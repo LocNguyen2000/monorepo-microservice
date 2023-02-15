@@ -1,0 +1,27 @@
+{
+  "name": "@nhl/schemas",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@nestjs/mongoose": "^9.2.1",
+    "mongoose": "^6.9.1"
+  },
+  "devDependencies": {
+    "@nhl/tsconfig": "workspace:*",
+    "@nestjs/common": "^9.2.1",
+    "@nestjs/core": "^9.0.0",
+    "reflect-metadata": "^0.1.13",
+    "rxjs": "^7.2.0"
+  },
+  "publishConfig": {
+    "directory": "dist",
+    "linkDirectory": true
+  }
+}

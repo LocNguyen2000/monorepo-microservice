@@ -11,5 +11,8 @@
   "license": "ISC",
   "devDependencies": {
     "turbo": "^1.7.0"
+  },
+  "dependencies": {
+    "typescript": "^4.7.4"
   }
 }

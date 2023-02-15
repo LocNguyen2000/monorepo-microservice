@@ -4,3 +4,8 @@ node_modules
 # Build
 dist
 .turbo
+
+# Enviroment
+/config
+
+pnpm-lock.yaml
