@@ -6,6 +6,6 @@ dist
 .turbo
 
 # Enviroment
-/config
+**/config
 
 pnpm-lock.yaml
