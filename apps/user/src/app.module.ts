@@ -1,26 +1,23 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
-import { ConfigModule, ConfigService } from '@nestjs/config';
 import { UserModule } from './user/user.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { Env } from './common/interfaces/env';
 import { DbConnection } from './common/const';
-
+import { EnvModule, EnvService } from '@nhl/env';
+import { EmployeeModule } from './employee/employee.module';
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-      envFilePath: '.env',
-    }),
+    EnvModule.register(),
     MongooseModule.forRootAsync({
       connectionName: DbConnection.User,
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService<Env>) => ({
-        uri: config.get('MONGO_URL'),
+      imports: [EnvModule],
+      inject: [EnvService],
+      useFactory: (env: EnvService) => ({
+        uri: env.get('mongoUrl'),
       }),
     }),
     UserModule,
+    EmployeeModule,
   ],
   controllers: [AppController],
   providers: [],
