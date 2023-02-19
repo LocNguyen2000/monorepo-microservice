@@ -1,7 +1,3 @@
 {
-  "extends": "@nhl/tsconfig/library.json",
-  "compilerOptions": {
-    "noEmit": true
-  },
-  "include": ["src"]
+  "extends": "@nhl/tsconfig/library.json"
 }
