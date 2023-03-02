@@ -1,6 +1,5 @@
-export interface Env {
-  HOST: string;
-  PORT: string;
-
-  MONGO_URL: string;
+export class Env {
+  host: string;
+  port: string;
+  mongoUrl: string;
 }

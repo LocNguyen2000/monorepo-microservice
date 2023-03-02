@@ -1,14 +1,29 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+// import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { IsEnum, IsNumber, IsString } from "class-validator";
 
-export type UserDocument = User;
-
-@Schema({ collection: "user", timestamps: true })
-export class User {
-  @Prop()
-  username: string;
-
-  @Prop()
-  password: string;
+export enum UserRoles {
+  President = "President",
+  Manager = "Manager",
+  Staff = "Staff",
+  Customer = "Customer",
 }
 
-export const UserSchema = SchemaFactory.createForClass(User);
+@Entity()
+export class User {
+  @PrimaryGeneratedColumn({ zerofill: true })
+  @IsNumber()
+  id: number;
+
+  @Column({ type: String })
+  @IsString()
+  username: string;
+
+  @Column({ type: String })
+  @IsString()
+  password: string;
+
+  @Column({ enum: UserRoles })
+  @IsEnum(UserRoles)
+  role: string;
+}

@@ -1,8 +1,31 @@
+import {
+  IsString,
+  IsOptional,
+  IsNumberString,
+  IsUrl,
+  IsDefined,
+} from "class-validator";
+
+class DatabaseEnv {
+  @IsString()
+  @IsOptional()
+  mongoUrl: string;
+
+  @IsString()
+  @IsOptional()
+  mysqlUrl: string;
+}
+
 class GlobalEnv {
-  mongoUrl: Record<string, unknown>;
+  @IsDefined()
+  db: DatabaseEnv;
 }
 
 export class Env extends GlobalEnv {
+  @IsString()
+  @IsUrl()
   host: string;
+
+  @IsNumberString()
   port: string;
 }

@@ -1,17 +1,11 @@
 import { Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { DbConnection } from '~/common/const';
+import { DbConnection } from '~/common';
+import { User } from '@nhl/schemas/user';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserService } from './user.service';
-import { User, UserSchema } from '@nhl/schemas/user';
 
 @Module({
-  imports: [
-    MongooseModule.forFeature(
-      [{ name: User.name, schema: UserSchema }],
-      DbConnection.User,
-    ),
-  ],
+  imports: [TypeOrmModule.forFeature([User], DbConnection.User)],
   providers: [UserService],
-  exports: [UserService],
 })
 export class UserModule {}

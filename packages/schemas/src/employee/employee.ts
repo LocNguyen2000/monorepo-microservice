@@ -1,44 +1,60 @@
-import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
+import { UserRoles } from "../user";
 
-export type EmployeeDocument = Employee;
-
-@Schema({ collection: "employee", timestamps: true })
+@Entity()
 export class Employee {
-  @Prop()
-  employeeId: number;
+  @PrimaryGeneratedColumn({ zerofill: true })
+  @IsNumber()
+  employeeCode: number;
 
-  @Prop()
-  employeeCode: string;
-
-  @Prop()
+  @Column()
+  @IsOptional()
+  @IsString()
   firstName?: string;
 
-  @Prop()
+  @Column()
+  @IsOptional()
+  @IsString()
   lastName?: string;
 
-  @Prop()
+  @Column()
+  @IsString()
   employeeName: string;
 
-  @Prop()
+  @Column({ enum: UserRoles })
+  @IsEnum(UserRoles)
+  role: string;
+
+  @Column()
+  @IsString()
   dateOfBirth: Date;
 
-  @Prop()
+  @Column()
+  @IsOptional()
+  @IsString()
   genderName?: string;
 
-  @Prop()
+  @Column()
+  @IsOptional()
+  @IsString()
   phoneNumber?: string;
 
-  @Prop()
+  @Column()
+  @IsOptional()
+  @IsString()
   email?: string;
 
-  @Prop()
+  @Column()
+  @IsOptional()
+  @IsString()
   contactAdress?: string;
 
-  @Prop()
-  workStatus?: number;
+  @Column()
+  @IsString()
+  createdBy: string;
 
-  @Prop()
-  workStatusName?: string;
+  @Column()
+  @IsString()
+  updatedBy: string;
 }
-
-export const EmployeeSchema = SchemaFactory.createForClass(Employee);

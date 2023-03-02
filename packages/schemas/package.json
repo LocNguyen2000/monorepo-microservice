@@ -10,13 +10,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@nestjs/mongoose": "^9.2.1",
-    "mongoose": "^6.9.1"
+    "class-validator": "^0.14.0",
+    "mysql2": "^3.1.2",
+    "typeorm": "^0.3.12"
   },
   "devDependencies": {
-    "@nhl/tsconfig": "workspace:*",
-    "@nestjs/common": "^9.2.1",
+    "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
+    "@nhl/tsconfig": "workspace:*",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0"
   },

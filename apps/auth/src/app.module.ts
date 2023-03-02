@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
-import { MongooseModule } from '@nestjs/mongoose';
-import { DbConnection } from './common/const';
+import { DbConnection } from './common';
 import { EnvModule, EnvService } from '@nhl/env';
+import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
     EnvModule.register(),
-    MongooseModule.forRootAsync({
-      connectionName: DbConnection.User,
+    TypeOrmModule.forRootAsync({
+      name: DbConnection.Auth,
       imports: [EnvModule],
       inject: [EnvService],
       useFactory: (env: EnvService) => ({
-        uri: env.get('mongoUrl'),
+        url: env.get('db.sqlUrl'),
       }),
     }),
-    AuthModule,
+    // AuthModule,
   ],
   controllers: [AppController],
   providers: [],
