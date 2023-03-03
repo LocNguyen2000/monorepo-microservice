@@ -1,6 +1,13 @@
 // import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  EntityRepository,
+  Repository,
+} from "typeorm";
 import { IsEnum, IsNumber, IsString } from "class-validator";
+import { BaseEntity } from "../base";
 
 export enum UserRoles {
   President = "President",
@@ -9,8 +16,8 @@ export enum UserRoles {
   Customer = "Customer",
 }
 
-@Entity()
-export class User {
+@Entity({ name: "users" })
+export class User extends BaseEntity {
   @PrimaryGeneratedColumn({ zerofill: true })
   @IsNumber()
   id: number;
@@ -23,7 +30,7 @@ export class User {
   @IsString()
   password: string;
 
-  @Column({ enum: UserRoles })
+  @Column({ enum: UserRoles, type: "enum" })
   @IsEnum(UserRoles)
   role: string;
 }

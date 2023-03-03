@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import * as fs from "fs";
 import _ from "lodash";
-import { Path, PathValue } from "@nestjs/config";
+import { Path } from "@nestjs/config";
 @Injectable()
 export class EnvService<T> {
   private readonly env: T;

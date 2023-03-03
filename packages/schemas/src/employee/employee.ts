@@ -1,60 +1,54 @@
 import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
 import { IsEnum, IsNumber, IsOptional, IsString } from "class-validator";
 import { UserRoles } from "../user";
+import { BaseEntity } from "../base";
 
-@Entity()
-export class Employee {
+@Entity({ name: "employees" })
+export class Employee extends BaseEntity {
   @PrimaryGeneratedColumn({ zerofill: true })
   @IsNumber()
   employeeCode: number;
 
-  @Column()
+  @Column({ type: String })
   @IsOptional()
   @IsString()
   firstName?: string;
 
-  @Column()
+  @Column({ type: String })
   @IsOptional()
   @IsString()
   lastName?: string;
 
-  @Column()
+  @Column({ type: String })
   @IsString()
   employeeName: string;
 
-  @Column({ enum: UserRoles })
+  @Column({ enum: UserRoles, type: "enum" })
   @IsEnum(UserRoles)
   role: string;
 
-  @Column()
+  @Column({ type: String })
+  @IsOptional()
   @IsString()
-  dateOfBirth: Date;
+  dateOfBirth?: Date;
 
-  @Column()
+  @Column({ type: String })
   @IsOptional()
   @IsString()
   genderName?: string;
 
-  @Column()
+  @Column({ type: String })
   @IsOptional()
   @IsString()
   phoneNumber?: string;
 
-  @Column()
+  @Column({ type: String })
   @IsOptional()
   @IsString()
   email?: string;
 
-  @Column()
+  @Column({ type: String })
   @IsOptional()
   @IsString()
   contactAdress?: string;
-
-  @Column()
-  @IsString()
-  createdBy: string;
-
-  @Column()
-  @IsString()
-  updatedBy: string;
 }

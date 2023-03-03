@@ -1,13 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { Employee } from '@nhl/schemas/employee';
-import { DbConnection } from '~/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
 export class EmployeeService {
   constructor(
-    @InjectRepository(Employee, DbConnection.User)
+    @InjectRepository(Employee)
     private readonly employeeRepo: Repository<Employee>,
   ) {}
 

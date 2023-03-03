@@ -7,6 +7,6 @@ export interface UserCreateDto {
 }
 
 export interface UserQueryDto {
-  _id: string;
-  username?: string;
+  id: number;
+  username: string;
 }

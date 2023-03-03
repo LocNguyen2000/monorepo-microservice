@@ -23,9 +23,6 @@
     "linkDirectory": true
   },
   "dependencies": {
-    "class-validator": "^0.14.0",
-    "lodash": "^4.17.21",
-    "mysql2": "^3.1.2",
-    "typeorm": "^0.3.12"
+    "class-validator": "^0.14.0"
   }
 }

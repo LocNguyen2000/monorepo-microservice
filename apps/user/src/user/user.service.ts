@@ -2,13 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@nhl/schemas/user';
-import { DbConnection } from '~/common';
 import { UserCreateDto, UserQueryDto } from '~/common/dto/user.dto';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User, DbConnection.User)
+    @InjectRepository(User)
     private readonly userRepo: Repository<User>,
   ) {}
 
@@ -17,6 +16,6 @@ export class UserService {
   }
 
   async findOne(user: UserQueryDto): Promise<User> {
-    return this.userRepo.findOneBy(user);
+    return this.userRepo.findOne({ where: user });
   }
 }

@@ -12,7 +12,7 @@
   "dependencies": {
     "class-validator": "^0.14.0",
     "mysql2": "^3.1.2",
-    "typeorm": "^0.3.12"
+    "typeorm": "0.2"
   },
   "devDependencies": {
     "@nestjs/common": "^9.0.0",

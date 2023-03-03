@@ -12,7 +12,7 @@ services:
        MYSQL_ROOT_PASSWORD: 
        MYSQL_ALLOW_EMPTY_PASSWORD: true
     ports:
-      - 3306:3306
+      - 3307:3306
     volumes:
       - mysql-data:/data/db
 
