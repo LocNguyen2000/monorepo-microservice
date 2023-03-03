@@ -1,5 +1,31 @@
-export class Env {
-  host: string;
-  port: string;
-  mongoUrl: string;
-}
+// import {
+//   IsString,
+//   IsOptional,
+//   IsNumberString,
+//   IsUrl,
+//   IsDefined,
+// } from 'class-validator';
+
+// class DatabaseEnv {
+//   @IsString()
+//   @IsOptional()
+//   mongoUrl: string;
+
+//   @IsString()
+//   @IsOptional()
+//   mysqlUrl: string;
+// }
+
+// class GlobalEnv {
+//   @IsDefined()
+//   db: DatabaseEnv;
+// }
+
+// export class Env extends GlobalEnv {
+//   @IsString()
+//   @IsUrl()
+//   host: string;
+
+//   @IsNumberString()
+//   port: string;
+// }

@@ -4,7 +4,12 @@ import { DbConnection } from '~/common';
 import { Employee } from '@nhl/schemas/employee';
 import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
-  imports: [TypeOrmModule.forFeature([Employee], DbConnection.User)],
+  imports: [
+    TypeOrmModule.forFeature([Employee], {
+      name: DbConnection.User,
+      type: 'mysql',
+    }),
+  ],
   providers: [EmployeeService],
 })
 export class EmployeeModule {}

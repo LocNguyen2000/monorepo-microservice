@@ -6,7 +6,12 @@ import { UserController } from './user.controller';
 import { UserService } from './user.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User], DbConnection.User)],
+  imports: [
+    TypeOrmModule.forFeature([User], {
+      name: DbConnection.User,
+      type: 'mysql',
+    }),
+  ],
   providers: [UserService],
   controllers: [UserController],
 })

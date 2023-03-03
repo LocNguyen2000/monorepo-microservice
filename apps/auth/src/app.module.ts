@@ -4,6 +4,7 @@ import { AuthModule } from './auth/auth.module';
 import { DbConnection } from './common';
 import { EnvModule, EnvService } from '@nhl/env';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Env } from '@nhl/env/common';
 @Module({
   imports: [
     EnvModule.register(),
@@ -11,11 +12,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       name: DbConnection.Auth,
       imports: [EnvModule],
       inject: [EnvService],
-      useFactory: (env: EnvService) => ({
+      useFactory: (env: EnvService<Env>) => ({
         url: env.get('db.sqlUrl'),
       }),
     }),
-    // AuthModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [],

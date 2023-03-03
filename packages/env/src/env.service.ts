@@ -1,9 +1,10 @@
 import { Injectable } from "@nestjs/common";
-import { Env } from "./common";
 import * as fs from "fs";
+import _ from "lodash";
+import { Path, PathValue } from "@nestjs/config";
 @Injectable()
-export class EnvService {
-  private readonly env: Env;
+export class EnvService<T> {
+  private readonly env: T;
 
   constructor() {
     // get root apps path
@@ -14,11 +15,12 @@ export class EnvService {
     // read json file (local and global)
     const jsonFile = fs.readFileSync(configPath, "utf-8");
 
-    this.env = JSON.parse(jsonFile || "{}") as unknown as Env;
-    console.log(this.env);
+    this.env = JSON.parse(jsonFile || "{}") as unknown as T;
+    console.log("Load file success", this.env);
   }
-
-  get(key: string) {
-    return this.env[key];
+  get<K extends Path<T>>(key: K) {
+    return key
+      .split(".")
+      .reduce((total, key) => (total = total[key]), this.env);
   }
 }

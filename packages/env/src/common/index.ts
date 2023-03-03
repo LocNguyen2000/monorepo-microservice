@@ -13,7 +13,7 @@ class DatabaseEnv {
 
   @IsString()
   @IsOptional()
-  mysqlUrl: string;
+  sqlUrl: string;
 }
 
 class GlobalEnv {
