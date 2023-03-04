@@ -26,7 +26,7 @@ create table
 
 create table
     if not exists employees(
-        `employeeNumber` int NOT NULL,
+        `employeeCode` int NOT NULL,
         `lastName` varchar(50) NOT NULL,
         `firstName` varchar(50) NOT NULL,
         `extension` varchar(10) NOT NULL,
@@ -39,5 +39,41 @@ create table
         `updatedAt` datetime DEFAULT NULL,
         `createdBy` varchar(50) DEFAULT NULL,
         `updatedBy` varchar(50) DEFAULT NULL,
-        PRIMARY KEY (`employeeNumber`),
+        PRIMARY KEY (`employeeCode`),
     ) COMMENT '';
+
+-- Active: 1677815117468@@127.0.0.1@3307@users
+
+insert into
+    users.employees (
+        `createdAt`,
+        `updatedAt`,
+        `createdBy`,
+        `updatedBy`,
+        `employeeCode`,
+        `firstName`,
+        `lastName`,
+        `employeeName`,
+        role,
+        `dateOfBirth`,
+        `genderName`,
+        `phoneNumber`,
+        `email`,
+        `contactAdress`
+    )
+values (
+        now(),
+        now(),
+        'admin',
+        'admin',
+        1,
+        'Huu Loc',
+        'Nguyen',
+        'Nguyen Huu Loc',
+        'President',
+        DATE('2000-12-04'),
+        'Male',
+        '0384696172',
+        'locnguyenhuu2k@gmail.com',
+        'Nguyen Phong Sac'
+    )

@@ -1,27 +1,36 @@
+import { Employee } from '@nhl/schemas/employee';
 import { UserRoles } from '@nhl/schemas/user';
+import { IsOptional } from 'class-validator';
 
-export interface EmployeeCreateDto {
-  employeeCode: number;
+export class EmployeeCreateDto extends Employee {}
+export class EmployeeQueryDto {
+  @IsOptional()
+  employeeCode?: number;
 
+  @IsOptional()
   firstName?: string;
 
+  @IsOptional()
   lastName?: string;
 
-  employeeName: string;
+  @IsOptional()
+  employeeName?: string;
 
-  role: UserRoles;
+  @IsOptional()
+  role?: UserRoles;
 
-  dateOfBirth: Date;
+  @IsOptional()
+  dateOfBirth?: Date;
 
+  @IsOptional()
   genderName?: string;
 
+  @IsOptional()
   phoneNumber?: string;
 
+  @IsOptional()
   email?: string;
 
+  @IsOptional()
   contactAdress?: string;
-
-  createdBy: string;
-
-  updatedBy: string;
 }

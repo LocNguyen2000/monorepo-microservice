@@ -22,3 +22,5 @@ export class BaseEntity {
   @IsString()
   updatedBy?: string;
 }
+
+export * from "./pagination";

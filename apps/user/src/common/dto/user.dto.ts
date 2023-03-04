@@ -1,12 +1,9 @@
-import { UserRoles } from '@nhl/schemas/user';
+import { User, UserRoles } from '@nhl/schemas/user';
 
-export interface UserCreateDto {
+export class UserCreateDto extends User {}
+
+export class UserQueryDto {
   username: string;
-  password: string;
+
   role: UserRoles;
-}
-
-export interface UserQueryDto {
-  id: number;
-  username: string;
 }

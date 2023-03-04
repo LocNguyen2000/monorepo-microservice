@@ -18,4 +18,8 @@ export class UserService {
   async findOne(user: UserQueryDto): Promise<User> {
     return this.userRepo.findOne({ where: user });
   }
+
+  async findById(id: number): Promise<User> {
+    return this.userRepo.findOne(id);
+  }
 }
