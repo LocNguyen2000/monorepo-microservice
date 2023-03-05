@@ -1,0 +1,68 @@
+:root{
+  --header-height: 10%;
+  --header-width: 100%;
+  --siderHeight: 90%;
+  --siderWidth: 10%;
+  --contentWidth: 90%;
+  --contentHeight: 90%;
+}
+
+.m-header{
+  position:fixed;
+  display: flex;
+  align-items: center;
+  top: 0;
+  text-align: center;
+  color: #fff;
+  width: var(--header-width);
+  height: var(--header-height);
+  background-color: #222831;
+}
+
+.m-header > *{
+  margin-left: 1em;
+}
+
+.m-header .logo{
+  width: 140px;
+  height: 30%;
+  background-color: grey;
+}
+
+.m-sider{
+  position: fixed;
+  top: var(--header-height);
+  left: 0px;
+  width: var(--siderWidth);
+  min-width: var(--siderWidth);
+  height: var(--siderHeight);
+  color: #fff;
+  background-color: #222831;
+}
+
+
+ /* LOGIN */
+
+ .m-login{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+}
+
+.m-login-form{
+  display: flex;
+  flex-direction: column;
+  width: 50em;
+  max-width: 50em;
+  padding: 2em;
+}
+
+.m-login-img{
+  width: 50%;
+  height: 60%;
+  background-image: url(./resources/spaceman.jpg);
+  background-repeat: no-repeat;
+  background-size: contain;
+}
