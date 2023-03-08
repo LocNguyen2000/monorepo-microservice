@@ -13,7 +13,6 @@ import { FilterPagination, Pagination } from '@nhl/schemas/base';
 import { EmployeeQueryDto, EmployeeCreateDto } from '~/common/dto/employee.dto';
 import { EmployeeService } from './employee.service';
 
-@UsePipes(new ValidationPipe({ transform: true }))
 @Controller('Employees')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}

@@ -1,6 +1,17 @@
-import { IsNumber, IsOptional, IsPositive } from "class-validator";
+import {
+  IsNumber,
+  IsOptional,
+  IsPositive,
+  validate,
+  ValidationError,
+} from "class-validator";
 import { Transform, plainToClass } from "class-transformer";
-import { createParamDecorator, ExecutionContext } from "@nestjs/common";
+import {
+  createParamDecorator,
+  ExecutionContext,
+  HttpException,
+  HttpStatus,
+} from "@nestjs/common";
 
 export type PaginationResponse<I extends Iterable<any>> = Readonly<{
   page: number;
@@ -12,6 +23,8 @@ export type PaginationResponse<I extends Iterable<any>> = Readonly<{
 export class FilterPagination {
   @IsOptional()
   @Transform(({ value }) => {
+    if (!value) return 1;
+
     return parseInt(value);
   })
   @IsNumber()
@@ -20,21 +33,43 @@ export class FilterPagination {
 
   @IsOptional()
   @Transform(({ value }) => {
+    if (!value) return 10;
+
     return parseInt(value);
   })
   @IsNumber()
+  @IsPositive()
   size: number;
 }
 
 export const Pagination = createParamDecorator(
-  (_: unknown, ctx: ExecutionContext) => {
+  async (_: unknown, ctx: ExecutionContext) => {
     const request = ctx.switchToHttp().getRequest();
 
-    const paginateFilter = {
-      page: request.query.page || 1,
-      size: request.query.size || 10,
-    };
+    const paginateFilter = plainToClass(
+      FilterPagination,
+      {
+        page: request.query.page,
+        size: request.query.size,
+      },
+      {
+        enableImplicitConversion: true,
+      }
+    );
 
-    return plainToClass(FilterPagination, paginateFilter);
+    const errors: ValidationError[] = await validate(paginateFilter);
+
+    if (errors.length > 0) {
+      //Get the errors and push to custom array
+      let validationErrors = errors.map((obj) =>
+        Object.values(obj.constraints)
+      );
+      throw new HttpException(
+        `Validation failed with following Errors: ${validationErrors}`,
+        HttpStatus.BAD_REQUEST
+      );
+    }
+
+    return paginateFilter;
   }
 );
