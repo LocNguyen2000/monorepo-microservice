@@ -1,11 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable, OnModuleInit } from '@nestjs/common';
 import { UserCreateDto, UserSignInDto } from '~/common/dto/user.dto';
 import { UserService } from '~/user/user.service';
-import bcrypt from 'bcrypt';
-
+import * as bcrypt from 'bcrypt';
+import { ClientKafka } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 @Injectable()
-export class AuthService {
-  constructor(private userService: UserService) {}
+export class AuthService implements OnModuleInit {
+  constructor(
+    private userService: UserService,
+    @Inject('AUTH_SERVICE') private readonly clientKafka: ClientKafka,
+  ) {}
+  onModuleInit() {
+    this.clientKafka.subscribeToResponseOf('USER_CREATE');
+  }
 
   async validateUser(user: UserSignInDto): Promise<any> {
     const profile = await this.userService.findOne({
@@ -18,12 +25,14 @@ export class AuthService {
   }
 
   async register(user: UserCreateDto) {
-    const SALT_ROUND = 12;
-    const salt = await bcrypt.genSalt(SALT_ROUND);
+    const response = await lastValueFrom(
+      this.clientKafka.send('USER_CREATE', user),
+    );
 
-    user.password = await bcrypt.hash(user.password, salt);
-    console.log(user);
+    console.log('[RETURNED]', response);
 
-    return this.userService.create(user);
+    if (response) return { message: 'Create user successfully' };
+
+    return { message: 'Create user fail' };
   }
 }

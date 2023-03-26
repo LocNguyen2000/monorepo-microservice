@@ -77,3 +77,8 @@ values (
         'locnguyenhuu2k@gmail.com',
         'Nguyen Phong Sac'
     )
+insert into
+    users.roles (id, role)
+values
+( (1, 'President'), (2, 'Manager'), (3, 'Employee')
+    )
