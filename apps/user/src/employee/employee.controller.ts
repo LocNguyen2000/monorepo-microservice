@@ -6,14 +6,12 @@ import {
   Param,
   Post,
   Query,
-  UsePipes,
-  ValidationPipe,
 } from '@nestjs/common';
 import { FilterPagination, Pagination } from '@nhl/schemas/base';
 import { EmployeeQueryDto, EmployeeCreateDto } from '~/common/dto/employee.dto';
 import { EmployeeService } from './employee.service';
 
-@Controller('Employees')
+@Controller('employees')
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 

@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Env } from '@nhl/env/common';
 import { NodeEnv } from '@nhl/env/common/enum';
 import { User } from '@nhl/schemas/user';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -20,6 +21,28 @@ import { User } from '@nhl/schemas/user';
         entities: [User],
       }),
     }),
+    {
+      ...ClientsModule.register([
+        {
+          name: 'AUTH_SERVICE',
+          transport: Transport.KAFKA,
+          options: {
+            client: {
+              clientId: 'user',
+              brokers: ['localhost:29092'],
+            },
+            producer: {
+              idempotent: true,
+              allowAutoTopicCreation: true,
+            },
+            consumer: {
+              groupId: 'user-consumer',
+            },
+          },
+        },
+      ]),
+      global: true,
+    },
     AuthModule,
   ],
   controllers: [AppController],

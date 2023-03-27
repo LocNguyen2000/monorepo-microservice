@@ -4,13 +4,15 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "turbo run build"
+    "build": "turbo run build",
+    "link-env": "node ./utils/scripts/link-env.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "turbo": "^1.7.0",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "@nhl/scripts": "workspace:*"
   }
 }

@@ -8,6 +8,8 @@ import { Env } from '@nhl/env/common';
 import { User } from '@nhl/schemas/user';
 import { Employee } from '@nhl/schemas/employee';
 import { NodeEnv } from '@nhl/env/common/enum';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -24,8 +26,32 @@ import { NodeEnv } from '@nhl/env/common/enum';
         };
       },
     }),
+    {
+      ...ClientsModule.register([
+        {
+          name: 'AUTH_SERVICE',
+          transport: Transport.KAFKA,
+          options: {
+            run: { autoCommit: false },
+            client: {
+              clientId: 'user',
+              brokers: ['localhost:29092'],
+            },
+            producer: {
+              idempotent: true,
+              allowAutoTopicCreation: true,
+            },
+            consumer: {
+              groupId: 'user-consumer',
+            },
+          },
+        },
+      ]),
+      global: true,
+    },
     UserModule,
     EmployeeModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [],

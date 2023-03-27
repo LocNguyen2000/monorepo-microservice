@@ -1,10 +1,8 @@
 const fs = require("fs");
 const path = require("path");
 
-const rootConfigPath = path.resolve(
-  path.join(process.cwd(), "../..", "config")
-);
-const rootAppsPath = path.resolve(path.join(process.cwd(), "../..", "apps"));
+const rootConfigPath = path.resolve(path.join(process.cwd(), "config"));
+const rootAppsPath = path.resolve(path.join(process.cwd(), "apps"));
 
 const symlinkFile = (apps) => {
   for (let i = 0; i < apps.length; i++) {

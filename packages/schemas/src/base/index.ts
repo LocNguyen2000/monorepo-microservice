@@ -2,22 +2,22 @@ import { Column } from "typeorm";
 import { IsDate, IsOptional, IsString } from "class-validator";
 
 export class BaseEntity {
-  @Column()
+  @Column({ default: null })
   @IsOptional()
   @IsDate()
   createdAt?: Date;
 
-  @Column()
+  @Column({ default: null })
   @IsOptional()
   @IsDate()
   updatedAt?: Date;
 
-  @Column()
+  @Column({ default: "nhloc" })
   @IsOptional()
   @IsString()
   createdBy?: string;
 
-  @Column()
+  @Column({ default: "nhloc" })
   @IsOptional()
   @IsString()
   updatedBy?: string;
