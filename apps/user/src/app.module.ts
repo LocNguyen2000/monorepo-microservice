@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { EnvModule, EnvService } from '@nhl/env';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -10,6 +10,8 @@ import { Employee } from '@nhl/schemas/employee';
 import { NodeEnv } from '@nhl/env/common/enum';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthModule } from './auth/auth.module';
+import { DbConnection } from './common';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -17,10 +19,11 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forRootAsync({
       imports: [EnvModule],
       inject: [EnvService],
+      name: DbConnection.User,
       useFactory: (env: EnvService<Env>) => {
         return {
           type: 'mysql',
-          url: env.get('db.sqlUrl'),
+          url: env.get('db.user.sqlUrl'),
           synchronize: process.env.NODE_ENV !== NodeEnv.Prod,
           entities: [User, Employee],
         };
@@ -54,6 +57,11 @@ import { AuthModule } from './auth/auth.module';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {}

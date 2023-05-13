@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  ParseUUIDPipe,
+  Post,
+} from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { User } from '@nhl/schemas/user';
 import { UserCreateDto, UserQueryDto } from '~/common/dto/user.dto';
@@ -8,25 +16,22 @@ import { UserService } from './user.service';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @MessagePattern('USER_CREATE')
-  async createUserFromAuth(@Payload() payload: any) {
-    console.log('[RECEIVED]', payload);
-
-    const response = await this.userService.create(payload);
-
-    console.log('[RESPONSE]', response);
-
-    return response;
-  }
-
-  @Get('/filter')
-  async findOne(@Param() params: UserQueryDto): Promise<User> {
-    return await this.userService.findOne(params);
-  }
+  // TODO: Testing kafka message pattern
+  // @MessagePattern('USER_CREATE')
+  // async createUserFromAuth(@Payload() payload: any) {
+  //   console.log('[RECEIVED]', payload);
+  //   const response = await this.userService.create(payload);
+  //   console.log('[RESPONSE]', response);
+  //   return JSON.stringify(response);
+  // }
 
   @Get('/:id')
-  async findById(@Param('id') id: number): Promise<User> {
-    return await this.userService.findById(id);
+  async findById(
+    @Param('id', new ParseUUIDPipe()) id: string,
+  ): Promise<UserQueryDto> {
+    const instance = await this.userService.findById(id);
+
+    return instance;
   }
 
   @Post()

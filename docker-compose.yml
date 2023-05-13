@@ -44,8 +44,6 @@ services:
       KAFKA_JMX_PORT: 9997
       KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schemaregistry:8085
       CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka-1:29092
-
-
   # schemaregistry:
   #   hostname: schemaregistry-1
   #   container_name: schemaregistry-1
@@ -60,11 +58,9 @@ services:
   #     SCHEMA_REGISTRY_KAFKASTORE_SECURITY_PROTOCOL: PLAINTEXT
   #     SCHEMA_REGISTRY_HOST_NAME: schemaregistry-1
   #     SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8085
-  #     SCHEMA_REGISTRY_SCHEMA_REGISTRY_INTER_INSTANCE_PROTOCOL: "http"
+  #     SCHEMA_REGISTRY_SCHEMA_REGISTRY_INTER_INSTANCE_PROTOCOL: http
   #     SCHEMA_REGISTRY_LOG4J_ROOT_LOGLEVEL: INFO
   #     SCHEMA_REGISTRY_KAFKASTORE_TOPIC: _schemas
-
-
   # kafka-ui-1:
   #   container_name: kafka-ui-1
   #   image: provectuslabs/kafka-ui:latest

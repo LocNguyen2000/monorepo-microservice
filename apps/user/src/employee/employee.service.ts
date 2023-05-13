@@ -4,11 +4,12 @@ import { Employee } from '@nhl/schemas/employee';
 import { InjectRepository } from '@nestjs/typeorm';
 import { EmployeeCreateDto, EmployeeQueryDto } from '~/common/dto/employee.dto';
 import { PaginationResponse, FilterPagination } from '@nhl/schemas/base';
+import { DbConnection } from '~/common';
 
 @Injectable()
 export class EmployeeService {
   constructor(
-    @InjectRepository(Employee)
+    @InjectRepository(Employee, DbConnection.User)
     private readonly employeeRepo: Repository<Employee>,
   ) {}
 

@@ -3,11 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from '@nhl/schemas/user';
 import { UserCreateDto, UserQueryDto } from '~/common/dto/user.dto';
+import { DbConnection } from '~/common';
 
 @Injectable()
 export class UserService {
   constructor(
-    @InjectRepository(User)
+    @InjectRepository(User, DbConnection.User)
     private readonly userRepo: Repository<User>,
   ) {}
 

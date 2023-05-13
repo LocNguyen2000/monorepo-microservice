@@ -1,6 +1,6 @@
 // import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
 import { Entity, Column, PrimaryGeneratedColumn, BeforeInsert } from "typeorm";
-import { IsEnum, IsNumber, IsString } from "class-validator";
+import { IsEnum, IsNumber, IsString, IsUUID } from "class-validator";
 import { BaseEntity } from "../base";
 import * as bcrypt from "bcrypt";
 
@@ -13,9 +13,9 @@ export enum UserRoles {
 
 @Entity({ name: "users" })
 export class User extends BaseEntity {
-  @PrimaryGeneratedColumn("increment", { zerofill: true })
-  @IsNumber()
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  @IsUUID()
+  id: string;
 
   @Column({ type: String })
   @IsString()
@@ -27,7 +27,7 @@ export class User extends BaseEntity {
 
   @Column({ enum: UserRoles, type: "enum" })
   @IsEnum(UserRoles)
-  role: string;
+  role: UserRoles;
 
   @BeforeInsert()
   async beforeInsert() {

@@ -5,7 +5,7 @@ import { BaseEntity } from "../base";
 
 @Entity({ name: "employees" })
 export class Employee extends BaseEntity {
-  @PrimaryGeneratedColumn({ zerofill: true })
+  @PrimaryGeneratedColumn("increment")
   @IsNumber()
   employeeCode: number;
 

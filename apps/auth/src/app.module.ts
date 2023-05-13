@@ -1,12 +1,15 @@
-import { Module } from '@nestjs/common';
+import { Module, ValidationPipe } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AuthModule } from './auth/auth.module';
 import { EnvModule, EnvService } from '@nhl/env';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Env } from '@nhl/env/common';
 import { NodeEnv } from '@nhl/env/common/enum';
-import { User } from '@nhl/schemas/user';
+import { AuthToken } from '@nhl/schemas/auth';
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { DbConnection } from './common';
+import { User } from '@nhl/schemas/user';
+import { APP_PIPE } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -14,9 +17,21 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     TypeOrmModule.forRootAsync({
       imports: [EnvModule],
       inject: [EnvService],
+      name: DbConnection.Auth,
       useFactory: (env: EnvService<Env>) => ({
         type: 'mysql',
-        url: env.get('db.sqlUrl'),
+        url: env.get('db.auth.sqlUrl'),
+        synchronize: process.env.NODE_ENV !== NodeEnv.Prod,
+        entities: [AuthToken],
+      }),
+    }),
+    TypeOrmModule.forRootAsync({
+      imports: [EnvModule],
+      inject: [EnvService],
+      name: DbConnection.User,
+      useFactory: (env: EnvService<Env>) => ({
+        type: 'mysql',
+        url: env.get('db.user.sqlUrl'),
         synchronize: process.env.NODE_ENV !== NodeEnv.Prod,
         entities: [User],
       }),
@@ -46,6 +61,11 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     AuthModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_PIPE,
+      useClass: ValidationPipe,
+    },
+  ],
 })
 export class AppModule {}
