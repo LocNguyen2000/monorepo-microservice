@@ -1,3 +1,8 @@
 {
-  "extends": "@nhl/tsconfig/library.json"
+  "extends": "@nhl/tsconfig/library.json",
+  "compilerOptions": {
+    "outDir": "./dist"
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "test", "dist", "**/*spec.ts"]
 }

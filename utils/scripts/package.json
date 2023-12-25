@@ -9,7 +9,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@nhl/tsconfig": "workspace:^1.0.0",
-    "typeorm": "0.2"
+    "@nhl/tsconfig": "workspace:^1.0.0"
   }
 }
