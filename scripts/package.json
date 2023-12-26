@@ -7,8 +7,5 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "@nhl/tsconfig": "workspace:^1.0.0"
-  }
+  "license": "ISC"
 }

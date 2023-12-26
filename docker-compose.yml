@@ -15,35 +15,35 @@ services:
       - 3307:3306
     volumes:
       - mysql-data:/data/db
-  zookeeper-1:
-    hostname: zookeeper-1
-    container_name: zookeeper-1
-    image: confluentinc/cp-zookeeper:latest
-    environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
-    ports:
-      - 22181:2181
-  kafka-1:
-    hostname: kafka-1
-    container_name: kafka-1
-    image: confluentinc/cp-kafka:7.2.1
-    depends_on:
-      - zookeeper-1
-    ports:
-      - 29092:29092
-      - 9997:9997
-      - 9092:9092
-    environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:29092
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT 
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_JMX_PORT: 9997
-      KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schemaregistry:8085
-      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka-1:29092
+  # zookeeper-1:
+  #   hostname: zookeeper-1
+  #   container_name: zookeeper-1
+  #   image: confluentinc/cp-zookeeper:latest
+  #   environment:
+  #     ZOOKEEPER_CLIENT_PORT: 2181
+  #     ZOOKEEPER_TICK_TIME: 2000
+  #   ports:
+  #     - 22181:2181
+  # kafka-1:
+  #   hostname: kafka-1
+  #   container_name: kafka-1
+  #   image: confluentinc/cp-kafka:7.2.1
+  #   depends_on:
+  #     - zookeeper-1
+  #   ports:
+  #     - 29092:29092
+  #     - 9997:9997
+  #     - 9092:9092
+  #   environment:
+  #     KAFKA_BROKER_ID: 1
+  #     KAFKA_ZOOKEEPER_CONNECT: zookeeper-1:2181
+  #     KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka-1:9092,PLAINTEXT_HOST://localhost:29092
+  #     KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+  #     KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT 
+  #     KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+  #     KAFKA_JMX_PORT: 9997
+  #     KAFKA_CONFLUENT_SCHEMA_REGISTRY_URL: http://schemaregistry:8085
+  #     CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka-1:29092
   # schemaregistry:
   #   hostname: schemaregistry-1
   #   container_name: schemaregistry-1

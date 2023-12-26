@@ -1,37 +1,21 @@
-import { NestFactory, HttpAdapterHost } from '@nestjs/core';
-import { NestExpressApplication } from '@nestjs/platform-express';
+import { NestFactory, HttpAdapterHost, NestApplication } from '@nestjs/core';
 import { EnvService } from '@nhl/env';
 import { AppModule } from './app.module';
-import { Env } from '@nhl/env/common';
+import { GlobalEnv } from '@nhl/env';
 import { ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from '@nhl/error/exception.filter';
-import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestApplication>(AppModule);
   app.enableCors({ origin: '*' });
 
-  const env = app.get(EnvService<Env>);
+  const env = app.get(EnvService<GlobalEnv>);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.useGlobalFilters(new AllExceptionsFilter(app.get(HttpAdapterHost)));
 
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.KAFKA,
-    options: {
-      client: {
-        brokers: ['localhost:29092'],
-      },
-      run: { autoCommit: false },
-      consumer: {
-        groupId: 'user-consumer',
-        allowAutoTopicCreation: true,
-      },
-    },
-  });
-
   await app.startAllMicroservices();
 
-  await app.listen(env.get('port'), env.get('host'));
+  await app.listen(env.get(''));
 }
 bootstrap();

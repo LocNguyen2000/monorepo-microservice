@@ -2,8 +2,6 @@
   "extends": "@nhl/tsconfig/library.json",
   "compilerOptions": {
     "noEmit": true,
-    "outDir": "./dist"
   },
   "include": ["src", "tsconfig.build.json"],
-  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
 }

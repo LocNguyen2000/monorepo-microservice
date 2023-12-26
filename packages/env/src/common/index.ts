@@ -6,19 +6,10 @@ class AuthEnv {
   signature: string;
 }
 
-class GlobalEnv {
+export class GlobalEnv {
   @IsDefined()
   db: ServiceDatabase;
 
   @IsDefined()
   auth: AuthEnv;
-}
-
-export class Env extends GlobalEnv {
-  @IsString()
-  @IsUrl()
-  host: string;
-
-  @IsNumberString()
-  port: string;
 }
