@@ -1,16 +1,11 @@
-import { Module, ValidationPipe } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { EnvModule } from '@nhl/env';
-import { APP_PIPE } from '@nestjs/core';
+import { Env } from './common/env';
 
 @Module({
-  imports: [EnvModule.register()],
+  imports: [EnvModule.register({ path: '/config/env.json', class: Env })],
   controllers: [AppController],
-  providers: [
-    {
-      provide: APP_PIPE,
-      useClass: ValidationPipe,
-    },
-  ],
+  providers: [],
 })
 export class AppModule {}

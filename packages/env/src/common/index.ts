@@ -3,7 +3,7 @@ import { ServiceDatabase } from "./database";
 
 class AuthEnv {
   @IsString()
-  signature: string;
+  jwtSecret: string;
 }
 
 export class GlobalEnv {

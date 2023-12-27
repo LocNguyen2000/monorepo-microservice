@@ -12,8 +12,5 @@ class DatabaseEnv {
 
 export class ServiceDatabase {
   @IsDefined()
-  auth: DatabaseEnv;
-
-  @IsDefined()
   user: DatabaseEnv;
 }

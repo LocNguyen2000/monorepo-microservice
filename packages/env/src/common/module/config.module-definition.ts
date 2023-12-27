@@ -1,7 +1,9 @@
 import { ConfigurableModuleBuilder } from "@nestjs/common";
-interface ConfigModuleOptions {
-  folder: string;
+import { ClassConstructor } from "class-transformer";
+export interface CustomConfigModuleOptions {
+  path: string;
+  class: ClassConstructor<object>;
 }
 
 export const { ConfigurableModuleClass, MODULE_OPTIONS_TOKEN } =
-  new ConfigurableModuleBuilder<ConfigModuleOptions>().build();
+  new ConfigurableModuleBuilder<CustomConfigModuleOptions>().build();
