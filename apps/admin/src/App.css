@@ -1,43 +1,47 @@
 :root{
-  --header-height: 10%;
-  --header-width: 100%;
-  --siderHeight: 90%;
-  --siderWidth: 10%;
-  --contentWidth: 90%;
-  --contentHeight: 90%;
+  --header-height: 10vh;
+  --header-width: 100vw;
+  --siderHeight: calc(100% - var(--header-height));
+  --siderWidth: 10vw;
+  --contentWidth: calc(100% - var(--siderWidth));;
+  --contentHeight: calc(100% - var(--header-height));;
 }
 
-.m-header{
-  position:fixed;
-  display: flex;
-  align-items: center;
-  top: 0;
-  text-align: center;
-  color: #fff;
-  width: var(--header-width);
-  height: var(--header-height);
-  background-color: #222831;
+@font-face {
+  font-family: 'GoogleRoboto';
+  src: url(./resources/font/static/NunitoSans_10pt-Regular.ttf);
 }
 
-.m-header > *{
-  margin-left: 1em;
+.override-antd-menu-item .ant-menu-title-content{
+  font-weight: bold;
 }
 
-.m-header .logo{
-  width: 140px;
-  height: 30%;
-  background-color: grey;
+.m-content-child-margin > * {
+  margin: 1rem;
 }
 
-.m-sider{
-  position: fixed;
-  top: var(--header-height);
-  left: 0px;
-  width: var(--siderWidth);
-  min-width: var(--siderWidth);
-  height: var(--siderHeight);
-  color: #fff;
-  background-color: #222831;
+/* .override-antd-form > *{
+} */
+
+.override-antd-icon-item{
+  stroke-width: 15;
+  stroke: black;
+  color: black;
+}
+
+.logo{
+  width: 48px;
+  height: 48px;
+  /* background-color: grey; */
+  background-image: url(./resources/logo-2-removebg-preview.png);
+  background-position: center;
+  background-size: contain;
+  margin: 4px;
+}
+
+.m-hoverable-rounded:hover{
+  border-radius: 50%;
+  background-color: rgba(24, 51, 109, 0.25);
 }
 
 
