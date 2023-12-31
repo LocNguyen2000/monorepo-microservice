@@ -1,50 +1,93 @@
-import './App.css'
-import 'antd/dist/reset.css';
-import { Layout, Space, Avatar } from 'antd';
-import { UserOutlined } from '@ant-design/icons';
-import { contentStyle } from './css/layout';
-import SidebarMenu from './components/SidebarMenu';
-import EmployeeTables from './pages/EmployeeTable';
-import { Fragment } from 'react';
-import { RouterProvider, Link, createBrowserRouter} from 'react-router-dom'
-import LoginPage from './pages/LoginPage';
+import "antd/dist/reset.css";
+import "./App.css";
+import Dashboard from "./pages/Dashboard";
+import { FunctionComponent } from "react";
+import { AuthenticatedRoute } from "./components/AuthenticatedRoute";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { DASHBOARD_ROUTES } from "./lib/constants/routes";
+import { GlobalContext } from "./lib/context/index.tsx";
+import LoginPage from "./pages/LoginPage";
+import notification from "antd/es/notification";
+import OverviewPage from "./pages/overview/Overview";
+import ConfigProvider from "antd/es/config-provider";
+import MyProfilePage from "./pages/MyProfile";
+import RentProviderTable from "./pages/provider/RentProviderTable.tsx";
+import TenantTable from "./pages/tenant/TenantTable.tsx";
+import Error404Page from "./pages/Error404Page.tsx";
 
-const { Header, Content } = Layout;
+export type NotificationType = "success" | "info" | "warning" | "error";
+
 const router = createBrowserRouter([
+  {
+    path: "/login",
+    element: <LoginPage />,
+  },
   {
     path: "/",
     element: (
-      <Space direction="vertical" style={{ width: '100%' }} size={[0, 48]}>
-          <Layout>
-            <Header className="m-header">
-              <div className='logo'/>
-              <Space direction="vertical" size={16}>
-                <Avatar size={48} icon={<UserOutlined />} />
-              </Space>
-            </Header>
-            <Layout>
-              <SidebarMenu />
-                
-              <Content style={contentStyle}>
-                <EmployeeTables/>
-              </Content>
-            </Layout>
-          </Layout>
-        </Space>
+      <AuthenticatedRoute>
+        <Dashboard />
+      </AuthenticatedRoute>
     ),
-  },
-  {
-    path: "login",
-    element: <LoginPage/>,
+    errorElement: <Error404Page />,
+    children: [
+      {
+        path: DASHBOARD_ROUTES.PROVIDER,
+        element: <RentProviderTable />,
+      },
+      {
+        path: DASHBOARD_ROUTES.TENANT,
+        element: <TenantTable />,
+      },
+      {
+        path: DASHBOARD_ROUTES.OVERVIEW,
+        element: <OverviewPage />,
+      },
+      {
+        path: DASHBOARD_ROUTES.MY_PROFILE,
+        element: <MyProfilePage />,
+      },
+    ],
   },
 ]);
 
-function App() {
-  return (
-      <Fragment>
-        <RouterProvider router={router}/>
-      </Fragment>
-  )
-}
+interface AppProps {}
 
-export default App
+const App: FunctionComponent<AppProps> = () => {
+  const [api, contextHolder] = notification.useNotification();
+
+  const openNotificationWithIcon = (
+    type: NotificationType,
+    message: string
+  ) => {
+    api[type]({
+      message: "Notification Title",
+      description:
+        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
+    });
+  };
+
+  return (
+    <>
+      <ConfigProvider
+        theme={{
+          token: {
+            fontFamily: "GoogleRoboto",
+          },
+        }}
+      >
+        <GlobalContext.Provider
+          value={{
+            authUser: { userID: 1, name: "Nguyen Huu Loc" },
+            useToast: openNotificationWithIcon,
+          }}
+        >
+          {contextHolder}
+          <RouterProvider router={router} />
+        </GlobalContext.Provider>
+      </ConfigProvider>
+    </>
+  );
+};
+
+export default App;

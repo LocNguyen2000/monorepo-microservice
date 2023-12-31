@@ -15,7 +15,9 @@
     "jsx": "react-jsx",
     "composite": true,
     "module": "esnext",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "outDir": "./dist"
   },
-  "include": ["src", "vite.config.ts"],
+  "include": ["src", "vite.config.ts"]
 }
