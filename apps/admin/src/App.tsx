@@ -5,15 +5,15 @@ import { FunctionComponent } from "react";
 import { AuthenticatedRoute } from "./components/AuthenticatedRoute";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { DASHBOARD_ROUTES } from "./lib/constants/routes";
-import { GlobalContext } from "./lib/context/index.tsx";
+import { GlobalContext } from "./lib/context";
 import LoginPage from "./pages/LoginPage";
 import notification from "antd/es/notification";
 import OverviewPage from "./pages/overview/Overview";
 import ConfigProvider from "antd/es/config-provider";
 import MyProfilePage from "./pages/MyProfile";
-import RentProviderTable from "./pages/provider/RentProviderTable.tsx";
-import TenantTable from "./pages/tenant/TenantTable.tsx";
-import Error404Page from "./pages/Error404Page.tsx";
+import RentProviderTable from "./pages/provider/RentProviderTable";
+import TenantTable from "./pages/tenant/TenantTable";
+import Error404Page from "./pages/Error404Page";
 
 export type NotificationType = "success" | "info" | "warning" | "error";
 

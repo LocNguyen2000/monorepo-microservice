@@ -1,5 +1,5 @@
 import Card from "antd/es/card/Card";
-import { getGlobalContext } from "../lib/context/index.tsx";
+import { getGlobalContext } from "../lib/context";
 import { DescriptionsProps, Badge, Descriptions } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import Typography from "antd/es/typography/Typography";

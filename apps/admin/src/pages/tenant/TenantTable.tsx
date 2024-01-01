@@ -5,14 +5,14 @@ import {
 } from "@ant-design/icons";
 import { ColumnsType } from "antd/es/table";
 import { useContext, useEffect, useState } from "react";
-import BaseTable from "../../components/BaseTable.tsx";
-import { tenantColumns } from "../../lib/constants/columns.ts";
-import { TenantDataType } from "../../lib/interface.ts";
+import BaseTable from "../../components/BaseTable";
+import { tenantColumns } from "../../lib/constants/columns";
+import { TenantDataType } from "../../lib/interface";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
 import Modal from "antd/es/modal/Modal";
-import { GlobalContext, getGlobalContext } from "../../lib/context/index.tsx";
-import TenantDetail from "./TenantDetail.tsx";
+import { getGlobalContext } from "../../lib/context";
+import TenantDetail from "./TenantDetail";
 import { Typography, Divider } from "antd";
 
 const TenantTable = () => {

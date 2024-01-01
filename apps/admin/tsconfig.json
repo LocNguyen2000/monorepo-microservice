@@ -16,7 +16,6 @@
     "composite": true,
     "module": "esnext",
     "moduleResolution": "node",
-    "allowImportingTsExtensions": true,
     "outDir": "./dist"
   },
   "include": ["src", "vite.config.ts"]

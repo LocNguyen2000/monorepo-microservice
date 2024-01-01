@@ -5,12 +5,12 @@ import {
 } from "@ant-design/icons";
 import { Typography, Avatar, Popover, Button, Divider } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { getGlobalContext, getSideMenuContext } from "../lib/context/index.tsx";
+import { getGlobalContext, getSideMenuContext } from "../lib/context";
 import { headerStyle, navHeaderStyle } from "../css/layout";
 import { useNavigate } from "react-router-dom";
 import BaseBreadCrum from "./BaseBreadCrum";
-import { MENU_LIST } from "../pages/Dashboard.tsx";
-import { DASHBOARD_ROUTES } from "../lib/constants/routes.ts";
+import { MENU_LIST } from "../pages/Dashboard";
+import { DASHBOARD_ROUTES } from "../lib/constants/routes";
 
 const PopoverMenuHeader = () => {
   const navigate = useNavigate();

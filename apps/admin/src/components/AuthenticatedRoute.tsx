@@ -1,5 +1,5 @@
 import { FunctionComponent, useContext } from "react";
-import { GlobalContext, getGlobalContext } from "../lib/context/index.tsx";
+import { GlobalContext, getGlobalContext } from "../lib/context";
 import { Navigate } from "react-router-dom";
 
 interface IAuthenticatedRoute {
