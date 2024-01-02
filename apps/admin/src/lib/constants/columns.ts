@@ -60,4 +60,9 @@ export const providerColumns: ColumnsType<ProviderDataType> = [
     dataIndex: "email",
     key: "email",
   },
+  {
+    title: "Room Size",
+    dataIndex: "roomSize",
+    key: "roomSize",
+  },
 ];

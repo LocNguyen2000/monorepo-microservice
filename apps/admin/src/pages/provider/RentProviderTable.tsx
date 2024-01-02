@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { providerColumns } from "../../lib/constants/columns";
 import { ProviderDataType } from "../../lib/interface";
@@ -10,11 +10,20 @@ import {
   RentProviderDetail,
 } from "./RentProviderDetail";
 import { UserAddOutlined } from "@ant-design/icons";
+import { userClient } from "../../lib/clients";
 
 const RentProviderTable = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
   const [provider, setProvider] = useState<Partial<ProviderDataType>>({});
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    userClient.getFilterRentProvider().then((res) => {
+      console.log(res.data);
+
+      setProviders(res.data);
+    });
+  }, []);
 
   return (
     <>

@@ -3,27 +3,26 @@ import axios from "axios";
 export const userClient = {
   endpoint: "http://0.0.0.0:8001",
 
-  async getFilterEmployees(
+  async getFilterRentProvider(
     page?: string,
     size?: string,
     filter?: Record<string, unknown>
   ) {
     try {
-      let api = new URL(`${this.endpoint}/employees`);
+      let api = new URL(`${this.endpoint}/rent-providers`);
       if (page) api.searchParams.append("page", page);
       if (size) api.searchParams.append("size", size);
 
       console.log(api.toString());
 
-      const { data } = await axios.get(api.toString());
-      return data;
+      const response = await axios.get(api.toString());
+      return response;
     } catch (error) {
-      console.log(error);
-      return [];
+      throw error;
     }
   },
 
-  async getFilterCustomers(
+  async getFilterTenant(
     page?: string,
     size?: string,
     filter?: Record<string, unknown>
@@ -35,11 +34,10 @@ export const userClient = {
 
       console.log(api.toString());
 
-      const { data } = await axios.get(api.toString());
-      return data;
+      const response = await axios.get(api.toString());
+      return response;
     } catch (error) {
-      console.log(error);
-      return [];
+      throw error;
     }
   },
 };

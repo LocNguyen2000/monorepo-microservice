@@ -88,7 +88,7 @@ importers:
         specifier: ^4.17.21
         version: registry.npmjs.org/lodash@4.17.21
       mysql2:
-        specifier: ^3.1.2
+        specifier: ^3.6.5
         version: registry.npmjs.org/mysql2@3.6.5
       reflect-metadata:
         specifier: ^0.1.13
@@ -99,6 +99,12 @@ importers:
       rxjs:
         specifier: ^7.2.0
         version: registry.npmjs.org/rxjs@7.8.1
+      sequelize:
+        specifier: ^6.35.2
+        version: registry.npmjs.org/sequelize@6.35.2(mysql2@3.6.5)
+      sequelize-typescript:
+        specifier: ^2.1.6
+        version: registry.npmjs.org/sequelize-typescript@2.1.6(@types/node@16.18.68)(@types/validator@13.11.7)(reflect-metadata@0.1.14)(sequelize@6.35.2)
     devDependencies:
       '@nestjs/cli':
         specifier: ^9.0.0
@@ -139,6 +145,9 @@ importers:
       '@types/node':
         specifier: ^16.0.0
         version: registry.npmjs.org/@types/node@16.18.68
+      '@types/sequelize':
+        specifier: ^4.28.19
+        version: registry.npmjs.org/@types/sequelize@4.28.19
       '@types/supertest':
         specifier: ^2.0.11
         version: registry.npmjs.org/@types/supertest@2.0.16
@@ -248,8 +257,14 @@ importers:
         specifier: ^0.14.0
         version: registry.npmjs.org/class-validator@0.14.0
       mysql2:
-        specifier: ^3.1.2
+        specifier: ^3.6.5
         version: registry.npmjs.org/mysql2@3.6.5
+      sequelize:
+        specifier: ^6.35.2
+        version: registry.npmjs.org/sequelize@6.35.2(mysql2@3.6.5)
+      sequelize-typescript:
+        specifier: ^2.1.6
+        version: registry.npmjs.org/sequelize-typescript@2.1.6(@types/node@16.18.68)(@types/validator@13.11.7)(reflect-metadata@0.1.14)(sequelize@6.35.2)
     devDependencies:
       '@nestjs/common':
         specifier: ^9.0.0
@@ -263,6 +278,9 @@ importers:
       '@types/bcrypt':
         specifier: ^5.0.0
         version: registry.npmjs.org/@types/bcrypt@5.0.2
+      '@types/sequelize':
+        specifier: ^4.28.19
+        version: registry.npmjs.org/@types/sequelize@4.28.19
       reflect-metadata:
         specifier: ^0.1.13
         version: registry.npmjs.org/reflect-metadata@0.1.14
@@ -1925,6 +1943,12 @@ packages:
       '@types/node': registry.npmjs.org/@types/node@16.18.68
     dev: true
 
+  registry.npmjs.org/@types/bluebird@3.5.42:
+    resolution: {integrity: sha512-Jhy+MWRlro6UjVi578V/4ZGNfeCOcNCp0YaFNIUGFKlImowqwb1O/22wDVk3FDGMLqxdpOV3qQHD5fPEH4hK6A==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/bluebird/-/bluebird-3.5.42.tgz}
+    name: '@types/bluebird'
+    version: 3.5.42
+    dev: true
+
   registry.npmjs.org/@types/body-parser@1.19.5:
     resolution: {integrity: sha512-fB3Zu92ucau0iQ0JMCFQE7b/dv8Ot07NI3KaZIkIUNXq82k4eBAqUaneXfleGY9JWskeS9y+u0nXMyspcuQrCg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/body-parser/-/body-parser-1.19.5.tgz}
     name: '@types/body-parser'
@@ -1942,11 +1966,27 @@ packages:
       '@types/node': registry.npmjs.org/@types/node@16.18.68
     dev: true
 
+  registry.npmjs.org/@types/continuation-local-storage@3.2.7:
+    resolution: {integrity: sha512-Q7dPOymVpRG5Zpz90/o26+OAqOG2Sw+FED7uQmTrJNCF/JAPTylclZofMxZKd6W7g1BDPmT9/C/jX0ZcSNTQwQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/continuation-local-storage/-/continuation-local-storage-3.2.7.tgz}
+    name: '@types/continuation-local-storage'
+    version: 3.2.7
+    dependencies:
+      '@types/node': registry.npmjs.org/@types/node@16.18.68
+    dev: true
+
   registry.npmjs.org/@types/cookiejar@2.1.5:
     resolution: {integrity: sha512-he+DHOWReW0nghN24E1WUqM0efK4kI9oTqDm6XmK8ZPe2djZ90BSNdGnIyCLzCPw7/pogPlGbzI2wHGGmi4O/Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/cookiejar/-/cookiejar-2.1.5.tgz}
     name: '@types/cookiejar'
     version: 2.1.5
     dev: true
+
+  registry.npmjs.org/@types/debug@4.1.12:
+    resolution: {integrity: sha512-vIChWdVG3LG1SMxEvI/AK+FWJthlrqlTu7fbrlywTkkaONwk/UAGaULXRlf8vkzFBLVm0zkMdCquhL5aOjhXPQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/debug/-/debug-4.1.12.tgz}
+    name: '@types/debug'
+    version: 4.1.12
+    dependencies:
+      '@types/ms': registry.npmjs.org/@types/ms@0.7.34
+    dev: false
 
   registry.npmjs.org/@types/eslint-scope@3.7.7:
     resolution: {integrity: sha512-MzMFlSLBqNF2gcHWO0G1vP/YQyfvrxZ0bF+u7mzUdZ1/xK4A4sru+nraZz5i3iEIk1l1uyicaDVTB4QbbEkAYg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/eslint-scope/-/eslint-scope-3.7.7.tgz}
@@ -2069,11 +2109,16 @@ packages:
     version: 3.0.4
     dev: true
 
+  registry.npmjs.org/@types/ms@0.7.34:
+    resolution: {integrity: sha512-nG96G3Wp6acyAgJqGasjODb+acrI7KltPiRxzHPXnP3NgI28bpQDRv53olbqGXbfcgF5aiiHmO3xpwEpS5Ld9g==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/ms/-/ms-0.7.34.tgz}
+    name: '@types/ms'
+    version: 0.7.34
+    dev: false
+
   registry.npmjs.org/@types/node@16.18.68:
     resolution: {integrity: sha512-sG3hPIQwJLoewrN7cr0dwEy+yF5nD4D/4FxtQpFciRD/xwUzgD+G05uxZHv5mhfXo4F9Jkp13jjn0CC2q325sg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/node/-/node-16.18.68.tgz}
     name: '@types/node'
     version: 16.18.68
-    dev: true
 
   registry.npmjs.org/@types/parse-json@4.0.2:
     resolution: {integrity: sha512-dISoDXWWQwUquiKsyZ4Ng+HX2KsPL7LyHKHQwgGFEA3IaKac4Obd+h2a/a6waisAoepJlBcx9paWqjA8/HVjCw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/parse-json/-/parse-json-4.0.2.tgz}
@@ -2142,6 +2187,17 @@ packages:
     dependencies:
       '@types/mime': registry.npmjs.org/@types/mime@1.3.5
       '@types/node': registry.npmjs.org/@types/node@16.18.68
+    dev: true
+
+  registry.npmjs.org/@types/sequelize@4.28.19:
+    resolution: {integrity: sha512-GTPL/0gRWyx44+w6HeJ1WHMWik3Bx+8njr7i2LVnRC24R+ocb4EOiJaVtrLEwu55llFRZ5hoYjyRUjrhvESrng==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/@types/sequelize/-/sequelize-4.28.19.tgz}
+    name: '@types/sequelize'
+    version: 4.28.19
+    dependencies:
+      '@types/bluebird': registry.npmjs.org/@types/bluebird@3.5.42
+      '@types/continuation-local-storage': registry.npmjs.org/@types/continuation-local-storage@3.2.7
+      '@types/lodash': registry.npmjs.org/@types/lodash@4.14.202
+      '@types/validator': registry.npmjs.org/@types/validator@13.11.7
     dev: true
 
   registry.npmjs.org/@types/serve-static@1.15.5:
@@ -3656,6 +3712,12 @@ packages:
     engines: {node: '>=12'}
     dev: true
 
+  registry.npmjs.org/dottie@2.0.6:
+    resolution: {integrity: sha512-iGCHkfUc5kFekGiqhe8B/mdaurD+lakO9txNnTvKtA6PISrw86LgqHvRzWYPyoE2Ph5aMIrCw9/uko6XHTKCwA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/dottie/-/dottie-2.0.6.tgz}
+    name: dottie
+    version: 2.0.6
+    dev: false
+
   registry.npmjs.org/ee-first@1.1.1:
     resolution: {integrity: sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/ee-first/-/ee-first-1.1.1.tgz}
     name: ee-first
@@ -4642,6 +4704,19 @@ packages:
     version: 0.4.1
     dev: true
 
+  registry.npmjs.org/glob@7.2.0:
+    resolution: {integrity: sha512-lmLf6gtyrPq8tTjSmrO94wBeQbFR3HbLHbuyD69wuyQkImp2hWqMGB47OX65FBkPffO641IP9jWa1z4ivqG26Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/glob/-/glob-7.2.0.tgz}
+    name: glob
+    version: 7.2.0
+    dependencies:
+      fs.realpath: registry.npmjs.org/fs.realpath@1.0.0
+      inflight: registry.npmjs.org/inflight@1.0.6
+      inherits: registry.npmjs.org/inherits@2.0.4
+      minimatch: registry.npmjs.org/minimatch@3.1.2
+      once: registry.npmjs.org/once@1.4.0
+      path-is-absolute: registry.npmjs.org/path-is-absolute@1.0.1
+    dev: false
+
   registry.npmjs.org/glob@7.2.3:
     resolution: {integrity: sha512-nFR0zLpU2YCaRxwoCJvL6UvCH2JFyFVIvwTLsIf21AuHlMskA1hhTdk+LlYJtOlYt9v6dvszD2BGRqBL+iQK9Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/glob/-/glob-7.2.3.tgz}
     name: glob
@@ -4869,6 +4944,13 @@ packages:
     version: 0.1.4
     engines: {node: '>=0.8.19'}
     dev: true
+
+  registry.npmjs.org/inflection@1.13.4:
+    resolution: {integrity: sha512-6I/HUDeYFfuNCVS3td055BaXBwKYuzw7K3ExVMStBowKo9oOAMJIXIHvdyR3iboTCp1b+1i5DSkIZTcwIktuDw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/inflection/-/inflection-1.13.4.tgz}
+    name: inflection
+    version: 1.13.4
+    engines: {'0': node >= 0.4.0}
+    dev: false
 
   registry.npmjs.org/inflight@1.0.6:
     resolution: {integrity: sha512-k92I/b08q4wvFscXCLvqfsHCrjrF7yiXsQuIVvVE7N82W3+aqpzuUdBbfhWcy/FZR3/4IgflMgKLOsvPDrGCJA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/inflight/-/inflight-1.0.6.tgz}
@@ -6039,6 +6121,20 @@ packages:
     hasBin: true
     dev: false
 
+  registry.npmjs.org/moment-timezone@0.5.44:
+    resolution: {integrity: sha512-nv3YpzI/8lkQn0U6RkLd+f0W/zy/JnoR5/EyPz/dNkPTBjA2jNLCVxaiQ8QpeLymhSZvX0wCL5s27NQWdOPwAw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/moment-timezone/-/moment-timezone-0.5.44.tgz}
+    name: moment-timezone
+    version: 0.5.44
+    dependencies:
+      moment: registry.npmjs.org/moment@2.30.1
+    dev: false
+
+  registry.npmjs.org/moment@2.30.1:
+    resolution: {integrity: sha512-uEmtNhbDOrWPFS+hdjFCBfy9f2YoyzRpwcl+DqpC6taX21FzsTLQVbMV/W7PzNSX6x/bhC1zA3c2UQ5NzH6how==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/moment/-/moment-2.30.1.tgz}
+    name: moment
+    version: 2.30.1
+    dev: false
+
   registry.npmjs.org/ms@2.0.0:
     resolution: {integrity: sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/ms/-/ms-2.0.0.tgz}
     name: ms
@@ -6424,6 +6520,12 @@ packages:
     version: 4.0.0
     engines: {node: '>=8'}
     dev: true
+
+  registry.npmjs.org/pg-connection-string@2.6.2:
+    resolution: {integrity: sha512-ch6OwaeaPYcova4kKZ15sbJ2hKb/VP48ZD2gE7i1J+L4MspCtBMAx8nMgz7bksc7IojCIIWuEhHibSMFH8m8oA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/pg-connection-string/-/pg-connection-string-2.6.2.tgz}
+    name: pg-connection-string
+    version: 2.6.2
+    dev: false
 
   registry.npmjs.org/picocolors@1.0.0:
     resolution: {integrity: sha512-1fygroTLlHu66zi26VoTDv8yRgm0Fccecssto+MhsZ0D/DGW2sm8E8AjW7NU5VVTRt5GxbeZ5qBuJr+HyLYkjQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/picocolors/-/picocolors-1.0.0.tgz}
@@ -7420,6 +7522,12 @@ packages:
       signal-exit: registry.npmjs.org/signal-exit@3.0.7
     dev: true
 
+  registry.npmjs.org/retry-as-promised@7.0.4:
+    resolution: {integrity: sha512-XgmCoxKWkDofwH8WddD0w85ZfqYz+ZHlr5yo+3YUCfycWawU56T5ckWXsScsj5B8tqUcIG67DxXByo3VUgiAdA==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/retry-as-promised/-/retry-as-promised-7.0.4.tgz}
+    name: retry-as-promised
+    version: 7.0.4
+    dev: false
+
   registry.npmjs.org/reusify@1.0.4:
     resolution: {integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/reusify/-/reusify-1.0.4.tgz}
     name: reusify
@@ -7560,6 +7668,89 @@ packages:
     resolution: {integrity: sha512-hr3Wtp/GZIc/6DAGPDcV4/9WoZhjrkXsi5B/07QgX8tsdc6ilr7BFM6PM6rbdAX1kFSDYeZGLipIZZKyQP0O5Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/seq-queue/-/seq-queue-0.0.5.tgz}
     name: seq-queue
     version: 0.0.5
+    dev: false
+
+  registry.npmjs.org/sequelize-pool@7.1.0:
+    resolution: {integrity: sha512-G9c0qlIWQSK29pR/5U2JF5dDQeqqHRragoyahj/Nx4KOOQ3CPPfzxnfqFPCSB7x5UgjOgnZ61nSxz+fjDpRlJg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/sequelize-pool/-/sequelize-pool-7.1.0.tgz}
+    name: sequelize-pool
+    version: 7.1.0
+    engines: {node: '>= 10.0.0'}
+    dev: false
+
+  registry.npmjs.org/sequelize-typescript@2.1.6(@types/node@16.18.68)(@types/validator@13.11.7)(reflect-metadata@0.1.14)(sequelize@6.35.2):
+    resolution: {integrity: sha512-Vc2N++3en346RsbGjL3h7tgAl2Y7V+2liYTAOZ8XL0KTw3ahFHsyAUzOwct51n+g70I1TOUDgs06Oh6+XGcFkQ==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/sequelize-typescript/-/sequelize-typescript-2.1.6.tgz}
+    id: registry.npmjs.org/sequelize-typescript/2.1.6
+    name: sequelize-typescript
+    version: 2.1.6
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      '@types/node': '*'
+      '@types/validator': '*'
+      reflect-metadata: '*'
+      sequelize: '>=6.20.1'
+    dependencies:
+      '@types/node': registry.npmjs.org/@types/node@16.18.68
+      '@types/validator': registry.npmjs.org/@types/validator@13.11.7
+      glob: registry.npmjs.org/glob@7.2.0
+      reflect-metadata: registry.npmjs.org/reflect-metadata@0.1.14
+      sequelize: registry.npmjs.org/sequelize@6.35.2(mysql2@3.6.5)
+    dev: false
+
+  registry.npmjs.org/sequelize@6.35.2(mysql2@3.6.5):
+    resolution: {integrity: sha512-EdzLaw2kK4/aOnWQ7ed/qh3B6/g+1DvmeXr66RwbcqSm/+QRS9X0LDI5INBibsy4eNJHWIRPo3+QK0zL+IPBHg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/sequelize/-/sequelize-6.35.2.tgz}
+    id: registry.npmjs.org/sequelize/6.35.2
+    name: sequelize
+    version: 6.35.2
+    engines: {node: '>=10.0.0'}
+    peerDependencies:
+      ibm_db: '*'
+      mariadb: '*'
+      mysql2: '*'
+      oracledb: '*'
+      pg: '*'
+      pg-hstore: '*'
+      snowflake-sdk: '*'
+      sqlite3: '*'
+      tedious: '*'
+    peerDependenciesMeta:
+      ibm_db:
+        optional: true
+      mariadb:
+        optional: true
+      mysql2:
+        optional: true
+      oracledb:
+        optional: true
+      pg:
+        optional: true
+      pg-hstore:
+        optional: true
+      snowflake-sdk:
+        optional: true
+      sqlite3:
+        optional: true
+      tedious:
+        optional: true
+    dependencies:
+      '@types/debug': registry.npmjs.org/@types/debug@4.1.12
+      '@types/validator': registry.npmjs.org/@types/validator@13.11.7
+      debug: registry.npmjs.org/debug@4.3.4
+      dottie: registry.npmjs.org/dottie@2.0.6
+      inflection: registry.npmjs.org/inflection@1.13.4
+      lodash: registry.npmjs.org/lodash@4.17.21
+      moment: registry.npmjs.org/moment@2.30.1
+      moment-timezone: registry.npmjs.org/moment-timezone@0.5.44
+      mysql2: registry.npmjs.org/mysql2@3.6.5
+      pg-connection-string: registry.npmjs.org/pg-connection-string@2.6.2
+      retry-as-promised: registry.npmjs.org/retry-as-promised@7.0.4
+      semver: registry.npmjs.org/semver@7.5.4
+      sequelize-pool: registry.npmjs.org/sequelize-pool@7.1.0
+      toposort-class: registry.npmjs.org/toposort-class@1.0.1
+      uuid: registry.npmjs.org/uuid@8.3.2
+      validator: registry.npmjs.org/validator@13.11.0
+      wkx: registry.npmjs.org/wkx@0.5.0
+    transitivePeerDependencies:
+      - supports-color
     dev: false
 
   registry.npmjs.org/serialize-javascript@6.0.1:
@@ -8066,6 +8257,12 @@ packages:
     name: toidentifier
     version: 1.0.1
     engines: {node: '>=0.6'}
+
+  registry.npmjs.org/toposort-class@1.0.1:
+    resolution: {integrity: sha512-OsLcGGbYF3rMjPUf8oKktyvCiUxSbqMMS39m33MAjLTC1DVIH6x3WSt63/M77ihI09+Sdfk1AXvfhCEeUmC7mg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/toposort-class/-/toposort-class-1.0.1.tgz}
+    name: toposort-class
+    version: 1.0.1
+    dev: false
 
   registry.npmjs.org/tr46@0.0.3:
     resolution: {integrity: sha512-N3WMsuqV66lT30CrXNbEjx4GEwlow3v6rr4mCcv6prnfwhS01rkgyFdjPNBYd9br7LpXV1+Emh01fHnq2Gdgrw==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/tr46/-/tr46-0.0.3.tgz}
@@ -8647,6 +8844,14 @@ packages:
     dependencies:
       execa: registry.npmjs.org/execa@4.1.0
     dev: true
+
+  registry.npmjs.org/wkx@0.5.0:
+    resolution: {integrity: sha512-Xng/d4Ichh8uN4l0FToV/258EjMGU9MGcA0HV2d9B/ZpZB3lqQm7nkOdZdm5GhKtLLhAE7PiVQwN4eN+2YJJUg==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/wkx/-/wkx-0.5.0.tgz}
+    name: wkx
+    version: 0.5.0
+    dependencies:
+      '@types/node': registry.npmjs.org/@types/node@16.18.68
+    dev: false
 
   registry.npmjs.org/wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==, registry: https://registry.npmjs.com/, tarball: https://registry.npmjs.org/wrap-ansi/-/wrap-ansi-7.0.0.tgz}

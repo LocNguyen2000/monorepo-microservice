@@ -4,9 +4,6 @@ import {
   CustomConfigModuleOptions,
 } from "./common/module/config.module-definition";
 import { EnvService } from "./env.service";
-import { ConfigModule } from "@nestjs/config";
-import { validateSync } from "class-validator";
-import { plainToInstance } from "class-transformer";
 @Global()
 @Module({})
 export class EnvModule extends ConfigurableModuleClass {
