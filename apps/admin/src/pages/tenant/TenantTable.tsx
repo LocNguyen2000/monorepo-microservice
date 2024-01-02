@@ -3,8 +3,7 @@ import {
   DeleteTwoTone,
   UserAddOutlined,
 } from "@ant-design/icons";
-import { ColumnsType } from "antd/es/table";
-import { useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { tenantColumns } from "../../lib/constants/columns";
 import { TenantDataType } from "../../lib/interface";
@@ -12,8 +11,7 @@ import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
 import Modal from "antd/es/modal/Modal";
 import { getGlobalContext } from "../../lib/context";
-import TenantDetail from "./TenantDetail";
-import { Typography, Divider } from "antd";
+import { TenantDetail, TenantDetailHeader } from "./TenantDetail";
 
 const TenantTable = () => {
   const mockTenants = [
@@ -22,7 +20,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -34,7 +31,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -46,7 +42,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -58,7 +53,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -70,7 +64,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -82,7 +75,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -94,7 +86,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -106,7 +97,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -118,7 +108,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -130,7 +119,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -142,7 +130,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -154,7 +141,6 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
@@ -166,71 +152,18 @@ const TenantTable = () => {
       firstName: "Loc",
       lastName: "Nguyen Huu",
       tenantName: "Nguyen Huu Loc",
-      role: "President",
       dateOfBirth: new Date(),
       genderName: "Male",
       phoneNumber: "034696172",
       email: "locnguyenhuu2k@gmail.com",
       contactAdress: "",
     },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      role: "President",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      role: "President",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      role: "President",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      role: "President",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-  ] as TenantDataType[];
+  ] as unknown as TenantDataType[];
 
   const [tenants, setTenants] = useState<TenantDataType[]>(mockTenants);
   const [tenant, setTenant] = useState<Partial<TenantDataType>>({});
   const [open, setOpen] = useState(false);
   const { useToast } = getGlobalContext();
-
-  useEffect(() => {
-    console.log(tenant);
-  }, [tenant]);
 
   const closeModal = () => {
     setOpen(false);
@@ -257,14 +190,7 @@ const TenantTable = () => {
       </div>
 
       <Modal
-        title={
-          <div>
-            <Typography>
-              Tenant Form
-              <Divider />
-            </Typography>
-          </div>
-        }
+        title={<TenantDetailHeader />}
         centered
         open={open}
         onOk={() => closeModal()}

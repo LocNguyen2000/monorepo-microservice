@@ -5,13 +5,15 @@ import { ProviderDataType } from "../../lib/interface";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
 import Modal from "antd/es/modal/Modal";
-import RentProviderDetail from "./RentProviderDetail";
-import Typography from "antd/es/typography/Typography";
-import Divider from "antd/es/divider";
+import {
+  RentProviderDetailHeader,
+  RentProviderDetail,
+} from "./RentProviderDetail";
 import { UserAddOutlined } from "@ant-design/icons";
 
 const RentProviderTable = () => {
-  const [provider, setProvider] = useState<ProviderDataType[]>([]);
+  const [providers, setProviders] = useState<ProviderDataType[]>([]);
+  const [provider, setProvider] = useState<Partial<ProviderDataType>>({});
   const [open, setOpen] = useState(false);
 
   return (
@@ -34,14 +36,7 @@ const RentProviderTable = () => {
         </Button>
       </div>
       <Modal
-        title={
-          <div>
-            <Typography>
-              Provider Form
-              <Divider />
-            </Typography>
-          </div>
-        }
+        title={<RentProviderDetailHeader />}
         centered
         open={open}
         onOk={() => setOpen(false)}
@@ -58,9 +53,9 @@ const RentProviderTable = () => {
           </Button>,
         ]}
       >
-        <RentProviderDetail />
+        <RentProviderDetail data={provider} setData={setProvider} />
       </Modal>
-      <BaseTable columns={providerColumns} data={provider} editable />;
+      <BaseTable columns={providerColumns} data={providers} editable />;
     </>
   );
 };

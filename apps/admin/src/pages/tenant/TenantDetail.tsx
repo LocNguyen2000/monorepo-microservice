@@ -1,22 +1,19 @@
 import {
   Form,
-  Checkbox,
   Radio,
   Input,
   Select,
-  TreeSelect,
-  Cascader,
   DatePicker,
   InputNumber,
   Switch,
-  Button,
-  Slider,
-  ColorPicker,
-  Space,
+  Typography,
+  Divider,
+  Upload,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { TenantDataType } from "../../lib/interface";
 import { useEffect, useState } from "react";
+import { PlusOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 
@@ -25,7 +22,18 @@ interface ITenantDetailProps {
   setData: (data: any) => void;
 }
 
-const TenantDetail: React.FunctionComponent<ITenantDetailProps> = ({
+export const TenantDetailHeader = () => {
+  return (
+    <div>
+      <Typography>
+        Tenant Form
+        <Divider />
+      </Typography>
+    </div>
+  );
+};
+
+export const TenantDetail: React.FunctionComponent<ITenantDetailProps> = ({
   data,
   setData,
 }) => {
@@ -66,34 +74,41 @@ const TenantDetail: React.FunctionComponent<ITenantDetailProps> = ({
       <Form.Item label="Date of Birth">
         <DatePicker />
       </Form.Item>
-      <Form.Item label="Checkbox" name="disabled" valuePropName="checked">
-        <Checkbox>Checkbox</Checkbox>
+      <Form.Item label="Contract Time">
+        <RangePicker />
       </Form.Item>
-      <Form.Item label="Radio">
+      <Form.Item label="Gender">
         <Radio.Group>
-          <Radio value="apple"> Apple </Radio>
-          <Radio value="pear"> Pear </Radio>
+          <Radio value="apple"> Male </Radio>
+          <Radio value="pear"> Female </Radio>
         </Radio.Group>
       </Form.Item>
-      <Form.Item label="Select">
+      <Form.Item label="City">
         <Select>
           <Select.Option value="demo">Demo</Select.Option>
         </Select>
       </Form.Item>
-      <Form.Item label="InputNumber">
+      <Form.Item label="No. roomates">
         <InputNumber />
       </Form.Item>
-      <Form.Item label="TextArea">
+      <Form.Item
+        label="Contract File"
+        valuePropName="fileList"
+        // getValueFromEvent={normFile}
+      >
+        <Upload action="/upload.do" listType="picture-card">
+          <button style={{ border: 0, background: "none" }} type="button">
+            <PlusOutlined />
+            <div style={{ marginTop: 8 }}>Upload</div>
+          </button>
+        </Upload>
+      </Form.Item>
+      <Form.Item label="Note">
         <TextArea rows={4} />
       </Form.Item>
       <Form.Item label="Switch" valuePropName="checked">
         <Switch />
       </Form.Item>
-      <Form.Item label="ColorPicker">
-        <ColorPicker />
-      </Form.Item>
     </Form>
   );
 };
-
-export default TenantDetail;

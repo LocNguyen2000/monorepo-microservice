@@ -106,6 +106,7 @@ export const MENU_LIST: IAntdMenuItem[] = [
 
 const Dashboard: FunctionComponent<DashboardProps> = () => {
   const [menuItem, setMenuItem] = useState<IAntdMenuItem>(MENU_LIST[0]);
+  const [isCollapse, setIsCollapse] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const onChangeMenuItem = (selectedItemKey: string) => {
@@ -131,6 +132,7 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
             menuItems={MENU_LIST}
             selectedItem={menuItem}
             setSelect={onChangeMenuItem}
+            isCollapse={isCollapse}
           />
 
           <BaseHeader />

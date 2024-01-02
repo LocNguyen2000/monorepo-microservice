@@ -1,13 +1,13 @@
 import React from "react";
 
+const siderHeight = "100vw";
+const siderWidth = "15vw";
+
 const headerHight = "10vh";
-const headerWidth = "85vw";
+const headerWidth = `calc(100vw - ${siderWidth})`;
 
 const navHight = "8vh";
 const navWidth = headerWidth;
-
-const siderHeight = "100vw";
-const siderWidth = "15vw";
 
 const contentHeight = `calc(100% - ${headerHight})`;
 const contentWidth = `calc(100% - ${siderWidth})`;
