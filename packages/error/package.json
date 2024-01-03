@@ -10,9 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@nestjs/common": "^9.0.0",
-    "@nestjs/core": "^9.0.0",
-    "@nhl/tsconfig": "workspace:^1.0.0"
+    "@nestjs/common": "9.0.0",
+    "@nestjs/core": "9.0.0",
+    "@nhl/tsconfig": "workspace:1.0.0"
   },
   "publishConfig": {
     "directory": "dist",
