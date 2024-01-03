@@ -1,9 +1,10 @@
 import {
+  BellFilled,
   HomeOutlined,
   InfoCircleOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Typography, Avatar, Popover, Button, Divider } from "antd";
+import { Typography, Avatar, Popover, Button, Divider, Badge } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { getGlobalContext, getSideMenuContext } from "../lib/context";
 import { headerStyle, navHeaderStyle } from "../css/layout";
@@ -86,7 +87,27 @@ const BaseHeader = () => {
         </Typography>
 
         <span style={{ flex: 1 }}></span>
-        <Typography style={{ color: "white" }}>{authUser?.name}</Typography>
+        <div style={{ marginRight: "1.5rem" }}>
+          <Badge
+            showZero
+            count={4}
+            overflowCount={10}
+            size="small"
+            color="geekblue"
+          >
+            <Avatar
+              className="m-hoverable"
+              shape="square"
+              size={40}
+              icon={<BellFilled />}
+              style={{ cursor: "pointer" }}
+            />
+          </Badge>
+        </div>
+
+        <Typography style={{ color: "white", marginRight: "1rem" }}>
+          {authUser?.name}
+        </Typography>
         <Popover
           content={<PopoverMenuHeader />}
           title={<PopoverMenuTitle />}
@@ -96,7 +117,8 @@ const BaseHeader = () => {
           trigger={"click"}
         >
           <Avatar
-            className="m-hoverable-rounded"
+            className="m-hoverable"
+            shape="square"
             size={40}
             icon={<UserOutlined />}
             style={{ cursor: "pointer" }}

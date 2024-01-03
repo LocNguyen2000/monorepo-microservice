@@ -29,6 +29,10 @@
   color: black;
 }
 
+.override-antd-message .ant-message-notice-content{
+  padding: 2rem;
+} 
+
 .logo{
   width: 48px;
   height: 48px;
@@ -39,9 +43,9 @@
   margin: 4px;
 }
 
-.m-hoverable-rounded:hover{
+.m-hoverable:hover{
   border-radius: 50%;
-  background-color: rgba(24, 51, 109, 0.25);
+  background-color: rgba(89, 115, 171, 0.25);
 }
 
 

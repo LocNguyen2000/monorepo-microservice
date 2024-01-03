@@ -4,7 +4,6 @@ import { siderStyle } from "../css/layout";
 import { formatAntdMenuByList } from "../lib/utils";
 import { IAntdMenuItem } from "../lib/interface";
 import { MENU_LIST } from "../pages/Dashboard";
-import MenuItem from "antd/es/menu/MenuItem";
 
 interface MenuSidebarProps {
   selectedItem: IAntdMenuItem;

@@ -1,11 +1,12 @@
 import { Component, createContext, useContext } from "react";
 import { NotificationType } from "../../App";
 import { IAntdMenuItem } from "../interface";
+import { NoticeType } from "antd/es/message/interface";
 
 export interface IGlobalContext {
-  setAuthUser?: () => {};
   authUser?: Record<string, unknown>;
-  useToast: (type: NotificationType, message: string) => void;
+  useNotify: (type: NotificationType, title: string, message: string) => void;
+  useToast: (type: NoticeType, message: string) => void;
 }
 
 export const GlobalContext = createContext<IGlobalContext | null>(null);

@@ -6,7 +6,7 @@ import { ClassConstructor, plainToInstance } from "class-transformer";
 import { validateSync } from "class-validator";
 import { CustomConfigModuleOptions } from "./common/module/config.module-definition";
 @Injectable()
-export class EnvService<T> {
+export class EnvService<T extends object> {
   private readonly env: T;
 
   constructor(

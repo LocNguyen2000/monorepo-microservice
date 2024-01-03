@@ -17,6 +17,13 @@ import { PlusOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 
+import dayjs from "dayjs";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+
+dayjs.extend(customParseFormat);
+/** Manually entering any of the following formats will perform date parsing */
+const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
+
 interface ITenantDetailProps {
   data: Partial<TenantDataType>;
   setData: (data: any) => void;
@@ -66,30 +73,58 @@ export const TenantDetail: React.FunctionComponent<ITenantDetailProps> = ({
         />
       </Form.Item>
       <Form.Item label="Email">
-        <Input value={data.email} />
+        <Input
+          value={data.email}
+          onChange={(e) => {
+            setData({ ...data, email: e.target.value });
+          }}
+        />
       </Form.Item>
       <Form.Item label="Phone number">
-        <Input value={data.phoneNumber} />
+        <Input
+          value={data.phoneNumber}
+          onChange={(e) => {
+            setData({ ...data, phoneNumber: e.target.value });
+          }}
+        />
+      </Form.Item>
+      <Form.Item label="Contact Address">
+        <Input
+          value={data.contactAddress}
+          onChange={(e) => {
+            setData({ ...data, contactAddress: e.target.value });
+          }}
+        />
       </Form.Item>
       <Form.Item label="Date of Birth">
-        <DatePicker />
+        <DatePicker
+          value={dayjs(data.dateOfBirth, { format: dateFormatList[0] })}
+          format={dateFormatList}
+          onChange={(e) => {
+            setData({ ...data, dateOfBirth: e.toDate() });
+          }}
+        />
       </Form.Item>
-      <Form.Item label="Contract Time">
-        <RangePicker />
-      </Form.Item>
+
       <Form.Item label="Gender">
-        <Radio.Group>
-          <Radio value="apple"> Male </Radio>
-          <Radio value="pear"> Female </Radio>
+        <Radio.Group
+          value={data.gender}
+          onChange={(e) => {
+            setData({ ...data, gender: e.target.value });
+          }}
+        >
+          <Radio value={0}> Male </Radio>
+          <Radio value={1}> Female </Radio>
         </Radio.Group>
       </Form.Item>
-      <Form.Item label="City">
-        <Select>
-          <Select.Option value="demo">Demo</Select.Option>
-        </Select>
-      </Form.Item>
+
       <Form.Item label="No. roomates">
-        <InputNumber />
+        <InputNumber
+          value={data.roomateCount}
+          onChange={(v) => {
+            setData({ ...data, roomateCount: v });
+          }}
+        />
       </Form.Item>
       <Form.Item
         label="Contract File"
@@ -103,8 +138,11 @@ export const TenantDetail: React.FunctionComponent<ITenantDetailProps> = ({
           </button>
         </Upload>
       </Form.Item>
+      <Form.Item label="Contract Time">
+        <RangePicker />
+      </Form.Item>
       <Form.Item label="Note">
-        <TextArea rows={4} />
+        <TextArea rows={4} value={data.description} />
       </Form.Item>
       <Form.Item label="Switch" valuePropName="checked">
         <Switch />

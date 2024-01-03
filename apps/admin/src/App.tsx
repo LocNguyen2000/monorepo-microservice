@@ -14,8 +14,12 @@ import MyProfilePage from "./pages/MyProfile";
 import RentProviderTable from "./pages/provider/RentProviderTable";
 import TenantTable from "./pages/tenant/TenantTable";
 import Error404Page from "./pages/Error404Page";
+import message from "antd/es/message";
+import { NoticeType } from "antd/es/message/interface";
+import { messageStyle } from "./css/messsage";
 
 export type NotificationType = "success" | "info" | "warning" | "error";
+export type ToastType = "success" | "info" | "warning" | "error";
 
 const router = createBrowserRouter([
   {
@@ -54,16 +58,25 @@ const router = createBrowserRouter([
 interface AppProps {}
 
 const App: FunctionComponent<AppProps> = () => {
-  const [api, contextHolder] = notification.useNotification();
+  const [api, notifyContextHolder] = notification.useNotification();
+  const [messageApi, messageContextHolder] = message.useMessage();
 
-  const openNotificationWithIcon = (
+  const openToast = (type: NoticeType, content: string) => {
+    messageApi.open({
+      type,
+      content,
+      className: "override-antd-message",
+    });
+  };
+
+  const openNotification = (
     type: NotificationType,
-    message: string
+    title: string = "Notification Title",
+    message: string = "This is the content of the notification. This is the content of the notification. This is the content of the notification."
   ) => {
     api[type]({
-      message: "Notification Title",
-      description:
-        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
+      message: title,
+      description: message,
     });
   };
 
@@ -79,10 +92,12 @@ const App: FunctionComponent<AppProps> = () => {
         <GlobalContext.Provider
           value={{
             authUser: { userID: 1, name: "Nguyen Huu Loc" },
-            useToast: openNotificationWithIcon,
+            useNotify: openNotification,
+            useToast: openToast,
           }}
         >
-          {contextHolder}
+          {messageContextHolder}
+          {notifyContextHolder}
           <RouterProvider router={router} />
         </GlobalContext.Provider>
       </ConfigProvider>

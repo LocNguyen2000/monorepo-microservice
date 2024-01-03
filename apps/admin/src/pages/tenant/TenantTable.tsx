@@ -12,6 +12,7 @@ import Input from "antd/es/input/Input";
 import Modal from "antd/es/modal/Modal";
 import { getGlobalContext } from "../../lib/context";
 import { TenantDetail, TenantDetailHeader } from "./TenantDetail";
+import { UserClient } from "../../lib/clients";
 
 const TenantTable = () => {
   const mockTenants = [
@@ -160,10 +161,22 @@ const TenantTable = () => {
     },
   ] as unknown as TenantDataType[];
 
-  const [tenants, setTenants] = useState<TenantDataType[]>(mockTenants);
+  const [tenants, setTenants] = useState<TenantDataType[]>([]);
   const [tenant, setTenant] = useState<Partial<TenantDataType>>({});
   const [open, setOpen] = useState(false);
-  const { useToast } = getGlobalContext();
+  const { useNotify, useToast } = getGlobalContext();
+  const userClient = UserClient(process.env.ADMIN_USER_URL);
+
+  useEffect(() => {
+    userClient
+      .get("/tenant")
+      .then((res) => {
+        setTenants(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }, []);
 
   const closeModal = () => {
     setOpen(false);
@@ -201,7 +214,7 @@ const TenantTable = () => {
           <Button
             key="submit"
             type="primary"
-            onClick={() => useToast("success", "okay")}
+            onClick={() => useToast("success", "Submit form successfully")}
           >
             Submit
           </Button>,

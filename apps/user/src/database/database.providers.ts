@@ -1,5 +1,10 @@
 import { Sequelize } from 'sequelize-typescript';
-import { UserSchema, RoleSchema, RentProviderSchema } from '@nhl/schemas/user';
+import {
+  UserSchema,
+  RoleSchema,
+  RentProviderSchema,
+  TenantSchema,
+} from '@nhl/schemas/user';
 import { Provider } from '@nestjs/common';
 import { EnvService } from '@nhl/env';
 import { Env } from '~/common/env';
@@ -19,7 +24,12 @@ export const databaseProviders: Provider[] = [
         username: username,
         database: pathname.replace('/', ''),
       });
-      sequelize.addModels([RoleSchema, UserSchema, RentProviderSchema]);
+      sequelize.addModels([
+        RoleSchema,
+        UserSchema,
+        RentProviderSchema,
+        TenantSchema,
+      ]);
       await sequelize.sync();
       return sequelize;
     },

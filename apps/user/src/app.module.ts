@@ -5,6 +5,7 @@ import { Env } from './common/env';
 import { DatabaseModule } from './database/database.module';
 import { RentProvidersModule } from './rent-providers/rent-providers.module';
 import { UsersModule } from './users/users.module';
+import { TenantModule } from './tenant/tenant.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { UsersModule } from './users/users.module';
     DatabaseModule,
     RentProvidersModule,
     UsersModule,
+    TenantModule,
   ],
   controllers: [AppController],
   providers: [],

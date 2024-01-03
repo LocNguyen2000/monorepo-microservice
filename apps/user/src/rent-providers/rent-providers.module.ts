@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { RentProvidersController } from './rent-providers.controller';
-import { providerRentProviders } from './rent-providers.provider';
+import { ProviderRentProviders } from './rent-providers.provider';
 
 @Module({
   controllers: [RentProvidersController],
-  providers: [...providerRentProviders],
+  providers: [...ProviderRentProviders],
 })
 export class RentProvidersModule {}

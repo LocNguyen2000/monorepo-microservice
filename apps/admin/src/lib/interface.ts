@@ -14,8 +14,8 @@ export interface ProviderDataType {
   genderName?: string;
   role?: string;
   tenants?: any[];
-  roomSize?: any[];
-  description?: any[];
+  roomSize?: number;
+  description?: string;
 }
 
 export interface TenantDataType {
@@ -29,7 +29,7 @@ export interface TenantDataType {
   phoneNumber?: string;
   email?: string;
   contactAddress?: string;
-  roomateSize?: number;
+  roomateCount?: number;
   description?: string;
 }
 

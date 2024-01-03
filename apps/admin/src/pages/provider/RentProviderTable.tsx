@@ -10,19 +10,31 @@ import {
   RentProviderDetail,
 } from "./RentProviderDetail";
 import { UserAddOutlined } from "@ant-design/icons";
-import { userClient } from "../../lib/clients";
+import { UserClient } from "../../lib/clients";
+import { getGlobalContext } from "../../lib/context";
+import { Divider } from "antd";
 
 const RentProviderTable = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
   const [provider, setProvider] = useState<Partial<ProviderDataType>>({});
   const [open, setOpen] = useState(false);
+  const { useNotify } = getGlobalContext();
+  const userClient = UserClient(process.env.ADMIN_USER_URL);
+
+  const closeModal = () => {
+    setOpen(false);
+    setProvider({});
+  };
 
   useEffect(() => {
-    userClient.getFilterRentProvider().then((res) => {
-      console.log(res.data);
-
-      setProviders(res.data);
-    });
+    userClient
+      .get("/rent-providers")
+      .then((res) => {
+        setProviders(res.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }, []);
 
   return (
@@ -48,15 +60,16 @@ const RentProviderTable = () => {
         title={<RentProviderDetailHeader />}
         centered
         open={open}
-        onOk={() => setOpen(false)}
-        onCancel={() => setOpen(false)}
-        width={1000}
+        onOk={() => closeModal()}
+        onCancel={() => closeModal()}
+        width={800}
         footer={[
+          <Divider />,
           <Button key="back">Return</Button>,
           <Button
             key="submit"
             type="primary"
-            // onClick={() => openNotification("success")}
+            onClick={() => useNotify("success", "Nice", "hello")}
           >
             Submit
           </Button>,
@@ -64,7 +77,20 @@ const RentProviderTable = () => {
       >
         <RentProviderDetail data={provider} setData={setProvider} />
       </Modal>
-      <BaseTable columns={providerColumns} data={providers} editable />;
+      <BaseTable
+        columns={providerColumns}
+        data={providers}
+        editable
+        onRow={(p: ProviderDataType) => {
+          return {
+            onDoubleClick: () => {
+              setProvider(p);
+              setOpen(true);
+            },
+          };
+        }}
+      />
+      ;
     </>
   );
 };
