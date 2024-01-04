@@ -44,7 +44,6 @@
 }
 
 .m-hoverable:hover{
-  border-radius: 50%;
   background-color: rgba(89, 115, 171, 0.25);
 }
 

@@ -1,10 +1,10 @@
 import React from "react";
 
-const siderHeight = "100vw";
-const siderWidth = "12vw";
+export const siderHeight = "100vw";
+export const siderWidth = "12vw";
 
-const headerHight = "7vh";
-const headerWidth = `calc(100vw - ${siderWidth})`;
+export const headerHight = "7vh";
+export const headerWidth = `calc(100vw - ${siderWidth})`;
 
 const navHight = "5vh";
 const navWidth = headerWidth;

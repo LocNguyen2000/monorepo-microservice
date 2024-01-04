@@ -2,6 +2,8 @@ import {
   BellFilled,
   HomeOutlined,
   InfoCircleOutlined,
+  MenuOutlined,
+  QuestionCircleOutlined,
   UserOutlined,
 } from "@ant-design/icons";
 import { Typography, Avatar, Popover, Button, Divider, Badge } from "antd";
@@ -12,6 +14,7 @@ import { useNavigate } from "react-router-dom";
 import BaseBreadCrum from "./BaseBreadCrum";
 import { MENU_LIST } from "../pages/Dashboard";
 import { DASHBOARD_ROUTES } from "../lib/constants/routes";
+import Input from "antd/es/input/Input";
 
 const PopoverMenuHeader = () => {
   const navigate = useNavigate();
@@ -74,18 +77,21 @@ const BaseHeader = () => {
   return (
     <>
       <Header style={headerStyle}>
-        <div className="logo" />
-        <Typography
-          style={{
-            marginRight: "1rem",
-            fontSize: "1rem",
-            color: "white",
-            fontWeight: "bold",
-          }}
-        >
-          Rent House Workbench
-        </Typography>
+        <Avatar
+          className="m-hoverable"
+          shape="square"
+          size={40}
+          icon={<MenuOutlined />}
+          style={{ cursor: "pointer", marginRight: "1rem" }}
+        />
 
+        <Avatar
+          className="m-hoverable"
+          shape="square"
+          size={40}
+          icon={<QuestionCircleOutlined />}
+          style={{ cursor: "pointer" }}
+        />
         <span style={{ flex: 1 }}></span>
         <div style={{ marginRight: "1.5rem" }}>
           <Badge
@@ -97,7 +103,7 @@ const BaseHeader = () => {
           >
             <Avatar
               className="m-hoverable"
-              shape="square"
+              shape="circle"
               size={40}
               icon={<BellFilled />}
               style={{ cursor: "pointer" }}

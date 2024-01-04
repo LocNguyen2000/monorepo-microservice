@@ -9,6 +9,7 @@ import {
   Divider,
   Table,
   Typography,
+  Tabs,
 } from "antd";
 import { ColumnsType } from "antd/es/table";
 
@@ -19,7 +20,7 @@ interface DataType {
   address: string;
 }
 
-const OverviewPage = () => {
+const AnalysistTab = () => {
   const data = [
     { year: "1991", value: 3 },
     { year: "1992", value: 4 },
@@ -81,7 +82,6 @@ const OverviewPage = () => {
       address: `London, Park Lane no. ${i}`,
     });
   }
-
   return (
     <>
       <Row gutter={[16, 8]} style={{ marginBottom: "0.5rem" }}>
@@ -177,6 +177,28 @@ const OverviewPage = () => {
           </Card>
         </Col>
       </Row>
+    </>
+  );
+};
+
+const OverviewPage = () => {
+  return (
+    <>
+      <Tabs
+        defaultActiveKey="1"
+        items={[
+          {
+            label: "Statistics & Analysist",
+            key: "1",
+            children: <AnalysistTab />,
+          },
+          {
+            label: "Payment Process",
+            key: "2",
+            children: "Tab 2",
+          },
+        ]}
+      />
     </>
   );
 };

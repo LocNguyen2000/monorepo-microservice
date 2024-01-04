@@ -65,18 +65,21 @@ export const MENU_LIST: IAntdMenuItem[] = [
     key: "4",
     icon: <HomeOutlined className="override-antd-icon-item" />,
     parentKey: "3",
+    path: DASHBOARD_ROUTES.LOCATION,
   },
   {
     text: "Settings",
     key: "5",
     icon: <SettingOutlined className="override-antd-icon-item" />,
     parentKey: "3",
+    path: DASHBOARD_ROUTES.SETTING,
   },
   {
     text: "Schedules",
     key: "6",
     icon: <ScheduleOutlined className="override-antd-icon-item" />,
     parentKey: "3",
+    path: DASHBOARD_ROUTES.SCHEDULE,
   },
   {
     text: "Analysis",

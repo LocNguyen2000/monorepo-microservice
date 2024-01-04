@@ -3,4 +3,7 @@ export enum DASHBOARD_ROUTES {
   OVERVIEW = "overview",
   PROVIDER = "rent-provider",
   TENANT = "tenant",
+  LOCATION = "location",
+  SETTING = "setting",
+  SCHEDULE = "schedule",
 }

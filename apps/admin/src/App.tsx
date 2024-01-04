@@ -51,6 +51,15 @@ const router = createBrowserRouter([
         path: DASHBOARD_ROUTES.MY_PROFILE,
         element: <MyProfilePage />,
       },
+      {
+        path: DASHBOARD_ROUTES.LOCATION,
+      },
+      {
+        path: DASHBOARD_ROUTES.SETTING,
+      },
+      {
+        path: DASHBOARD_ROUTES.SCHEDULE,
+      },
     ],
   },
 ]);
