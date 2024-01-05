@@ -32,6 +32,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
                 fontSize: "large",
                 cursor: "pointer",
               }}
+              color="primary"
             />
             <DeleteTwoTone
               style={{
@@ -39,6 +40,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
                 fontSize: "large",
                 cursor: "pointer",
               }}
+              color="primary"
             />
           </span>
         );

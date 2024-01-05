@@ -33,7 +33,12 @@ const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({
       >
         <div className="logo" />
         <Typography
-          style={{ fontWeight: "bold", fontSize: "1rem", textAlign: "center" }}
+          style={{
+            fontWeight: "bold",
+            fontSize: "1rem",
+            textAlign: "center",
+            color: "white",
+          }}
         >
           RentHouse Workbench
         </Typography>
@@ -42,7 +47,7 @@ const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({
 
       <Menu
         title="Workbench Administrator"
-        theme="light"
+        // theme="dark"
         mode="inline"
         className="override-antd-menu-item"
         onClick={(info) => setSelect(info.key)}

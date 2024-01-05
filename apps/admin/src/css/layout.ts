@@ -9,8 +9,8 @@ export const headerWidth = `calc(100vw - ${siderWidth})`;
 const navHight = "5vh";
 const navWidth = headerWidth;
 
-const contentHeight = `calc(100% - ${headerHight})`;
-const contentWidth = `calc(100% - ${siderWidth})`;
+export const contentHeight = `calc(100% - ${headerHight})`;
+export const contentWidth = `calc(100% - ${siderWidth})`;
 
 const headerTop = "0";
 const headerLeft = `calc(${siderWidth})`;
@@ -30,7 +30,7 @@ export const headerStyle: React.CSSProperties = {
   alignItems: "center",
   textAlign: "center",
   color: "#fff",
-  // backgroundColor: "#222831",
+  backgroundColor: "#474747",
   borderBottom: "1px solid white",
 };
 
@@ -69,4 +69,5 @@ export const siderStyle: React.CSSProperties = {
   width: siderWidth,
   height: siderHeight,
   padding: "0.5rem",
+  backgroundColor: "#2f3330",
 };

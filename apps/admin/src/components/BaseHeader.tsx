@@ -76,7 +76,7 @@ const BaseHeader = () => {
 
   return (
     <>
-      <Header style={headerStyle}>
+      <Header style={headerStyle} color="primary">
         <Avatar
           className="m-hoverable"
           shape="square"

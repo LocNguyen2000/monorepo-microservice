@@ -49,7 +49,7 @@ export const MENU_LIST: IAntdMenuItem[] = [
     parentKey: "0",
   },
   {
-    text: "Rent Provider",
+    text: "Rent Owner",
     key: "2",
     icon: <IdcardOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.PROVIDER,

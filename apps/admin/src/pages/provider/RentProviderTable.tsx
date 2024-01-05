@@ -13,6 +13,7 @@ import { UserAddOutlined } from "@ant-design/icons";
 import { UserClient } from "../../lib/clients";
 import { getGlobalContext } from "../../lib/context";
 import { Divider } from "antd";
+import Card from "antd/es/card/Card";
 
 const RentProviderTable = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
@@ -38,7 +39,7 @@ const RentProviderTable = () => {
   }, []);
 
   return (
-    <>
+    <Card>
       <div
         style={{
           display: "flex",
@@ -91,7 +92,7 @@ const RentProviderTable = () => {
         }}
       />
       ;
-    </>
+    </Card>
   );
 };
 

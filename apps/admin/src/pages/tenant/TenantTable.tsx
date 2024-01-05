@@ -13,154 +13,9 @@ import Modal from "antd/es/modal/Modal";
 import { getGlobalContext } from "../../lib/context";
 import { TenantDetail, TenantDetailHeader } from "./TenantDetail";
 import { UserClient } from "../../lib/clients";
+import Card from "antd/es/card/Card";
 
 const TenantTable = () => {
-  const mockTenants = [
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-    {
-      tenantCode: 1,
-      firstName: "Loc",
-      lastName: "Nguyen Huu",
-      tenantName: "Nguyen Huu Loc",
-      dateOfBirth: new Date(),
-      genderName: "Male",
-      phoneNumber: "034696172",
-      email: "locnguyenhuu2k@gmail.com",
-      contactAdress: "",
-    },
-  ] as unknown as TenantDataType[];
-
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
   const [tenant, setTenant] = useState<Partial<TenantDataType>>({});
   const [open, setOpen] = useState(false);
@@ -184,7 +39,7 @@ const TenantTable = () => {
   };
 
   return (
-    <>
+    <Card>
       <div
         style={{
           display: "flex",
@@ -235,7 +90,7 @@ const TenantTable = () => {
           };
         }}
       />
-    </>
+    </Card>
   );
 };
 

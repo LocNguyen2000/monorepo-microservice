@@ -17,6 +17,7 @@ import Error404Page from "./pages/Error404Page";
 import message from "antd/es/message";
 import { NoticeType } from "antd/es/message/interface";
 import { messageStyle } from "./css/messsage";
+import theme from "antd/es/theme";
 
 export type NotificationType = "success" | "info" | "warning" | "error";
 export type ToastType = "success" | "info" | "warning" | "error";
@@ -90,27 +91,53 @@ const App: FunctionComponent<AppProps> = () => {
   };
 
   return (
-    <>
-      <ConfigProvider
-        theme={{
-          token: {
-            fontFamily: "GoogleRoboto",
+    <ConfigProvider
+      theme={{
+        // algorithm: theme.darkAlgorithm,
+        components: {
+          //   Button: {
+          //     colorPrimary: "#00b96b",
+          //     algorithm: true, // Enable algorithm
+          //   },
+          //   Input: {
+          //     colorPrimary: "#0ff594",
+          //   },
+          Menu: {
+            // colorPrimary: "#2f3330",
+            algorithm: true,
+            colorBgBase: "#2f3330",
+            colorText: "white",
+            itemHoverBg: "#d4d7dc",
+            itemHoverColor: "#4CAF50",
+            itemSelectedBg: "#d4d7dc",
+            controlItemBgActiveHover: "#2f3330",
+            // subMenuItemBg: "#2f3330",
           },
+        },
+        token: {
+          fontFamily: "GoogleRoboto",
+          // Seed Token
+          colorPrimary: "#4CAF50",
+          colorBgTextHover: "#2ca01c",
+          borderRadius: 4,
+          // colorIcon: "#8b3ec7",
+          // Alias Token
+          // colorBgContainer: "#f6ffed",
+        },
+      }}
+    >
+      <GlobalContext.Provider
+        value={{
+          authUser: { userID: 1, name: "Nguyen Huu Loc" },
+          useNotify: openNotification,
+          useToast: openToast,
         }}
       >
-        <GlobalContext.Provider
-          value={{
-            authUser: { userID: 1, name: "Nguyen Huu Loc" },
-            useNotify: openNotification,
-            useToast: openToast,
-          }}
-        >
-          {messageContextHolder}
-          {notifyContextHolder}
-          <RouterProvider router={router} />
-        </GlobalContext.Provider>
-      </ConfigProvider>
-    </>
+        {messageContextHolder}
+        {notifyContextHolder}
+        <RouterProvider router={router} />
+      </GlobalContext.Provider>
+    </ConfigProvider>
   );
 };
 
