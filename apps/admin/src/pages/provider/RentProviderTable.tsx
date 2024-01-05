@@ -91,7 +91,6 @@ const RentProviderTable = () => {
           };
         }}
       />
-      ;
     </Card>
   );
 };

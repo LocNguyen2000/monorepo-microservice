@@ -24,3 +24,5 @@ export class LocationSchema extends BaseEntity {
   @Column
   image?: string;
 }
+
+export const LOCATION_SCHEMA = "LOCATION_SCHEMA";

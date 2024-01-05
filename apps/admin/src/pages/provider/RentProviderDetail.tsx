@@ -104,11 +104,6 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> =
             <Radio value={1}> Female </Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="Tenants">
-          <Select showSearch placeholder="Select tenant">
-            <Select.Option value="demo">Demo</Select.Option>
-          </Select>
-        </Form.Item>
         <Form.Item label="Locations">
           <Select showSearch placeholder="Select locations that you provide">
             <Select.Option value="demo">Demo</Select.Option>
@@ -116,40 +111,6 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> =
             <Select.Option value="demo">Demo</Select.Option>
           </Select>
         </Form.Item>
-
-        {/* <Form.Item label="TreeSelect">
-        <TreeSelect
-          treeData={[
-            {
-              title: "Light",
-              value: "light",
-              children: [{ title: "Bamboo", value: "bamboo" }],
-            },
-          ]}
-        />
-      </Form.Item>
-      <Form.Item label="Cascader">
-        <Cascader
-          options={[
-            {
-              value: "zhejiang",
-              label: "Zhejiang",
-              children: [
-                {
-                  value: "hangzhou",
-                  label: "Hangzhou",
-                },
-              ],
-            },
-          ]}
-        />
-      </Form.Item>
-      <Form.Item label="Locations">
-        <DatePicker />
-      </Form.Item>
-      <Form.Item label="RangePicker">
-        <RangePicker />
-      </Form.Item> */}
         <Form.Item label="No. rooms">
           <InputNumber value={data.roomSize} />
         </Form.Item>

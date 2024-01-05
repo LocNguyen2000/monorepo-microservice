@@ -1,5 +1,5 @@
 import { SettingTwoTone, DeleteTwoTone } from "@ant-design/icons";
-import { Table } from "antd";
+import { Empty, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { FunctionComponent } from "react";
 
@@ -61,14 +61,23 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
 
   return (
     <>
-      <Table
-        style={{ marginRight: "16px" }}
-        columns={editable ? withEditColumn(columns) : columns}
-        dataSource={data}
-        showSorterTooltip={true}
-        bordered
-        onRow={onRow}
-      />
+      {data.length > 0 ? (
+        <Table
+          style={{ marginRight: "16px" }}
+          columns={editable ? withEditColumn(columns) : columns}
+          dataSource={data}
+          showSorterTooltip={true}
+          bordered
+          onRow={onRow}
+        />
+      ) : (
+        <Table
+          style={{ marginRight: "16px" }}
+          columns={editable ? withEditColumn(columns) : columns}
+          showSorterTooltip={true}
+          bordered
+        />
+      )}
     </>
   );
 };

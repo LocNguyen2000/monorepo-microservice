@@ -67,7 +67,7 @@ importers:
         specifier: 2.8.0
         version: registry.npmjs.org/vite@2.8.0
 
-  apps/user:
+  apps/service:
     dependencies:
       '@nestjs/common':
         specifier: 9.0.0

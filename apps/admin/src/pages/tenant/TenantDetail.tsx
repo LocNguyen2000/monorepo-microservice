@@ -117,7 +117,11 @@ export const TenantDetail: React.FunctionComponent<ITenantDetailProps> = ({
           <Radio value={1}> Female </Radio>
         </Radio.Group>
       </Form.Item>
-
+      <Form.Item label="Rent Owner">
+        <Select showSearch placeholder="Select tenant">
+          <Select.Option value="demo">Demo</Select.Option>
+        </Select>
+      </Form.Item>
       <Form.Item label="No. roomates">
         <InputNumber
           value={data.roomateCount}
