@@ -8,26 +8,30 @@ import { Repository } from 'sequelize-typescript';
 export class TenantService {
   constructor(
     @Inject(TENANTS_SCHEMA)
-    private readonly rentProviderRepository: Repository<TenantSchema>,
+    private readonly tenantRepository: Repository<TenantSchema>,
   ) {}
 
-  create(createTenantDto: CreateTenantDto) {
-    return 'This action adds a new tenant';
+  create(payload: Record<string, unknown>) {
+    return this.tenantRepository.create(payload);
   }
 
   findAll() {
-    return this.rentProviderRepository.findAll();
+    return this.tenantRepository.findAll();
   }
 
   findOne(id: number) {
-    return this.rentProviderRepository.findByPk(id);
+    return this.tenantRepository.findByPk(id);
   }
 
-  update(id: number, updateTenantDto: UpdateTenantDto) {
-    return `This action updates a #${id} tenant`;
+  async update(id: number, payload: Record<string, unknown>) {
+    const tenant = await this.tenantRepository.findByPk(id);
+
+    return tenant.update({ ...payload });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} tenant`;
+  async remove(id: number) {
+    const tenant = await this.tenantRepository.findByPk(id);
+
+    return tenant.destroy();
   }
 }

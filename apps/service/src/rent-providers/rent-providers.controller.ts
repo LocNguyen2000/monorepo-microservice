@@ -1,16 +1,40 @@
-import { Controller, Get, Inject } from '@nestjs/common';
-import { RENT_PROVIDER_SCHEMA, RentProviderSchema } from '@nhl/schemas/user';
-import { Repository } from 'sequelize-typescript';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+} from '@nestjs/common';
+import { RentProvidersService } from './rent-providers.service';
 
 @Controller('rent-providers')
 export class RentProvidersController {
-  constructor(
-    @Inject(RENT_PROVIDER_SCHEMA)
-    private readonly rentProviderRepository: Repository<RentProviderSchema>,
-  ) {}
+  constructor(private readonly rentProvider: RentProvidersService) {}
+
+  @Post()
+  create(@Body() payload: Record<string, unknown>) {
+    return this.rentProvider.create(payload);
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.rentProvider.findOne(+id);
+  }
 
   @Get()
   findAll() {
-    return this.rentProviderRepository.findAll();
+    return this.rentProvider.findAll();
+  }
+
+  @Patch(':id')
+  update(@Param('id') id: string, @Body() payload: Record<string, unknown>) {
+    return this.rentProvider.update(+id, payload);
+  }
+
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.rentProvider.remove(+id);
   }
 }
