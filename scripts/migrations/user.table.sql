@@ -37,7 +37,6 @@ create table
         `phoneNumber` varchar(20),
         `contactAdress` varchar(100),
         `gender` int not null,
-        `roomSize` int NOT NULL,
         `description` varchar(50),
         `createdAt` datetime DEFAULT NOW(),
         `updatedAt` datetime DEFAULT NULL,
@@ -48,7 +47,7 @@ create table
 
 create table
     if not exists tenants(
-        `tenantCode` int,
+        `tenantCode` int not null,
         `lastName` varchar(50),
         `firstName` varchar(50),
         `email` varchar(100) NOT NULL,
@@ -66,6 +65,23 @@ create table
         PRIMARY KEY (`tenantCode`)
     )
 
-insert into
-    users.roles (id, role)
-values (1, 'Administrator'), (2, 'Manager'), (3, 'Employee'), (4, 'Tenant')
+create table
+    if not exists locations(
+        `locationCode` int not null,
+        `locationAddress` varchar(100) not null,
+        `roomSize` int NOT NULL,
+        `description` varchar(50),
+        `owner` int,
+        `image` VARCHAR(100),
+        `createdAt` datetime DEFAULT NOW(),
+        `updatedAt` datetime DEFAULT NULL,
+        `createdBy` varchar(50) DEFAULT NULL,
+        `updatedBy` varchar(50) DEFAULT NULL,
+        PRIMARY KEY (`locationCode`),
+        CONSTRAINT FOREIGN KEY(`owner`) REFERENCES rent_providers(providerCode)
+    ) # v2.0 migration
+
+ALTER TABLE tenants
+ADD `rentProviderId` INTEGER,
+ADD
+    CONSTRAINT FOREIGN KEY(rentProviderId) REFERENCES rent_providers(providerCode);

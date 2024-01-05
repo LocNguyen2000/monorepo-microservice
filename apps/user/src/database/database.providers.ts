@@ -4,6 +4,7 @@ import {
   RoleSchema,
   RentProviderSchema,
   TenantSchema,
+  LocationSchema,
 } from '@nhl/schemas/user';
 import { Provider } from '@nestjs/common';
 import { EnvService } from '@nhl/env';
@@ -29,6 +30,7 @@ export const databaseProviders: Provider[] = [
         UserSchema,
         RentProviderSchema,
         TenantSchema,
+        LocationSchema,
       ]);
       await sequelize.sync();
       return sequelize;

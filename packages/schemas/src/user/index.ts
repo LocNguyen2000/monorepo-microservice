@@ -24,3 +24,4 @@ export const USER_SCHEMA_TOKEN = "USER_SCHEMA";
 export * from "./role";
 export * from "./rent-provider";
 export * from "./tenant";
+export * from "./location";
