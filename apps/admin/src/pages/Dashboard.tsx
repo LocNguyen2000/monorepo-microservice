@@ -31,7 +31,7 @@ const { Content } = Layout;
 
 export const MENU_LIST: IAntdMenuItem[] = [
   {
-    text: "Trang chu",
+    text: "Overview",
     key: "10",
     icon: <BarChartOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.OVERVIEW,

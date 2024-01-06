@@ -29,13 +29,12 @@ const AnalysistTab = () => {
     yField: "value",
     point: {
       size: 5,
-      shape: "circule",
     },
     tooltip: {
       // formatter: (data) => {
       //   return {
       //     name: "",
-      //     value: any,
+      //     value: data,
       //   };
       // },
       customContent: (name, data) =>

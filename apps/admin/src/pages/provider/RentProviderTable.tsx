@@ -10,7 +10,7 @@ import {
   RentProviderDetail,
 } from "./RentProviderDetail";
 import { UserAddOutlined } from "@ant-design/icons";
-import { UserClient } from "../../lib/clients";
+import { ServiceClient } from "../../lib/clients";
 import { getGlobalContext } from "../../lib/context";
 import { Divider } from "antd";
 import Card from "antd/es/card/Card";
@@ -20,7 +20,7 @@ const RentProviderTable = () => {
   const [provider, setProvider] = useState<Partial<ProviderDataType>>({});
   const [open, setOpen] = useState(false);
   const { useNotify } = getGlobalContext();
-  const userClient = UserClient(process.env.ADMIN_USER_URL);
+  const serviceClient = ServiceClient();
 
   const closeModal = () => {
     setOpen(false);
@@ -28,7 +28,7 @@ const RentProviderTable = () => {
   };
 
   useEffect(() => {
-    userClient
+    serviceClient
       .get("/rent-providers")
       .then((res) => {
         setProviders(res.data);

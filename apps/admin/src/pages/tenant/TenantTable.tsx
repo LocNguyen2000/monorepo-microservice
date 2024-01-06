@@ -10,20 +10,18 @@ import { TenantDataType } from "../../lib/interface";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
 import Modal from "antd/es/modal/Modal";
-import { getGlobalContext } from "../../lib/context";
-import { TenantDetail, TenantDetailHeader } from "./TenantDetail";
-import { UserClient } from "../../lib/clients";
+import TenantDetail from "./TenantDetail";
+import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
 
 const TenantTable = () => {
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
   const [tenant, setTenant] = useState<Partial<TenantDataType>>({});
   const [open, setOpen] = useState(false);
-  const { useNotify, useToast } = getGlobalContext();
-  const userClient = UserClient(process.env.ADMIN_USER_URL);
+  const serviceClient = ServiceClient();
 
   useEffect(() => {
-    userClient
+    serviceClient
       .get("/tenant")
       .then((res) => {
         setTenants(res.data);
@@ -58,24 +56,15 @@ const TenantTable = () => {
       </div>
 
       <Modal
-        title={<TenantDetailHeader />}
+        title={<TenantDetail.Header />}
         centered
         open={open}
         onOk={() => closeModal()}
         onCancel={() => closeModal()}
         width={1000}
-        footer={[
-          <Button key="back">Return</Button>,
-          <Button
-            key="submit"
-            type="primary"
-            onClick={() => useToast("success", "Submit form successfully")}
-          >
-            Submit
-          </Button>,
-        ]}
+        footer={<TenantDetail.Footer />}
       >
-        <TenantDetail data={tenant} setData={setTenant} />
+        <TenantDetail.Body data={tenant} setData={setTenant} />
       </Modal>
       <BaseTable
         columns={tenantColumns}

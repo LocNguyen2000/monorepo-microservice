@@ -1,8 +1,8 @@
 import axios from "axios";
 
-export const UserClient = (url: string) => {
+export const ServiceClient = (url?: string) => {
   const axiosIntance = axios.create({
-    baseURL: url,
+    baseURL: process.env.ADMIN_USER_URL,
   });
 
   return axiosIntance;

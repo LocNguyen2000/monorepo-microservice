@@ -1,6 +1,6 @@
 import { SettingTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { Empty, Table } from "antd";
-import { ColumnsType } from "antd/es/table";
+import { ColumnGroupType, ColumnsType } from "antd/es/table";
 import { FunctionComponent } from "react";
 
 export interface IBaseTableProps {
@@ -23,9 +23,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
       render: () => {
         // const editable = isEditing(record);
         return (
-          <span
-          // style={{ display: "flex", justifyContent: "center", width: "100%" }}
-          >
+          <span>
             <SettingTwoTone
               style={{
                 marginRight: "0.5rem",
@@ -43,7 +41,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
               color="primary"
             />
           </span>
-        );
+        ) as unknown as ColumnsType<any>;
         // editable ? (
         //   <span>
         //     <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>

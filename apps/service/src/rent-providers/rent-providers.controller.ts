@@ -18,14 +18,14 @@ export class RentProvidersController {
     return this.rentProvider.create(payload);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.rentProvider.findOne(+id);
-  }
-
   @Get()
   findAll() {
     return this.rentProvider.findAll();
+  }
+
+  @Get(':id')
+  findOne(@Param('id') id: string) {
+    return this.rentProvider.findOne(+id);
   }
 
   @Patch(':id')

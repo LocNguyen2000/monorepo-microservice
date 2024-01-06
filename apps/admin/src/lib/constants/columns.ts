@@ -6,11 +6,13 @@ export const tenantColumns: ColumnsType<TenantDataType> = [
     title: "Tenant Code",
     dataIndex: "tenantCode",
     key: "tenantCode",
+    fixed: "left",
   },
   {
-    title: "Name",
+    title: "Tenant Name",
     dataIndex: "tenantName",
     key: "tenantName",
+    fixed: "left",
   },
   {
     title: "DOB",
@@ -23,9 +25,24 @@ export const tenantColumns: ColumnsType<TenantDataType> = [
     key: "phoneNumber",
   },
   {
+    title: "Gender",
+    dataIndex: "gender",
+    key: "gender",
+  },
+  {
     title: "Email",
     dataIndex: "email",
     key: "email",
+  },
+  {
+    title: "Contact Address",
+    dataIndex: "contactAddress",
+    key: "contactAddress",
+  },
+  {
+    title: "Roomate Count",
+    dataIndex: "roomateCount",
+    key: "roomateCount",
   },
 ];
 
