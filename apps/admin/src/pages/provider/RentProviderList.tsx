@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { providerColumns } from "../../lib/constants/columns";
 import { ProviderDataType } from "../../lib/interface";
@@ -13,20 +13,22 @@ import { ACTION_ENUM } from "../../lib/constants";
 const RentProviderList = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
   const [provider, setProvider] = useState<ProviderDataType>({});
-  const [open, setOpen] = useState(false);
+  const [isOpenForm, dispatch] = useReducer(
+    (_: boolean, action: ACTION_ENUM) => {
+      return action == ACTION_ENUM.ADD || action == ACTION_ENUM.EDIT;
+    },
+    false
+  );
+  const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.CLOSE);
   const serviceClient = ServiceClient();
 
   const openFormHandler = (action: ACTION_ENUM, data: ProviderDataType) => {
-    if (action == ACTION_ENUM.ADD) {
-      setProvider({});
-      setOpen(true);
-    } else if (action == ACTION_ENUM.EDIT) {
-      setProvider(data);
-      setOpen(true);
-    } else {
-      setProvider({});
-      setOpen(false);
-    }
+    console.log("FORM", action);
+    console.log("DATA", data);
+
+    setAction(action);
+    dispatch(action);
+    setProvider(data);
   };
 
   useEffect(() => {
@@ -67,7 +69,8 @@ const RentProviderList = () => {
       <RentProviderDetail
         data={provider}
         setData={setProvider}
-        isOpen={open}
+        action={action}
+        isOpen={isOpenForm}
         setIsFormOpen={openFormHandler}
       />
 

@@ -16,6 +16,7 @@ export function formatAntdMenu(
     icon,
     children,
     type,
+    title: label,
   } as MenuItem;
 }
 
@@ -46,3 +47,13 @@ export function findAntdItemAndExecute(
   data: IAntdMenuItem[],
   callback: () => any
 ) {}
+
+export function debounce(func, timeout = 300) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, timeout);
+  };
+}

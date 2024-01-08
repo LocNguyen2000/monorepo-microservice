@@ -17,6 +17,8 @@ export class RentProvidersController {
 
   @Post()
   create(@Body() payload: Record<string, unknown>) {
+    console.log('payload >', payload);
+
     return this.rentProvider.create(payload);
   }
 
@@ -31,7 +33,9 @@ export class RentProvidersController {
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() payload: UpsertRentProviderDto) {
+  update(@Param('id') id: string, @Body() payload: Record<string, unknown>) {
+    console.log('payload >', payload);
+
     return this.rentProvider.update(+id, payload);
   }
 

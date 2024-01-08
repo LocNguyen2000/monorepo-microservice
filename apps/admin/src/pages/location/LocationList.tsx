@@ -4,6 +4,7 @@ import Meta from "antd/es/card/Meta";
 import { useEffect, useState } from "react";
 import { ServiceClient } from "../../lib/clients";
 import UserAddOutlined from "@ant-design/icons/lib/icons/UserAddOutlined";
+import Typography from "antd/es/typography/Typography";
 
 interface ILocationList {}
 
@@ -43,7 +44,7 @@ const LocationList = () => {
           </Button>
         </div>
       </Card>
-      <Flex wrap="wrap" gap="small">
+      <Flex wrap="wrap" gap="small" style={{ justifyContent: "center" }}>
         {locations.map((l) => (
           <Card
             hoverable
@@ -54,7 +55,12 @@ const LocationList = () => {
           >
             <Meta
               title={l.locationCode + ": " + l.locationAddress}
-              description={l.description}
+              description={
+                <>
+                  <Typography>Room count: {l.roomCount}</Typography>
+                  <Typography>Description: {l.description}</Typography>
+                </>
+              }
             />
           </Card>
         ))}

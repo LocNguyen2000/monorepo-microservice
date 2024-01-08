@@ -1,11 +1,11 @@
 import { UserAddOutlined } from "@ant-design/icons";
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { tenantColumns } from "../../lib/constants/columns";
 import { TenantDataType } from "../../lib/interface";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
-import TenantDetail from "./TenantDetail";
+import TenantDetail, { TenantDetailForm } from "./TenantDetail";
 import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
@@ -13,12 +13,18 @@ import { ACTION_ENUM } from "../../lib/constants";
 const TenantList = () => {
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
   const [tenant, setTenant] = useState<TenantDataType>({});
-  const [open, setOpen] = useState(false);
+  const [isOpenForm, dispatch] = useReducer(
+    (_: boolean, action: ACTION_ENUM) => {
+      return action == ACTION_ENUM.ADD || action == ACTION_ENUM.EDIT;
+    },
+    false
+  );
+  const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.CLOSE);
   const serviceClient = ServiceClient();
 
   useEffect(() => {
     serviceClient
-      .get("/tenant")
+      .get("/tenants")
       .then((res) => {
         setTenants(res.data);
       })
@@ -28,16 +34,12 @@ const TenantList = () => {
   }, []);
 
   const openFormHandler = (action: ACTION_ENUM, data: TenantDataType) => {
-    if (action == ACTION_ENUM.ADD) {
-      setTenant({});
-      setOpen(true);
-    } else if (action == ACTION_ENUM.EDIT) {
-      setTenant(data);
-      setOpen(true);
-    } else {
-      setTenant({});
-      setOpen(false);
-    }
+    console.log("FORM", action);
+    console.log("DATA", data);
+
+    setAction(action);
+    dispatch(action);
+    setTenant(data);
   };
 
   return (
@@ -63,10 +65,11 @@ const TenantList = () => {
         </Button>
       </div>
 
-      <TenantDetail.Body
+      <TenantDetailForm
         data={tenant}
         setData={setTenant}
-        isOpen={open}
+        action={action}
+        isOpen={isOpenForm}
         setIsFormOpen={openFormHandler}
       />
 

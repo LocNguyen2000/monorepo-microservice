@@ -24,6 +24,7 @@ import { ServiceClient } from "../../lib/clients";
 import { getGlobalContext } from "../../lib/context";
 import Modal from "antd/es/modal/Modal";
 import { ACTION_ENUM } from "../../lib/constants";
+import { debounce } from "../../lib/utils";
 
 dayjs.extend(customParseFormat);
 /** Manually entering any of the following formats will perform date parsing */
@@ -33,48 +34,10 @@ interface ITenantDetailProps {
   data: TenantDataType;
   setData: (data: TenantDataType) => void;
   isOpen: boolean;
+  action: ACTION_ENUM;
   setIsFormOpen: (action: ACTION_ENUM, data: TenantDataType) => void;
   setSubmitEvent?: () => void;
 }
-
-export const TenantDetailHeader = () => {
-  return (
-    <div>
-      <Typography>
-        Tenant Form
-        <Divider />
-      </Typography>
-    </div>
-  );
-};
-
-export const TenantDetailFooter: React.FunctionComponent = () => {
-  const { useNotify } = getGlobalContext();
-  const serviceClient = ServiceClient();
-  const handleSubmitEvent = () => {
-    serviceClient
-      .post("/tenant", {})
-      .then((res) => {
-        useNotify(
-          "success",
-          "New Tenant Added",
-          `Submit form successfully for`
-        );
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  return (
-    <>
-      <Button key="back">Return</Button>
-      <Button key="submit" type="primary" onClick={() => handleSubmitEvent()}>
-        Submit
-      </Button>
-    </>
-  );
-};
 
 type ISelectProviders = Pick<
   ProviderDataType,
@@ -86,8 +49,10 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
   setData,
   isOpen,
   setIsFormOpen,
+  action,
 }) => {
   const [providers, setProviders] = useState<ISelectProviders>([]);
+  const { useNotify } = getGlobalContext();
   const serviceClient = ServiceClient();
 
   const formChangeHandler: ChangeEventHandler<
@@ -96,7 +61,41 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
     const key = e.target.attributes.getNamedItem("name")
       .value as keyof TenantDataType;
     const value = e.target.value;
-    setData({ ...data, [key]: value });
+
+    debounce(setData({ ...data, [key]: value }));
+  };
+
+  const handleSubmitEvent = async () => {
+    try {
+      console.log(action);
+
+      if (action === ACTION_ENUM.ADD) {
+        console.log("Hello Add");
+
+        await serviceClient.post("/tenant", { ...data });
+
+        useNotify(
+          "success",
+          "New Tenant Added",
+          `Submit form successfully for ${data.tenantName}`
+        );
+      } else if (action === ACTION_ENUM.EDIT) {
+        console.log("Hello Edit");
+
+        await serviceClient.put(`/tenant/${data.tenantCode}`, { ...data });
+
+        useNotify(
+          "success",
+          "Tenant Updated Success",
+          `Submit form successfully for ${data.tenantName}`
+        );
+      }
+
+      debounce(setIsFormOpen(ACTION_ENUM.CLOSE, {}));
+    } catch (error) {
+      console.log("Error", error);
+      useNotify("error", "Tenant Submission Error", `Form submission failed.`);
+    }
   };
 
   useEffect(() => {
@@ -114,13 +113,19 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
   }, []);
   return (
     <Modal
-      title={<TenantDetail.Header />}
+      title={
+        <Typography>
+          Tenant Form
+          <Divider />
+        </Typography>
+      }
       centered
       open={isOpen}
-      onOk={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
+      okText="Submit"
+      onOk={async () => await handleSubmitEvent()}
+      cancelText="Return"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
       width={1000}
-      footer={<TenantDetail.Footer />}
     >
       <Form
         labelCol={{ span: 4 }}
@@ -237,14 +242,9 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
           <Switch />
         </Form.Item>
       </Form>
+      <Divider />
     </Modal>
   );
 };
 
-const TenantDetail = {
-  Footer: TenantDetailFooter,
-  Header: TenantDetailHeader,
-  Body: TenantDetailForm,
-};
-
-export default TenantDetail;
+export default TenantDetailForm;

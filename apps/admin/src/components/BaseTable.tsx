@@ -21,7 +21,6 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
       title: "Action",
       dataIndex: "action",
       render: () => {
-        // const editable = isEditing(record);
         return (
           <span>
             <SettingTwoTone
@@ -31,6 +30,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
                 cursor: "pointer",
               }}
               color="primary"
+              title="Double click here to open information"
             />
             <DeleteTwoTone
               style={{
@@ -39,19 +39,10 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
                 cursor: "pointer",
               }}
               color="primary"
+              title="Click here to delete information"
             />
           </span>
         ) as unknown as ColumnsType<any>;
-        // editable ? (
-        //   <span>
-        //     <Typography.Link onClick={() => save(record.key)} style={{ marginRight: 8 }}>
-        //       Save
-        //     </Typography.Link>
-        //     <Popconfirm title="Sure to cancel?" onConfirm={cancel}>
-        //       <a>Cancel</a>
-        //     </Popconfirm>
-        //   </span>
-        // ) :
       },
     };
     return [...columns, editTableColumn];

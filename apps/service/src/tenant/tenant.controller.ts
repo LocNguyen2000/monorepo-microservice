@@ -6,10 +6,11 @@ import {
   Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { TenantService } from './tenant.service';
 
-@Controller('tenant')
+@Controller('tenants')
 export class TenantController {
   constructor(private readonly tenantService: TenantService) {}
 
@@ -28,7 +29,7 @@ export class TenantController {
     return this.tenantService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateTenantDto: Record<string, unknown>,

@@ -1,28 +1,22 @@
 import {
   Form,
-  Checkbox,
   Radio,
   Input,
-  Select,
-  TreeSelect,
-  Cascader,
   DatePicker,
   InputNumber,
-  Switch,
-  Button,
-  Slider,
-  ColorPicker,
   Divider,
   Typography,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { ProviderDataType, TenantDataType } from "../../lib/interface";
-import React, { ChangeEventHandler, useState } from "react";
+import { ProviderDataType } from "../../lib/interface";
+import React, { ChangeEventHandler } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import Modal from "antd/es/modal/Modal";
 import { getGlobalContext } from "../../lib/context";
 import { ACTION_ENUM } from "../../lib/constants";
+import { debounce } from "../../lib/utils";
+import { ServiceClient } from "../../lib/clients";
 
 dayjs.extend(customParseFormat);
 /** Manually entering any of the following formats will perform date parsing */
@@ -32,23 +26,15 @@ interface IRentProviderProps {
   data: ProviderDataType;
   setData: (data: ProviderDataType) => void;
   isOpen: boolean;
+  action: ACTION_ENUM;
   setIsFormOpen: (action: ACTION_ENUM, data: ProviderDataType) => void;
   setSubmitEvent?: () => void;
 }
 
-function debounce(func, timeout = 300) {
-  let timer;
-  return (...args) => {
-    clearTimeout(timer);
-    timer = setTimeout(() => {
-      func.apply(this, args);
-    }, timeout);
-  };
-}
-
 export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> =
-  ({ data, setData, isOpen, setIsFormOpen, setSubmitEvent }) => {
+  ({ data, setData, isOpen, setIsFormOpen, action }) => {
     const { useNotify } = getGlobalContext();
+    const serviceClient = ServiceClient();
 
     const formChangeHandler: ChangeEventHandler<
       HTMLInputElement | HTMLTextAreaElement
@@ -57,28 +43,51 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> =
         .value as keyof ProviderDataType;
       const value = e.target.value;
 
-      setData({ ...data, [key]: value });
+      debounce(setData({ ...data, [key]: value }));
+    };
+
+    const handleSubmitEvent = async () => {
+      try {
+        if (action === ACTION_ENUM.ADD) {
+          await serviceClient.post("/rent-providers", data);
+
+          useNotify(
+            "success",
+            "New Owner Added",
+            `Submit form successfully for ${data.providerName}`
+          );
+        } else if (action === ACTION_ENUM.EDIT) {
+          await serviceClient.put(`/rent-providers/${data.providerCode}`, data);
+
+          useNotify(
+            "success",
+            "Owner Updated Success",
+            `Submit form successfully for ${data.providerName}`
+          );
+        }
+
+        debounce(setIsFormOpen(ACTION_ENUM.CLOSE, {}));
+      } catch (error) {
+        console.log("Error", error);
+        useNotify("error", "Tenant Submission Error", "Form submission failed");
+      }
     };
 
     return (
       <Modal
-        title={<RentProviderDetailHeader />}
+        title={
+          <Typography>
+            Provider Form
+            <Divider />
+          </Typography>
+        }
         centered
         open={isOpen}
-        onOk={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
+        okText="Submit"
+        onOk={() => handleSubmitEvent()}
+        cancelText="Return"
         onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
         width={800}
-        footer={[
-          <Divider />,
-          <Button key="back">Return</Button>,
-          <Button
-            key="submit"
-            type="primary"
-            onClick={() => useNotify("success", "Nice", "hello")}
-          >
-            Submit
-          </Button>,
-        ]}
       >
         <Form
           labelCol={{ span: 4 }}
@@ -170,14 +179,3 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> =
       </Modal>
     );
   };
-
-export const RentProviderDetailHeader = () => {
-  return (
-    <div>
-      <Typography>
-        Provider Form
-        <Divider />
-      </Typography>
-    </div>
-  );
-};

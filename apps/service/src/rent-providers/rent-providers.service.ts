@@ -22,11 +22,14 @@ export class RentProvidersService {
     return this.rentProviderRepository.findByPk(id);
   }
 
-  async update(id: number, payload: UpsertRentProviderDto) {
+  async update(id: number, payload: Record<string, unknown>) {
     const instance = await this.rentProviderRepository.findByPk(id);
 
-    const response = await instance.update({ ...payload });
-    return response;
+    console.log(instance);
+
+    if (!instance) throw new Error('Owner not found');
+
+    return instance.update({ ...payload });
   }
 
   remove(id: number) {
