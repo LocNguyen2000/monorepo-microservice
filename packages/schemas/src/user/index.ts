@@ -19,7 +19,7 @@ export class UserSchema extends BaseEntity {
   role: number;
 }
 
-export const USER_SCHEMA_TOKEN = "USER_SCHEMA";
+export type UserModel = typeof UserSchema;
 
 export * from "./role";
 export * from "./rent-provider";

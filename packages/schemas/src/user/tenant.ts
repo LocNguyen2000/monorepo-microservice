@@ -45,4 +45,4 @@ export class TenantSchema extends BaseEntity {
   description?: string;
 }
 
-export const TENANTS_SCHEMA = "TENANTS_SCHEMA";
+export type TenantModel = typeof TenantSchema;

@@ -45,4 +45,4 @@ export class RentProviderSchema extends BaseEntity {
   description?: string;
 }
 
-export const RENT_PROVIDER_SCHEMA = "RENT_PROVIDER_SCHEMA";
+export type RentProviderModel = typeof RentProviderSchema;

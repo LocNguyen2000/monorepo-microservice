@@ -1,14 +1,14 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
-import { TENANTS_SCHEMA, TenantSchema } from '@nhl/schemas/user';
-import { Repository } from 'sequelize-typescript';
+import { TenantModel, TenantSchema } from '@nhl/schemas/user';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class TenantService {
   constructor(
-    @Inject(TENANTS_SCHEMA)
-    private readonly tenantRepository: Repository<TenantSchema>,
+    @InjectModel(TenantSchema)
+    private readonly tenantRepository: TenantModel,
   ) {}
 
   create(payload: Record<string, unknown>) {

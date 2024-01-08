@@ -1,10 +1,12 @@
 import { Module } from '@nestjs/common';
 import { TenantService } from './tenant.service';
 import { TenantController } from './tenant.controller';
-import { TenantProviders } from './tenant.provider';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { TenantSchema } from '@nhl/schemas/user';
 
 @Module({
+  imports: [SequelizeModule.forFeature([TenantSchema])],
   controllers: [TenantController],
-  providers: [TenantService, ...TenantProviders],
+  providers: [TenantService],
 })
 export class TenantModule {}

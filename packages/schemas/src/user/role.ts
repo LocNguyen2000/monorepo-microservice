@@ -18,4 +18,4 @@ export class RoleSchema extends BaseEntity {
   role: string;
 }
 
-export const ROLE_SCHEMA = "ROLE_SCHEMA";
+export type RoleModel = typeof RoleSchema;

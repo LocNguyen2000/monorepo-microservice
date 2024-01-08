@@ -47,8 +47,6 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> =
       const key = e.target.attributes.getNamedItem("name").value;
       const value = e.target.value;
 
-      console.log(value);
-
       debounce(setData({ ...data, [key]: value }));
     };
 

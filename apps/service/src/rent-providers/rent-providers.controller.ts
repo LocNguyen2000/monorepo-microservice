@@ -6,8 +6,10 @@ import {
   Param,
   Patch,
   Post,
+  Put,
 } from '@nestjs/common';
 import { RentProvidersService } from './rent-providers.service';
+import { UpsertRentProviderDto } from './dto/upsert-provider.dto';
 
 @Controller('rent-providers')
 export class RentProvidersController {
@@ -28,8 +30,8 @@ export class RentProvidersController {
     return this.rentProvider.findOne(+id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() payload: Record<string, unknown>) {
+  @Put(':id')
+  update(@Param('id') id: string, @Body() payload: UpsertRentProviderDto) {
     return this.rentProvider.update(+id, payload);
   }
 

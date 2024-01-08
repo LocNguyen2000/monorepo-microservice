@@ -13,7 +13,7 @@ import {
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { ProviderDataType, TenantDataType } from "../../lib/interface";
-import { useEffect, useState } from "react";
+import { ChangeEventHandler, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
@@ -44,25 +44,45 @@ export const TenantDetailHeader = () => {
   );
 };
 
-export const TenantDetailFooter = () => {
+export const TenantDetailFooter: React.FunctionComponent<{
+  data: Partial<TenantDataType>;
+}> = ({ data }) => {
   const { useNotify } = getGlobalContext();
-  const handleSubmitEvent = () => {};
+  const serviceClient = ServiceClient();
+  const handleSubmitEvent = () => {
+    serviceClient
+      .post("/tenant", data)
+      .then((res) => {
+        useNotify(
+          "success",
+          "New Tenant Added",
+          `Submit form successfully for ${data.tenantName}`
+        );
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   return (
     <>
       <Button key="back">Return</Button>
-      <Button
-        key="submit"
-        type="primary"
-        onClick={() => {
-          useNotify("success", "New Tenant Added", "Submit form successfully");
-        }}
-      >
+      <Button key="submit" type="primary" onClick={() => handleSubmitEvent()}>
         Submit
       </Button>
     </>
   );
 };
+
+function debounce(func, timeout = 300) {
+  let timer;
+  return (...args) => {
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      func.apply(this, args);
+    }, timeout);
+  };
+}
 
 type ISelectProviders = Pick<
   ProviderDataType,
@@ -75,6 +95,15 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
 }) => {
   const [providers, setProviders] = useState<ISelectProviders>([]);
   const serviceClient = ServiceClient();
+
+  const formChangeHandler: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (e) => {
+    const key = e.target.attributes.getNamedItem("name").value;
+    const value = e.target.value;
+
+    debounce(setData({ ...data, [key]: value }));
+  };
 
   useEffect(() => {
     serviceClient
@@ -103,42 +132,37 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
     >
       <Form.Item label="Tenant Code">
         <Input
+          name="tenantCode"
           value={data.tenantCode}
-          onChange={(e) => {
-            setData({ ...data, tenantCode: e.target.value });
-          }}
+          onChange={(e) => formChangeHandler(e)}
         />
       </Form.Item>
       <Form.Item label="Tenant Name">
         <Input
+          name="tenantName"
           value={data.tenantName}
-          onChange={(e) => {
-            setData({ ...data, tenantName: e.target.value });
-          }}
+          onChange={(e) => formChangeHandler(e)}
         />
       </Form.Item>
       <Form.Item label="Email">
         <Input
+          name="email"
           value={data.email}
-          onChange={(e) => {
-            setData({ ...data, email: e.target.value });
-          }}
+          onChange={(e) => formChangeHandler(e)}
         />
       </Form.Item>
       <Form.Item label="Phone number">
         <Input
+          name="phoneNumber"
           value={data.phoneNumber}
-          onChange={(e) => {
-            setData({ ...data, phoneNumber: e.target.value });
-          }}
+          onChange={(e) => formChangeHandler(e)}
         />
       </Form.Item>
       <Form.Item label="Contact Address">
         <Input
+          name="contactAddress"
           value={data.contactAddress}
-          onChange={(e) => {
-            setData({ ...data, contactAddress: e.target.value });
-          }}
+          onChange={(e) => formChangeHandler(e)}
         />
       </Form.Item>
       <Form.Item label="Date of Birth">

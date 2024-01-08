@@ -25,4 +25,4 @@ export class LocationSchema extends BaseEntity {
   image?: string;
 }
 
-export const LOCATION_SCHEMA = "LOCATION_SCHEMA";
+export type LocationModel = typeof LocationSchema;

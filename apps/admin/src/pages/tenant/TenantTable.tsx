@@ -16,7 +16,7 @@ import Card from "antd/es/card/Card";
 
 const TenantTable = () => {
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
-  const [tenant, setTenant] = useState<Partial<TenantDataType>>({});
+  const [tenant, setTenant] = useState<TenantDataType | {}>({});
   const [open, setOpen] = useState(false);
   const serviceClient = ServiceClient();
 
@@ -62,7 +62,7 @@ const TenantTable = () => {
         onOk={() => closeModal()}
         onCancel={() => closeModal()}
         width={1000}
-        footer={<TenantDetail.Footer />}
+        footer={<TenantDetail.Footer data={tenant} />}
       >
         <TenantDetail.Body data={tenant} setData={setTenant} />
       </Modal>
