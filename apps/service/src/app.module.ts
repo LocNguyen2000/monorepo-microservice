@@ -13,6 +13,7 @@ import {
   TenantSchema,
   LocationSchema,
 } from '@nhl/schemas/user';
+import { LocationsModule } from './locations/locations.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import {
     RentProvidersModule,
     UsersModule,
     TenantModule,
+    LocationsModule,
   ],
   controllers: [AppController],
   providers: [],

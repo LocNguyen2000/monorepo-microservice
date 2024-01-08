@@ -4,27 +4,29 @@ import { providerColumns } from "../../lib/constants/columns";
 import { ProviderDataType } from "../../lib/interface";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
-import Modal from "antd/es/modal/Modal";
-import {
-  RentProviderDetailHeader,
-  RentProviderDetail,
-} from "./RentProviderDetail";
+import { RentProviderDetail } from "./RentProviderDetail";
 import { UserAddOutlined } from "@ant-design/icons";
 import { ServiceClient } from "../../lib/clients";
-import { getGlobalContext } from "../../lib/context";
-import { Divider } from "antd";
 import Card from "antd/es/card/Card";
+import { ACTION_ENUM } from "../../lib/constants";
 
-const RentProviderTable = () => {
+const RentProviderList = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
-  const [provider, setProvider] = useState<Partial<ProviderDataType>>({});
+  const [provider, setProvider] = useState<ProviderDataType>({});
   const [open, setOpen] = useState(false);
-  const { useNotify } = getGlobalContext();
   const serviceClient = ServiceClient();
 
-  const closeModal = () => {
-    setOpen(false);
-    setProvider({});
+  const openFormHandler = (action: ACTION_ENUM, data: ProviderDataType) => {
+    if (action == ACTION_ENUM.ADD) {
+      setProvider({});
+      setOpen(true);
+    } else if (action == ACTION_ENUM.EDIT) {
+      setProvider(data);
+      setOpen(true);
+    } else {
+      setProvider({});
+      setOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -53,41 +55,29 @@ const RentProviderTable = () => {
           style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
         />
 
-        <Button type="primary" size="large" onClick={() => setOpen(true)}>
+        <Button
+          type="primary"
+          size="large"
+          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+        >
           <UserAddOutlined /> Add
         </Button>
       </div>
-      <Modal
-        title={<RentProviderDetailHeader />}
-        centered
-        open={open}
-        onOk={() => closeModal()}
-        onCancel={() => closeModal()}
-        width={800}
-        footer={[
-          <Divider />,
-          <Button key="back">Return</Button>,
-          <Button
-            key="submit"
-            type="primary"
-            onClick={() => useNotify("success", "Nice", "hello")}
-          >
-            Submit
-          </Button>,
-        ]}
-      >
-        <RentProviderDetail data={provider} setData={setProvider} />
-      </Modal>
+
+      <RentProviderDetail
+        data={provider}
+        setData={setProvider}
+        isOpen={open}
+        setIsFormOpen={openFormHandler}
+      />
+
       <BaseTable
         columns={providerColumns}
         data={providers}
         editable
         onRow={(p: ProviderDataType) => {
           return {
-            onDoubleClick: () => {
-              setProvider(p);
-              setOpen(true);
-            },
+            onDoubleClick: () => openFormHandler(ACTION_ENUM.EDIT, p),
           };
         }}
       />
@@ -95,4 +85,4 @@ const RentProviderTable = () => {
   );
 };
 
-export default RentProviderTable;
+export default RentProviderList;

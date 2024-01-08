@@ -2,7 +2,7 @@ import { ReactNode } from "react";
 import { DASHBOARD_ROUTES } from "./constants/routes";
 
 export interface ProviderDataType {
-  providerCode: number;
+  providerCode?: number;
   providerName?: string;
   firstName?: string;
   lastName?: string;
@@ -18,7 +18,7 @@ export interface ProviderDataType {
 }
 
 export interface TenantDataType {
-  tenantCode: number;
+  tenantCode?: number;
   firstName?: string;
   lastName?: string;
   tenantName?: string;

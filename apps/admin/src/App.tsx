@@ -11,13 +11,12 @@ import notification from "antd/es/notification";
 import OverviewPage from "./pages/overview/Overview";
 import ConfigProvider from "antd/es/config-provider";
 import MyProfilePage from "./pages/MyProfile";
-import RentProviderTable from "./pages/provider/RentProviderTable";
-import TenantTable from "./pages/tenant/TenantTable";
+import RentProviderList from "./pages/provider/RentProviderList";
+import TenantList from "./pages/tenant/TenantList";
 import Error404Page from "./pages/Error404Page";
 import message from "antd/es/message";
 import { NoticeType } from "antd/es/message/interface";
-import { messageStyle } from "./css/messsage";
-import theme from "antd/es/theme";
+import LocationList from "./pages/location/LocationList";
 
 export type NotificationType = "success" | "info" | "warning" | "error";
 export type ToastType = "success" | "info" | "warning" | "error";
@@ -38,11 +37,11 @@ const router = createBrowserRouter([
     children: [
       {
         path: DASHBOARD_ROUTES.PROVIDER,
-        element: <RentProviderTable />,
+        element: <RentProviderList />,
       },
       {
         path: DASHBOARD_ROUTES.TENANT,
-        element: <TenantTable />,
+        element: <TenantList />,
       },
       {
         path: DASHBOARD_ROUTES.OVERVIEW,
@@ -54,6 +53,7 @@ const router = createBrowserRouter([
       },
       {
         path: DASHBOARD_ROUTES.LOCATION,
+        element: <LocationList />,
       },
       {
         path: DASHBOARD_ROUTES.SETTING,
@@ -93,7 +93,6 @@ const App: FunctionComponent<AppProps> = () => {
   return (
     <ConfigProvider
       theme={{
-        // algorithm: theme.darkAlgorithm,
         components: {
           //   Button: {
           //     colorPrimary: "#00b96b",

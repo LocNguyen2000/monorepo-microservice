@@ -19,11 +19,12 @@ import { contentStyle } from "../css/layout";
 import { IAntdMenuItem } from "../lib/interface";
 import { DASHBOARD_ROUTES } from "../lib/constants/routes";
 import BaseHeader from "../components/BaseHeader";
-import TenantTable from "./tenant/TenantTable";
-import RentProviderTable from "./provider/RentProviderTable";
+import TenantList from "./tenant/TenantList";
+import RentProviderList from "./provider/RentProviderList";
 import OverviewPage from "./overview/Overview";
 import MyProfilePage from "./MyProfile";
 import { SideMenuContext } from "../lib/context";
+import LocationList from "./location/LocationList";
 
 interface DashboardProps {}
 
@@ -142,14 +143,18 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
 
           <Content style={contentStyle} className="m-content-child-margin">
             <Routes>
-              <Route path={DASHBOARD_ROUTES.TENANT} element={<TenantTable />} />
+              <Route path={DASHBOARD_ROUTES.TENANT} element={<TenantList />} />
               <Route
                 path={DASHBOARD_ROUTES.PROVIDER}
-                element={<RentProviderTable />}
+                element={<RentProviderList />}
               />
               <Route
                 path={DASHBOARD_ROUTES.OVERVIEW}
                 element={<OverviewPage />}
+              />
+              <Route
+                path={DASHBOARD_ROUTES.LOCATION}
+                element={<LocationList />}
               />
               <Route
                 path={DASHBOARD_ROUTES.MY_PROFILE}

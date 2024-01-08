@@ -1,22 +1,18 @@
-import {
-  SettingTwoTone,
-  DeleteTwoTone,
-  UserAddOutlined,
-} from "@ant-design/icons";
+import { UserAddOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { tenantColumns } from "../../lib/constants/columns";
 import { TenantDataType } from "../../lib/interface";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
-import Modal from "antd/es/modal/Modal";
 import TenantDetail from "./TenantDetail";
 import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
+import { ACTION_ENUM } from "../../lib/constants";
 
-const TenantTable = () => {
+const TenantList = () => {
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
-  const [tenant, setTenant] = useState<TenantDataType | {}>({});
+  const [tenant, setTenant] = useState<TenantDataType>({});
   const [open, setOpen] = useState(false);
   const serviceClient = ServiceClient();
 
@@ -31,9 +27,17 @@ const TenantTable = () => {
       });
   }, []);
 
-  const closeModal = () => {
-    setOpen(false);
-    setTenant({});
+  const openFormHandler = (action: ACTION_ENUM, data: TenantDataType) => {
+    if (action == ACTION_ENUM.ADD) {
+      setTenant({});
+      setOpen(true);
+    } else if (action == ACTION_ENUM.EDIT) {
+      setTenant(data);
+      setOpen(true);
+    } else {
+      setTenant({});
+      setOpen(false);
+    }
   };
 
   return (
@@ -50,32 +54,29 @@ const TenantTable = () => {
           placeholder="Enter search value here"
           style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
         />
-        <Button type="primary" size="large" onClick={() => setOpen(true)}>
+        <Button
+          type="primary"
+          size="large"
+          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+        >
           <UserAddOutlined /> Add
         </Button>
       </div>
 
-      <Modal
-        title={<TenantDetail.Header />}
-        centered
-        open={open}
-        onOk={() => closeModal()}
-        onCancel={() => closeModal()}
-        width={1000}
-        footer={<TenantDetail.Footer data={tenant} />}
-      >
-        <TenantDetail.Body data={tenant} setData={setTenant} />
-      </Modal>
+      <TenantDetail.Body
+        data={tenant}
+        setData={setTenant}
+        isOpen={open}
+        setIsFormOpen={openFormHandler}
+      />
+
       <BaseTable
         columns={tenantColumns}
         data={tenants}
         editable
         onRow={(t: TenantDataType) => {
           return {
-            onDoubleClick: () => {
-              setTenant(t);
-              setOpen(true);
-            },
+            onDoubleClick: () => openFormHandler(ACTION_ENUM.EDIT, t),
           };
         }}
       />
@@ -83,4 +84,4 @@ const TenantTable = () => {
   );
 };
 
-export default TenantTable;
+export default TenantList;

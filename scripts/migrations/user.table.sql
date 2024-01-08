@@ -70,7 +70,7 @@ create table
         `locationCode` int not null,
         `locationAddress` varchar(100) not null,
         `roomSize` int NOT NULL,
-        `description` varchar(50),
+        `description` varchar(200),
         `owner` int,
         `image` VARCHAR(100),
         `createdAt` datetime DEFAULT NOW(),

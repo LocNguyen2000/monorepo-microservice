@@ -57,7 +57,7 @@ export const contentStyle: React.CSSProperties = {
   height: contentHeight,
   // textAlign: "center",
   color: "#fff",
-  padding: "0 30px",
+  // padding: "0 30px",
   backgroundColor: "#EEEEEE",
   overflowY: "auto",
 };
