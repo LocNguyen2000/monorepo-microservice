@@ -94,8 +94,8 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> =
           wrapperCol={{ span: 14 }}
           layout="horizontal"
           style={{
-            height: "62vh",
-            maxHeight: "62vh",
+            // height: "62vh",
+            // maxHeight: "62vh",
             width: "100%",
             overflow: "auto",
           }}

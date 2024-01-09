@@ -2,6 +2,7 @@ import { SettingTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { Empty, Table } from "antd";
 import { ColumnGroupType, ColumnsType } from "antd/es/table";
 import { FunctionComponent } from "react";
+import styled from "styled-components";
 
 export interface IBaseTableProps {
   columns: ColumnsType<any>;
@@ -9,6 +10,15 @@ export interface IBaseTableProps {
   editable?: boolean;
   onRow?: any;
 }
+
+const StyledTable = styled((props) => <Table {...props} />)`
+  && thead > tr > th {
+    background-color: #a1a3a6;
+  }
+  && tbody > tr:hover > td {
+    cursor: pointer;
+  }
+`;
 
 const BaseTable: FunctionComponent<IBaseTableProps> = ({
   columns,
@@ -51,7 +61,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
   return (
     <>
       {data.length > 0 ? (
-        <Table
+        <StyledTable
           style={{ marginRight: "16px" }}
           columns={editable ? withEditColumn(columns) : columns}
           dataSource={data}
@@ -60,7 +70,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
           onRow={onRow}
         />
       ) : (
-        <Table
+        <StyledTable
           style={{ marginRight: "16px" }}
           columns={editable ? withEditColumn(columns) : columns}
           showSorterTooltip={true}
