@@ -5,10 +5,11 @@ import { tenantColumns } from "../../lib/constants/columns";
 import { TenantDataType } from "../../lib/interface";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
-import TenantDetail, { TenantDetailForm } from "./TenantDetail";
+import { TenantDetailForm } from "./TenantDetail";
 import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
+import Popover from "antd/es/popover";
 
 const TenantList = () => {
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
@@ -24,7 +25,7 @@ const TenantList = () => {
 
   useEffect(() => {
     serviceClient
-      .get("/tenants")
+      .get("/tenant")
       .then((res) => {
         setTenants(res.data);
       })
@@ -77,11 +78,9 @@ const TenantList = () => {
         columns={tenantColumns}
         data={tenants}
         editable
-        onRow={(t: TenantDataType) => {
-          return {
-            onDoubleClick: () => openFormHandler(ACTION_ENUM.EDIT, t),
-          };
-        }}
+        onDblClickRow={(t: TenantDataType) =>
+          openFormHandler(ACTION_ENUM.EDIT, t)
+        }
       />
     </Card>
   );

@@ -59,12 +59,6 @@ export const providerColumns: ColumnsType<ProviderDataType> = [
     key: "providerName",
   },
   {
-    title: "Job Title",
-    dataIndex: "role",
-    key: "role",
-    align: "center",
-  },
-  {
     title: "DOB",
     dataIndex: "dateOfBirth",
     key: "dateOfBirth",
@@ -87,11 +81,5 @@ export const providerColumns: ColumnsType<ProviderDataType> = [
     dataIndex: "contactAdress",
     key: "contactAdress",
     align: "left",
-  },
-  {
-    title: "Room Size",
-    dataIndex: "roomSize",
-    key: "roomSize",
-    align: "center",
   },
 ];

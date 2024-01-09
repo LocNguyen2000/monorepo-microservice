@@ -2,7 +2,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -20,7 +20,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -38,7 +38,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -56,7 +56,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -74,7 +74,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -92,7 +92,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -110,7 +110,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -128,7 +128,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -146,7 +146,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -164,7 +164,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -182,7 +182,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -200,7 +200,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -218,7 +218,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -236,7 +236,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -254,7 +254,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -272,7 +272,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -290,7 +290,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -308,7 +308,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -326,7 +326,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -344,7 +344,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -362,7 +362,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -380,7 +380,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -398,7 +398,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -416,7 +416,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -434,7 +434,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -452,7 +452,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -470,7 +470,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -488,7 +488,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -506,7 +506,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -524,7 +524,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -542,7 +542,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -560,7 +560,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -578,7 +578,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -596,7 +596,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image
@@ -614,7 +614,7 @@ insert into
     locations (
         locationCode,
         locationAddress,
-        roomSize,
+        roomCount,
         description,
         owner,
         image

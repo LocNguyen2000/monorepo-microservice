@@ -1,17 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
+import { AppService } from './app.service';
 import { EnvModule, EnvService } from '@nhl/env';
 import { Env } from './common/env';
-import { RentProvidersModule } from './rent-providers/rent-providers.module';
-import { TenantModule } from './tenant/tenant.module';
 import { SequelizeModule } from '@nestjs/sequelize';
-import {
-  RentProviderSchema,
-  TenantSchema,
-  LocationSchema,
-} from '@nhl/schemas/user';
-import { LocationsModule } from './locations/locations.module';
-
 @Module({
   imports: [
     EnvModule.register({ path: '/config/env.json', class: Env }),
@@ -27,19 +19,15 @@ import { LocationsModule } from './locations/locations.module';
           port: +port,
           username: username,
           database: pathname.replace('/', ''),
-          models: [RentProviderSchema, TenantSchema, LocationSchema],
-          logging: false,
+          models: [],
           sync: {
             force: true,
           },
         };
       },
     }),
-    RentProvidersModule,
-    TenantModule,
-    LocationsModule,
   ],
   controllers: [AppController],
-  providers: [],
+  providers: [AppService],
 })
 export class AppModule {}

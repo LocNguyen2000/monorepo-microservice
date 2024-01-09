@@ -37,17 +37,12 @@ export const MENU_LIST: IAntdMenuItem[] = [
     icon: <BarChartOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.OVERVIEW,
   },
-  // {
-  //   text: "Users",
-  //   key: "0",
-  //   icon: ,
-  // },
+
   {
     text: "Tenants",
     key: "1",
     icon: <UserOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.TENANT,
-    // parentKey: "0",
   },
   {
     text: "Rent Owners",

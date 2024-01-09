@@ -78,11 +78,9 @@ const RentProviderList = () => {
         columns={providerColumns}
         data={providers}
         editable
-        onRow={(p: ProviderDataType) => {
-          return {
-            onDoubleClick: () => openFormHandler(ACTION_ENUM.EDIT, p),
-          };
-        }}
+        onDblClickRow={(p: ProviderDataType) =>
+          openFormHandler(ACTION_ENUM.EDIT, p)
+        }
       />
     </Card>
   );

@@ -1,0 +1,10 @@
+{
+  "extends": "@nhl/tsconfig/app.json",
+  "compilerOptions": {
+    "baseUrl": "./",
+    "outDir": "./dist",
+    "paths": {
+      "~/*": ["src/*"]
+    }
+  }
+}

@@ -1,39 +1,12 @@
--- Active: 1677815117468@@127.0.0.1@3306
-
-create database if not exists users;
-
-use users;
-
--- Active: 1703494540009@@127.0.0.1@3307@users
-
-create table
-    if not exists roles(
-        `id` int NOT NULL PRIMARY KEY,
-        `role` varchar(50) NOT NULL,
-        `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
-        `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
-        `createdBy` varchar(50) DEFAULT NULL,
-        `updatedBy` varchar(50) DEFAULT NULL
-    );
-
-create table
-    if not exists users(
-        `id` int NOT NULL,
-        `username` varchar(50) NOT NULL,
-        `password` varchar(100) NOT NULL,
-        `role` varchar(50) NOT NULL,
-        PRIMARY KEY (`id`)
-    );
-
+-- Active: 1703494540009@@127.0.0.1@3307@services
 create table
     if not exists rent_providers(
         `providerCode` int NOT NULL,
-        `providerName` int NOT NULL,
+        `providerName` varchar(100) NOT NULL,
         `lastName` varchar(50),
         `firstName` varchar(50),
         `email` varchar(100) NOT NULL,
-        `role` int DEFAULT NULL,
-        `dateOfBirth`: datetime,
+        `dateOfBirth` datetime DEFAULT NULL,
         `phoneNumber` varchar(20),
         `contactAdress` varchar(100),
         `gender` int not null,
@@ -51,25 +24,27 @@ create table
         `lastName` varchar(50),
         `firstName` varchar(50),
         `email` varchar(100) NOT NULL,
-        `tenantName` int,
-        `dateOfBirth`: datetime,
+        `tenantName` varchar(100) NOT NULL,
+        `dateOfBirth` datetime DEFAULT NULL,
         `phoneNumber` varchar(20),
-        `contactAdress` varchar(100),
+        `contactAdress` varchar(200),
+        `rentProviderId` int DEFAULT null,
         `gender` int not null,
         `roomateCount` int NOT NULL,
-        `description` varchar(50),
+        `description` varchar(200),
         `createdAt` datetime DEFAULT NOW(),
         `updatedAt` datetime DEFAULT NULL,
         `createdBy` varchar(50) DEFAULT NULL,
         `updatedBy` varchar(50) DEFAULT NULL,
-        PRIMARY KEY (`tenantCode`)
-    )
+        PRIMARY KEY (`tenantCode`),
+        CONSTRAINT FOREIGN KEY(rentProviderId) REFERENCES rent_providers(providerCode)
+    );
 
 create table
     if not exists locations(
         `locationCode` int not null,
         `locationAddress` varchar(100) not null,
-        `roomSize` int NOT NULL,
+        `roomCount` int NOT NULL,
         `description` varchar(200),
         `owner` int,
         `image` VARCHAR(100),
@@ -79,9 +54,4 @@ create table
         `updatedBy` varchar(50) DEFAULT NULL,
         PRIMARY KEY (`locationCode`),
         CONSTRAINT FOREIGN KEY(`owner`) REFERENCES rent_providers(providerCode)
-    ) # v2.0 migration
-
-ALTER TABLE tenants
-ADD `rentProviderId` INTEGER,
-ADD
-    CONSTRAINT FOREIGN KEY(rentProviderId) REFERENCES rent_providers(providerCode);
+    )

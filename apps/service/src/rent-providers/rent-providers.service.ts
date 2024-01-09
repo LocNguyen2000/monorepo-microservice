@@ -25,8 +25,6 @@ export class RentProvidersService {
   async update(id: number, payload: Record<string, unknown>) {
     const instance = await this.rentProviderRepository.findByPk(id);
 
-    console.log(instance);
-
     if (!instance) throw new Error('Owner not found');
 
     return instance.update({ ...payload });

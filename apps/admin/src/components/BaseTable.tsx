@@ -1,5 +1,5 @@
 import { SettingTwoTone, DeleteTwoTone } from "@ant-design/icons";
-import { Empty, Table } from "antd";
+import { Empty, Popover, Table } from "antd";
 import { ColumnGroupType, ColumnsType } from "antd/es/table";
 import { FunctionComponent } from "react";
 import styled from "styled-components";
@@ -8,7 +8,8 @@ export interface IBaseTableProps {
   columns: ColumnsType<any>;
   data: any[];
   editable?: boolean;
-  onRow?: any;
+  onDblClickRow?: (data: any) => void;
+  onClickRow?: (data: any) => void;
 }
 
 const StyledTable = styled((props) => <Table {...props} />)`
@@ -24,7 +25,8 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
   columns,
   data,
   editable,
-  onRow,
+  onDblClickRow,
+  onClickRow,
 }) => {
   const withEditColumn = (columns: ColumnsType<any>) => {
     const editTableColumn = {
@@ -32,16 +34,23 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
       dataIndex: "action",
       render: () => {
         return (
-          <span>
-            <SettingTwoTone
-              style={{
-                marginRight: "0.5rem",
-                fontSize: "large",
-                cursor: "pointer",
-              }}
-              color="primary"
-              title="Double click here to open information"
-            />
+          <>
+            <Popover
+              placement="topLeft"
+              title={"HELLO"}
+              content="Here's pop up Text"
+              trigger="click"
+            >
+              <SettingTwoTone
+                style={{
+                  marginRight: "0.5rem",
+                  fontSize: "large",
+                  cursor: "pointer",
+                }}
+                color="primary"
+                title="Double click here to open information"
+              />
+            </Popover>
             <DeleteTwoTone
               style={{
                 marginRight: "0.5rem",
@@ -51,11 +60,19 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
               color="primary"
               title="Click here to delete information"
             />
-          </span>
+          </>
         ) as unknown as ColumnsType<any>;
       },
     };
     return [...columns, editTableColumn];
+  };
+
+  const addEventHandler = (data) => {
+    let event: Record<string, unknown> = {};
+    if (onDblClickRow) event.onDoubleClick = () => onDblClickRow(data);
+    if (onClickRow) event.onClick = () => onClickRow(data);
+
+    return event;
   };
 
   return (
@@ -67,7 +84,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
           dataSource={data}
           showSorterTooltip={true}
           bordered
-          onRow={onRow}
+          onRow={(data) => addEventHandler(data)}
         />
       ) : (
         <StyledTable

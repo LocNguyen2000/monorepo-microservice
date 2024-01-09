@@ -1,5 +1,5 @@
 import { IsString, IsNumberString, IsUrl, IsDefined } from "class-validator";
-import { ServiceDatabase } from "./database";
+import { DatabaseEnv } from "./database";
 
 class AuthEnv {
   @IsString()
@@ -8,7 +8,7 @@ class AuthEnv {
 
 export class GlobalEnv {
   @IsDefined()
-  db: ServiceDatabase;
+  db: DatabaseEnv;
 
   @IsDefined()
   auth: AuthEnv;

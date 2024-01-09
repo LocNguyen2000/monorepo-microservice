@@ -1,6 +1,6 @@
 import { IsString, IsOptional, IsDefined } from "class-validator";
 
-class DatabaseEnv {
+export class DatabaseEnv {
   @IsString()
   @IsOptional()
   mongoUrl: string;
@@ -8,9 +8,4 @@ class DatabaseEnv {
   @IsString()
   @IsOptional()
   sqlUrl: string;
-}
-
-export class ServiceDatabase {
-  @IsDefined()
-  user: DatabaseEnv;
 }

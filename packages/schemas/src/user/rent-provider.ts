@@ -35,13 +35,6 @@ export class RentProviderSchema extends BaseEntity {
   genderName: string;
 
   @Column
-  @ForeignKey(() => RoleSchema)
-  role: number;
-
-  @Column
-  roomSize?: number;
-
-  @Column
   description?: string;
 }
 

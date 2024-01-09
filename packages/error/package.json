@@ -12,6 +12,7 @@
   "dependencies": {
     "@nestjs/common": "9.0.0",
     "@nestjs/core": "9.0.0",
+    "rxjs": "7.2.0",
     "@nhl/tsconfig": "workspace:1.0.0"
   },
   "publishConfig": {

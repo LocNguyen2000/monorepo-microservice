@@ -46,7 +46,6 @@ const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({
       <Divider />
 
       <Menu
-        title="Workbench Administrator"
         // theme="dark"
         mode="inline"
         className="override-antd-menu-item"
