@@ -6,6 +6,8 @@ import {
   Param,
   Delete,
   Put,
+  Query,
+  UsePipes,
 } from '@nestjs/common';
 import { LocationsService } from './locations.service';
 
@@ -19,8 +21,8 @@ export class LocationsController {
   }
 
   @Get()
-  findAll() {
-    return this.locationsService.findAll();
+  findAll(@Query() query: Record<string, unknown>) {
+    return this.locationsService.findAll(query);
   }
 
   @Get(':id')

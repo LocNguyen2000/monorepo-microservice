@@ -7,8 +7,11 @@ import {
   Param,
   Delete,
   Put,
+  Query,
+  UsePipes,
 } from '@nestjs/common';
 import { TenantService } from './tenant.service';
+import { PaginatedQuery } from '~/common/pagination';
 
 @Controller('tenant')
 export class TenantController {
@@ -20,8 +23,8 @@ export class TenantController {
   }
 
   @Get()
-  findAll() {
-    return this.tenantService.findAll();
+  findAll(@Query() query: Record<string, unknown>) {
+    return this.tenantService.findAll(query);
   }
 
   @Get(':id')

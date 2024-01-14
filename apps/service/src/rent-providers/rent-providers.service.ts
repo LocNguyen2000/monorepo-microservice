@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { RentProviderModel, RentProviderSchema } from '@nhl/schemas/user';
 import { UpsertRentProviderDto } from './dto/upsert-provider.dto';
 import { InjectModel } from '@nestjs/sequelize';
+import { PaginatedQuery, paginatedQuery } from '~/common/pagination';
 
 @Injectable()
 export class RentProvidersService {
@@ -14,8 +15,13 @@ export class RentProvidersService {
     return this.rentProviderRepository.create(payload);
   }
 
-  findAll() {
-    return this.rentProviderRepository.findAll();
+  findAll(query: PaginatedQuery) {
+    console.log(query);
+
+    return paginatedQuery<RentProviderSchema>(
+      this.rentProviderRepository,
+      query,
+    );
   }
 
   findOne(id: number) {

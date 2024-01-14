@@ -3,6 +3,7 @@ import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { TenantModel, TenantSchema } from '@nhl/schemas/user';
 import { InjectModel } from '@nestjs/sequelize';
+import { PaginatedQuery, paginatedQuery } from '~/common/pagination';
 
 @Injectable()
 export class TenantService {
@@ -17,8 +18,8 @@ export class TenantService {
     return this.tenantRepository.create(payload);
   }
 
-  findAll() {
-    return this.tenantRepository.findAll();
+  findAll(query: PaginatedQuery) {
+    return paginatedQuery<TenantSchema>(this.tenantRepository, query);
   }
 
   findOne(id: number) {

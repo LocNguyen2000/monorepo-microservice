@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { UpdateLocationDto } from './dto/update-location.dto';
 import { LocationModel, LocationSchema } from '@nhl/schemas/user';
 import { InjectModel } from '@nestjs/sequelize';
+import { PaginatedQuery, paginatedQuery } from '~/common/pagination';
 
 @Injectable()
 export class LocationsService {
@@ -14,8 +15,8 @@ export class LocationsService {
     return this.locationModel.create(createLocationDto);
   }
 
-  findAll() {
-    return this.locationModel.findAll();
+  findAll(query: PaginatedQuery) {
+    return paginatedQuery<LocationSchema>(this.locationModel, query);
   }
 
   findOne(id: number) {

@@ -2,14 +2,14 @@ import { Button, Divider, Flex, Form, InputNumber, Select, Upload } from "antd";
 import Card from "antd/es/card/Card";
 import { useLocation, useNavigate } from "react-router-dom";
 import Input from "antd/es/input";
-import { useEffect, useState, ChangeEventHandler } from "react";
+import { useEffect, useState, ChangeEventHandler, useContext } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
 import { ServiceClient } from "../../lib/clients";
-import { LocationDataType, ProviderDataType } from "../../lib/interface";
+import { LocationDataType, PaginatedResponse, ProviderDataType } from "../../lib/interface";
 import { debounce } from "../../lib/utils";
 import { ACTION_ENUM } from "../../lib/constants";
-import { getGlobalContext, getPathContext } from "../../lib/context";
+import { GlobalContext, getGlobalContext, getPathContext } from "../../lib/context";
 import { MENU_LIST } from "../Dashboard";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 
@@ -17,11 +17,9 @@ const LocationDetail: React.FunctionComponent = () => {
   const [location, setLocation] = useState<Partial<LocationDataType>>({});
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.ADD);
-  const { useNotify } = getGlobalContext();
+  const { useNotify, serviceClient } = getGlobalContext();
   const { setPathFromKey } = getPathContext();
   const navigate = useNavigate();
-
-  const serviceClient = ServiceClient();
 
   const { search } = useLocation();
 
@@ -58,7 +56,7 @@ const LocationDetail: React.FunctionComponent = () => {
       debounce(() => returnLocationTable(), 500);
     } catch (error) {
       console.log("Error", error);
-      useNotify("error", "Tenant Submission Error", "Form submission failed");
+      useNotify("error", "Location Submission Error", "Form submission failed");
     }
   };
 
@@ -80,15 +78,13 @@ const LocationDetail: React.FunctionComponent = () => {
     }
 
     serviceClient
-      .get("/rent-providers")
-      .then((res) => {
-        console.log(res.data);
-
-        setProviders(res.data);
+      .get(`/rent-providers`)
+      .then((json) => json.data)
+      .then((response: PaginatedResponse<ProviderDataType>) => {
+        setProviders(response.data);
       })
       .catch((e) => {
         console.log(e);
-        setProviders([]);
       });
   }, []);
 

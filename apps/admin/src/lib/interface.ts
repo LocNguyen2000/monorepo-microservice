@@ -56,3 +56,16 @@ export interface IAuthUser {
   name: string;
   role: string;
 }
+
+export interface PaginatedResponse<T> {
+  total: number;
+  page: number;
+  size: number;
+  data: T[];
+}
+
+export interface IPagination {
+  total: number;
+  page: number;
+  size: number;
+}

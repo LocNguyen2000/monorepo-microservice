@@ -16,7 +16,7 @@ async function bootstrap() {
   const env = app.get(EnvService<Env>);
   const logger = new Logger();
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useGlobalPipes(new ValidationPipe({transform: true}));
   app.useGlobalFilters(new AllExceptionsFilter(app.get(HttpAdapterHost)));
   app.useGlobalInterceptors(new LoggingInterceptor(logger))
 

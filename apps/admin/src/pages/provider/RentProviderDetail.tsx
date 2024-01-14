@@ -1,11 +1,11 @@
 import { Form, Radio, Input, DatePicker, InputNumber, Divider, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { ProviderDataType } from "../../lib/interface";
-import React, { ChangeEventHandler } from "react";
+import React, { ChangeEventHandler, useContext } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import Modal from "antd/es/modal/Modal";
-import { getGlobalContext } from "../../lib/context";
+import { GlobalContext, getGlobalContext } from "../../lib/context";
 import { ACTION_ENUM } from "../../lib/constants";
 import { debounce } from "../../lib/utils";
 import { ServiceClient } from "../../lib/clients";
@@ -30,8 +30,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
   setIsFormOpen,
   action,
 }) => {
-  const { useNotify } = getGlobalContext();
-  const serviceClient = ServiceClient();
+  const { useNotify, serviceClient } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const key = e.target.attributes.getNamedItem("name").value as keyof ProviderDataType;
@@ -55,7 +54,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
       debounce(setIsFormOpen(ACTION_ENUM.CLOSE, {}));
     } catch (error) {
       console.log("Error", error);
-      useNotify("error", "Tenant Submission Error", "Form submission failed");
+      useNotify("error", "Owner Submission Error", "Form submission failed");
     }
   };
 

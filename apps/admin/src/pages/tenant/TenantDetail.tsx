@@ -1,6 +1,6 @@
 import { Form, Radio, Input, Select, DatePicker, InputNumber, Switch, Typography, Divider, Upload, Button } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { ProviderDataType, TenantDataType } from "../../lib/interface";
+import { PaginatedResponse, ProviderDataType, TenantDataType } from "../../lib/interface";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -37,8 +37,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
   action,
 }) => {
   const [providers, setProviders] = useState<ISelectProviders>([]);
-  const { useNotify } = getGlobalContext();
-  const serviceClient = ServiceClient();
+  const { useNotify, serviceClient } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const key = e.target.attributes.getNamedItem("name").value as keyof TenantDataType;
@@ -70,15 +69,13 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
 
   useEffect(() => {
     serviceClient
-      .get("/rent-providers")
-      .then((res) => {
-        console.log(res.data);
-
-        setProviders(res.data);
+      .get(`/rent-providers`)
+      .then((json) => json.data)
+      .then((response: PaginatedResponse<ProviderDataType>) => {
+        setProviders(response.data);
       })
       .catch((e) => {
         console.log(e);
-        setProviders([]);
       });
   }, []);
   return (

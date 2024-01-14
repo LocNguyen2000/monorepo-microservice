@@ -7,8 +7,11 @@ import {
   Patch,
   Post,
   Put,
+  Query,
+  UsePipes,
 } from '@nestjs/common';
 import { RentProvidersService } from './rent-providers.service';
+import { PaginatedQuery } from '~/common/pagination';
 
 @Controller('rent-providers')
 export class RentProvidersController {
@@ -20,8 +23,8 @@ export class RentProvidersController {
   }
 
   @Get()
-  findAll() {
-    return this.rentProvider.findAll();
+  findAll(@Query() query: Record<string, unknown>) {
+    return this.rentProvider.findAll(query);
   }
 
   @Get(':id')

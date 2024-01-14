@@ -1,6 +1,7 @@
 import { SettingTwoTone, DeleteTwoTone } from "@ant-design/icons";
-import { Empty, Popover, Table } from "antd";
-import { ColumnGroupType, ColumnsType } from "antd/es/table";
+import { Popover, Table } from "antd";
+import { AnyObject } from "antd/es/_util/type";
+import { ColumnsType, TableProps } from "antd/es/table";
 import { FunctionComponent } from "react";
 import styled from "styled-components";
 
@@ -12,7 +13,7 @@ export interface IBaseTableProps {
   onClickRow?: (data: any) => void;
 }
 
-const StyledTable = styled((props) => <Table {...props} />)`
+const StyledTable = styled((props: React.PropsWithChildren<TableProps<AnyObject>>) => <Table {...props} />)`
   && thead > tr > th {
     background-color: #a1a3a6;
   }
@@ -21,13 +22,7 @@ const StyledTable = styled((props) => <Table {...props} />)`
   }
 `;
 
-const BaseTable: FunctionComponent<IBaseTableProps> = ({
-  columns,
-  data,
-  editable,
-  onDblClickRow,
-  onClickRow,
-}) => {
+const BaseTable: FunctionComponent<IBaseTableProps> = ({ columns, data, editable, onDblClickRow, onClickRow }) => {
   const withEditColumn = (columns: ColumnsType<any>) => {
     const editTableColumn = {
       title: "Action",
@@ -35,12 +30,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
       render: () => {
         return (
           <>
-            <Popover
-              placement="topLeft"
-              title={"HELLO"}
-              content="Here's pop up Text"
-              trigger="click"
-            >
+            <Popover placement="topLeft" title={"HELLO"} content="Here's pop up Text" trigger="click">
               <SettingTwoTone
                 style={{
                   marginRight: "0.5rem",
@@ -85,6 +75,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
           showSorterTooltip={true}
           bordered
           onRow={(data) => addEventHandler(data)}
+          pagination={false}
         />
       ) : (
         <StyledTable

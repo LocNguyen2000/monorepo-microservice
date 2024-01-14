@@ -19,6 +19,7 @@ import { NoticeType } from "antd/es/message/interface";
 import LocationList from "./pages/location/LocationList";
 import LocationDetail from "./pages/location/LocationDetail";
 import { globalTheme } from "./css/theme";
+import { ServiceClient } from "./lib/clients";
 
 export type NotificationType = "success" | "info" | "warning" | "error";
 export type ToastType = "success" | "info" | "warning" | "error";
@@ -55,6 +56,7 @@ const App: FunctionComponent<AppProps> = () => {
           authUser: { userId: 1, name: "Nguyen Huu Loc", role: "Administrator" },
           useNotify: openNotification,
           useToast: openToast,
+          serviceClient: ServiceClient(),
         }}
       >
         {messageContextHolder}
