@@ -1,14 +1,15 @@
 import { Component, createContext, useContext } from "react";
-import { NotificationType } from "../../App";
+import { ConfirmType, NotificationType } from "../../App";
 import { IAntdMenuItem, IAuthUser } from "../interface";
 import { NoticeType } from "antd/es/message/interface";
 import { AxiosInstance } from "axios";
 
 export interface IGlobalContext {
   authUser?: IAuthUser;
+  serviceClient: AxiosInstance;
   useNotify: (type: NotificationType, title: string, message: string) => void;
   useToast: (type: NoticeType, message: string) => void;
-  serviceClient: AxiosInstance;
+  useConfirm: (type: ConfirmType, title: string, content: string, confirmHandler: any) => void;
 }
 
 export const GlobalContext = createContext<IGlobalContext | null>(null);

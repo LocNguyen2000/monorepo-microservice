@@ -12,6 +12,7 @@ import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
 import Flex from "antd/es/flex";
 import { GlobalContext, getGlobalContext } from "../../lib/context";
+import Divider from "antd/es/divider";
 
 const RentProviderList = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
@@ -95,6 +96,8 @@ const RentProviderList = () => {
           <UserAddOutlined /> Add
         </Button>
       </Flex>
+
+      <Divider />
 
       <RentProviderDetail
         data={provider}

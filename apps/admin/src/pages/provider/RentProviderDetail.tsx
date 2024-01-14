@@ -30,7 +30,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
   setIsFormOpen,
   action,
 }) => {
-  const { useNotify, serviceClient } = getGlobalContext();
+  const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const key = e.target.attributes.getNamedItem("name").value as keyof ProviderDataType;
@@ -39,7 +39,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
     debounce(setData({ ...data, [key]: value }));
   };
 
-  const handleSubmitEvent = async () => {
+  const formSubmitHandler = async () => {
     try {
       if (action === ACTION_ENUM.ADD) {
         await serviceClient.post("/rent-providers", data);
@@ -69,7 +69,9 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
       centered
       open={isOpen}
       okText="Submit"
-      onOk={() => handleSubmitEvent()}
+      onOk={() =>
+        useConfirm("confirm", "Owner Form", "Are you sure to submit this owner?", async () => await formSubmitHandler())
+      }
       cancelText="Return"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
       width={800}

@@ -37,7 +37,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
   action,
 }) => {
   const [providers, setProviders] = useState<ISelectProviders>([]);
-  const { useNotify, serviceClient } = getGlobalContext();
+  const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
     const key = e.target.attributes.getNamedItem("name").value as keyof TenantDataType;
@@ -46,7 +46,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
     debounce(setData({ ...data, [key]: value }));
   };
 
-  const handleSubmitEvent = async () => {
+  const formSubmitHandler = async () => {
     try {
       console.log(action);
 
@@ -89,7 +89,14 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
       centered
       open={isOpen}
       okText="Submit"
-      onOk={async () => await handleSubmitEvent()}
+      onOk={() =>
+        useConfirm(
+          "confirm",
+          "Tenant Form",
+          "Are you sure to submit this tenant?",
+          async () => await formSubmitHandler()
+        )
+      }
       cancelText="Return"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
       width={1000}

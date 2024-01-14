@@ -9,7 +9,7 @@ import { TenantDetailForm } from "./TenantDetail";
 import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
-import { Flex, Pagination } from "antd";
+import { Divider, Flex, Pagination } from "antd";
 import { GlobalContext, getGlobalContext } from "../../lib/context";
 
 const TenantList = () => {
@@ -97,6 +97,8 @@ const TenantList = () => {
           <UserAddOutlined /> Add
         </Button>
       </Flex>
+
+      <Divider />
 
       <TenantDetailForm
         data={tenant}

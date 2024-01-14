@@ -1,20 +1,17 @@
-import { Button, Empty, Flex, Image, Input, Pagination } from "antd";
+import { Button, Divider, Empty, Flex, Input, Pagination } from "antd";
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
 import { useContext, useEffect, useState } from "react";
-import { ServiceClient } from "../../lib/clients";
 import Typography from "antd/es/typography/Typography";
 import { SettingOutlined, EditOutlined, HomeOutlined } from "@ant-design/icons";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 import { GlobalContext, PathContext } from "../../lib/context";
 import { MENU_LIST } from "../Dashboard";
 import { useNavigate } from "react-router-dom";
-import { ACTION_ENUM } from "../../lib/constants";
 import { IPagination, LocationDataType, PaginatedResponse } from "../../lib/interface";
 
 const LocationList = () => {
   const [locations, setLocations] = useState([]);
-  const [location, setLocation] = useState({});
   const [pagination, setPagination] = useState<IPagination>({
     total: 0,
     page: 1,
@@ -94,6 +91,9 @@ const LocationList = () => {
             <HomeOutlined /> Add
           </Button>
         </Flex>
+
+        <Divider />
+
         <Flex wrap="wrap" gap="small" style={{ width: "100%", justifyContent: "space-between" }}>
           {locations.length > 0 ? (
             locations.map((l) => (
@@ -101,7 +101,7 @@ const LocationList = () => {
                 key={l.locationCode}
                 hoverable
                 style={{ width: 300 }}
-                cover={<img alt="example" height={200} src={`${l.image}`} />}
+                cover={<img alt="example" height={180} src={`${l.image}`} />}
                 actions={[
                   <EditOutlined
                     key="edit"
