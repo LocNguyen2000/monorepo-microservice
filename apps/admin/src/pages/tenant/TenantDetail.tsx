@@ -1,16 +1,4 @@
-import {
-  Form,
-  Radio,
-  Input,
-  Select,
-  DatePicker,
-  InputNumber,
-  Switch,
-  Typography,
-  Divider,
-  Upload,
-  Button,
-} from "antd";
+import { Form, Radio, Input, Select, DatePicker, InputNumber, Switch, Typography, Divider, Upload, Button } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { ProviderDataType, TenantDataType } from "../../lib/interface";
 import { ChangeEventHandler, useEffect, useState } from "react";
@@ -39,10 +27,7 @@ interface ITenantDetailProps {
   setSubmitEvent?: () => void;
 }
 
-type ISelectProviders = Pick<
-  ProviderDataType,
-  "providerCode" | "providerName"
->[];
+type ISelectProviders = Pick<ProviderDataType, "providerCode" | "providerName">[];
 
 export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
   data,
@@ -55,11 +40,8 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
   const { useNotify } = getGlobalContext();
   const serviceClient = ServiceClient();
 
-  const formChangeHandler: ChangeEventHandler<
-    HTMLInputElement | HTMLTextAreaElement
-  > = (e) => {
-    const key = e.target.attributes.getNamedItem("name")
-      .value as keyof TenantDataType;
+  const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
+    const key = e.target.attributes.getNamedItem("name").value as keyof TenantDataType;
     const value = e.target.value;
 
     debounce(setData({ ...data, [key]: value }));
@@ -70,25 +52,13 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
       console.log(action);
 
       if (action === ACTION_ENUM.ADD) {
-        console.log("Hello Add");
-
         await serviceClient.post("/tenant", { ...data });
 
-        useNotify(
-          "success",
-          "New Tenant Added",
-          `Submit form successfully for ${data.tenantName}`
-        );
+        useNotify("success", "New Tenant Added", `Submit form successfully for ${data.tenantName}`);
       } else if (action === ACTION_ENUM.EDIT) {
-        console.log("Hello Edit");
-
         await serviceClient.put(`/tenant/${data.tenantCode}`, { ...data });
 
-        useNotify(
-          "success",
-          "Tenant Updated Success",
-          `Submit form successfully for ${data.tenantName}`
-        );
+        useNotify("success", "Tenant Updated Success", `Submit form successfully for ${data.tenantName}`);
       }
 
       debounce(setIsFormOpen(ACTION_ENUM.CLOSE, {}));
@@ -129,7 +99,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
     >
       <Form
         labelCol={{ span: 4 }}
-        wrapperCol={{ span: 14 }}
+        wrapperCol={{ span: 18 }}
         layout="horizontal"
         style={{
           height: "75vh",
@@ -142,6 +112,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
           <Input
             name="tenantCode"
             value={data.tenantCode}
+            placeholder="Enter a number here"
             onChange={(e) => formChangeHandler(e)}
           />
         </Form.Item>
@@ -149,6 +120,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
           <Input
             name="tenantName"
             value={data.tenantName}
+            placeholder="Enter tenant name"
             onChange={(e) => formChangeHandler(e)}
           />
         </Form.Item>
@@ -156,6 +128,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
           <Input
             name="email"
             value={data.email}
+            placeholder="Enter valid email"
             onChange={(e) => formChangeHandler(e)}
           />
         </Form.Item>
@@ -163,6 +136,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
           <Input
             name="phoneNumber"
             value={data.phoneNumber}
+            placeholder="Enter phone number"
             onChange={(e) => formChangeHandler(e)}
           />
         </Form.Item>
@@ -170,6 +144,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
           <Input
             name="contactAddress"
             value={data.contactAddress}
+            placeholder="Enter contact address"
             onChange={(e) => formChangeHandler(e)}
           />
         </Form.Item>
@@ -197,7 +172,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
         <Form.Item label="Rent Owner" required={true}>
           <Select
             showSearch
-            placeholder="Select data"
+            placeholder="Add your rent owner"
             value={data.rentProviderId}
             onChange={(e) => {
               setData({ ...data, rentProviderId: e });
@@ -232,6 +207,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
         <Form.Item label="Note">
           <TextArea
             rows={4}
+            placeholder="Take some notes!"
             value={data.description}
             onChange={(e) => {
               setData({ ...data, description: e.target.value });

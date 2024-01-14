@@ -33,6 +33,15 @@ export interface TenantDataType {
   description?: string;
 }
 
+export interface LocationDataType {
+  locationCode: string;
+  locationAddress: string;
+  roomCount: number;
+  description?: string;
+  owner?: string;
+  image?: string;
+}
+
 export interface IAntdMenuItem {
   text: string;
   key: string;
@@ -40,4 +49,10 @@ export interface IAntdMenuItem {
   path?: DASHBOARD_ROUTES;
   parentKey?: string;
   hidden?: boolean;
+}
+
+export interface IAuthUser {
+  userId: number;
+  name: string;
+  role: string;
 }

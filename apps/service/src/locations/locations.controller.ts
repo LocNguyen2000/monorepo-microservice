@@ -3,20 +3,18 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
+  Put,
 } from '@nestjs/common';
 import { LocationsService } from './locations.service';
-import { CreateLocationDto } from './dto/create-location.dto';
-import { UpdateLocationDto } from './dto/update-location.dto';
 
 @Controller('location')
 export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}
 
   @Post()
-  create(@Body() payload: CreateLocationDto) {
+  create(@Body() payload: Record<string, unknown>) {
     return this.locationsService.create(payload);
   }
 
@@ -30,10 +28,10 @@ export class LocationsController {
     return this.locationsService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
-    @Body() updateLocationDto: UpdateLocationDto,
+    @Body() updateLocationDto: Record<string, unknown>,
   ) {
     return this.locationsService.update(+id, updateLocationDto);
   }

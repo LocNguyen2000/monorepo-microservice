@@ -8,7 +8,7 @@ import {
 } from "@ant-design/icons";
 import { Typography, Avatar, Popover, Button, Divider, Badge } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { getGlobalContext, getSideMenuContext } from "../lib/context";
+import { getGlobalContext, getPathContext } from "../lib/context";
 import { headerStyle, navHeaderStyle } from "../css/layout";
 import { useNavigate } from "react-router-dom";
 import BaseBreadCrum from "./BaseBreadCrum";
@@ -18,7 +18,7 @@ import Input from "antd/es/input/Input";
 
 const PopoverMenuHeader = () => {
   const navigate = useNavigate();
-  const { setMenuItem } = getSideMenuContext();
+  const { setPathFromKey } = getPathContext();
 
   return (
     <>
@@ -26,24 +26,17 @@ const PopoverMenuHeader = () => {
       <Button
         style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}
         onClick={() => {
-          const [mePage] = MENU_LIST.filter(
-            (i) => i.path && i.path == DASHBOARD_ROUTES.MY_PROFILE
-          );
+          const [mePage] = MENU_LIST.filter((i) => i.path && i.path == DASHBOARD_ROUTES.MY_PROFILE);
 
-          setMenuItem(mePage);
-          navigate(DASHBOARD_ROUTES.MY_PROFILE);
+          setPathFromKey(mePage.key);
         }}
       >
         My Profile
       </Button>
       <br />
-      <Button style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}>
-        Settings
-      </Button>
+      <Button style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}>Settings</Button>
       <br />
-      <Button style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}>
-        Sign Out
-      </Button>
+      <Button style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}>Sign Out</Button>
       <br />
     </>
   );
@@ -61,18 +54,14 @@ const PopoverMenuTitle = () => {
       }}
     >
       <Typography style={{ marginBottom: "0.25rem" }}>Demo Company</Typography>
-      <span style={{ fontWeight: "lighter", color: "grey" }}>
-        Workbench Administrator
-      </span>
+      <span style={{ fontWeight: "lighter", color: "grey" }}>Workbench Administrator</span>
     </div>
   );
 };
 
 const BaseHeader = () => {
   const { authUser } = getGlobalContext();
-  const { menuItem } = getSideMenuContext();
-
-  console.log(menuItem);
+  const { menuItem } = getPathContext();
 
   return (
     <>
@@ -94,13 +83,7 @@ const BaseHeader = () => {
         />
         <span style={{ flex: 1 }}></span>
         <div style={{ marginRight: "1.5rem" }}>
-          <Badge
-            showZero
-            count={4}
-            overflowCount={10}
-            size="small"
-            color="geekblue"
-          >
+          <Badge showZero count={4} overflowCount={10} size="small" color="geekblue">
             <Avatar
               className="m-hoverable"
               shape="circle"
@@ -111,9 +94,7 @@ const BaseHeader = () => {
           </Badge>
         </div>
 
-        <Typography style={{ color: "white", marginRight: "1rem" }}>
-          {authUser?.name}
-        </Typography>
+        <Typography style={{ color: "white", marginRight: "1rem" }}>{authUser?.name}</Typography>
         <Popover
           content={<PopoverMenuHeader />}
           title={<PopoverMenuTitle />}

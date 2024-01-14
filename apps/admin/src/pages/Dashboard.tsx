@@ -4,27 +4,19 @@ import {
   HomeOutlined,
   SettingOutlined,
   ScheduleOutlined,
-  FundViewOutlined,
-  CalculatorOutlined,
   MoneyCollectOutlined,
   BarChartOutlined,
-  ProfileOutlined,
   IdcardOutlined,
 } from "@ant-design/icons";
 import { Space, Layout } from "antd";
-import { FunctionComponent, useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { FunctionComponent, useState } from "react";
+import { useNavigate, Outlet } from "react-router-dom";
 import MenuSidebar from "../components/MenuSidebar";
 import { contentStyle } from "../css/layout";
 import { IAntdMenuItem } from "../lib/interface";
 import { DASHBOARD_ROUTES } from "../lib/constants/routes";
 import BaseHeader from "../components/BaseHeader";
-import TenantList from "./tenant/TenantList";
-import RentProviderList from "./provider/RentProviderList";
-import OverviewPage from "./overview/Overview";
-import MyProfilePage from "./MyProfile";
-import { SideMenuContext } from "../lib/context";
-import LocationList from "./location/LocationList";
+import { PathContext } from "../lib/context";
 
 interface DashboardProps {}
 
@@ -33,7 +25,7 @@ const { Content } = Layout;
 export const MENU_LIST: IAntdMenuItem[] = [
   {
     text: "Overview",
-    key: "10",
+    key: "0",
     icon: <BarChartOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.OVERVIEW,
   },
@@ -49,39 +41,43 @@ export const MENU_LIST: IAntdMenuItem[] = [
     key: "2",
     icon: <IdcardOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.PROVIDER,
-    // parentKey: "0",
   },
-  // {
-  //   text: "Inventory",
-  //   key: "3",
-  //   icon: <AppstoreOutlined className="override-antd-icon-item" />,
-  // },
+
   {
     text: "Locations",
     key: "4",
     icon: <HomeOutlined className="override-antd-icon-item" />,
-    // parentKey: "3",
     path: DASHBOARD_ROUTES.LOCATION,
+  },
+  {
+    text: "Location Detail",
+    key: "12",
+    icon: <HomeOutlined className="override-antd-icon-item" />,
+    hidden: true,
   },
   {
     text: "Invoices",
     key: "8",
     icon: <MoneyCollectOutlined className="override-antd-icon-item" />,
-    // parentKey: "7",
   },
   {
     text: "Settings",
     key: "5",
     icon: <SettingOutlined className="override-antd-icon-item" />,
-    // parentKey: "3",
     path: DASHBOARD_ROUTES.SETTING,
   },
   {
     text: "Schedules",
     key: "6",
     icon: <ScheduleOutlined className="override-antd-icon-item" />,
-    // parentKey: "3",
     path: DASHBOARD_ROUTES.SCHEDULE,
+  },
+  {
+    text: "My Profile",
+    key: "11",
+    icon: <UserOutlined className="override-antd-icon-item" />,
+    path: DASHBOARD_ROUTES.MY_PROFILE,
+    hidden: true,
   },
   // {
   //   text: "Analysis",
@@ -94,13 +90,6 @@ export const MENU_LIST: IAntdMenuItem[] = [
   //   icon: <CalculatorOutlined className="override-antd-icon-item" />,
   //   parentKey: "7",
   // },
-  {
-    text: "My Profile",
-    key: "11",
-    icon: <UserOutlined className="override-antd-icon-item" />,
-    path: DASHBOARD_ROUTES.MY_PROFILE,
-    hidden: true,
-  },
 ];
 
 const Dashboard: FunctionComponent<DashboardProps> = () => {
@@ -108,58 +97,33 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
   const navigate = useNavigate();
 
-  const onChangeMenuItem = (selectedItemKey: string) => {
+  const setPathFromKey = (selectedItemKey: string) => {
     const selected = MENU_LIST.find((item) => item.key === selectedItemKey);
-    if (selected) setMenuItem(selected);
+    if (selected) {
+      setMenuItem(selected);
+      if (selected.path) navigate(selected.path);
+    }
   };
 
-  useEffect(() => {
-    console.log("changed", menuItem);
-
-    if (menuItem.path) {
-      navigate(menuItem.path);
-    }
-  }, [menuItem]);
-
   return (
-    <SideMenuContext.Provider
-      value={{ menuItem, setMenuItem: (value) => setMenuItem(value) }}
+    <PathContext.Provider
+      value={{
+        menuItem,
+        setPathFromKey,
+      }}
     >
       <Space direction="vertical">
         <Layout>
-          <MenuSidebar
-            menuItems={MENU_LIST}
-            selectedItem={menuItem}
-            setSelect={onChangeMenuItem}
-            isCollapse={isCollapse}
-          />
+          <MenuSidebar menuItems={MENU_LIST} isCollapse={isCollapse} />
 
           <BaseHeader />
 
           <Content style={contentStyle} className="m-content-child-margin">
-            <Routes>
-              <Route path={DASHBOARD_ROUTES.TENANT} element={<TenantList />} />
-              <Route
-                path={DASHBOARD_ROUTES.PROVIDER}
-                element={<RentProviderList />}
-              />
-              <Route
-                path={DASHBOARD_ROUTES.OVERVIEW}
-                element={<OverviewPage />}
-              />
-              <Route
-                path={DASHBOARD_ROUTES.LOCATION}
-                element={<LocationList />}
-              />
-              <Route
-                path={DASHBOARD_ROUTES.MY_PROFILE}
-                element={<MyProfilePage />}
-              />
-            </Routes>
+            <Outlet />
           </Content>
         </Layout>
       </Space>
-    </SideMenuContext.Provider>
+    </PathContext.Provider>
   );
 };
 

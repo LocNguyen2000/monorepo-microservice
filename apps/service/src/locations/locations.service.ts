@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import { CreateLocationDto } from './dto/create-location.dto';
 import { UpdateLocationDto } from './dto/update-location.dto';
 import { LocationModel, LocationSchema } from '@nhl/schemas/user';
 import { InjectModel } from '@nestjs/sequelize';
@@ -11,8 +10,8 @@ export class LocationsService {
     private readonly locationModel: LocationModel,
   ) {}
 
-  create(createLocationDto: CreateLocationDto) {
-    return 'This action adds a new location';
+  async create(createLocationDto: Record<string, unknown>) {
+    return this.locationModel.create(createLocationDto);
   }
 
   findAll() {
@@ -23,7 +22,7 @@ export class LocationsService {
     return this.locationModel.findByPk(id);
   }
 
-  async update(id: number, payload: UpdateLocationDto) {
+  async update(id: number, payload: Record<string, unknown>) {
     const instance = await this.locationModel.findByPk(id);
 
     const response = await instance.update({ ...payload });

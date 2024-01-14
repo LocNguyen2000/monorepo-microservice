@@ -1,24 +1,18 @@
-import { FunctionComponent } from "react";
+import { FunctionComponent, useContext } from "react";
 import { Divider, Menu, Typography } from "antd";
 import { headerHight, siderStyle } from "../css/layout";
 import { formatAntdMenuByList } from "../lib/utils";
 import { IAntdMenuItem } from "../lib/interface";
 import { MENU_LIST } from "../pages/Dashboard";
+import { PathContext } from "../lib/context";
 
 interface MenuSidebarProps {
-  selectedItem: IAntdMenuItem;
   menuItems: IAntdMenuItem[];
-  setSelect: (item: any) => void;
   isCollapse: boolean;
 }
 
-const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({
-  menuItems,
-  selectedItem,
-  setSelect,
-  isCollapse,
-}) => {
-  console.log("selected >", selectedItem);
+const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({ menuItems, isCollapse }) => {
+  const { menuItem, setPathFromKey } = useContext(PathContext);
 
   return (
     <div style={siderStyle}>
@@ -49,12 +43,10 @@ const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({
         // theme="dark"
         mode="inline"
         className="override-antd-menu-item"
-        onClick={(info) => setSelect(info.key)}
+        onClick={(info) => setPathFromKey(info.key)}
         items={formatAntdMenuByList(menuItems)}
-        selectedKeys={[selectedItem.key]}
-        defaultOpenKeys={MENU_LIST.filter((t) => t.parentKey === undefined).map(
-          (t) => t.key
-        )}
+        selectedKeys={[menuItem.key]}
+        defaultOpenKeys={MENU_LIST.filter((t) => t.parentKey === undefined).map((t) => t.key)}
         inlineCollapsed={isCollapse}
       />
     </div>

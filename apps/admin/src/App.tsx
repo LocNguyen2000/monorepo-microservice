@@ -3,7 +3,7 @@ import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import { FunctionComponent } from "react";
 import { AuthenticatedRoute } from "./components/AuthenticatedRoute";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { BrowserRouter, createBrowserRouter, Navigate, Route, RouterProvider, Routes } from "react-router-dom";
 import { DASHBOARD_ROUTES } from "./lib/constants/routes";
 import { GlobalContext } from "./lib/context";
 import LoginPage from "./pages/LoginPage";
@@ -17,53 +17,11 @@ import Error404Page from "./pages/Error404Page";
 import message from "antd/es/message";
 import { NoticeType } from "antd/es/message/interface";
 import LocationList from "./pages/location/LocationList";
+import LocationDetail from "./pages/location/LocationDetail";
+import { globalTheme } from "./css/theme";
 
 export type NotificationType = "success" | "info" | "warning" | "error";
 export type ToastType = "success" | "info" | "warning" | "error";
-
-const router = createBrowserRouter([
-  {
-    path: "/login",
-    element: <LoginPage />,
-  },
-  {
-    path: "/",
-    element: (
-      <AuthenticatedRoute>
-        <Dashboard />
-      </AuthenticatedRoute>
-    ),
-    errorElement: <Error404Page />,
-    children: [
-      {
-        path: DASHBOARD_ROUTES.PROVIDER,
-        element: <RentProviderList />,
-      },
-      {
-        path: DASHBOARD_ROUTES.TENANT,
-        element: <TenantList />,
-      },
-      {
-        path: DASHBOARD_ROUTES.OVERVIEW,
-        element: <OverviewPage />,
-      },
-      {
-        path: DASHBOARD_ROUTES.MY_PROFILE,
-        element: <MyProfilePage />,
-      },
-      {
-        path: DASHBOARD_ROUTES.LOCATION,
-        element: <LocationList />,
-      },
-      {
-        path: DASHBOARD_ROUTES.SETTING,
-      },
-      {
-        path: DASHBOARD_ROUTES.SCHEDULE,
-      },
-    ],
-  },
-]);
 
 interface AppProps {}
 
@@ -91,50 +49,41 @@ const App: FunctionComponent<AppProps> = () => {
   };
 
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          //   Button: {
-          //     colorPrimary: "#00b96b",
-          //     algorithm: true, // Enable algorithm
-          //   },
-          //   Input: {
-          //     colorPrimary: "#0ff594",
-          //   },
-          Menu: {
-            // colorPrimary: "#2f3330",
-            algorithm: true,
-            colorBgBase: "#2f3330",
-            colorText: "white",
-            itemHoverBg: "#d4d7dc",
-            itemHoverColor: "#4CAF50",
-            itemSelectedBg: "#d4d7dc",
-            controlItemBgActiveHover: "#2f3330",
-            // subMenuItemBg: "#2f3330",
-          },
-        },
-        token: {
-          fontFamily: "GoogleRoboto",
-          // Seed Token
-          colorPrimary: "#4CAF50",
-          colorBgTextHover: "#2ca01c",
-          borderRadius: 4,
-          // colorIcon: "#8b3ec7",
-          // Alias Token
-          // colorBgContainer: "#f6ffed",
-        },
-      }}
-    >
+    <ConfigProvider theme={globalTheme}>
       <GlobalContext.Provider
         value={{
-          authUser: { userID: 1, name: "Nguyen Huu Loc" },
+          authUser: { userId: 1, name: "Nguyen Huu Loc", role: "Administrator" },
           useNotify: openNotification,
           useToast: openToast,
         }}
       >
         {messageContextHolder}
         {notifyContextHolder}
-        <RouterProvider router={router} />
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <AuthenticatedRoute>
+                  <Dashboard />
+                </AuthenticatedRoute>
+              }
+              errorElement={<Error404Page />}
+            >
+              <Route index element={<Navigate to={DASHBOARD_ROUTES.OVERVIEW} replace />} />
+              <Route path={DASHBOARD_ROUTES.OVERVIEW} element={<OverviewPage />} />
+              <Route path={DASHBOARD_ROUTES.PROVIDER} element={<RentProviderList />} />
+              <Route path={DASHBOARD_ROUTES.TENANT} element={<TenantList />} />
+              <Route path={DASHBOARD_ROUTES.LOCATION_DETAIL} element={<LocationDetail />} />
+              <Route path={DASHBOARD_ROUTES.LOCATION} element={<LocationList />} />
+              <Route path={DASHBOARD_ROUTES.SETTING} />
+              <Route path={DASHBOARD_ROUTES.SCHEDULE} />
+              <Route path={DASHBOARD_ROUTES.MY_PROFILE} element={<MyProfilePage />} />
+              {/* <Route path="*" element={<Error404Page />} /> */}
+            </Route>
+            <Route path="/login" element={<LoginPage />} />
+          </Routes>
+        </BrowserRouter>
       </GlobalContext.Provider>
     </ConfigProvider>
   );

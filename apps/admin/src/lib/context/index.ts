@@ -1,10 +1,10 @@
 import { Component, createContext, useContext } from "react";
 import { NotificationType } from "../../App";
-import { IAntdMenuItem } from "../interface";
+import { IAntdMenuItem, IAuthUser } from "../interface";
 import { NoticeType } from "antd/es/message/interface";
 
 export interface IGlobalContext {
-  authUser?: Record<string, unknown>;
+  authUser?: IAuthUser;
   useNotify: (type: NotificationType, title: string, message: string) => void;
   useToast: (type: NoticeType, message: string) => void;
 }
@@ -23,19 +23,19 @@ export const getGlobalContext = (): IGlobalContext => {
 
 // Side Menu
 
-export interface ISideMenuContext {
+export interface IPathContext {
   menuItem: IAntdMenuItem;
-  setMenuItem: ({ ...rest }: IAntdMenuItem) => void;
+  setPathFromKey: (key: string, ...rest) => void;
 }
 
-export const SideMenuContext = createContext<ISideMenuContext | null>(null);
+export const PathContext = createContext<IPathContext | null>(null);
 
-export const getSideMenuContext = (): ISideMenuContext => {
-  const menuContext = useContext(SideMenuContext);
+export const getPathContext = (): IPathContext => {
+  const pathContext = useContext(PathContext);
 
-  if (!menuContext) {
-    throw new Error("global context must be used in GlobalProvider");
+  if (!pathContext) {
+    throw new Error("path context must be used in PathContext Provider");
   }
 
-  return menuContext;
+  return pathContext;
 };
