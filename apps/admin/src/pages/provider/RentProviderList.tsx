@@ -6,12 +6,13 @@ import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
 import Pagination from "antd/es/pagination/Pagination";
 import { RentProviderDetail } from "./RentProviderDetail";
-import { UserAddOutlined } from "@ant-design/icons";
+import { ReloadOutlined, UserAddOutlined } from "@ant-design/icons";
 import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
 import Flex from "antd/es/flex";
 import { GlobalContext, getGlobalContext } from "../../lib/context";
+import Divider from "antd/es/divider";
 
 const RentProviderList = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
@@ -26,7 +27,7 @@ const RentProviderList = () => {
     return action == ACTION_ENUM.ADD || action == ACTION_ENUM.EDIT;
   }, false);
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.CLOSE);
-  const { serviceClient } = getGlobalContext();
+  const { serviceClient, useToast, useConfirm } = getGlobalContext();
 
   const openFormHandler = (action: ACTION_ENUM, data: ProviderDataType) => {
     console.log("FORM", action);
@@ -35,6 +36,30 @@ const RentProviderList = () => {
     setAction(action);
     dispatch(action);
     setProvider(data);
+  };
+
+  const deleteDataHandler = async (data: ProviderDataType) => {
+    serviceClient
+      .delete(`/rent-providers/${data.providerCode}`)
+      .then(() => {
+        useToast("success", "Delete Owner successfully");
+        loadData();
+      })
+      .catch((err) => {
+        useToast("error", "Delete Owner failed");
+      });
+  };
+
+  const loadData = () => {
+    serviceClient
+      .get(`/rent-providers?page=${pagination.page}&size=${pagination.size}`)
+      .then((json) => json.data)
+      .then((response: PaginatedResponse<ProviderDataType>) => {
+        setProviders(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   // ON MOUNTED
@@ -53,15 +78,7 @@ const RentProviderList = () => {
 
   // ON UPDATED
   useEffect(() => {
-    serviceClient
-      .get(`/rent-providers?page=${pagination.page}&size=${pagination.size}`)
-      .then((json) => json.data)
-      .then((response: PaginatedResponse<ProviderDataType>) => {
-        setProviders(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    loadData();
   }, [pagination]);
 
   return (
@@ -91,10 +108,21 @@ const RentProviderList = () => {
           style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
         />
 
-        <Button type="primary" size="large" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
+        <Button
+          type="primary"
+          style={{ marginRight: "1rem" }}
+          size="large"
+          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+        >
           <UserAddOutlined /> Add
         </Button>
+
+        <Button size="large">
+          <ReloadOutlined onClick={() => loadData()} />
+        </Button>
       </Flex>
+
+      <Divider />
 
       <RentProviderDetail
         data={provider}
@@ -109,6 +137,14 @@ const RentProviderList = () => {
         data={providers}
         editable
         onDblClickRow={(p: ProviderDataType) => openFormHandler(ACTION_ENUM.EDIT, p)}
+        onDeleteRow={(t: ProviderDataType) =>
+          useConfirm(
+            "warning",
+            "Owner Deletion",
+            `Do you want to delete owner ${t.providerName}?`,
+            async () => await deleteDataHandler(t)
+          )
+        }
       />
     </Card>
   );

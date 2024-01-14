@@ -1,8 +1,8 @@
 import { SettingTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { Popover, Table } from "antd";
 import { AnyObject } from "antd/es/_util/type";
-import { ColumnsType, TableProps } from "antd/es/table";
-import { FunctionComponent } from "react";
+import { ColumnGroupType, ColumnType, ColumnsType, TableProps } from "antd/es/table";
+import { FunctionComponent, useState } from "react";
 import styled from "styled-components";
 
 export interface IBaseTableProps {
@@ -11,6 +11,7 @@ export interface IBaseTableProps {
   editable?: boolean;
   onDblClickRow?: (data: any) => void;
   onClickRow?: (data: any) => void;
+  onDeleteRow?: (data: any) => void;
 }
 
 const StyledTable = styled((props: React.PropsWithChildren<TableProps<AnyObject>>) => <Table {...props} />)`
@@ -22,15 +23,22 @@ const StyledTable = styled((props: React.PropsWithChildren<TableProps<AnyObject>
   }
 `;
 
-const BaseTable: FunctionComponent<IBaseTableProps> = ({ columns, data, editable, onDblClickRow, onClickRow }) => {
+const BaseTable: FunctionComponent<IBaseTableProps> = ({
+  columns,
+  data,
+  editable,
+  onDblClickRow,
+  onClickRow,
+  onDeleteRow,
+}) => {
   const withEditColumn = (columns: ColumnsType<any>) => {
-    const editTableColumn = {
+    const editTableColumn: ColumnType<any> = {
       title: "Action",
       dataIndex: "action",
-      render: () => {
+      render: (value, record) => {
         return (
           <>
-            <Popover placement="topLeft" title={"HELLO"} content="Here's pop up Text" trigger="click">
+            <Popover placement="topLeft" content="Here's pop up Text" trigger="click">
               <SettingTwoTone
                 style={{
                   marginRight: "0.5rem",
@@ -49,6 +57,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({ columns, data, editable
               }}
               color="primary"
               title="Click here to delete information"
+              onClick={() => onDeleteRow(record)}
             />
           </>
         ) as unknown as ColumnsType<any>;
@@ -57,12 +66,12 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({ columns, data, editable
     return [...columns, editTableColumn];
   };
 
-  const addEventHandler = (data) => {
-    let event: Record<string, unknown> = {};
-    if (onDblClickRow) event.onDoubleClick = () => onDblClickRow(data);
-    if (onClickRow) event.onClick = () => onClickRow(data);
+  const addRowEventHandler = (data) => {
+    let e: Record<string, unknown> = {};
+    if (onDblClickRow) e.onDoubleClick = () => onDblClickRow(data);
+    if (onClickRow) e.onClick = () => onClickRow(data);
 
-    return event;
+    return e;
   };
 
   return (
@@ -74,7 +83,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({ columns, data, editable
           dataSource={data}
           showSorterTooltip={true}
           bordered
-          onRow={(data) => addEventHandler(data)}
+          onRow={(data) => addRowEventHandler(data)}
           pagination={false}
         />
       ) : (

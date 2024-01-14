@@ -4,14 +4,11 @@ import {
   Delete,
   Get,
   Param,
-  Patch,
   Post,
   Put,
   Query,
-  UsePipes,
 } from '@nestjs/common';
 import { RentProvidersService } from './rent-providers.service';
-import { PaginatedQuery } from '~/common/pagination';
 
 @Controller('rent-providers')
 export class RentProvidersController {

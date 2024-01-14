@@ -36,7 +36,9 @@ export class RentProvidersService {
     return instance.update({ ...payload });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} location`;
+  async remove(id: number) {
+    const provider = await this.rentProviderRepository.findByPk(id);
+
+    return provider.destroy();
   }
 }

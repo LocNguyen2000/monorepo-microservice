@@ -1,27 +1,24 @@
-import { Button, Empty, Flex, Image, Input, Pagination } from "antd";
+import { Button, Divider, Empty, Flex, Input, Pagination } from "antd";
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
 import { useContext, useEffect, useState } from "react";
-import { ServiceClient } from "../../lib/clients";
 import Typography from "antd/es/typography/Typography";
-import { SettingOutlined, EditOutlined, HomeOutlined } from "@ant-design/icons";
+import { SettingOutlined, EditOutlined, HomeOutlined, ReloadOutlined, DeleteOutlined } from "@ant-design/icons";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 import { GlobalContext, PathContext } from "../../lib/context";
 import { MENU_LIST } from "../Dashboard";
 import { useNavigate } from "react-router-dom";
-import { ACTION_ENUM } from "../../lib/constants";
 import { IPagination, LocationDataType, PaginatedResponse } from "../../lib/interface";
 
 const LocationList = () => {
-  const [locations, setLocations] = useState([]);
-  const [location, setLocation] = useState({});
+  const [locations, setLocations] = useState<LocationDataType[]>([]);
   const [pagination, setPagination] = useState<IPagination>({
     total: 0,
     page: 1,
     size: 10,
   });
 
-  const { serviceClient } = useContext(GlobalContext);
+  const { serviceClient, useToast, useConfirm } = useContext(GlobalContext);
   const { setPathFromKey } = useContext(PathContext);
   const navigate = useNavigate();
 
@@ -34,6 +31,30 @@ const LocationList = () => {
     else {
       navigate(DASHBOARD_ROUTES.LOCATION_DETAIL);
     }
+  };
+
+  const deleteDataHandler = async (data: LocationDataType) => {
+    serviceClient
+      .delete(`/location/${data.locationCode}`)
+      .then(() => {
+        useToast("success", "Delete Location successfully");
+        loadData();
+      })
+      .catch((err) => {
+        useToast("error", "Delete Location failed");
+      });
+  };
+
+  const loadData = () => {
+    serviceClient
+      .get(`/location?page=${pagination.page}&size=${pagination.size}`)
+      .then((json) => json.data)
+      .then((response: PaginatedResponse<LocationDataType>) => {
+        setLocations(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   // ON MOUNTED
@@ -52,15 +73,7 @@ const LocationList = () => {
 
   // ON UPDATED
   useEffect(() => {
-    serviceClient
-      .get(`/location?page=${pagination.page}&size=${pagination.size}`)
-      .then((json) => json.data)
-      .then((response: PaginatedResponse<LocationDataType>) => {
-        setLocations(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    loadData();
   }, [pagination]);
 
   return (
@@ -90,10 +103,17 @@ const LocationList = () => {
             placeholder="Enter search value here"
             style={{ width: "20rem", height: "2.5rem", marginRight: "2rem" }}
           />
-          <Button type="primary" size="large" onClick={(e) => openLocationForm()}>
+          <Button type="primary" style={{ marginRight: "1rem" }} size="large" onClick={(e) => openLocationForm()}>
             <HomeOutlined /> Add
           </Button>
+
+          <Button size="large">
+            <ReloadOutlined onClick={() => loadData()} />
+          </Button>
         </Flex>
+
+        <Divider />
+
         <Flex wrap="wrap" gap="small" style={{ width: "100%", justifyContent: "space-between" }}>
           {locations.length > 0 ? (
             locations.map((l) => (
@@ -101,7 +121,7 @@ const LocationList = () => {
                 key={l.locationCode}
                 hoverable
                 style={{ width: 300 }}
-                cover={<img alt="example" height={200} src={`${l.image}`} />}
+                cover={<img alt="example" height={180} src={`${l.image}`} />}
                 actions={[
                   <EditOutlined
                     key="edit"
@@ -109,10 +129,18 @@ const LocationList = () => {
                     className="override-antd-icon-item"
                     onClick={() => openLocationForm(l.locationCode)}
                   />,
-                  <SettingOutlined
-                    key="setting"
+                  <DeleteOutlined
+                    key="delete"
                     className="override-antd-icon-item"
-                    title="Other action for this location!"
+                    title="Delete this location!"
+                    onClick={() => {
+                      useConfirm(
+                        "warning",
+                        "Location Deletion",
+                        `Do you want to delete location ${l.locationCode}?`,
+                        async () => await deleteDataHandler(l)
+                      );
+                    }}
                   />,
                 ]}
               >

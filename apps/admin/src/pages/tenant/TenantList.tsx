@@ -1,4 +1,4 @@
-import { UserAddOutlined } from "@ant-design/icons";
+import { ReloadOutlined, UserAddOutlined } from "@ant-design/icons";
 import { useContext, useEffect, useReducer, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { tenantColumns } from "../../lib/constants/columns";
@@ -9,7 +9,7 @@ import { TenantDetailForm } from "./TenantDetail";
 import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
-import { Flex, Pagination } from "antd";
+import { Divider, Flex, Pagination } from "antd";
 import { GlobalContext, getGlobalContext } from "../../lib/context";
 
 const TenantList = () => {
@@ -24,7 +24,7 @@ const TenantList = () => {
     return action == ACTION_ENUM.ADD || action == ACTION_ENUM.EDIT;
   }, false);
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.CLOSE);
-  const { serviceClient } = getGlobalContext();
+  const { serviceClient, useConfirm, useToast } = getGlobalContext();
 
   // ON MOUNTED
   useEffect(() => {
@@ -46,15 +46,7 @@ const TenantList = () => {
 
   // ON UPDATED
   useEffect(() => {
-    serviceClient
-      .get(`/tenant?page=${pagination.page}&size=${pagination.size}`)
-      .then((json) => json.data)
-      .then((response: PaginatedResponse<TenantDataType>) => {
-        setTenants(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    loadData();
   }, [pagination]);
 
   const openFormHandler = (action: ACTION_ENUM, data: TenantDataType) => {
@@ -64,6 +56,30 @@ const TenantList = () => {
     setAction(action);
     dispatch(action);
     setTenant(data);
+  };
+
+  const loadData = () => {
+    serviceClient
+      .get(`/tenant?page=${pagination.page}&size=${pagination.size}`)
+      .then((json) => json.data)
+      .then((response: PaginatedResponse<TenantDataType>) => {
+        setTenants(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const deleteDataHandler = async (data: TenantDataType) => {
+    serviceClient
+      .delete(`/tenant/${data.tenantCode}`)
+      .then(() => {
+        useToast("success", "Delete Tenant successfully");
+        loadData();
+      })
+      .catch((err) => {
+        useToast("error", "Delete Tenant failed");
+      });
   };
 
   return (
@@ -93,16 +109,27 @@ const TenantList = () => {
           style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
         />
 
-        <Button type="primary" size="large" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
+        <Button
+          type="primary"
+          style={{ marginRight: "1rem" }}
+          size="large"
+          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+        >
           <UserAddOutlined /> Add
+        </Button>
+
+        <Button size="large">
+          <ReloadOutlined onClick={() => loadData()} />
         </Button>
       </Flex>
 
+      <Divider />
+
       <TenantDetailForm
         data={tenant}
-        setData={setTenant}
         action={action}
         isOpen={isOpenForm}
+        setData={setTenant}
         setIsFormOpen={openFormHandler}
       />
 
@@ -111,6 +138,14 @@ const TenantList = () => {
         data={tenants}
         editable
         onDblClickRow={(t: TenantDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
+        onDeleteRow={(t: TenantDataType) =>
+          useConfirm(
+            "warning",
+            "Tenant Deletion",
+            `Do you want to delete tenant ${t.tenantName}?`,
+            async () => await deleteDataHandler(t)
+          )
+        }
       />
     </Card>
   );

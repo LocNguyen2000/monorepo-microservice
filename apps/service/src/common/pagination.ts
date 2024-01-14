@@ -31,7 +31,10 @@ export async function paginatedQuery<T extends Model<any, any>>(
 
   console.log(transformFilter);
 
-  const skip = transformFilter.page > 1 ? transformFilter.page - 1 : 0;
+  const skip =
+    transformFilter.page > 1
+      ? (transformFilter.page - 1) * transformFilter.size
+      : 0;
   const limit = transformFilter.size;
 
   const response = await model.findAndCountAll({

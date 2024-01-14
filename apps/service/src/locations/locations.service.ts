@@ -30,7 +30,9 @@ export class LocationsService {
     return response;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} location`;
+  async remove(id: number) {
+    const location = await this.locationModel.findByPk(id);
+
+    return location.destroy();
   }
 }

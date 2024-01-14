@@ -2,14 +2,13 @@ import { Button, Divider, Flex, Form, InputNumber, Select, Upload } from "antd";
 import Card from "antd/es/card/Card";
 import { useLocation, useNavigate } from "react-router-dom";
 import Input from "antd/es/input";
-import { useEffect, useState, ChangeEventHandler, useContext } from "react";
+import { useEffect, useState, ChangeEventHandler } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
-import { ServiceClient } from "../../lib/clients";
 import { LocationDataType, PaginatedResponse, ProviderDataType } from "../../lib/interface";
 import { debounce } from "../../lib/utils";
 import { ACTION_ENUM } from "../../lib/constants";
-import { GlobalContext, getGlobalContext, getPathContext } from "../../lib/context";
+import { getGlobalContext, getPathContext } from "../../lib/context";
 import { MENU_LIST } from "../Dashboard";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 
@@ -17,7 +16,7 @@ const LocationDetail: React.FunctionComponent = () => {
   const [location, setLocation] = useState<Partial<LocationDataType>>({});
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.ADD);
-  const { useNotify, serviceClient } = getGlobalContext();
+  const { serviceClient, useNotify, useConfirm } = getGlobalContext();
   const { setPathFromKey } = getPathContext();
   const navigate = useNavigate();
 
@@ -170,7 +169,13 @@ const LocationDetail: React.FunctionComponent = () => {
         >
           Return
         </Button>
-        <Button type="primary" htmlType="submit" onClick={(e) => formSubmitHandler()}>
+        <Button
+          type="primary"
+          htmlType="submit"
+          onClick={(e) => {
+            useConfirm("confirm", "New Location", "Are you sure to submit location?", () => formSubmitHandler());
+          }}
+        >
           Submit
         </Button>
       </Form.Item>
