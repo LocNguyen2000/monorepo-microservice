@@ -1,4 +1,4 @@
-import { Button, Divider, Empty, Flex, Input, Pagination } from "antd";
+import { Button, Divider, Empty, Flex, Input, Pagination, Skeleton } from "antd";
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
 import { useContext, useEffect, useState } from "react";
@@ -9,18 +9,28 @@ import { GlobalContext, PathContext } from "../../lib/context";
 import { MENU_LIST } from "../Dashboard";
 import { useNavigate } from "react-router-dom";
 import { IPagination, LocationDataType, PaginatedResponse } from "../../lib/interface";
+import SkeletonImage from "antd/es/skeleton/Image";
 
 const LocationList = () => {
   const [locations, setLocations] = useState<LocationDataType[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [pagination, setPagination] = useState<IPagination>({
     total: 0,
     page: 1,
     size: 10,
   });
-
   const { serviceClient, useToast, useConfirm } = useContext(GlobalContext);
   const { setPathFromKey } = useContext(PathContext);
   const navigate = useNavigate();
+
+  const setLoadingSekeleton = (callback?: () => void) => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      if (callback) callback();
+    }, 500);
+  };
 
   const openLocationForm = (id?: string) => {
     const [detailFormPage] = MENU_LIST.filter((i) => i.text == "Location Detail");
@@ -50,6 +60,7 @@ const LocationList = () => {
       .get(`/location?page=${pagination.page}&size=${pagination.size}`)
       .then((json) => json.data)
       .then((response: PaginatedResponse<LocationDataType>) => {
+        setLoadingSekeleton();
         setLocations(response.data);
       })
       .catch((e) => {
@@ -59,6 +70,8 @@ const LocationList = () => {
 
   // ON MOUNTED
   useEffect(() => {
+    setLoadingSekeleton();
+
     serviceClient
       .get(`/location?page=${pagination.page}&size=${pagination.size}`)
       .then((json) => json.data)
@@ -107,15 +120,33 @@ const LocationList = () => {
             <HomeOutlined /> Add
           </Button>
 
-          <Button size="large">
-            <ReloadOutlined onClick={() => loadData()} />
+          <Button size="large" onClick={() => loadData()}>
+            <ReloadOutlined />
           </Button>
         </Flex>
 
         <Divider />
 
         <Flex wrap="wrap" gap="small" style={{ width: "100%", justifyContent: "space-between" }}>
-          {locations.length > 0 ? (
+          {isLoading ? (
+            <>
+              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
+                <Skeleton active loading />
+              </Card>
+              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
+                <Skeleton active loading />
+              </Card>
+              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
+                <Skeleton active loading />
+              </Card>
+              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
+                <Skeleton active loading />
+              </Card>
+              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
+                <Skeleton active loading />
+              </Card>
+            </>
+          ) : locations.length > 0 ? (
             locations.map((l) => (
               <Card
                 key={l.locationCode}

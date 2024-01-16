@@ -15,6 +15,7 @@ import { GlobalContext, getGlobalContext } from "../../lib/context";
 const TenantList = () => {
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
   const [tenant, setTenant] = useState<TenantDataType>({});
+  const [isLoading, setIsLoading] = useState(false);
   const [pagination, setPagination] = useState<IPagination>({
     total: 0,
     page: 1,
@@ -26,8 +27,53 @@ const TenantList = () => {
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.CLOSE);
   const { serviceClient, useConfirm, useToast } = getGlobalContext();
 
+  const setLoadingSekeleton = (callback?: () => void) => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      if (callback) callback();
+    }, 500);
+  };
+
+  const openFormHandler = (action: ACTION_ENUM, data: TenantDataType) => {
+    console.log("FORM", action);
+    console.log("DATA", data);
+
+    setAction(action);
+    dispatch(action);
+    setTenant(data);
+  };
+
+  const loadData = () => {
+    serviceClient
+      .get(`/tenant?page=${pagination.page}&size=${pagination.size}`)
+      .then((json) => json.data)
+      .then((response: PaginatedResponse<TenantDataType>) => {
+        setLoadingSekeleton();
+        setTenants(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
+
+  const deleteDataHandler = async (data: TenantDataType) => {
+    serviceClient
+      .delete(`/tenant/${data.tenantCode}`)
+      .then(() => {
+        useToast("success", "Delete Tenant successfully");
+        loadData();
+      })
+      .catch((err) => {
+        useToast("error", "Delete Tenant failed");
+      });
+  };
+
   // ON MOUNTED
   useEffect(() => {
+    setLoadingSekeleton();
+
     serviceClient
       .get(`/tenant?page=${pagination.page}&size=${pagination.size}`)
       .then((json) => json.data)
@@ -48,39 +94,6 @@ const TenantList = () => {
   useEffect(() => {
     loadData();
   }, [pagination]);
-
-  const openFormHandler = (action: ACTION_ENUM, data: TenantDataType) => {
-    console.log("FORM", action);
-    console.log("DATA", data);
-
-    setAction(action);
-    dispatch(action);
-    setTenant(data);
-  };
-
-  const loadData = () => {
-    serviceClient
-      .get(`/tenant?page=${pagination.page}&size=${pagination.size}`)
-      .then((json) => json.data)
-      .then((response: PaginatedResponse<TenantDataType>) => {
-        setTenants(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const deleteDataHandler = async (data: TenantDataType) => {
-    serviceClient
-      .delete(`/tenant/${data.tenantCode}`)
-      .then(() => {
-        useToast("success", "Delete Tenant successfully");
-        loadData();
-      })
-      .catch((err) => {
-        useToast("error", "Delete Tenant failed");
-      });
-  };
 
   return (
     <Card style={{ padding: "0.25rem" }}>
@@ -118,8 +131,8 @@ const TenantList = () => {
           <UserAddOutlined /> Add
         </Button>
 
-        <Button size="large">
-          <ReloadOutlined onClick={() => loadData()} />
+        <Button size="large" onClick={() => loadData()}>
+          <ReloadOutlined />
         </Button>
       </Flex>
 
@@ -136,6 +149,7 @@ const TenantList = () => {
       <BaseTable
         columns={tenantColumns}
         data={tenants}
+        isLoading={isLoading}
         editable
         onDblClickRow={(t: TenantDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
         onDeleteRow={(t: TenantDataType) =>

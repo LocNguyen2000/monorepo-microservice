@@ -17,6 +17,7 @@ import Divider from "antd/es/divider";
 const RentProviderList = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
   const [provider, setProvider] = useState<ProviderDataType>({});
+  const [isLoading, setIsLoading] = useState(true);
   const [pagination, setPagination] = useState<IPagination>({
     total: 0,
     page: 1,
@@ -28,6 +29,15 @@ const RentProviderList = () => {
   }, false);
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.CLOSE);
   const { serviceClient, useToast, useConfirm } = getGlobalContext();
+
+  const setLoadingSekeleton = (callback?: () => void) => {
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      if (callback) callback();
+    }, 500);
+  };
 
   const openFormHandler = (action: ACTION_ENUM, data: ProviderDataType) => {
     console.log("FORM", action);
@@ -55,6 +65,7 @@ const RentProviderList = () => {
       .get(`/rent-providers?page=${pagination.page}&size=${pagination.size}`)
       .then((json) => json.data)
       .then((response: PaginatedResponse<ProviderDataType>) => {
+        setLoadingSekeleton();
         setProviders(response.data);
       })
       .catch((e) => {
@@ -64,6 +75,8 @@ const RentProviderList = () => {
 
   // ON MOUNTED
   useEffect(() => {
+    setLoadingSekeleton();
+
     serviceClient
       .get(`/rent-providers?page=${pagination.page}&size=${pagination.size}`)
       .then((json) => json.data)
@@ -117,8 +130,8 @@ const RentProviderList = () => {
           <UserAddOutlined /> Add
         </Button>
 
-        <Button size="large">
-          <ReloadOutlined onClick={() => loadData()} />
+        <Button size="large" onClick={() => loadData()}>
+          <ReloadOutlined />
         </Button>
       </Flex>
 
@@ -136,6 +149,7 @@ const RentProviderList = () => {
         columns={providerColumns}
         data={providers}
         editable
+        isLoading={isLoading}
         onDblClickRow={(p: ProviderDataType) => openFormHandler(ACTION_ENUM.EDIT, p)}
         onDeleteRow={(t: ProviderDataType) =>
           useConfirm(

@@ -16,7 +16,7 @@ import { contentStyle } from "../css/layout";
 import { IAntdMenuItem } from "../lib/interface";
 import { DASHBOARD_ROUTES } from "../lib/constants/routes";
 import BaseHeader from "../components/BaseHeader";
-import { PathContext } from "../lib/context";
+import { PathContext, getGlobalContext } from "../lib/context";
 
 interface DashboardProps {}
 
@@ -53,6 +53,7 @@ export const MENU_LIST: IAntdMenuItem[] = [
     text: "Location Detail",
     key: "12",
     icon: <HomeOutlined className="override-antd-icon-item" />,
+    path: DASHBOARD_ROUTES.LOCATION_DETAIL,
     hidden: true,
   },
   {
@@ -64,13 +65,13 @@ export const MENU_LIST: IAntdMenuItem[] = [
     text: "Settings",
     key: "5",
     icon: <SettingOutlined className="override-antd-icon-item" />,
-    path: DASHBOARD_ROUTES.SETTING,
+    // path: DASHBOARD_ROUTES.SETTING,
   },
   {
     text: "Schedules",
     key: "6",
     icon: <ScheduleOutlined className="override-antd-icon-item" />,
-    path: DASHBOARD_ROUTES.SCHEDULE,
+    // path: DASHBOARD_ROUTES.SCHEDULE,
   },
   {
     text: "My Profile",
@@ -95,13 +96,18 @@ export const MENU_LIST: IAntdMenuItem[] = [
 const Dashboard: FunctionComponent<DashboardProps> = () => {
   const [menuItem, setMenuItem] = useState<IAntdMenuItem>(MENU_LIST[0]);
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
+  const { useNotify } = getGlobalContext();
   const navigate = useNavigate();
 
   const setPathFromKey = (selectedItemKey: string) => {
     const selected = MENU_LIST.find((item) => item.key === selectedItemKey);
     if (selected) {
-      setMenuItem(selected);
-      if (selected.path) navigate(selected.path);
+      if (selected.path) {
+        setMenuItem(selected);
+        navigate(selected.path);
+      } else {
+        useNotify("warning", "Under construction!", "Cannot access this page yet.");
+      }
     }
   };
 
