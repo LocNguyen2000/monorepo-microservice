@@ -5,10 +5,10 @@ import { useContext, useEffect, useState } from "react";
 import Typography from "antd/es/typography/Typography";
 import { SettingOutlined, EditOutlined, HomeOutlined, ReloadOutlined, DeleteOutlined } from "@ant-design/icons";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
-import { GlobalContext, PathContext } from "../../lib/context";
+import { GlobalContext, PathContext, getGlobalContext } from "../../lib/context";
 import { MENU_LIST } from "../Dashboard";
 import { useNavigate } from "react-router-dom";
-import { IPagination, LocationDataType, PaginatedResponse } from "../../lib/interface";
+import { ExpenseDataType, IPagination, LocationDataType, PaginatedResponse } from "../../lib/interface";
 import SkeletonImage from "antd/es/skeleton/Image";
 
 const LocationList = () => {
@@ -19,7 +19,7 @@ const LocationList = () => {
     page: 1,
     size: 10,
   });
-  const { serviceClient, useToast, useConfirm } = useContext(GlobalContext);
+  const { serviceClient, useToast, useConfirm } = getGlobalContext();
   const { setPathFromKey } = useContext(PathContext);
   const navigate = useNavigate();
 
@@ -92,42 +92,28 @@ const LocationList = () => {
   return (
     <>
       <Card style={{ padding: "0.25rem" }}>
-        <Flex
-          style={{
-            display: "flex",
-            alignItems: "center",
-            marginBottom: "1rem",
-          }}
-        >
-          <Pagination
-            current={pagination.page}
-            total={pagination.total}
-            pageSize={pagination.size}
-            pageSizeOptions={[10]}
-            onChange={(page, size) => {
-              setPagination({ ...pagination, page, size });
-            }}
-            style={{ marginRight: "2rem" }}
-          />
-
+        <Flex style={{ alignItems: "center" }}>
+          <div>
+            <h2>Locations</h2>
+            <Typography>- Place for Tenants to rent from Rent Owner</Typography>
+          </div>
           <div style={{ flex: 1 }}></div>
-
           <Input
             placeholder="Enter search value here"
-            style={{ width: "20rem", height: "2.5rem", marginRight: "2rem" }}
+            style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
           />
-          <Button type="primary" style={{ marginRight: "1rem" }} size="large" onClick={(e) => openLocationForm()}>
+          <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={(e) => openLocationForm()}>
             <HomeOutlined /> Add
           </Button>
 
-          <Button size="large" onClick={() => loadData()}>
+          <Button size="middle" onClick={() => loadData()}>
             <ReloadOutlined />
           </Button>
         </Flex>
 
         <Divider />
 
-        <Flex wrap="wrap" gap="small" style={{ width: "100%", justifyContent: "space-between" }}>
+        <Flex wrap="wrap" gap="small" style={{ width: "100%" }}>
           {isLoading ? (
             <>
               <Card style={{ width: 300 }} cover={<SkeletonImage />}>
@@ -151,8 +137,14 @@ const LocationList = () => {
               <Card
                 key={l.locationCode}
                 hoverable
-                style={{ width: 300 }}
-                cover={<img alt="example" height={180} src={`${l.image}`} />}
+                style={{ width: 250, marginRight: "0.5rem" }}
+                cover={
+                  l.image ? (
+                    <img alt="example" height={100} src={`${l.image}`} />
+                  ) : (
+                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                  )
+                }
                 actions={[
                   <EditOutlined
                     key="edit"
@@ -176,10 +168,10 @@ const LocationList = () => {
                 ]}
               >
                 <Meta
-                  title={l.locationCode + ": " + l.locationAddress}
+                  title={l.locationCode + ": " + l.locationName}
                   description={
                     <>
-                      <Typography>Room count: {l.roomCount}</Typography>
+                      <Typography>Room size: {l.roomSize}</Typography>
                       <Typography
                         style={{
                           whiteSpace: "nowrap",
@@ -187,7 +179,7 @@ const LocationList = () => {
                           textOverflow: "ellipsis",
                         }}
                       >
-                        {l.description}
+                        {l.locationAddress}
                       </Typography>
                     </>
                   }
@@ -202,6 +194,16 @@ const LocationList = () => {
             </>
           )}
         </Flex>
+        <Pagination
+          current={pagination.page}
+          total={pagination.total}
+          pageSize={pagination.size}
+          pageSizeOptions={[10]}
+          onChange={(page, size) => {
+            setPagination({ ...pagination, page, size });
+          }}
+          style={{ marginTop: "1.5rem" }}
+        />
       </Card>
     </>
   );

@@ -22,6 +22,7 @@ import LocationDetail from "./pages/location/LocationDetail";
 import { globalTheme } from "./css/theme";
 import { ServiceClient } from "./lib/clients";
 import { Divider, Flex } from "antd";
+import ExpenseList from "./pages/expense/ExpenseList";
 
 export type NotificationType = "success" | "info" | "warning" | "error";
 export type ConfirmType = ModalFuncProps["type"];
@@ -110,7 +111,7 @@ const App: FunctionComponent<AppProps> = () => {
               <Route path={DASHBOARD_ROUTES.TENANT} element={<TenantList />} />
               <Route path={DASHBOARD_ROUTES.LOCATION_DETAIL} element={<LocationDetail />} />
               <Route path={DASHBOARD_ROUTES.LOCATION} element={<LocationList />} />
-              <Route path={DASHBOARD_ROUTES.SETTING} />
+              <Route path={DASHBOARD_ROUTES.EXPENSE} element={<ExpenseList />} />
               <Route path={DASHBOARD_ROUTES.SCHEDULE} />
               <Route path={DASHBOARD_ROUTES.MY_PROFILE} element={<MyProfilePage />} />
               {/* <Route path="*" element={<Error404Page />} /> */}

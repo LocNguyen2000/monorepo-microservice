@@ -5,6 +5,6 @@ export enum DASHBOARD_ROUTES {
   TENANT = "/tenant",
   LOCATION = "/location",
   LOCATION_DETAIL = "/location/detail",
-  SETTING = "/setting",
+  EXPENSE = "/expense",
   SCHEDULE = "/schedule",
 }

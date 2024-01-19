@@ -1,6 +1,7 @@
 import { Column, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
 import { BaseEntity } from "../base";
 import { RentProviderSchema } from "./rent-provider";
+import { LocationSchema } from "./location";
 
 @Table({ tableName: "tenants" })
 export class TenantSchema extends BaseEntity {
@@ -32,8 +33,8 @@ export class TenantSchema extends BaseEntity {
   email?: string;
 
   @Column
-  @ForeignKey(() => RentProviderSchema)
-  rentProviderId?: number;
+  @ForeignKey(() => LocationSchema)
+  locationCode?: number;
 
   @Column
   contactAddress: string;

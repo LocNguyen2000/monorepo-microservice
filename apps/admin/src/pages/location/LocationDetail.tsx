@@ -1,11 +1,11 @@
-import { Button, Divider, Flex, Form, InputNumber, Select, Upload } from "antd";
+import { Button, Divider, Flex, Form, InputNumber, Select, Tag, Upload } from "antd";
 import Card from "antd/es/card/Card";
 import { useLocation, useNavigate } from "react-router-dom";
 import Input from "antd/es/input";
 import { useEffect, useState, ChangeEventHandler } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 import TextArea from "antd/es/input/TextArea";
-import { LocationDataType, PaginatedResponse, ProviderDataType } from "../../lib/interface";
+import { ExpenseDataType, LocationDataType, PaginatedResponse, ProviderDataType } from "../../lib/interface";
 import { debounce } from "../../lib/utils";
 import { ACTION_ENUM } from "../../lib/constants";
 import { getGlobalContext, getPathContext } from "../../lib/context";
@@ -14,13 +14,27 @@ import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 
 const LocationDetail: React.FunctionComponent = () => {
   const [location, setLocation] = useState<Partial<LocationDataType>>({});
+  const [locationExpenses, setLocationExpenses] = useState<ExpenseDataType["expenseCode"][]>([]);
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
+  const [expenses, setExpenses] = useState<ExpenseDataType[]>([]);
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.ADD);
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
   const { setPathFromKey } = getPathContext();
   const navigate = useNavigate();
 
   const { search } = useLocation();
+
+  const getExpenseData = () => {
+    serviceClient
+      .get(`/expense`)
+      .then((json) => json.data)
+      .then((response: PaginatedResponse<ExpenseDataType>) => {
+        setExpenses(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  };
 
   const returnLocationTable = () => {
     const [locationPage] = MENU_LIST.filter((i) => i.path === DASHBOARD_ROUTES.LOCATION);
@@ -44,7 +58,10 @@ const LocationDetail: React.FunctionComponent = () => {
 
         useNotify("success", "New Location Added", `Submit form successfully for Location ${location.locationCode}`);
       } else if (action === ACTION_ENUM.EDIT) {
+        console.log(locationExpenses);
+
         await serviceClient.put(`/location/${location.locationCode}`, location);
+        await serviceClient.patch(`/location/${location.locationCode}`, locationExpenses);
 
         useNotify(
           "success",
@@ -69,6 +86,7 @@ const LocationDetail: React.FunctionComponent = () => {
         .get(`/location/${isId}`)
         .then((res) => {
           setLocation(res.data);
+          if (res.data.expenses) setLocationExpenses(res.data.expenses.map((e) => e.expenseCode));
           setAction(ACTION_ENUM.EDIT);
         })
         .catch((e) => {
@@ -77,10 +95,12 @@ const LocationDetail: React.FunctionComponent = () => {
     }
 
     serviceClient
-      .get(`/rent-providers`)
+      .get(`/rent-provider`)
       .then((json) => json.data)
       .then((response: PaginatedResponse<ProviderDataType>) => {
         setProviders(response.data);
+
+        getExpenseData();
       })
       .catch((e) => {
         console.log(e);
@@ -107,7 +127,15 @@ const LocationDetail: React.FunctionComponent = () => {
             onChange={(e) => formChangeHandler(e)}
           />
         </Form.Item>
-        <Form.Item label="Location Address" required={true} style={{}}>
+        <Form.Item label="Location Name" required={true}>
+          <Input
+            name="locationName"
+            placeholder="Name for location"
+            value={location.locationName}
+            onChange={(e) => formChangeHandler(e)}
+          />
+        </Form.Item>
+        <Form.Item label="Address" required={true} style={{}}>
           <Input
             name="locationAddress"
             value={location.locationAddress}
@@ -115,12 +143,12 @@ const LocationDetail: React.FunctionComponent = () => {
             placeholder="Enter a location here"
           />
         </Form.Item>
-        <Form.Item label="Room Count" required={true}>
+        <Form.Item label="Room size" required={true}>
           <InputNumber
-            name="roomCount"
-            value={location.roomCount}
+            name="roomSize"
+            value={location.roomSize}
             onChange={(v) => {
-              setLocation({ ...location, roomCount: v });
+              setLocation({ ...location, roomSize: v });
             }}
             placeholder="A number of room in location"
           />
@@ -145,6 +173,24 @@ const LocationDetail: React.FunctionComponent = () => {
             {providers.map((p) => (
               <Select.Option key={p.providerCode} value={p.providerCode}>
                 {p.providerName}
+              </Select.Option>
+            ))}
+          </Select>
+        </Form.Item>
+
+        <Form.Item label="Expense">
+          <Select
+            showSearch
+            mode="multiple"
+            placeholder="Select expenses for location"
+            value={locationExpenses}
+            onChange={(e) => {
+              setLocationExpenses(e);
+            }}
+          >
+            {expenses.map((p) => (
+              <Select.Option key={p.expenseCode} value={p.expenseCode}>
+                {p.expenseName}
               </Select.Option>
             ))}
           </Select>

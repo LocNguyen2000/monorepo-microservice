@@ -8,8 +8,10 @@ import {
   Put,
   Query,
   UsePipes,
+  Patch,
 } from '@nestjs/common';
 import { LocationsService } from './locations.service';
+import { ExpenseSchema } from '@nhl/schemas/user';
 
 @Controller('location')
 export class LocationsController {
@@ -36,6 +38,11 @@ export class LocationsController {
     @Body() updateLocationDto: Record<string, unknown>,
   ) {
     return this.locationsService.update(+id, updateLocationDto);
+  }
+
+  @Patch(':id')
+  assign(@Param('id') id: string, @Body() payload: number[]) {
+    return this.locationsService.assignExpensesToLocation(+id, payload);
   }
 
   @Delete(':id')

@@ -6,13 +6,14 @@ import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
 import Pagination from "antd/es/pagination/Pagination";
 import { RentProviderDetail } from "./RentProviderDetail";
-import { ReloadOutlined, UserAddOutlined } from "@ant-design/icons";
+import { HomeOutlined, ReloadOutlined, UserAddOutlined } from "@ant-design/icons";
 import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
 import Flex from "antd/es/flex";
 import { GlobalContext, getGlobalContext } from "../../lib/context";
 import Divider from "antd/es/divider";
+import { Typography } from "antd";
 
 const RentProviderList = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
@@ -50,7 +51,7 @@ const RentProviderList = () => {
 
   const deleteDataHandler = async (data: ProviderDataType) => {
     serviceClient
-      .delete(`/rent-providers/${data.providerCode}`)
+      .delete(`/rent-provider/${data.providerCode}`)
       .then(() => {
         useToast("success", "Delete Owner successfully");
         loadData();
@@ -62,7 +63,7 @@ const RentProviderList = () => {
 
   const loadData = () => {
     serviceClient
-      .get(`/rent-providers?page=${pagination.page}&size=${pagination.size}`)
+      .get(`/rent-provider?page=${pagination.page}&size=${pagination.size}`)
       .then((json) => json.data)
       .then((response: PaginatedResponse<ProviderDataType>) => {
         setLoadingSekeleton();
@@ -78,7 +79,7 @@ const RentProviderList = () => {
     setLoadingSekeleton();
 
     serviceClient
-      .get(`/rent-providers?page=${pagination.page}&size=${pagination.size}`)
+      .get(`/rent-provider?page=${pagination.page}&size=${pagination.size}`)
       .then((json) => json.data)
       .then((response: PaginatedResponse<ProviderDataType>) => {
         setProviders(response.data);
@@ -96,24 +97,11 @@ const RentProviderList = () => {
 
   return (
     <Card style={{ padding: "0.25rem" }}>
-      <Flex
-        style={{
-          display: "flex",
-          alignItems: "center",
-          marginBottom: "1rem",
-        }}
-      >
-        <Pagination
-          current={pagination.page}
-          total={pagination.total}
-          pageSize={pagination.size}
-          pageSizeOptions={[10]}
-          onChange={(page, size) => {
-            setPagination({ ...pagination, page, size });
-          }}
-          style={{ marginRight: "2rem" }}
-        />
-
+      <Flex style={{ alignItems: "center" }}>
+        <div>
+          <h2>Rent Owners</h2>
+          <Typography>- Land lord, owner of locations</Typography>
+        </div>
         <div style={{ flex: 1 }}></div>
 
         <Input
@@ -124,13 +112,13 @@ const RentProviderList = () => {
         <Button
           type="primary"
           style={{ marginRight: "1rem" }}
-          size="large"
+          size="middle"
           onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
         >
           <UserAddOutlined /> Add
         </Button>
 
-        <Button size="large" onClick={() => loadData()}>
+        <Button size="middle" onClick={() => loadData()}>
           <ReloadOutlined />
         </Button>
       </Flex>
@@ -159,6 +147,17 @@ const RentProviderList = () => {
             async () => await deleteDataHandler(t)
           )
         }
+      />
+
+      <Pagination
+        current={pagination.page}
+        total={pagination.total}
+        pageSize={pagination.size}
+        pageSizeOptions={[10]}
+        onChange={(page, size) => {
+          setPagination({ ...pagination, page, size });
+        }}
+        style={{ marginTop: "1.5rem" }}
       />
     </Card>
   );

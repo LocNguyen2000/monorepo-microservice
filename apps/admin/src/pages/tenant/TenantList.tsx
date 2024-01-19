@@ -11,6 +11,7 @@ import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
 import { Divider, Flex, Pagination } from "antd";
 import { GlobalContext, getGlobalContext } from "../../lib/context";
+import Typography from "antd/es/typography/Typography";
 
 const TenantList = () => {
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
@@ -104,17 +105,10 @@ const TenantList = () => {
           alignItems: "center",
         }}
       >
-        <Pagination
-          current={pagination.page}
-          total={pagination.total}
-          pageSize={pagination.size}
-          pageSizeOptions={[10]}
-          onChange={(page, size) => {
-            setPagination({ ...pagination, page, size });
-          }}
-          style={{ marginRight: "2rem" }}
-        />
-
+        <div>
+          <h2>Tenants</h2>
+          <Typography>- People who rent locations, pay money to owners</Typography>
+        </div>
         <div style={{ flex: 1 }}></div>
 
         <Input
@@ -125,13 +119,13 @@ const TenantList = () => {
         <Button
           type="primary"
           style={{ marginRight: "1rem" }}
-          size="large"
+          size="middle"
           onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
         >
           <UserAddOutlined /> Add
         </Button>
 
-        <Button size="large" onClick={() => loadData()}>
+        <Button size="middle" onClick={() => loadData()}>
           <ReloadOutlined />
         </Button>
       </Flex>
@@ -160,6 +154,17 @@ const TenantList = () => {
             async () => await deleteDataHandler(t)
           )
         }
+      />
+
+      <Pagination
+        current={pagination.page}
+        total={pagination.total}
+        pageSize={pagination.size}
+        pageSizeOptions={[10]}
+        onChange={(page, size) => {
+          setPagination({ ...pagination, page, size });
+        }}
+        style={{ marginTop: "1.5rem" }}
       />
     </Card>
   );

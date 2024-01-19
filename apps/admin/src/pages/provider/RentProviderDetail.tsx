@@ -42,11 +42,11 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
   const formSubmitHandler = async () => {
     try {
       if (action === ACTION_ENUM.ADD) {
-        await serviceClient.post("/rent-providers", data);
+        await serviceClient.post("/rent-provider", data);
 
         useNotify("success", "New Owner Added", `Submit form successfully for ${data.providerName}`);
       } else if (action === ACTION_ENUM.EDIT) {
-        await serviceClient.put(`/rent-providers/${data.providerCode}`, data);
+        await serviceClient.put(`/rent-provider/${data.providerCode}`, data);
 
         useNotify("success", "Owner Updated Success", `Submit form successfully for ${data.providerName}`);
       }
@@ -70,7 +70,12 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
       open={isOpen}
       okText="Submit"
       onOk={() =>
-        useConfirm("confirm", "Owner Form", "Are you sure to submit this owner?", async () => await formSubmitHandler())
+        useConfirm(
+          "confirm",
+          "Owner Confirmation",
+          "Are you sure to submit this owner?",
+          async () => await formSubmitHandler()
+        )
       }
       cancelText="Return"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
@@ -110,8 +115,8 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
         </Form.Item>
         <Form.Item label="Contact Address">
           <Input
-            value={data.contactAdress}
-            name="contactAdress"
+            value={data.contactAddress}
+            name="contactAddress"
             placeholder="Enter your address"
             onChange={(e) => formChangeHandler(e)}
           />

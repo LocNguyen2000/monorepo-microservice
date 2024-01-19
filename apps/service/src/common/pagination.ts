@@ -24,6 +24,7 @@ export class PaginatedResponse<M> {
 export async function paginatedQuery<T extends Model<any, any>>(
   model: ModelCtor<T>,
   filter: PaginatedQuery,
+  rest?: Record<string, any>,
 ): Promise<PaginatedResponse<T>> {
   const transformFilter = plainToClass(PaginatedQuery, filter, {
     enableImplicitConversion: true,
@@ -40,6 +41,7 @@ export async function paginatedQuery<T extends Model<any, any>>(
   const response = await model.findAndCountAll({
     offset: skip,
     limit,
+    ...rest,
   });
 
   return {

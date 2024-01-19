@@ -1,6 +1,6 @@
 import { Form, Radio, Input, Select, DatePicker, InputNumber, Switch, Typography, Divider, Upload, Button } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { PaginatedResponse, ProviderDataType, TenantDataType } from "../../lib/interface";
+import { LocationDataType, PaginatedResponse, ProviderDataType, TenantDataType } from "../../lib/interface";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -27,7 +27,7 @@ interface ITenantDetailProps {
   setSubmitEvent?: () => void;
 }
 
-type ISelectProviders = Pick<ProviderDataType, "providerCode" | "providerName">[];
+type ISelectLocations = Pick<LocationDataType, "locationCode" | "locationName">[];
 
 export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
   data,
@@ -36,7 +36,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
   setIsFormOpen,
   action,
 }) => {
-  const [providers, setProviders] = useState<ISelectProviders>([]);
+  const [locations, setLocations] = useState<ISelectLocations>([]);
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -69,10 +69,10 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
 
   useEffect(() => {
     serviceClient
-      .get(`/rent-providers`)
+      .get(`/location`)
       .then((json) => json.data)
-      .then((response: PaginatedResponse<ProviderDataType>) => {
-        setProviders(response.data);
+      .then((response: PaginatedResponse<LocationDataType>) => {
+        setLocations(response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -92,7 +92,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
       onOk={() =>
         useConfirm(
           "confirm",
-          "Tenant Form",
+          "Tenant Confirmation",
           "Are you sure to submit this tenant?",
           async () => await formSubmitHandler()
         )
@@ -173,18 +173,18 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
             <Radio value={1}> Female </Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="Rent Owner" required={true}>
+        <Form.Item label="Locations" required={true}>
           <Select
             showSearch
-            placeholder="Add your rent owner"
-            value={data.rentProviderId}
+            placeholder="Tenant Location"
+            value={data.locationCode}
             onChange={(e) => {
-              setData({ ...data, rentProviderId: e });
+              setData({ ...data, locationCode: e });
             }}
           >
-            {providers.map((p) => (
-              <Select.Option key={p.providerCode} value={p.providerCode}>
-                {p.providerName}
+            {locations.map((p) => (
+              <Select.Option key={p.locationCode} value={p.locationCode}>
+                {p.locationName}
               </Select.Option>
             ))}
           </Select>

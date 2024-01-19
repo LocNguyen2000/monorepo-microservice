@@ -2,6 +2,7 @@ import { Column } from "@ant-design/charts";
 import { SettingTwoTone, DeleteTwoTone } from "@ant-design/icons";
 import { Button, Flex, Popover, Skeleton, Table } from "antd";
 import { AnyObject } from "antd/es/_util/type";
+import { SizeType } from "antd/es/config-provider/SizeContext";
 import { ColumnGroupType, ColumnType, ColumnsType, TableProps } from "antd/es/table";
 import { FunctionComponent, useEffect, useState } from "react";
 import styled from "styled-components";
@@ -11,9 +12,11 @@ export interface IBaseTableProps {
   data: any[];
   isLoading?: boolean;
   editable?: boolean;
+  size?: SizeType;
   onDblClickRow?: (data: any) => void;
   onClickRow?: (data: any) => void;
   onDeleteRow?: (data: any) => void;
+  onAddRow?: () => void;
 }
 
 const StyledTable = styled((props: React.PropsWithChildren<TableProps<AnyObject>>) => <Table {...props} />)`
@@ -30,6 +33,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
   data,
   isLoading,
   editable,
+  size,
   onDblClickRow,
   onClickRow,
   onDeleteRow,
@@ -42,29 +46,37 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
       render: (value, record) => {
         return (
           <Flex style={{ flexDirection: "row", justifyContent: "center" }}>
-            <Button style={{ alignItems: "center", justifyContent: "center", marginRight: "0.5rem" }}>
-              <SettingTwoTone
-                style={{
-                  fontSize: "large",
-                  cursor: "pointer",
-                }}
-                color="primary"
-                title="Double click here to open information"
-              />
-            </Button>
-            <Button
-              style={{ alignItems: "center", justifyContent: "center", marginRight: "0.5rem" }}
-              onClick={() => onDeleteRow(record)}
-            >
-              <DeleteTwoTone
-                style={{
-                  fontSize: "large",
-                  cursor: "pointer",
-                }}
-                color="primary"
-                title="Click here to delete information"
-              />
-            </Button>
+            {onClickRow ? (
+              <Button style={{ alignItems: "center", justifyContent: "center", marginRight: "0.5rem" }}>
+                <SettingTwoTone
+                  style={{
+                    fontSize: "large",
+                    cursor: "pointer",
+                  }}
+                  color="primary"
+                  title="Double click here to open information"
+                />
+              </Button>
+            ) : (
+              <></>
+            )}
+            {onDeleteRow ? (
+              <Button
+                style={{ alignItems: "center", justifyContent: "center", marginRight: "0.5rem" }}
+                onClick={() => onDeleteRow(record)}
+              >
+                <DeleteTwoTone
+                  style={{
+                    fontSize: "large",
+                    cursor: "pointer",
+                  }}
+                  color="primary"
+                  title="Click here to delete information"
+                />
+              </Button>
+            ) : (
+              <></>
+            )}
           </Flex>
         ) as unknown as ColumnsType<any>;
       },
@@ -85,7 +97,8 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
       {isLoading ? (
         <Skeleton active loading />
       ) : data.length > 0 ? (
-        <StyledTable
+        <Table
+          size={size ? size : "middle"}
           style={{ marginRight: "16px" }}
           columns={editable ? withEditColumn(columns) : columns}
           dataSource={data}

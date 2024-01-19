@@ -8,34 +8,34 @@ import {
   Put,
   Query,
 } from '@nestjs/common';
-import { RentProvidersService } from './rent-providers.service';
+import { ExpenseService } from './expense.service';
 
-@Controller('rent-provider')
-export class RentProvidersController {
-  constructor(private readonly rentProvider: RentProvidersService) {}
+@Controller('expense')
+export class ExpenseController {
+  constructor(private readonly expense: ExpenseService) {}
 
   @Post()
   create(@Body() payload: Record<string, unknown>) {
-    return this.rentProvider.create(payload);
+    return this.expense.create(payload);
   }
 
   @Get()
   findAll(@Query() query: Record<string, unknown>) {
-    return this.rentProvider.findAll(query);
+    return this.expense.findAll(query);
   }
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.rentProvider.findOne(+id);
+    return this.expense.findOne(+id);
   }
 
   @Put(':id')
   update(@Param('id') id: string, @Body() payload: Record<string, unknown>) {
-    return this.rentProvider.update(+id, payload);
+    return this.expense.update(+id, payload);
   }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    return this.rentProvider.remove(+id);
+    return this.expense.remove(+id);
   }
 }

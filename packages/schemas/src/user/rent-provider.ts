@@ -27,7 +27,7 @@ export class RentProviderSchema extends BaseEntity {
   email?: string;
 
   @Column
-  contactAdress?: string;
+  contactAddress?: string;
 
   @Column
   gender: number;

@@ -7,6 +7,7 @@ import {
   MoneyCollectOutlined,
   BarChartOutlined,
   IdcardOutlined,
+  EuroOutlined,
 } from "@ant-design/icons";
 import { Space, Layout } from "antd";
 import { FunctionComponent, useState } from "react";
@@ -57,15 +58,15 @@ export const MENU_LIST: IAntdMenuItem[] = [
     hidden: true,
   },
   {
+    text: "Expenses",
+    key: "5",
+    icon: <EuroOutlined className="override-antd-icon-item" />,
+    path: DASHBOARD_ROUTES.EXPENSE,
+  },
+  {
     text: "Invoices",
     key: "8",
     icon: <MoneyCollectOutlined className="override-antd-icon-item" />,
-  },
-  {
-    text: "Settings",
-    key: "5",
-    icon: <SettingOutlined className="override-antd-icon-item" />,
-    // path: DASHBOARD_ROUTES.SETTING,
   },
   {
     text: "Schedules",

@@ -9,7 +9,7 @@ export interface ProviderDataType {
   dateOfBirth?: Date;
   phoneNumber?: string;
   email?: string;
-  contactAdress?: string;
+  contactAddress?: string;
   gender?: number;
   genderName?: string;
   role?: string;
@@ -28,18 +28,34 @@ export interface TenantDataType {
   phoneNumber?: string;
   email?: string;
   contactAddress?: string;
-  rentProviderId?: string;
+  locationCode?: string;
   roomateCount?: number;
   description?: string;
 }
 
 export interface LocationDataType {
   locationCode: string;
+  locationName: string;
   locationAddress: string;
-  roomCount: number;
+  roomSize: number;
   description?: string;
   owner?: string;
   image?: string;
+}
+
+export enum ExpenseType {
+  Electric = "Electric",
+  Water = "Water",
+  Rent = "Rent",
+  Wifi = "Wifi",
+  Other = "Other",
+}
+export interface ExpenseDataType {
+  expenseCode: string;
+  expenseName: string;
+  type: ExpenseType;
+  price: string;
+  inUsed: string;
 }
 
 export interface IAntdMenuItem {

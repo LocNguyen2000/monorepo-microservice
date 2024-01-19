@@ -1,12 +1,12 @@
 import { ColumnsType } from "antd/es/table";
-import { TenantDataType, ProviderDataType } from "../interface";
+import { TenantDataType, ProviderDataType, ExpenseDataType } from "../interface";
 
 export const tenantColumns: ColumnsType<TenantDataType> = [
   {
     title: "Tenant Code",
     dataIndex: "tenantCode",
     key: "tenantCode",
-    fixed: "left",
+    align: "center",
   },
   {
     title: "Tenant Name",
@@ -78,8 +78,42 @@ export const providerColumns: ColumnsType<ProviderDataType> = [
   },
   {
     title: "Address",
-    dataIndex: "contactAdress",
-    key: "contactAdress",
+    dataIndex: "contactAddress",
+    key: "contactAddress",
     align: "left",
+  },
+];
+
+export const expenseColumns: ColumnsType<ExpenseDataType> = [
+  {
+    title: "Expense Code",
+    dataIndex: "expenseCode",
+    key: "expenseCode",
+    align: "center",
+    width: "150px",
+  },
+  {
+    title: "Expense Name",
+    dataIndex: "expenseName",
+    key: "expenseName",
+    align: "center",
+  },
+  {
+    title: "Type",
+    dataIndex: "type",
+    key: "type",
+    align: "center",
+  },
+  {
+    title: "Price",
+    dataIndex: "price",
+    key: "price",
+    align: "center",
+  },
+  {
+    title: "Is Used",
+    dataIndex: "inUsed",
+    key: "inUsed",
+    align: "center",
   },
 ];

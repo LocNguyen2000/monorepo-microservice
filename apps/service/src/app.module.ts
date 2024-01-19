@@ -9,8 +9,11 @@ import {
   RentProviderSchema,
   TenantSchema,
   LocationSchema,
+  ExpenseLocationSchema,
 } from '@nhl/schemas/user';
 import { LocationsModule } from './locations/locations.module';
+import { ExpenseSchema } from '@nhl/schemas/user/expense';
+import { ExpenseModule } from './expense/expense.module';
 
 @Module({
   imports: [
@@ -27,8 +30,14 @@ import { LocationsModule } from './locations/locations.module';
           port: +port,
           username: username,
           database: pathname.replace('/', ''),
-          models: [RentProviderSchema, TenantSchema, LocationSchema],
-          logging: false,
+          models: [
+            RentProviderSchema,
+            TenantSchema,
+            LocationSchema,
+            ExpenseSchema,
+            ExpenseLocationSchema,
+          ],
+          // logging: false,
           sync: {
             force: true,
           },
@@ -38,6 +47,7 @@ import { LocationsModule } from './locations/locations.module';
     RentProvidersModule,
     TenantModule,
     LocationsModule,
+    ExpenseModule,
   ],
   controllers: [AppController],
   providers: [],
