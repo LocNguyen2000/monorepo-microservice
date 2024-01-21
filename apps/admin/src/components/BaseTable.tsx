@@ -97,7 +97,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
       {isLoading ? (
         <Skeleton active loading />
       ) : data.length > 0 ? (
-        <Table
+        <StyledTable
           size={size ? size : "middle"}
           style={{ marginRight: "16px" }}
           columns={editable ? withEditColumn(columns) : columns}

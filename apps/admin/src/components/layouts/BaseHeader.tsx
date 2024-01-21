@@ -8,12 +8,12 @@ import {
 } from "@ant-design/icons";
 import { Typography, Avatar, Popover, Button, Divider, Badge } from "antd";
 import { Header } from "antd/es/layout/layout";
-import { getGlobalContext, getPathContext } from "../lib/context";
-import { headerStyle, navHeaderStyle } from "../css/layout";
+import { getGlobalContext, getPathContext } from "../../lib/context";
+import { headerStyle, navHeaderStyle } from "../../css/layout";
 import { useNavigate } from "react-router-dom";
-import BaseBreadCrum from "./BaseBreadCrum";
-import { MENU_LIST } from "../pages/Dashboard";
-import { DASHBOARD_ROUTES } from "../lib/constants/routes";
+import BaseBreadCrum from "../BaseBreadCrum";
+import { MENU_LIST } from "../../pages/Dashboard";
+import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 import Input from "antd/es/input/Input";
 
 const PopoverMenuHeader = () => {

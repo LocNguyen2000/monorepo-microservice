@@ -1,4 +1,4 @@
-import { Button, Divider, Empty, Flex, Input, Pagination, Skeleton } from "antd";
+import { Button, Carousel, Divider, Empty, Flex, Input, Pagination, Skeleton } from "antd";
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
 import { useContext, useEffect, useState } from "react";
@@ -113,7 +113,7 @@ const LocationList = () => {
 
         <Divider />
 
-        <Flex wrap="wrap" gap="small" style={{ width: "100%" }}>
+        <Flex style={{ width: "100%" }}>
           {isLoading ? (
             <>
               <Card style={{ width: 300 }} cover={<SkeletonImage />}>
