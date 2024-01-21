@@ -145,6 +145,7 @@ const TenantList = () => {
         data={tenants}
         isLoading={isLoading}
         editable
+        size="small"
         onDblClickRow={(t: TenantDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
         onDeleteRow={(t: TenantDataType) =>
           useConfirm(

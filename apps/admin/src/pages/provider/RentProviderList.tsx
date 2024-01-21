@@ -138,6 +138,7 @@ const RentProviderList = () => {
         data={providers}
         editable
         isLoading={isLoading}
+        size="small"
         onDblClickRow={(p: ProviderDataType) => openFormHandler(ACTION_ENUM.EDIT, p)}
         onDeleteRow={(t: ProviderDataType) =>
           useConfirm(

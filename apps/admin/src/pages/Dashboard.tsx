@@ -16,8 +16,9 @@ import MenuSidebar from "../components/MenuSidebar";
 import { contentStyle } from "../css/layout";
 import { IAntdMenuItem } from "../lib/interface";
 import { DASHBOARD_ROUTES } from "../lib/constants/routes";
-import BaseHeader from "../components/BaseHeader";
+import BaseHeader from "../components/layouts/BaseHeader";
 import { PathContext, getGlobalContext } from "../lib/context";
+import BaseFooter from "../components/layouts/BaseFooter";
 
 interface DashboardProps {}
 
@@ -67,6 +68,7 @@ export const MENU_LIST: IAntdMenuItem[] = [
     text: "Invoices",
     key: "8",
     icon: <MoneyCollectOutlined className="override-antd-icon-item" />,
+    path: DASHBOARD_ROUTES.INVOICE,
   },
   {
     text: "Schedules",
@@ -128,6 +130,8 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
           <Content style={contentStyle} className="m-content-child-margin">
             <Outlet />
           </Content>
+
+          <BaseFooter />
         </Layout>
       </Space>
     </PathContext.Provider>

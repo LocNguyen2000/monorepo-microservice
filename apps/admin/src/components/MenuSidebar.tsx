@@ -34,7 +34,7 @@ const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({ menuItems, isCollaps
             color: "white",
           }}
         >
-          RentHouse Workbench
+          Rental Workbench
         </Typography>
       </div>
       <Divider />
