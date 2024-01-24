@@ -37,7 +37,7 @@ import { ExpenseModule } from './expense/expense.module';
             ExpenseSchema,
             ExpenseLocationSchema,
           ],
-          // logging: false,
+          logging: false,
           sync: {
             force: true,
           },

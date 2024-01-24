@@ -7,7 +7,7 @@ import {
   HomeOutlined,
   IdcardOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Divider, Flex, Form, Input, List, Progress, Radio, Select, Typography } from "antd";
+import { Card, Flex, Form, Input, InputProps, List, Radio, Select, Typography } from "antd";
 import { useEffect, useState } from "react";
 import {
   ExpenseDataType,
@@ -17,6 +17,7 @@ import {
   TenantDataType,
 } from "../../lib/interface";
 import { getGlobalContext } from "../../lib/context";
+import styled from "styled-components";
 
 const InvoicePage: React.FunctionComponent = () => {
   const [tenantData, setTenantData] = useState<TenantDataType>({});
@@ -88,7 +89,7 @@ const InvoicePage: React.FunctionComponent = () => {
       <Card
         title={
           <Flex style={{ alignItems: "center" }}>
-            <Flex style={{ alignItems: "center", marginRight: "2rem", width: "33%" }}>
+            <Flex style={{ alignItems: "center", paddingLeft: "2.5rem", marginRight: "2rem", width: "33%" }}>
               <Typography style={{ marginRight: "1.5rem" }}>
                 <UserOutlined style={{ marginRight: "0.5rem" }} />
                 Tenant
@@ -115,7 +116,12 @@ const InvoicePage: React.FunctionComponent = () => {
                 <HomeOutlined style={{ marginRight: "0.5rem" }} />
                 Location
               </Typography>
-              <Input disabled={true} placeholder="Tenant Location" value={locationData.locationName} />
+              <Input
+                disabled={true}
+                placeholder="Tenant Location"
+                value={locationData.locationName}
+                style={{ fontWeight: "bold" }}
+              />
             </Flex>
 
             <ArrowRightOutlined style={{ marginRight: "2rem" }} />
@@ -125,7 +131,12 @@ const InvoicePage: React.FunctionComponent = () => {
                 <IdcardOutlined style={{ marginRight: "0.5rem" }} />
                 Rent Owner
               </Typography>
-              <Input disabled={true} placeholder="Location Owner" value={ownerData.providerName} />
+              <Input
+                disabled={true}
+                placeholder="Location Owner"
+                value={ownerData.providerName}
+                style={{ fontWeight: "bold" }}
+              />
             </Flex>
           </Flex>
         }
