@@ -57,3 +57,14 @@ export function debounce(func, timeout = 300) {
     }, timeout);
   };
 }
+
+
+export const formatMoney = (amount: number) => Intl.NumberFormat().format(amount)
+export const parseMoney = (money: string) => {
+  const cleanedStr = money.replace(/[^\d.-]/g, '');
+  const amount = parseInt(cleanedStr);
+  return isNaN(amount) ? null : amount;
+}
+
+
+

@@ -1,31 +1,32 @@
 import { ColumnsType } from "antd/es/table";
-import { TenantDataType, ProviderDataType, ExpenseDataType } from "../interface";
+import { TenantDataType, ProviderDataType, ExpenseDataType, ExpenseLocationDataType } from "../interface";
+import { formatMoney } from "../utils";
 
 export const tenantColumns: ColumnsType<TenantDataType> = [
   {
-    title: "Tenant Code",
+    title: "Mã người thuê",
     dataIndex: "tenantCode",
     key: "tenantCode",
     align: "center",
   },
   {
-    title: "Tenant Name",
+    title: "Tên người thuê",
     dataIndex: "tenantName",
     key: "tenantName",
     fixed: "left",
   },
   {
-    title: "DOB",
+    title: "Ngày sinh nhật",
     dataIndex: "dateOfBirth",
     key: "dateOfBirth",
   },
   {
-    title: "Phone Number",
+    title: "Số điện thoại",
     dataIndex: "phoneNumber",
     key: "phoneNumber",
   },
   {
-    title: "Gender",
+    title: "Giới tính",
     dataIndex: "gender",
     key: "gender",
   },
@@ -35,37 +36,32 @@ export const tenantColumns: ColumnsType<TenantDataType> = [
     key: "email",
   },
   {
-    title: "Contact Address",
+    title: "Địa chỉ tạm trú",
     dataIndex: "contactAddress",
     key: "contactAddress",
-  },
-  {
-    title: "Roomate Count",
-    dataIndex: "roomateCount",
-    key: "roomateCount",
   },
 ];
 
 export const providerColumns: ColumnsType<ProviderDataType> = [
   {
-    title: "Provider Code",
+    title: "Mã chủ trọ",
     dataIndex: "providerCode",
     key: "providerCode",
     align: "center",
   },
   {
-    title: "Provider Name",
+    title: "Tên chủ trọ",
     dataIndex: "providerName",
     key: "providerName",
   },
   {
-    title: "DOB",
+    title: "Ngày sinh nhật",
     dataIndex: "dateOfBirth",
     key: "dateOfBirth",
     align: "center",
   },
   {
-    title: "Phone Number",
+    title: "Số điện thoại",
     dataIndex: "phoneNumber",
     key: "phoneNumber",
     align: "center",
@@ -77,7 +73,7 @@ export const providerColumns: ColumnsType<ProviderDataType> = [
     align: "left",
   },
   {
-    title: "Address",
+    title: "Địa chỉ",
     dataIndex: "contactAddress",
     key: "contactAddress",
     align: "left",
@@ -86,34 +82,67 @@ export const providerColumns: ColumnsType<ProviderDataType> = [
 
 export const expenseColumns: ColumnsType<ExpenseDataType> = [
   {
-    title: "Expense Code",
+    title: "Mã chi phí",
     dataIndex: "expenseCode",
     key: "expenseCode",
     align: "center",
     width: "150px",
   },
   {
-    title: "Expense Name",
+    title: "Tên chi phí",
     dataIndex: "expenseName",
     key: "expenseName",
     align: "center",
   },
   {
-    title: "Type",
+    title: "Loại chi phí",
     dataIndex: "type",
     key: "type",
     align: "center",
   },
   {
-    title: "Price",
+    title: "Giá cả",
     dataIndex: "price",
     key: "price",
     align: "center",
+    render: (value) => formatMoney(value),
   },
   {
-    title: "Is Used",
+    title: "Đang sử dụng",
     dataIndex: "inUsed",
     key: "inUsed",
     align: "center",
+    render: (value) => (value === true ? "Yes" : "No"),
+  },
+];
+
+export const expenseLocationColumns: ColumnsType<ExpenseLocationDataType> = [
+  {
+    title: "Tên chi phí",
+    dataIndex: "expenseName",
+    key: "expenseName",
+    align: "left",
+  },
+  {
+    title: "Số cũ",
+    dataIndex: "initialUnit",
+    key: "initialUnit",
+    align: "center",
+    width: "20%",
+  },
+  {
+    title: "Số mới",
+    dataIndex: "currentUnit",
+    key: "currentUnit",
+    align: "center",
+    width: "20%",
+  },
+  {
+    title: "Giá tiền",
+    dataIndex: "price",
+    key: "price",
+    align: "center",
+    width: "25%",
+    render: (value) => formatMoney(value),
   },
 ];

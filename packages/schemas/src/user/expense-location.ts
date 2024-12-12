@@ -1,4 +1,4 @@
-import { Column, ForeignKey, PrimaryKey, Table, Model } from "sequelize-typescript";
+import { Column, ForeignKey, PrimaryKey, Table, Model, DataType } from "sequelize-typescript";
 import { LocationSchema } from "./location";
 import { ExpenseSchema } from "./expense";
 import { BaseEntity } from "../base";
@@ -21,6 +21,16 @@ export class ExpenseLocationSchema extends BaseEntity {
   @ForeignKey(() => LocationSchema)
   @Column({ unique: false })
   locationCode: number;
+
+  @Column({type: DataType.INTEGER})
+  initialUnit: number
+  
+  @Column({type: DataType.INTEGER})
+  currentUnit: number
+  
+  @Column({type: DataType.CHAR})
+  unitName: string
 }
+
 
 export type ExpenseLocationModel = typeof ExpenseLocationSchema;

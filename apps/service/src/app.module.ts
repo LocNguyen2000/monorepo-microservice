@@ -14,6 +14,7 @@ import {
 import { LocationsModule } from './locations/locations.module';
 import { ExpenseSchema } from '@nhl/schemas/user/expense';
 import { ExpenseModule } from './expense/expense.module';
+import { InvoicesModule } from './invoices/invoices.module';
 
 @Module({
   imports: [
@@ -48,6 +49,7 @@ import { ExpenseModule } from './expense/expense.module';
     TenantModule,
     LocationsModule,
     ExpenseModule,
+    InvoicesModule,
   ],
   controllers: [AppController],
   providers: [],

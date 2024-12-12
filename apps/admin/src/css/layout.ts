@@ -9,7 +9,7 @@ export const headerWidth = `calc(100vw - ${siderWidth})`;
 const navHight = "5vh";
 const navWidth = headerWidth;
 
-export const footerHeight = `65px`;
+export const footerHeight = `55px`;
 export const footerWidth = `calc(100% - ${siderWidth})`;
 
 export const contentHeight = `calc(100% - ${headerHight} - ${footerHeight})`;

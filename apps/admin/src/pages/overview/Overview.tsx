@@ -9,12 +9,12 @@ const OverviewPage = () => {
         defaultActiveKey="1"
         items={[
           {
-            label: "Statistics & Analysist",
+            label: "Phân tích & Thống kê",
             key: "1",
             children: <AnalysistTab />,
           },
           {
-            label: "Management Guide",
+            label: "Hướng dẫn quản lý",
             key: "2",
             children: <GuidanceTab />,
           },

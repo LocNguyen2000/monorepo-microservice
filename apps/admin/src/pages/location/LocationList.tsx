@@ -33,9 +33,9 @@ const LocationList = () => {
   };
 
   const openLocationForm = (id?: string) => {
-    const [detailFormPage] = MENU_LIST.filter((i) => i.text == "Location Detail");
+    // const [detailFormPage] = MENU_LIST.filter((i) => i.text == "Location Detail");
 
-    setPathFromKey(detailFormPage.key);
+    // setPathFromKey(detailFormPage.key);
 
     if (id) navigate(DASHBOARD_ROUTES.LOCATION_DETAIL + `?id=${id}`);
     else {
@@ -94,8 +94,8 @@ const LocationList = () => {
       <Card style={{ padding: "0.25rem" }}>
         <Flex style={{ alignItems: "center" }}>
           <div>
-            <h2>Locations</h2>
-            <Typography>- Place for Tenants to rent from Rent Owner</Typography>
+            <h2>Phòng trọ</h2>
+            <Typography>- Nơi dành cho <b>người thuê nhà</b> từ <b>Chủ sở hữu thuê nhà</b></Typography>
           </div>
           <div style={{ flex: 1 }}></div>
           <Input

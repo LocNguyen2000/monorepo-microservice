@@ -29,13 +29,7 @@ interface ITenantDetailProps {
 
 type ISelectLocations = Pick<LocationDataType, "locationCode" | "locationName">[];
 
-export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
-  data,
-  setData,
-  isOpen,
-  setIsFormOpen,
-  action,
-}) => {
+export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ data, setData, isOpen, setIsFormOpen, action }) => {
   const [locations, setLocations] = useState<ISelectLocations>([]);
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
@@ -89,14 +83,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
       centered
       open={isOpen}
       okText="Submit"
-      onOk={() =>
-        useConfirm(
-          "confirm",
-          "Tenant Confirmation",
-          "Are you sure to submit this tenant?",
-          async () => await formSubmitHandler()
-        )
-      }
+      onOk={() => useConfirm("confirm", "Tenant Confirmation", "Are you sure to submit this tenant?", async () => await formSubmitHandler())}
       cancelText="Return"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
       width={1000}
@@ -113,44 +100,19 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
         }}
       >
         <Form.Item label="Tenant Code" required={true}>
-          <Input
-            name="tenantCode"
-            value={data.tenantCode}
-            placeholder="Enter a number here"
-            onChange={(e) => formChangeHandler(e)}
-          />
+          <Input name="tenantCode" value={data.tenantCode} placeholder="Enter a number here" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Tenant Name" required={true}>
-          <Input
-            name="tenantName"
-            value={data.tenantName}
-            placeholder="Enter tenant name"
-            onChange={(e) => formChangeHandler(e)}
-          />
+          <Input name="tenantName" value={data.tenantName} placeholder="Enter tenant name" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Email" required={true}>
-          <Input
-            name="email"
-            value={data.email}
-            placeholder="Enter valid email"
-            onChange={(e) => formChangeHandler(e)}
-          />
+          <Input name="email" value={data.email} placeholder="Enter valid email" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Phone number" required={true}>
-          <Input
-            name="phoneNumber"
-            value={data.phoneNumber}
-            placeholder="Enter phone number"
-            onChange={(e) => formChangeHandler(e)}
-          />
+          <Input name="phoneNumber" value={data.phoneNumber} placeholder="Enter phone number" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
-        <Form.Item label="Contact Address" required={true}>
-          <Input
-            name="contactAddress"
-            value={data.contactAddress}
-            placeholder="Enter contact address"
-            onChange={(e) => formChangeHandler(e)}
-          />
+        <Form.Item label="Địa chỉ tạm trú" required={true}>
+          <Input name="contactAddress" value={data.contactAddress} placeholder="Enter contact address" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Date of Birth">
           <DatePicker

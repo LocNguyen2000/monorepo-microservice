@@ -58,6 +58,20 @@ export interface ExpenseDataType {
   inUsed: string;
 }
 
+export interface ExpenseLocationDataType  extends ExpenseDataType{
+  locationCode: string;
+  initialUnit: number;
+  currentUnit: number;
+  unitName?: string; 
+}
+
+
+export interface InvoiceDataType {
+  tenant: TenantDataType;
+  location?: LocationDataType & { expenses?: ExpenseDataType[] };
+  owner?: ProviderDataType;
+}
+
 export interface IAntdMenuItem {
   text: string;
   key: string;

@@ -13,8 +13,6 @@ export class TenantService {
   ) {}
 
   create(payload: Record<string, unknown>) {
-    console.log('payload >', payload);
-
     return this.tenantRepository.create(payload);
   }
 
@@ -28,8 +26,6 @@ export class TenantService {
 
   async update(id: number, payload: Record<string, unknown>) {
     const instance = await this.tenantRepository.findByPk(id);
-
-    console.log(instance);
 
     if (!instance) throw new Error('Owner not found');
 

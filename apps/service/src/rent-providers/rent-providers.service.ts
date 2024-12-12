@@ -16,8 +16,6 @@ export class RentProvidersService {
   }
 
   findAll(query: PaginatedQuery) {
-    console.log(query);
-
     return paginatedQuery<RentProviderSchema>(
       this.rentProviderRepository,
       query,

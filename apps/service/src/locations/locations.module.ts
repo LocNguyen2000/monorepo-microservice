@@ -10,5 +10,6 @@ import { SequelizeModule } from '@nestjs/sequelize';
   ],
   controllers: [LocationsController],
   providers: [LocationsService],
+  exports: [LocationsService],
 })
 export class LocationsModule {}
