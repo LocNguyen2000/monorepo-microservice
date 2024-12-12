@@ -50,13 +50,13 @@
 
  /* LOGIN */
 
- .m-login{
+ /* .m-login{
   display: flex;
   justify-content: center;
   align-items: center;
   width: 100%;
   height: 100vh;
-}
+} */
 
 .m-login-form{
   display: flex;
@@ -67,9 +67,7 @@
 }
 
 .m-login-img{
-  width: 50%;
-  height: 60%;
-  background-image: url(./resources/spaceman.jpg);
-  background-repeat: no-repeat;
+  background-image: url(./public/spaceman.jpg);
   background-size: contain;
+  background-repeat:round;
 }

@@ -8,5 +8,6 @@ import { RentProviderSchema } from '@nhl/schemas/user';
   imports: [SequelizeModule.forFeature([RentProviderSchema])],
   controllers: [RentProvidersController],
   providers: [RentProvidersService],
+  exports: [RentProvidersService],
 })
 export class RentProvidersModule {}

@@ -26,58 +26,58 @@ const { Content } = Layout;
 
 export const MENU_LIST: IAntdMenuItem[] = [
   {
-    text: "Overview",
+    text: "Tổng quan",
     key: "0",
     icon: <BarChartOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.OVERVIEW,
   },
 
   {
-    text: "Tenants",
+    text: "Người thuê nhà",
     key: "1",
     icon: <UserOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.TENANT,
   },
   {
-    text: "Rent Owners",
+    text: "Chủ trọ",
     key: "2",
     icon: <IdcardOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.PROVIDER,
   },
 
   {
-    text: "Locations",
+    text: "Phòng trọ",
     key: "4",
     icon: <HomeOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.LOCATION,
   },
   {
-    text: "Location Detail",
+    text: "Chi tiết phòng trọ",
     key: "12",
     icon: <HomeOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.LOCATION_DETAIL,
     hidden: true,
   },
   {
-    text: "Expenses",
+    text: "Chi phí phòng trọ",
     key: "5",
     icon: <EuroOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.EXPENSE,
   },
   {
-    text: "Invoices",
+    text: "Hóa đơn",
     key: "8",
     icon: <MoneyCollectOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.INVOICE,
   },
   {
-    text: "Schedules",
+    text: "Lệnh lịch thông báo",
     key: "6",
     icon: <ScheduleOutlined className="override-antd-icon-item" />,
     // path: DASHBOARD_ROUTES.SCHEDULE,
   },
   {
-    text: "My Profile",
+    text: "Trang cá nhân",
     key: "11",
     icon: <UserOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.MY_PROFILE,

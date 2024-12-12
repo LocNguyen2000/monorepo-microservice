@@ -1,7 +1,9 @@
 import { Fragment, FunctionComponent, useEffect } from "react";
-import { Form, Input, Checkbox, Button, Typography } from "antd";
+import { Form, Input, Checkbox, Button, Typography, Flex } from "antd";
 import { useNavigate } from "react-router-dom";
 import { getGlobalContext } from "../lib/context";
+import Card from "antd/es/card/Card";
+
 interface LoginPageProps {}
 
 const LoginPage: FunctionComponent<LoginPageProps> = () => {
@@ -15,22 +17,22 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
   });
 
   return (
-    <Fragment>
-      <section className="m-login">
+    <Flex
+      style={{ width: "100vw", height: "100vh", justifyContent: "center", alignItems: "center" }}
+      className="m-login-img"
+    >
+      <Card className="m-login" style={{ width: "650px", height: "300px" }}>
         <Form
           name="basic"
-          labelCol={{ span: 8 }}
+          labelCol={{ span: 4 }}
+          wrapperCol={{ span: 16 }}
           className="m-login-form"
           initialValues={{ remember: true }}
           autoComplete="off"
         >
-          <Typography.Title
-            level={1}
-            title="Login Page"
-            style={{ textAlign: "center" }}
-          >
+          {/* <Typography.Title level={1} title="Login Page" style={{ textAlign: "center" }}>
             Login Page
-          </Typography.Title>
+          </Typography.Title> */}
           <Form.Item
             label="Username"
             name="username"
@@ -47,23 +49,18 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
             <Input.Password />
           </Form.Item>
 
-          <Form.Item
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{ offset: 8, span: 16 }}
-          >
+          <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 4, span: 16 }}>
             <Checkbox>Remember me</Checkbox>
           </Form.Item>
 
-          <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-            <Button type="primary" htmlType="submit">
+          <Form.Item wrapperCol={{ offset: 4, span: 16 }}>
+            <Button type="primary" htmlType="submit" size="large">
               Submit
             </Button>
           </Form.Item>
         </Form>
-        <div className="m-login-img"></div>
-      </section>
-    </Fragment>
+      </Card>
+    </Flex>
   );
 };
 

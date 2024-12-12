@@ -8,5 +8,6 @@ import { TenantSchema } from '@nhl/schemas/user';
   imports: [SequelizeModule.forFeature([TenantSchema])],
   controllers: [TenantController],
   providers: [TenantService],
+  exports: [TenantService],
 })
 export class TenantModule {}

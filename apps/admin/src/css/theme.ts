@@ -11,6 +11,12 @@ export const globalTheme: ThemeConfig = {
       itemSelectedBg: "#d4d7dc",
       controlItemBgActiveHover: "#2f3330",
     },
+    Input: {
+      colorTextDisabled: "#4ba64e",
+    },
+    Radio: {
+      dotColorDisabled: "#4ba64e",
+    },
   },
   token: {
     fontFamily: "GoogleRoboto",

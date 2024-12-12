@@ -75,58 +75,24 @@ const AnalysistTab = () => {
     <>
       <Row gutter={[16, 8]} style={{ marginBottom: "0.5rem" }}>
         <Col span={8}>
-          <Card title="Locations status">
+          <Card title="Thống kê phòng trọ">
             <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-              <Statistic
-                title="Active Locations"
-                value={107}
-                valueStyle={{ textAlign: "center" }}
-              />
-              <Statistic
-                title="Idle Locations"
-                value={23}
-                valueStyle={{ textAlign: "center" }}
-              />
+              <Statistic title="Phòng trọ đang dùng" value={107} valueStyle={{ textAlign: "center" }} />
+              <Statistic title="Phòng trọ không dùng" value={23} valueStyle={{ textAlign: "center" }} />
             </div>
           </Card>
         </Col>
         <Col span={8}>
-          <Card title="Rent Providers status">
+          <Card title="Thống kê người thuê nhà">
             <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-              <Statistic
-                title="Total Rent Providers"
-                value={1000}
-                valueStyle={{ textAlign: "center" }}
-              />
-
-              <Statistic
-                title="Providers Active"
-                value={20.28}
-                precision={2}
-                valueStyle={{ color: "#3f8600" }}
-                prefix={<ArrowUpOutlined />}
-                suffix="%"
-              />
-
-              <Statistic
-                title="Providers Idle"
-                value={9.3}
-                precision={2}
-                valueStyle={{ color: "#cf1322" }}
-                prefix={<ArrowDownOutlined />}
-                suffix="%"
-              />
+              <Statistic title="Tổng số lượng người thuê nhà" value={1000} valueStyle={{ textAlign: "center" }} />
             </div>
           </Card>
         </Col>
         <Col span={8}>
           <Card bordered={false} title="Tenants status">
             <div style={{ display: "flex", justifyContent: "space-evenly" }}>
-              <Statistic
-                title="Total Tenants"
-                value={112893}
-                valueStyle={{ textAlign: "center" }}
-              />
+              <Statistic title="Total Tenants" value={112893} valueStyle={{ textAlign: "center" }} />
 
               <Statistic
                 title="Tenant Active"
@@ -157,12 +123,7 @@ const AnalysistTab = () => {
         </Col>
         <Col span={12}>
           <Card bordered={false} title="Top 10 Best Selling Locations">
-            <Table
-              columns={columns}
-              dataSource={tableData}
-              size="small"
-              pagination={false}
-            />
+            <Table columns={columns} dataSource={tableData} size="small" pagination={false} />
           </Card>
         </Col>
       </Row>

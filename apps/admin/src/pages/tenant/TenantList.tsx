@@ -106,22 +106,16 @@ const TenantList = () => {
         }}
       >
         <div>
-          <h2>Tenants</h2>
-          <Typography>- People who rent locations, pay money to owners</Typography>
+          <h2>Người thuê nhà</h2>
+          <Typography>
+            - <b>Người thuê</b> địa điểm, trả tiền cho <b>chủ sở hữu</b>
+          </Typography>
         </div>
         <div style={{ flex: 1 }}></div>
 
-        <Input
-          placeholder="Enter search value here"
-          style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
-        />
+        <Input placeholder="Enter search value here" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
 
-        <Button
-          type="primary"
-          style={{ marginRight: "1rem" }}
-          size="middle"
-          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
-        >
+        <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
           <UserAddOutlined /> Add
         </Button>
 
@@ -132,28 +126,17 @@ const TenantList = () => {
 
       <Divider />
 
-      <TenantDetailForm
-        data={tenant}
-        action={action}
-        isOpen={isOpenForm}
-        setData={setTenant}
-        setIsFormOpen={openFormHandler}
-      />
+      <TenantDetailForm data={tenant} action={action} isOpen={isOpenForm} setData={setTenant} setIsFormOpen={openFormHandler} />
 
       <BaseTable
         columns={tenantColumns}
         data={tenants}
         isLoading={isLoading}
         editable
-        size="small"
+        size="middle"
         onDblClickRow={(t: TenantDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
         onDeleteRow={(t: TenantDataType) =>
-          useConfirm(
-            "warning",
-            "Tenant Deletion",
-            `Do you want to delete tenant ${t.tenantName}?`,
-            async () => await deleteDataHandler(t)
-          )
+          useConfirm("warning", "Tenant Deletion", `Do you want to delete tenant ${t.tenantName}?`, async () => await deleteDataHandler(t))
         }
       />
 

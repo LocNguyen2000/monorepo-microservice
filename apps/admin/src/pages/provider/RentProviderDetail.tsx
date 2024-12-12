@@ -23,13 +23,7 @@ interface IRentProviderProps {
   setSubmitEvent?: () => void;
 }
 
-export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = ({
-  data,
-  setData,
-  isOpen,
-  setIsFormOpen,
-  action,
-}) => {
+export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = ({ data, setData, isOpen, setIsFormOpen, action }) => {
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -69,14 +63,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
       centered
       open={isOpen}
       okText="Submit"
-      onOk={() =>
-        useConfirm(
-          "confirm",
-          "Owner Confirmation",
-          "Are you sure to submit this owner?",
-          async () => await formSubmitHandler()
-        )
-      }
+      onOk={() => useConfirm("confirm", "Owner Confirmation", "Are you sure to submit this owner?", async () => await formSubmitHandler())}
       cancelText="Return"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
       width={800}
@@ -90,44 +77,19 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
         }}
       >
         <Form.Item label="Provider Code" required={true}>
-          <Input
-            value={data.providerCode}
-            name="providerCode"
-            placeholder="Enter number here"
-            onChange={(e) => formChangeHandler(e)}
-          />
+          <Input value={data.providerCode} name="providerCode" placeholder="Enter number here" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Provider Name" required={true}>
-          <Input
-            value={data.providerName}
-            name="providerName"
-            placeholder="Enter your name here"
-            onChange={(e) => formChangeHandler(e)}
-          />
+          <Input value={data.providerName} name="providerName" placeholder="Enter your name here" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Email" required={true}>
-          <Input
-            value={data.email}
-            name="email"
-            placeholder="Enter your email here"
-            onChange={(e) => formChangeHandler(e)}
-          />
+          <Input value={data.email} name="email" placeholder="Enter your email here" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
-        <Form.Item label="Contact Address">
-          <Input
-            value={data.contactAddress}
-            name="contactAddress"
-            placeholder="Enter your address"
-            onChange={(e) => formChangeHandler(e)}
-          />
+        <Form.Item label="Địa chỉ tạm trú">
+          <Input value={data.contactAddress} name="contactAddress" placeholder="Enter your address" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Phone number" required={true}>
-          <Input
-            value={data.phoneNumber}
-            name="phoneNumber"
-            onChange={(e) => formChangeHandler(e)}
-            placeholder="Enter your phone number"
-          />
+          <Input value={data.phoneNumber} name="phoneNumber" onChange={(e) => formChangeHandler(e)} placeholder="Enter your phone number" />
         </Form.Item>
         <Form.Item label="Date of Birth">
           <DatePicker
@@ -162,13 +124,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
           />
         </Form.Item>
         <Form.Item label="Description">
-          <TextArea
-            rows={4}
-            value={data.description}
-            name="description"
-            placeholder="Optional"
-            onChange={(e) => formChangeHandler(e)}
-          />
+          <TextArea rows={4} value={data.description} name="description" placeholder="Optional" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
       </Form>
     </Modal>

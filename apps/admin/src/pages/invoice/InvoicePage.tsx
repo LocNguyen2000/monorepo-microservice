@@ -7,16 +7,11 @@ import {
   HomeOutlined,
   IdcardOutlined,
 } from "@ant-design/icons";
-import { Button, Card, Divider, Flex, Form, Input, List, Progress, Radio, Select, Typography } from "antd";
+import { Card, Flex, Form, Input, InputProps, List, Radio, Select, Typography } from "antd";
 import { useEffect, useState } from "react";
-import {
-  ExpenseDataType,
-  LocationDataType,
-  PaginatedResponse,
-  ProviderDataType,
-  TenantDataType,
-} from "../../lib/interface";
+import { ExpenseDataType, InvoiceDataType, LocationDataType, PaginatedResponse, ProviderDataType, TenantDataType } from "../../lib/interface";
 import { getGlobalContext } from "../../lib/context";
+import styled from "styled-components";
 
 const InvoicePage: React.FunctionComponent = () => {
   const [tenantData, setTenantData] = useState<TenantDataType>({});
@@ -29,17 +24,12 @@ const InvoicePage: React.FunctionComponent = () => {
 
   const loadAllData = async (tenantCode: number) => {
     try {
-      // Get tenant data
-      const { data: t } = await serviceClient.get<TenantDataType>(`/tenant/${tenantCode}`);
-      const { data: l } = await serviceClient.get<LocationDataType & { expenses: ExpenseDataType[] }>(
-        `/location/${t.locationCode}`
-      );
-      const { data: o } = await serviceClient.get<ProviderDataType>(`/rent-provider/${l.owner}`);
+      const { data: i } = await serviceClient.get<InvoiceDataType>(`/invoices/${tenantCode}`);
 
-      setTenantData(t);
-      setLocationData(l);
-      setOwnerData(o);
-      setExpensesData(l.expenses);
+      setTenantData(i.tenant);
+      if (i.location) setLocationData(i.location);
+      if (Array.isArray(i.location.expenses)) setExpensesData(i.location.expenses);
+      if (i.owner) setOwnerData(i.owner);
 
       // Get Location
     } catch (error) {
@@ -77,8 +67,7 @@ const InvoicePage: React.FunctionComponent = () => {
           <div>
             <h2>Invoices</h2>
             <Typography style={{ marginBottom: "0.25rem" }}>
-              - Summarize all invoices, generate an invoice for a tenant (Require information from location, expense,
-              rent owners)
+              - Summarize all invoices, generate an invoice for a tenant (Require information from location, expense, rent owners)
             </Typography>
           </div>
           <div style={{ flex: 1 }}></div>
@@ -88,7 +77,7 @@ const InvoicePage: React.FunctionComponent = () => {
       <Card
         title={
           <Flex style={{ alignItems: "center" }}>
-            <Flex style={{ alignItems: "center", marginRight: "2rem", width: "33%" }}>
+            <Flex style={{ alignItems: "center", paddingLeft: "2.5rem", marginRight: "2rem", width: "33%" }}>
               <Typography style={{ marginRight: "1.5rem" }}>
                 <UserOutlined style={{ marginRight: "0.5rem" }} />
                 Tenant
@@ -115,7 +104,7 @@ const InvoicePage: React.FunctionComponent = () => {
                 <HomeOutlined style={{ marginRight: "0.5rem" }} />
                 Location
               </Typography>
-              <Input disabled={true} placeholder="Tenant Location" value={locationData.locationName} />
+              <Input disabled={true} placeholder="Tenant Location" value={locationData.locationName} style={{ fontWeight: "bold" }} />
             </Flex>
 
             <ArrowRightOutlined style={{ marginRight: "2rem" }} />
@@ -125,7 +114,7 @@ const InvoicePage: React.FunctionComponent = () => {
                 <IdcardOutlined style={{ marginRight: "0.5rem" }} />
                 Rent Owner
               </Typography>
-              <Input disabled={true} placeholder="Location Owner" value={ownerData.providerName} />
+              <Input disabled={true} placeholder="Location Owner" value={ownerData.providerName} style={{ fontWeight: "bold" }} />
             </Flex>
           </Flex>
         }
@@ -146,7 +135,7 @@ const InvoicePage: React.FunctionComponent = () => {
               <Form.Item label="Phone number">
                 <Input disabled={true} value={tenantData.phoneNumber} placeholder="Phone number" />
               </Form.Item>
-              <Form.Item label="Contact Address">
+              <Form.Item label="Địa chỉ tạm trú">
                 <Input disabled={true} value={tenantData.contactAddress} placeholder="Contact address" />
               </Form.Item>
               <Form.Item label="Date of Birth">
@@ -163,10 +152,10 @@ const InvoicePage: React.FunctionComponent = () => {
           </div>
           <div style={{ width: "33%" }}>
             <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} layout="horizontal">
-              <Form.Item label="Location Code">
+              <Form.Item label="Mã phòng trọ">
                 <Input disabled={true} value={locationData.locationCode} placeholder="Code number" />
               </Form.Item>
-              <Form.Item label="Address">
+              <Form.Item label="Địa chỉ">
                 <Input disabled={true} value={locationData.locationAddress} placeholder="Tenant name" />
               </Form.Item>
               <Form.Item label="Max room">

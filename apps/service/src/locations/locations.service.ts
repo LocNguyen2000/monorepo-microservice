@@ -60,11 +60,12 @@ export class LocationsService {
   }
 
   formatLocationExpense(data: LocationWithExpenses[]): LocationSchema {
-    console.log(data);
-
     const expenseKeys = [
       'expenseCode',
       'expenseName',
+      'initialUnit',
+      'currentUnit',
+      'unitName',
       'type',
       'price',
       'inUsed',
@@ -76,12 +77,15 @@ export class LocationsService {
 
         if (!acc?.expenses || acc?.expenses.length === 0) acc.expenses = [];
 
-        const expense: Partial<ExpenseSchema> = {
+        const expense = {
           expenseCode: curr.expenseCode,
           expenseName: curr.expenseName,
           type: curr.type,
           price: curr.price,
           inUsed: curr.inUsed,
+          initialUnit: curr.initialUnit,
+          currentUnit: curr.currentUnit,
+          unitName: curr.unitName,
         };
 
         if (curr.expenseCode && curr.expenseName && curr.price)

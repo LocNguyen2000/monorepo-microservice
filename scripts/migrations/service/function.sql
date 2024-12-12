@@ -1,12 +1,10 @@
--- Active: 1703494540009@@127.0.0.1@3307@services
+-- Active: 1733974675535@@127.0.0.1@3307@services
 DROP PROCEDURE prcd_FindLocationExpenseById;
-
-CREATE DEFINER =`root`@`%` PROCEDURE `prcd_FindLocationExpenseById`
-(LocationId int) 
+CREATE DEFINER=`root`@`%` PROCEDURE `prcd_FindLocationExpenseById`(LocationId int)
 BEGIN 
 	SELECT
 	    l.`locationCode`,
-	    l.`name`,
+	    l.`locationName`,
 	    l.`locationAddress`,
 	    l.image,
 	    l.`description`,
@@ -17,7 +15,10 @@ BEGIN
 	    l.`updatedAt`,
 	    l.`updatedBy`,
 	    e.`expenseCode`,
-	    e.name,
+	    e.`expenseName`,
+        el.`initialUnit` as 'initialUnit',
+        el.`currentUnit` as 'currentUnit',
+        el.`unitName` as 'unitName',
 	    e.price,
 	    e.`inUsed`,
 	    e.`type`

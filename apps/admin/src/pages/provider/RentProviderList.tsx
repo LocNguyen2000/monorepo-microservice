@@ -99,22 +99,14 @@ const RentProviderList = () => {
     <Card style={{ padding: "0.25rem" }}>
       <Flex style={{ alignItems: "center" }}>
         <div>
-          <h2>Rent Owners</h2>
-          <Typography>- Land lord, owner of locations</Typography>
+          <h2>Chủ sở hữu thuê</h2>
+          <Typography>- Chủ đất, chủ địa điểm</Typography>
         </div>
         <div style={{ flex: 1 }}></div>
 
-        <Input
-          placeholder="Enter search value here"
-          style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
-        />
+        <Input placeholder="Enter search value here" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
 
-        <Button
-          type="primary"
-          style={{ marginRight: "1rem" }}
-          size="middle"
-          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
-        >
+        <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
           <UserAddOutlined /> Add
         </Button>
 
@@ -125,28 +117,17 @@ const RentProviderList = () => {
 
       <Divider />
 
-      <RentProviderDetail
-        data={provider}
-        setData={setProvider}
-        action={action}
-        isOpen={isOpenForm}
-        setIsFormOpen={openFormHandler}
-      />
+      <RentProviderDetail data={provider} setData={setProvider} action={action} isOpen={isOpenForm} setIsFormOpen={openFormHandler} />
 
       <BaseTable
         columns={providerColumns}
         data={providers}
         editable
         isLoading={isLoading}
-        size="small"
+        size="middle"
         onDblClickRow={(p: ProviderDataType) => openFormHandler(ACTION_ENUM.EDIT, p)}
         onDeleteRow={(t: ProviderDataType) =>
-          useConfirm(
-            "warning",
-            "Owner Deletion",
-            `Do you want to delete owner ${t.providerName}?`,
-            async () => await deleteDataHandler(t)
-          )
+          useConfirm("warning", "Owner Deletion", `Do you want to delete owner ${t.providerName}?`, async () => await deleteDataHandler(t))
         }
       />
 
