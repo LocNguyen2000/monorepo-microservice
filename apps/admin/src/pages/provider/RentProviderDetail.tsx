@@ -88,10 +88,10 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
         <Form.Item label="Địa chỉ tạm trú">
           <Input value={data.contactAddress} name="contactAddress" placeholder="Enter your address" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
-        <Form.Item label="Phone number" required={true}>
-          <Input value={data.phoneNumber} name="phoneNumber" onChange={(e) => formChangeHandler(e)} placeholder="Enter your phone number" />
+        <Form.Item label="Số điện thoại" required={true}>
+          <Input value={data.phoneNumber} name="phoneNumber" onChange={(e) => formChangeHandler(e)} placeholder="Enter your Số điện thoại" />
         </Form.Item>
-        <Form.Item label="Date of Birth">
+        <Form.Item label="Ngày sinh">
           <DatePicker
             value={dayjs(data.dateOfBirth, { format: dateFormatList[0] })}
             format={dateFormatList}
@@ -101,7 +101,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
             }}
           />
         </Form.Item>
-        <Form.Item label="Gender">
+        <Form.Item label="Giới tính">
           <Radio.Group
             value={data.gender}
             name="gender"
@@ -109,8 +109,8 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
               setData({ ...data, gender: e.target.value });
             }}
           >
-            <Radio value={0}> Male </Radio>
-            <Radio value={1}> Female </Radio>
+            <Radio value={0}> Nam </Radio>
+            <Radio value={1}> Nữ </Radio>
           </Radio.Group>
         </Form.Item>
 

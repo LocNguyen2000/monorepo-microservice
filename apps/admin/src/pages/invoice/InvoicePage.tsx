@@ -9,18 +9,28 @@ import {
 } from "@ant-design/icons";
 import { Card, Flex, Form, Input, InputProps, List, Radio, Select, Typography } from "antd";
 import { useEffect, useState } from "react";
-import { ExpenseDataType, InvoiceDataType, LocationDataType, PaginatedResponse, ProviderDataType, TenantDataType } from "../../lib/interface";
+import {
+  ExpenseDataType,
+  ExpenseLocationDataType,
+  InvoiceDataType,
+  LocationDataType,
+  PaginatedResponse,
+  ProviderDataType,
+  TenantDataType,
+} from "../../lib/interface";
 import { getGlobalContext } from "../../lib/context";
-import styled from "styled-components";
+import { formatMoney } from "../../lib/utils";
 
 const InvoicePage: React.FunctionComponent = () => {
   const [tenantData, setTenantData] = useState<TenantDataType>({});
   const [locationData, setLocationData] = useState<Partial<LocationDataType>>({});
   const [ownerData, setOwnerData] = useState<Partial<ProviderDataType>>({});
-  const [expensesData, setExpensesData] = useState<ExpenseDataType[]>([]);
+  const [expensesData, setExpensesData] = useState<ExpenseLocationDataType[]>([]);
 
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
   const { serviceClient } = getGlobalContext();
+
+  console.log(expensesData);
 
   const loadAllData = async (tenantCode: number) => {
     try {
@@ -53,8 +63,6 @@ const InvoicePage: React.FunctionComponent = () => {
     loadData();
   }, []);
 
-  useEffect(() => {});
-
   return (
     <>
       <Card style={{ padding: "0.25rem" }}>
@@ -80,7 +88,7 @@ const InvoicePage: React.FunctionComponent = () => {
             <Flex style={{ alignItems: "center", paddingLeft: "2.5rem", marginRight: "2rem", width: "33%" }}>
               <Typography style={{ marginRight: "1.5rem" }}>
                 <UserOutlined style={{ marginRight: "0.5rem" }} />
-                Tenant
+                Người thuê nhà
               </Typography>
               <Select
                 showSearch
@@ -102,9 +110,9 @@ const InvoicePage: React.FunctionComponent = () => {
             <Flex style={{ alignItems: "center", marginRight: "2rem", width: "33%" }}>
               <Typography style={{ marginRight: "1.5rem" }}>
                 <HomeOutlined style={{ marginRight: "0.5rem" }} />
-                Location
+                Phòng trọ
               </Typography>
-              <Input disabled={true} placeholder="Tenant Location" value={locationData.locationName} style={{ fontWeight: "bold" }} />
+              <Input disabled={true} style={{ fontWeight: "bold" }} value={locationData.locationName} />
             </Flex>
 
             <ArrowRightOutlined style={{ marginRight: "2rem" }} />
@@ -112,9 +120,9 @@ const InvoicePage: React.FunctionComponent = () => {
             <Flex style={{ alignItems: "center", width: "33%" }}>
               <Typography style={{ marginRight: "1.5rem" }}>
                 <IdcardOutlined style={{ marginRight: "0.5rem" }} />
-                Rent Owner
+                Chủ trọ
               </Typography>
-              <Input disabled={true} placeholder="Location Owner" value={ownerData.providerName} style={{ fontWeight: "bold" }} />
+              <Input disabled={true} style={{ fontWeight: "bold" }} value={ownerData.providerName} />
             </Flex>
           </Flex>
         }
@@ -122,30 +130,30 @@ const InvoicePage: React.FunctionComponent = () => {
         <Flex>
           <div style={{ width: "33%" }}>
             <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} layout="horizontal">
-              <Form.Item label="Tenant Code">
-                <Input disabled={true} value={tenantData.tenantCode} placeholder="Code number" />
+              <Form.Item label="Mã chủ trọ">
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={tenantData.tenantCode} placeholder="Code number" />
               </Form.Item>
-              <Form.Item label="Tenant Name">
-                <Input disabled={true} value={tenantData.tenantName} placeholder="Tenant name" />
+              <Form.Item label="Tên chủ trọ">
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={tenantData.tenantName} placeholder="Tên chủ trọ" />
               </Form.Item>
 
               <Form.Item label="Email">
-                <Input disabled={true} value={tenantData.email} placeholder="Valid email" />
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={tenantData.email} placeholder="Valid email" />
               </Form.Item>
-              <Form.Item label="Phone number">
-                <Input disabled={true} value={tenantData.phoneNumber} placeholder="Phone number" />
+              <Form.Item label="Số điện thoại">
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={tenantData.phoneNumber} placeholder="Số điện thoại" />
               </Form.Item>
               <Form.Item label="Địa chỉ tạm trú">
-                <Input disabled={true} value={tenantData.contactAddress} placeholder="Contact address" />
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={tenantData.contactAddress} placeholder="Contact address" />
               </Form.Item>
-              <Form.Item label="Date of Birth">
-                <Input disabled={true} value={tenantData.dateOfBirth?.toDateString()} placeholder="Date of birth" />
+              <Form.Item label="Ngày sinh">
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={tenantData.dateOfBirth} placeholder="Ngày sinh" />
               </Form.Item>
 
-              <Form.Item label="Gender">
+              <Form.Item label="Giới tính">
                 <Radio.Group value={tenantData.gender} disabled={true}>
-                  <Radio value={0}> Male </Radio>
-                  <Radio value={1}> Female </Radio>
+                  <Radio value={0}> Nam </Radio>
+                  <Radio value={1}> Nữ </Radio>
                 </Radio.Group>
               </Form.Item>
             </Form>
@@ -153,55 +161,49 @@ const InvoicePage: React.FunctionComponent = () => {
           <div style={{ width: "33%" }}>
             <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} layout="horizontal">
               <Form.Item label="Mã phòng trọ">
-                <Input disabled={true} value={locationData.locationCode} placeholder="Code number" />
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={locationData.locationCode} placeholder="Code number" />
               </Form.Item>
               <Form.Item label="Địa chỉ">
-                <Input disabled={true} value={locationData.locationAddress} placeholder="Tenant name" />
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={locationData.locationAddress} placeholder="Tên chủ trọ" />
               </Form.Item>
-              <Form.Item label="Max room">
-                <Input disabled={true} value={locationData.roomSize} placeholder="Room size" />
+              <Form.Item label="Số người">
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={locationData.roomSize} placeholder="Room size" />
               </Form.Item>
             </Form>
           </div>
           <div style={{ width: "33%" }}>
             <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} layout="horizontal">
-              <Form.Item label="Owner Code">
-                <Input disabled={true} value={ownerData.providerCode} placeholder="Code number" />
+              <Form.Item label="Mã chủ trọ">
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={ownerData.providerCode} placeholder="Code number" />
               </Form.Item>
-              <Form.Item label="Phone number">
-                <Input disabled={true} value={ownerData.phoneNumber} placeholder="Contact phone number" />
+              <Form.Item label="Số điện thoại">
+                <Input disabled={true} style={{ fontWeight: "bold" }} value={ownerData.phoneNumber} placeholder="Contact Số điện thoại" />
               </Form.Item>
             </Form>
           </div>
         </Flex>
       </Card>
-      <Card
-        title={
-          <Flex style={{ alignItems: "center" }}>
-            <Typography style={{ marginRight: "1rem" }}>
-              <EuroCircleOutlined style={{ marginRight: "0.5rem" }} />
-              Expense
-            </Typography>
-            <Typography>
-              [Total] :{" "}
-              {expensesData.reduce((acc, prev) => {
-                return acc + +prev.price;
-              }, 0)}{" "}
-              VND
-            </Typography>
-          </Flex>
-        }
-      >
-        <List
-          bordered
-          dataSource={expensesData}
-          renderItem={(item) => (
-            <List.Item>
-              <Typography.Text>[{item.type}]</Typography.Text> {item.price} VND
-            </List.Item>
-          )}
-        />
-      </Card>
+      <Flex style={{ width: "90%", alignItems: "center", gap: "1rem" }}>
+        <Card
+          style={{ width: "30%" }}
+          title={
+            <div>
+              <Typography style={{ marginRight: "1rem", fontSize: "16px" }}>
+                <EuroCircleOutlined style={{ marginRight: "0.5rem" }} />
+                Tổng chi phí:{" "}
+                {formatMoney(
+                  expensesData.reduce<number>((acc, prev) => {
+                    return acc + +prev.price;
+                  }, 0)
+                ) + " VND"}
+              </Typography>
+            </div>
+          }
+        ></Card>
+        <Card style={{ width: "70%" }}>
+          <Form labelCol={{ span: 6 }} wrapperCol={{ span: 18 }} layout="horizontal"></Form>
+        </Card>
+      </Flex>
     </>
   );
 };

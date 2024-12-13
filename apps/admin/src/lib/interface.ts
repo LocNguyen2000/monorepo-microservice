@@ -22,7 +22,7 @@ export interface TenantDataType {
   firstName?: string;
   lastName?: string;
   tenantName?: string;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   genderName?: string;
   gender?: number;
   phoneNumber?: string;
@@ -58,17 +58,16 @@ export interface ExpenseDataType {
   inUsed: string;
 }
 
-export interface ExpenseLocationDataType  extends ExpenseDataType{
+export interface ExpenseLocationDataType extends ExpenseDataType {
   locationCode: string;
   initialUnit: number;
   currentUnit: number;
-  unitName?: string; 
+  unitName?: string;
 }
-
 
 export interface InvoiceDataType {
   tenant: TenantDataType;
-  location?: LocationDataType & { expenses?: ExpenseDataType[] };
+  location?: LocationDataType & { expenses?: ExpenseLocationDataType[] };
   owner?: ProviderDataType;
 }
 

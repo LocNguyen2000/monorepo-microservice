@@ -99,22 +99,22 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
           overflow: "auto",
         }}
       >
-        <Form.Item label="Tenant Code" required={true}>
+        <Form.Item label="Mã chủ trọ" required={true}>
           <Input name="tenantCode" value={data.tenantCode} placeholder="Enter a number here" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
-        <Form.Item label="Tenant Name" required={true}>
-          <Input name="tenantName" value={data.tenantName} placeholder="Enter tenant name" onChange={(e) => formChangeHandler(e)} />
+        <Form.Item label="Tên chủ trọ" required={true}>
+          <Input name="tenantName" value={data.tenantName} placeholder="Enter Tên chủ trọ" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Email" required={true}>
           <Input name="email" value={data.email} placeholder="Enter valid email" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
-        <Form.Item label="Phone number" required={true}>
-          <Input name="phoneNumber" value={data.phoneNumber} placeholder="Enter phone number" onChange={(e) => formChangeHandler(e)} />
+        <Form.Item label="Số điện thoại" required={true}>
+          <Input name="phoneNumber" value={data.phoneNumber} placeholder="Enter Số điện thoại" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Địa chỉ tạm trú" required={true}>
           <Input name="contactAddress" value={data.contactAddress} placeholder="Enter contact address" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
-        <Form.Item label="Date of Birth">
+        <Form.Item label="Ngày sinh">
           <DatePicker
             value={dayjs(data.dateOfBirth, { format: dateFormatList[0] })}
             format={dateFormatList}
@@ -124,15 +124,15 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
           />
         </Form.Item>
 
-        <Form.Item label="Gender">
+        <Form.Item label="Giới tính">
           <Radio.Group
             value={data.gender}
             onChange={(e) => {
               setData({ ...data, gender: e.target.value });
             }}
           >
-            <Radio value={0}> Male </Radio>
-            <Radio value={1}> Female </Radio>
+            <Radio value={0}> Nam </Radio>
+            <Radio value={1}> Nữ </Radio>
           </Radio.Group>
         </Form.Item>
         <Form.Item label="Locations" required={true}>

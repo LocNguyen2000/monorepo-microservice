@@ -20,8 +20,10 @@ export class ExpenseController {
   }
 
   @Get()
-  findAll(@Query() query: Record<string, unknown>) {
-    return this.expense.findAll(query);
+  async findAll(@Query() query: Record<string, unknown>) {
+    const data = await this.expense.findAll(query);
+    console.log(data);
+    return data;
   }
 
   @Get(':id')

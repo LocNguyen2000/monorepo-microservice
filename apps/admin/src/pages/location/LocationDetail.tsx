@@ -56,24 +56,30 @@ const LocationDetail: React.FunctionComponent = () => {
     debounce(setLocation({ ...location, [key]: value }));
   };
 
-  const updateExpenseLocationHandler = (elCodes: string[]) => {
-    // setLocationExpenses(expenses.filter(e => el.includes(e.expenseCode)));
-    console.log("isNewUpdate", elCodes.length > locationExpenses.length);
+  console.log("expenses", expenses);
 
-    const isNewUpdate = elCodes.length > locationExpenses.length;
-    if (isNewUpdate) {
-      const [newExpenseCode] = elCodes.filter((code) => !locationExpenses.map((el) => el.expenseCode).includes(code));
-      const [newExpense] = expenses.filter((e) => (e.expenseCode = newExpenseCode));
-      const defaultExpenseLocation: ExpenseLocationDataType = {
-        locationCode: newExpenseCode,
-        ...newExpense,
-        initialUnit: DEFAULT_INITIAL_UNIT,
-        currentUnit: DEFAULT_CURRENT_UNIT,
-      };
-      setLocationExpenses([...locationExpenses, defaultExpenseLocation]);
-    } else {
-      const remainingExpenseLocation = locationExpenses.filter((el) => elCodes.includes(el.expenseCode));
-      setLocationExpenses(remainingExpenseLocation);
+  const updateExpense = (action: "SELECT" | "DESELECT", code: string) => {
+    console.log("ACTION", action);
+
+    switch (action) {
+      case "SELECT": {
+        const [selectedExpense] = expenses.filter((e) => e.expenseCode === code);
+        const defaultExpense: ExpenseLocationDataType = {
+          locationCode: code,
+          ...selectedExpense,
+          initialUnit: DEFAULT_INITIAL_UNIT,
+          currentUnit: DEFAULT_CURRENT_UNIT,
+        };
+        setLocationExpenses([...locationExpenses, defaultExpense]);
+        break;
+      }
+      case "DESELECT": {
+        const newExpenses = locationExpenses.filter((e) => e.expenseCode !== code);
+        console.log(newExpenses);
+
+        setLocationExpenses(newExpenses);
+        break;
+      }
     }
   };
 
@@ -96,8 +102,6 @@ const LocationDetail: React.FunctionComponent = () => {
     }
   };
 
-  console.log("LE", locationExpenses);
-
   useEffect(() => {
     const isId = search.replace("?id=", "");
 
@@ -108,7 +112,11 @@ const LocationDetail: React.FunctionComponent = () => {
         .get(`/location/${isId}`)
         .then((res) => {
           setLocation(res.data);
-          if (res.data.expenses) setLocationExpenses(res.data.expenses);
+          if (res.data.expenses) {
+            setLocationExpenses(res.data.expenses);
+            console.log("RES EXPENSE", res.data.expenses);
+          }
+
           setAction(ACTION_ENUM.EDIT);
           console.log("RES", res.data);
         })
@@ -178,8 +186,8 @@ const LocationDetail: React.FunctionComponent = () => {
               setLocation({ ...location, owner: e });
             }}
           >
-            {providers.map((p) => (
-              <Select.Option key={p.providerCode} value={p.providerCode}>
+            {providers.map((p, index) => (
+              <Select.Option key={index} value={p.providerCode}>
                 <Tag>
                   <b>{p.providerName}</b>
                 </Tag>
@@ -195,10 +203,11 @@ const LocationDetail: React.FunctionComponent = () => {
             placeholder="Select expenses for location"
             value={locationExpenses.map((el) => el.expenseCode)}
             style={{ marginBottom: "1rem" }}
-            onChange={(el) => updateExpenseLocationHandler(el)}
+            onDeselect={(value) => updateExpense("DESELECT", value)}
+            onSelect={(value) => updateExpense("SELECT", value)}
           >
-            {expenses.map((p) => (
-              <Select.Option key={p.expenseCode} value={p.expenseCode}>
+            {expenses.map((p, index) => (
+              <Select.Option key={index} value={p.expenseCode}>
                 {p.expenseName}
               </Select.Option>
             ))}

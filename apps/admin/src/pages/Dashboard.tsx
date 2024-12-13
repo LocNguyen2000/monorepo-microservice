@@ -127,7 +127,7 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
 
           <BaseHeader />
 
-          <Content style={contentStyle} className="m-content-child-margin">
+          <Content style={contentStyle} className="m-content-child-margin m-background-dashboard">
             <Outlet />
           </Content>
 

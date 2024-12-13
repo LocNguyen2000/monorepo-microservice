@@ -66,6 +66,7 @@ export const contentStyle: React.CSSProperties = {
   color: "#fff",
   // padding: "0 30px",
   backgroundColor: "#EEEEEE",
+  // backgroundImage: "../../../public/background.jpg",
   overflowY: "auto",
 };
 
