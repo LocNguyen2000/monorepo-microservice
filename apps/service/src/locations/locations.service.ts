@@ -121,7 +121,7 @@ export class LocationsService {
     return formatLocation;
   }
 
-  async assignExpensesToLocation(locationCode: number, payload: any[]) {
+  async updateExpensesByLocation(locationCode: number, payload: any[]) {
     console.log(payload);
     console.log(locationCode);
 

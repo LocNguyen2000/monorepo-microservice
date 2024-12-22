@@ -91,3 +91,8 @@ export const footerStyle: React.CSSProperties = {
   justifyContent: "space-between",
   alignItems: "center",
 };
+
+export const alignCenter: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+}

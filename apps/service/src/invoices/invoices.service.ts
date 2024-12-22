@@ -36,6 +36,21 @@ export class InvoicesService {
     return result;
   }
 
+  async findOneByLocation(id: number) {
+    const result = {};
+    const location = await this.locationSvc.findOne(id);
+
+    const tenants =
+      (await this.tenantSvc.findTenantsByLocation(+location.locationCode)) ||
+      [];
+
+    const owner = await this.rentProviderSvc.findOne(+location.owner);
+
+    Object.assign(result, { location, tenants, owner });
+
+    return result;
+  }
+
   async update(id: number, payload: Record<string, unknown>) {
     throw new NotImplementedException();
   }

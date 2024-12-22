@@ -42,7 +42,7 @@ export class LocationsController {
 
   @Patch(':id')
   assign(@Param('id') id: string, @Body() payload: number[]) {
-    return this.locationsService.assignExpensesToLocation(+id, payload);
+    return this.locationsService.updateExpensesByLocation(+id, payload);
   }
 
   @Delete(':id')

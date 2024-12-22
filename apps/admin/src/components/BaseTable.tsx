@@ -1,5 +1,5 @@
 import { Column } from "@ant-design/charts";
-import { SettingTwoTone, DeleteTwoTone } from "@ant-design/icons";
+import { SettingTwoTone, DeleteTwoTone, EditTwoTone } from "@ant-design/icons";
 import { Button, Flex, Popover, Skeleton, Table } from "antd";
 import { AnyObject } from "antd/es/_util/type";
 import { SizeType } from "antd/es/config-provider/SizeContext";
@@ -48,7 +48,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
           <Flex style={{ flexDirection: "row", justifyContent: "center" }}>
             {onClickRow ? (
               <Button style={{ alignItems: "center", justifyContent: "center", marginRight: "0.5rem" }}>
-                <SettingTwoTone
+                <EditTwoTone
                   style={{
                     fontSize: "large",
                     cursor: "pointer",

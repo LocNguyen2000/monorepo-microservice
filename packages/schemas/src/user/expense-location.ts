@@ -27,9 +27,6 @@ export class ExpenseLocationSchema extends BaseEntity {
   
   @Column({type: DataType.INTEGER})
   currentUnit: number
-  
-  @Column({type: DataType.CHAR})
-  unitName: string
 }
 
 

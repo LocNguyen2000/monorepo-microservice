@@ -15,6 +15,7 @@ import { LocationsModule } from './locations/locations.module';
 import { ExpenseSchema } from '@nhl/schemas/user/expense';
 import { ExpenseModule } from './expense/expense.module';
 import { InvoicesModule } from './invoices/invoices.module';
+import { OpenAiModule } from './openai/openai.module';
 
 @Module({
   imports: [
@@ -50,6 +51,7 @@ import { InvoicesModule } from './invoices/invoices.module';
     LocationsModule,
     ExpenseModule,
     InvoicesModule,
+    OpenAiModule,
   ],
   controllers: [AppController],
   providers: [],

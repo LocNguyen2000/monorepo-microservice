@@ -50,10 +50,15 @@ export enum ExpenseType {
   Wifi = "Wifi",
   Other = "Other",
 }
+
+export enum ExpenseUnitType {
+  per_unit= "theo đơn vị",
+  constant= "cố định"
+}
 export interface ExpenseDataType {
   expenseCode: string;
   expenseName: string;
-  type: ExpenseType;
+  type: ExpenseUnitType;
   price: string;
   inUsed: string;
 }
@@ -66,7 +71,7 @@ export interface ExpenseLocationDataType extends ExpenseDataType {
 }
 
 export interface InvoiceDataType {
-  tenant: TenantDataType;
+  tenants: TenantDataType[];
   location?: LocationDataType & { expenses?: ExpenseLocationDataType[] };
   owner?: ProviderDataType;
 }

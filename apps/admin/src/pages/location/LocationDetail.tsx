@@ -90,7 +90,9 @@ const LocationDetail: React.FunctionComponent = () => {
 
         useNotify("success", "New Location Added", `Submit form successfully for Location ${location.locationCode}`);
       } else if (action === ACTION_ENUM.EDIT) {
+        // update location
         await serviceClient.put(`/location/${location.locationCode}`, location);
+        // update expense based on location
         await serviceClient.patch(`/location/${location.locationCode}`, locationExpenses);
 
         useNotify("success", "Location Updated Success", `Submit form successfully for Location ${location.locationCode}`);

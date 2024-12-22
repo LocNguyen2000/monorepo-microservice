@@ -24,6 +24,14 @@ export class TenantService {
     return this.tenantRepository.findByPk(id);
   }
 
+  findTenantsByLocation(id: number) {
+    return this.tenantRepository.findAll({
+      where: {
+        locationCode: id,
+      },
+    });
+  }
+
   async update(id: number, payload: Record<string, unknown>) {
     const instance = await this.tenantRepository.findByPk(id);
 

@@ -64,6 +64,7 @@ create table if not exists expenses (
     `updatedAt` datetime DEFAULT NULL,
     `createdBy` varchar(50) DEFAULT NULL,
     `updatedBy` varchar(50) DEFAULT NULL,
+    `unitName` VARCHAR(30) not null,
     PRIMARY KEY (`expenseCode`)
 );  
 
@@ -72,7 +73,6 @@ create table if not exists expenses_location (
     `expenseCode` int NOT null,
     `initialUnit` int not null,
     `currentUnit` int not null,
-    `unitName` VARCHAR(30) not null,
     CONSTRAINT FOREIGN KEY (`locationCode`) REFERENCES locations (`locationCode`),
     CONSTRAINT FOREIGN KEY (`expenseCode`) REFERENCES expenses (`expenseCode`)
 );

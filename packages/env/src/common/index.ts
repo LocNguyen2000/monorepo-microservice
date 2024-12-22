@@ -1,5 +1,11 @@
-import { IsString, IsNumberString, IsUrl, IsDefined } from "class-validator";
+import { IsString, IsNumberString, IsUrl, IsDefined, IsEnum } from "class-validator";
 import { DatabaseEnv } from "./database";
+
+export enum Environment {
+  Development = "dev",
+  Staging = "staging",
+  Production = "dev"
+}
 
 class AuthEnv {
   @IsString()
@@ -12,4 +18,8 @@ export class GlobalEnv {
 
   @IsDefined()
   auth: AuthEnv;
+
+  @IsDefined()
+  @IsEnum(Environment)
+  env: Environment
 }

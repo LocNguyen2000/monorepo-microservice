@@ -18,7 +18,7 @@ BEGIN
 	    e.`expenseName`,
         el.`initialUnit` as 'initialUnit',
         el.`currentUnit` as 'currentUnit',
-        el.`unitName` as 'unitName',
+        e.`unitName` as 'unitName',
 	    e.price,
 	    e.`inUsed`,
 	    e.`type`
@@ -28,6 +28,5 @@ BEGIN
 	    LEFT JOIN expenses e ON e.`expenseCode` = el.`expenseCode`
 	WHERE
 	    l.`locationCode` = LocationId
-	ORDER BY l.`createdAt`
-	    and l.`updatedAt`;
+	ORDER BY e.`expenseName`;
 END

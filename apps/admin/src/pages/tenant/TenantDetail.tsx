@@ -1,4 +1,4 @@
-import { Form, Radio, Input, Select, DatePicker, InputNumber, Switch, Typography, Divider, Upload, Button } from "antd";
+import { Form, Radio, Input, Select, DatePicker, InputNumber, Switch, Typography, Divider, Upload, Button, theme } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { LocationDataType, PaginatedResponse, ProviderDataType, TenantDataType } from "../../lib/interface";
 import { ChangeEventHandler, useEffect, useState } from "react";
@@ -13,6 +13,7 @@ import { getGlobalContext } from "../../lib/context";
 import Modal from "antd/es/modal/Modal";
 import { ACTION_ENUM } from "../../lib/constants";
 import { debounce } from "../../lib/utils";
+import { globalTheme } from "../../css/theme";
 
 dayjs.extend(customParseFormat);
 /** Manually entering any of the following formats will perform date parsing */
@@ -86,15 +87,15 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
       onOk={() => useConfirm("confirm", "Tenant Confirmation", "Are you sure to submit this tenant?", async () => await formSubmitHandler())}
       cancelText="Return"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
-      width={1000}
+      width={900}
     >
       <Form
         labelCol={{ span: 4 }}
         wrapperCol={{ span: 18 }}
         layout="horizontal"
         style={{
-          height: "75vh",
-          maxHeight: "75vh",
+          height: "50vh",
+          maxHeight: "65vh",
           width: "100%",
           overflow: "auto",
         }}
@@ -135,11 +136,13 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
             <Radio value={1}> Nữ </Radio>
           </Radio.Group>
         </Form.Item>
-        <Form.Item label="Locations" required={true}>
+        <Form.Item label="Phòng trọ" required={true}>
           <Select
             showSearch
             placeholder="Tenant Location"
             value={data.locationCode}
+            style={{fontWeight: '1000', color: globalTheme.token.colorPrimary}}
+            disabled={Number.isSafeInteger(data?.locationCode)}
             onChange={(e) => {
               setData({ ...data, locationCode: e });
             }}
@@ -151,7 +154,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="No. roomates" required={true}>
+        <Form.Item label="Số lượng người" required={true}>
           <InputNumber
             value={data.roomateCount}
             onChange={(v) => {
@@ -159,7 +162,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
             }}
           />
         </Form.Item>
-        <Form.Item label="Contract File" valuePropName="fileList">
+        <Form.Item label="Ảnh hợp đồng/CCCD" valuePropName="fileList">
           <Upload action="/upload.do" listType="picture-card">
             <button style={{ border: 0, background: "none" }} type="button">
               <PlusOutlined />
@@ -167,7 +170,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
             </button>
           </Upload>
         </Form.Item>
-        <Form.Item label="Contract Time">
+        <Form.Item label="Thời gian hiệu lực">
           <RangePicker />
         </Form.Item>
         <Form.Item label="Note">
