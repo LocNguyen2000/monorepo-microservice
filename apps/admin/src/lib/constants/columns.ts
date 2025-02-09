@@ -165,6 +165,9 @@ export const expenseLocationColumns: ColumnsType<ExpenseLocationDataType> = [
         case 'constant': {
           return ExpenseUnitType.constant
         }
+        case 'per_person': {
+          return ExpenseUnitType.per_person
+        }
         default: {
           return ''
         }

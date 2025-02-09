@@ -16,6 +16,7 @@ import { ExpenseSchema } from '@nhl/schemas/user/expense';
 import { ExpenseModule } from './expense/expense.module';
 import { InvoicesModule } from './invoices/invoices.module';
 import { OpenAiModule } from './openai/openai.module';
+import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -52,8 +53,8 @@ import { OpenAiModule } from './openai/openai.module';
     ExpenseModule,
     InvoicesModule,
     OpenAiModule,
+    SocketModule,
   ],
   controllers: [AppController],
-  providers: [],
 })
 export class AppModule {}

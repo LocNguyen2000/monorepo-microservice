@@ -1,9 +1,8 @@
-import { UserOutlined, ArrowRightOutlined, EuroCircleOutlined, HomeOutlined, IdcardOutlined, PlusOutlined, MoneyCollectOutlined, ControlOutlined, FileImageOutlined, SlidersOutlined, FileProtectOutlined, FileAddOutlined } from "@ant-design/icons";
+import { UserOutlined, EuroCircleOutlined, HomeOutlined, IdcardOutlined, PlusOutlined, MoneyCollectOutlined, ControlOutlined, FileImageOutlined, SlidersOutlined, FileProtectOutlined, FileAddOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
   Col,
-  Descriptions,
   Divider,
   Drawer,
   Empty,
@@ -15,11 +14,10 @@ import {
   Radio,
   Row,
   Select,
-  Skeleton,
   Space,
   Typography,
 } from "antd";
-import { ChangeEventHandler, useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   ExpenseLocationDataType,
   InvoiceDataType,
@@ -35,6 +33,8 @@ import BaseTable from "../../components/BaseTable";
 import { expenseLocationColumns } from "../../lib/constants/columns";
 import { globalTheme } from "../../css/theme";
 import TextArea from "antd/es/input/TextArea";
+import { AxiosResponse } from "axios";
+import { IElectricMeterImageResponse } from "./InvoiceDrawer";
 
 export type WithRow<T> = T & {
   index: number | string
@@ -48,7 +48,7 @@ const InvoicePage: React.FunctionComponent = () => {
   const [expensesData, setExpensesData] = useState<ExpenseLocationDataType[]>([]);
   const [selectedExpense, setSelectedExpenseData] = useState<WithRow<ExpenseLocationDataType> | null>(null);
   const [loading, setLoading] = useState(false);
-  const [processedData, setProcessedData] = useState<string | null>(null);
+  const [processedData, setProcessedData] = useState<IElectricMeterImageResponse | null>(null);
   const [openDrawer, setOpenDrawer] = useState(false);
   const { serviceClient, useConfirm, useToast } = getGlobalContext();
   const totalMoney = useMemo<string>(() => formatMoney(expensesData.reduce<number>((acc, prev) => {
@@ -65,6 +65,7 @@ const InvoicePage: React.FunctionComponent = () => {
   const onClose = () => {
     setSelectedExpenseData(null)
     setOpenDrawer(false);
+    setProcessedData(null)
   };
 
   const onEditedSelectExpense = () => {
@@ -79,24 +80,8 @@ const InvoicePage: React.FunctionComponent = () => {
     })
 
     setExpensesData(updatedExpenses)
-    onClose()    
+    onClose()
   }
-
-
-  // const loadAllData = async (tenantCode: number) => {
-  //   try {
-  //     const { data: i } = await serviceClient.get<InvoiceDataType>(`/invoices/${tenantCode}`);
-
-  //     setTenantData(i.tenant);
-  //     if (i.location) setLocationData(i.location);
-  //     if (Array.isArray(i.location.expenses)) setExpensesData(i.location.expenses);
-  //     if (i.owner) setOwnerData(i.owner);
-
-  //     // Get Location
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
 
   const getSummerizeData = async (locationCode: number) => {
     try {
@@ -149,16 +134,19 @@ const InvoicePage: React.FunctionComponent = () => {
     formData.append("files", file); // Send the file with the "files" key
 
     try {
-      const response = await serviceClient.post("/openai/process-meter-image", formData, {
+      const { data } = await serviceClient.post<any, AxiosResponse<IElectricMeterImageResponse>>("/openai/process-meter-image", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       });
 
-
       // Handle success
       onSuccess("File uploaded successfully");
-      setProcessedData(response.data);
+      setProcessedData(data);
+      setSelectedExpenseData({...selectedExpense,
+        initialUnit: selectedExpense.currentUnit, 
+        currentUnit: +data.electricMeterReading
+      })
       notification.success({
         message: "Upload Successful",
         description: "The image has been processed successfully.",
@@ -435,12 +423,9 @@ const InvoicePage: React.FunctionComponent = () => {
                     ) : <Card><Empty/></Card>}
                 </Form.Item>
 
-
               </Col>
             </Row>
         </Form>
-              
-             
       </Drawer>
     </>
   );

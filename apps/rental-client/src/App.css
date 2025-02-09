@@ -1,0 +1,30 @@
+
+@font-face {
+    font-family: 'GoogleRoboto';
+    src: url(./resources/font/static/NunitoSans_10pt-Regular.ttf);
+}
+
+
+
+.m-login-form{
+    display: flex;
+    flex-direction: column;
+    width: 50em;
+    max-width: 50em;
+    padding: 2em;
+  }
+  
+  .m-login-img{
+    background-image: url('./spaceman.jpg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+  
+  .m-background-dashboard{
+    background-image: url(./background-2.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-color: rgba(0, 0, 0, 0.9);
+  }
+  

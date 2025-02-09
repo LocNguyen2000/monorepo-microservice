@@ -52,8 +52,9 @@ export enum ExpenseType {
 }
 
 export enum ExpenseUnitType {
-  per_unit= "theo đơn vị",
-  constant= "cố định"
+  per_unit = "theo đơn vị",
+  per_person = "theo đầu người",
+  constant = "cố định"
 }
 export interface ExpenseDataType {
   expenseCode: string;

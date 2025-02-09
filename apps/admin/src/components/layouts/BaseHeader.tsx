@@ -15,6 +15,7 @@ import BaseBreadCrum from "../BaseBreadCrum";
 import { MENU_LIST } from "../../pages/Dashboard";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 import Input from "antd/es/input/Input";
+import WebSocketComponent from "../../pages/Websocket";
 
 const PopoverMenuHeader = () => {
   const navigate = useNavigate();
@@ -80,7 +81,7 @@ const BaseHeader = () => {
           size={40}
           icon={<QuestionCircleOutlined />}
           style={{ cursor: "pointer" }}
-        />
+        />  
         <span style={{ flex: 1 }}></span>
         <div style={{ marginRight: "1.5rem" }}>
           <Badge showZero count={4} overflowCount={10} size="small" color="geekblue">
@@ -114,6 +115,8 @@ const BaseHeader = () => {
       </Header>
 
       <Header style={navHeaderStyle}>
+        <WebSocketComponent url={process.env.ADMIN_WEBSOCKET_SERVICE}/>
+
         <BaseBreadCrum selectedMenu={menuItem} />
 
         <Typography style={{ fontWeight: "bold" }}>
