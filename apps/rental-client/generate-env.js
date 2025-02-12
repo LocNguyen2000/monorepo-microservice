@@ -1,5 +1,5 @@
-const { resolve } = require("path");
-const { readFileSync, writeFileSync } = require("fs");
+import { resolve } from "path";
+import { readFileSync, writeFileSync } from "fs";
 
 function flattenToObject(obj, prefix = "") {
   return Object.keys(obj).reduce((acc, k) => {

@@ -2,8 +2,11 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { EnvModule, EnvService } from '@nhl/env';
+import { RoleSchema, AccountSchema } from '@nhl/schemas/user';
+import { AuthCodeSchema, ClientSchema } from '@nhl/schemas/account';
 import { Env } from './common/env';
 import { SequelizeModule } from '@nestjs/sequelize';
+import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
     EnvModule.register({ path: '/config/env.json', class: Env }),
@@ -19,13 +22,16 @@ import { SequelizeModule } from '@nestjs/sequelize';
           port: +port,
           username: username,
           database: pathname.replace('/', ''),
-          models: [],
+          models: [AccountSchema, RoleSchema, AuthCodeSchema, ClientSchema],
           sync: {
             force: true,
           },
         };
       },
     }),
+
+    SequelizeModule.forFeature([AccountSchema, RoleSchema]),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
