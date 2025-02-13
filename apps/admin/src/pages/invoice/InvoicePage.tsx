@@ -34,7 +34,22 @@ import { expenseLocationColumns } from "../../lib/constants/columns";
 import { globalTheme } from "../../css/theme";
 import TextArea from "antd/es/input/TextArea";
 import { AxiosResponse } from "axios";
-import { IElectricMeterImageResponse } from "./InvoiceDrawer";
+// import { IElectricMeterImageResponse } from "./InvoiceDrawer";
+
+export class IElectricMeterImageResponse {
+  electricMeterReading: string;
+  manufacturer: string;
+  model: string;
+  serialNumber: string;
+  voltage: string;
+  current: string;
+  frequency: string;
+  powerFactor: string;
+  temperature: string;
+  phase: string;
+  installationYear: string;
+  locationMarking: string;
+}
 
 export type WithRow<T> = T & {
   index: number | string

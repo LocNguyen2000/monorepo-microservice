@@ -22,7 +22,7 @@ export interface TenantDataType {
   firstName?: string;
   lastName?: string;
   tenantName?: string;
-  dateOfBirth?: string;
+  dateOfBirth?: Date;
   genderName?: string;
   gender?: number;
   phoneNumber?: string;
