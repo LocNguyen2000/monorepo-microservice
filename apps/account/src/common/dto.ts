@@ -53,3 +53,13 @@ export class CreateAuthCodeDto {
   @IsNotEmpty()
   expiresAt: number;
 }
+
+export class TokenIntrospectionDto {
+  @IsString()
+  @IsNotEmpty()
+  token: string;
+
+  @IsString()
+  @IsNotEmpty()
+  clientId: string;
+}

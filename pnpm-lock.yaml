@@ -208,6 +208,9 @@ importers:
       '@ant-design/charts':
         specifier: ^2.0.3
         version: registry.npmjs.org/@ant-design/charts@2.0.3(lodash-es@4.17.21)(react-dom@17.0.2)(react@17.0.2)
+      '@nhl/schemas':
+        specifier: workspace:*
+        version: link:../../packages/schemas/dist
       antd:
         specifier: 5.12.6
         version: registry.npmjs.org/antd@5.12.6(react-dom@17.0.2)(react@17.0.2)

@@ -14,6 +14,7 @@ import Flex from "antd/es/flex";
 import { GlobalContext, getGlobalContext } from "../../lib/context";
 import Divider from "antd/es/divider";
 import { Typography } from "antd";
+import { autoGenerateNewCode } from "../../lib/utils";
 
 const RentProviderList = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
@@ -39,6 +40,11 @@ const RentProviderList = () => {
       if (callback) callback();
     }, 500);
   };
+
+  const codeGenerator = () => {
+    const code = autoGenerateNewCode(providers, 'providerCode')
+    setProvider({...provider, providerCode: code})
+  }
 
   const openFormHandler = (action: ACTION_ENUM, data: ProviderDataType) => {
     console.log("FORM", action);
@@ -117,7 +123,7 @@ const RentProviderList = () => {
 
       <Divider />
 
-      <RentProviderDetail data={provider} setData={setProvider} action={action} isOpen={isOpenForm} setIsFormOpen={openFormHandler} />
+      <RentProviderDetail data={provider} setData={setProvider} action={action} isOpen={isOpenForm} setIsFormOpen={openFormHandler} codeGenerator={codeGenerator} />
 
       <BaseTable
         columns={providerColumns}

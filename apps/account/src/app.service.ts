@@ -28,6 +28,7 @@ import { AuthCodeService } from './auth/auth-code.service';
 import { TemplateEnum } from './common/constant';
 import { ClientService } from './auth/client.service';
 import { OAuthService } from './auth/oauth.service';
+import { TokenIntrospectionDto } from './common/dto';
 
 @Injectable()
 export class AppService {
@@ -155,10 +156,6 @@ export class AppService {
     return 'Account verified successfully!';
   }
 
-  findRoles() {
-    return this.roleRepo.findAndCountAll();
-  }
-
   async sendEmail(payload: ConfirmEmailPayload, type: TemplateEnum) {
     const templateId =
       type === TemplateEnum.login
@@ -171,5 +168,9 @@ export class AppService {
       templateId,
       payload,
     );
+  }
+
+  findRoles() {
+    return this.roleRepo.findAndCountAll();
   }
 }

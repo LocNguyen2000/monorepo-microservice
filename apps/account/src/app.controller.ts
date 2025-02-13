@@ -6,6 +6,7 @@ import {
   LoginPayload,
   RegisterPayload,
 } from './common/interface';
+import { TokenIntrospectionDto } from './common/dto';
 
 @Controller('account')
 export class AppController {
@@ -33,4 +34,9 @@ export class AppController {
   ) {
     return this.appService.login(payload, callbackUri);
   }
+
+  // @Post('introspection')
+  // async validateToken(@Body() payload: TokenIntrospectionDto) {
+  //   return this.appService.introspectToken(payload);
+  // }
 }
