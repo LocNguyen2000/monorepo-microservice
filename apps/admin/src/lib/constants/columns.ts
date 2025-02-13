@@ -1,5 +1,5 @@
 import { ColumnsType } from "antd/es/table";
-import { TenantDataType, ProviderDataType, ExpenseDataType, ExpenseLocationDataType } from "../interface";
+import { TenantDataType, ProviderDataType, ExpenseDataType, ExpenseLocationDataType, ExpenseUnitType } from "../interface";
 import { formatMoney } from "../utils";
 
 export const tenantColumns: ColumnsType<TenantDataType> = [
@@ -99,6 +99,19 @@ export const expenseColumns: ColumnsType<ExpenseDataType> = [
     dataIndex: "type",
     key: "type",
     align: "center",
+    render: (value) => {
+      switch (value){
+        case 'per_unit':{
+          return ExpenseUnitType.per_unit
+        }
+        case 'constant': {
+          return ExpenseUnitType.constant
+        }
+        default: {
+          return ''
+        }
+      }
+    }
   },
   {
     title: "Giá cả",
@@ -121,28 +134,52 @@ export const expenseLocationColumns: ColumnsType<ExpenseLocationDataType> = [
     title: "Tên chi phí",
     dataIndex: "expenseName",
     key: "expenseName",
-    align: "left",
+    align: "center",
+    width: "20%",
   },
   {
     title: "Số cũ",
     dataIndex: "initialUnit",
     key: "initialUnit",
     align: "center",
-    width: "20%",
+    width: "15%",
   },
   {
     title: "Số mới",
     dataIndex: "currentUnit",
     key: "currentUnit",
     align: "center",
+    width: "15%",
+  },
+  {
+    title: "Loại chi phí",
+    dataIndex: "type",
+    key: "type",
     width: "20%",
+    align: "center",
+    render: (value) => {
+      switch (value){
+        case 'per_unit':{
+          return ExpenseUnitType.per_unit
+        }
+        case 'constant': {
+          return ExpenseUnitType.constant
+        }
+        case 'per_person': {
+          return ExpenseUnitType.per_person
+        }
+        default: {
+          return ''
+        }
+      }
+    }
   },
   {
     title: "Giá tiền",
     dataIndex: "price",
     key: "price",
     align: "center",
-    width: "25%",
+    width: "20%",
     render: (value) => formatMoney(value),
   },
 ];

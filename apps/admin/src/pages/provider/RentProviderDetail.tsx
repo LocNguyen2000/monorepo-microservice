@@ -1,4 +1,4 @@
-import { Form, Radio, Input, DatePicker, InputNumber, Divider, Typography } from "antd";
+import { Form, Radio, Input, DatePicker, InputNumber, Divider, Typography, Button } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { ProviderDataType } from "../../lib/interface";
 import React, { ChangeEventHandler, useContext } from "react";
@@ -21,9 +21,10 @@ interface IRentProviderProps {
   action: ACTION_ENUM;
   setIsFormOpen: (action: ACTION_ENUM, data: ProviderDataType) => void;
   setSubmitEvent?: () => void;
+  codeGenerator?: () => void;
 }
 
-export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = ({ data, setData, isOpen, setIsFormOpen, action }) => {
+export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = ({ data, setData, isOpen, setIsFormOpen, action, codeGenerator }) => {
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -77,7 +78,9 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
         }}
       >
         <Form.Item label="Provider Code" required={true}>
-          <Input value={data.providerCode} name="providerCode" placeholder="Enter number here" onChange={(e) => formChangeHandler(e)} />
+          <Input value={data.providerCode} name="providerCode" placeholder="Enter number here" onChange={(e) => formChangeHandler(e)} 
+            addonAfter={<Button style={{border: 'none', height: 'auto'}} onClick={() => codeGenerator()}>Tự điền mã nhập</Button>}
+          />
         </Form.Item>
         <Form.Item label="Provider Name" required={true}>
           <Input value={data.providerName} name="providerName" placeholder="Enter your name here" onChange={(e) => formChangeHandler(e)} />
@@ -88,10 +91,10 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
         <Form.Item label="Địa chỉ tạm trú">
           <Input value={data.contactAddress} name="contactAddress" placeholder="Enter your address" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
-        <Form.Item label="Phone number" required={true}>
-          <Input value={data.phoneNumber} name="phoneNumber" onChange={(e) => formChangeHandler(e)} placeholder="Enter your phone number" />
+        <Form.Item label="Số điện thoại" required={true}>
+          <Input value={data.phoneNumber} name="phoneNumber" onChange={(e) => formChangeHandler(e)} placeholder="Enter your Số điện thoại" />
         </Form.Item>
-        <Form.Item label="Date of Birth">
+        <Form.Item label="Ngày sinh">
           <DatePicker
             value={dayjs(data.dateOfBirth, { format: dateFormatList[0] })}
             format={dateFormatList}
@@ -101,7 +104,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
             }}
           />
         </Form.Item>
-        <Form.Item label="Gender">
+        <Form.Item label="Giới tính">
           <Radio.Group
             value={data.gender}
             name="gender"
@@ -109,8 +112,8 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
               setData({ ...data, gender: e.target.value });
             }}
           >
-            <Radio value={0}> Male </Radio>
-            <Radio value={1}> Female </Radio>
+            <Radio value={0}> Nam </Radio>
+            <Radio value={1}> Nữ </Radio>
           </Radio.Group>
         </Form.Item>
 

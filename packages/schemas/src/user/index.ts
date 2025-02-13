@@ -1,25 +1,30 @@
-import { Table, Column, PrimaryKey, ForeignKey } from "sequelize-typescript";
-import { BaseEntity } from "../base";
+import { Table, Column, PrimaryKey, ForeignKey, Model, AutoIncrement, Default, DataType } from "sequelize-typescript";
 import { RoleSchema } from "./role";
 
-@Table({ tableName: "users" })
-export class UserSchema extends BaseEntity {
+@Table({ tableName: "accounts", timestamps: false })
+export class AccountSchema extends Model<AccountSchema>{
   @PrimaryKey
-  @Column
+  @Column({ type: DataType.INTEGER, autoIncrement: true })
   id: number;
 
   @Column
-  username: number;
+  fullName: string;
+
+  @Column
+  email: string;
 
   @Column
   password: string;
 
-  @Column
   @ForeignKey(() => RoleSchema)
+  @Column({ type: DataType.INTEGER, allowNull: false })  
   role: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: false })  
+  status: number;
 }
 
-export type UserModel = typeof UserSchema;
+export type AccountModel = typeof AccountSchema;
 
 export * from "./role";
 export * from "./rent-provider";

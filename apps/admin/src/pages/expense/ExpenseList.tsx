@@ -13,6 +13,7 @@ import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 import { MENU_LIST } from "../Dashboard";
 import ExpenseDetail from "./ExpenseDetail";
 import { ACTION_ENUM } from "../../lib/constants";
+import { autoGenerateNewCode } from "../../lib/utils";
 
 export interface IExpenseListProps {}
 
@@ -32,6 +33,11 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
   const { serviceClient, useToast, useConfirm } = getGlobalContext();
   const { setPathFromKey } = useContext(PathContext);
   const navigate = useNavigate();
+
+  const expenseCodeGenerator = () => {
+    const code = autoGenerateNewCode(expenses, 'expenseCode')
+    setExpense({...expense, expenseCode: code})
+  }
 
   const setLoadingSekeleton = (callback?: () => void) => {
     setIsLoading(true);
@@ -123,6 +129,7 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
           setIsFormOpen={openFormHandler}
           data={expense}
           setData={(d) => setExpense(d)}
+          codeGenerator={expenseCodeGenerator}
         />
 
         <BaseTable

@@ -67,7 +67,14 @@
 }
 
 .m-login-img{
-  background-image: url(./public/spaceman.jpg);
+  background-image: url(./spaceman.jpg);
   background-size: contain;
   background-repeat:round;
+}
+
+.m-background-dashboard{
+  background-image: url(./background-2.jpg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-color: rgba(0, 0, 0, 0.9);
 }

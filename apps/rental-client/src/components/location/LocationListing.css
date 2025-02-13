@@ -1,0 +1,20 @@
+.property-list {
+  margin-top: 20px;
+}
+
+.property-card {
+  color: #fff;
+}
+
+.property-title {
+  color: #fff;
+}
+
+.property-text {
+  color: #bfbfbf;
+}
+
+.property-empty {
+  text-align: center;
+  color: #bfbfbf;
+}

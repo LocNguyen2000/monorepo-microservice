@@ -11,7 +11,7 @@ async function bootstrap() {
 
   const env = app.get(EnvService<Env>);
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new AllExceptionsFilter(app.get(HttpAdapterHost)));
 
   await app.startAllMicroservices();

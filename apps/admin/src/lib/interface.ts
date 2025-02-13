@@ -22,7 +22,7 @@ export interface TenantDataType {
   firstName?: string;
   lastName?: string;
   tenantName?: string;
-  dateOfBirth?: Date;
+  dateOfBirth?: string;
   genderName?: string;
   gender?: number;
   phoneNumber?: string;
@@ -50,25 +50,30 @@ export enum ExpenseType {
   Wifi = "Wifi",
   Other = "Other",
 }
+
+export enum ExpenseUnitType {
+  per_unit = "theo đơn vị",
+  per_person = "theo đầu người",
+  constant = "cố định"
+}
 export interface ExpenseDataType {
   expenseCode: string;
   expenseName: string;
-  type: ExpenseType;
+  type: ExpenseUnitType;
   price: string;
   inUsed: string;
 }
 
-export interface ExpenseLocationDataType  extends ExpenseDataType{
+export interface ExpenseLocationDataType extends ExpenseDataType {
   locationCode: string;
   initialUnit: number;
   currentUnit: number;
-  unitName?: string; 
+  unitName?: string;
 }
 
-
 export interface InvoiceDataType {
-  tenant: TenantDataType;
-  location?: LocationDataType & { expenses?: ExpenseDataType[] };
+  tenants: TenantDataType[];
+  location?: LocationDataType & { expenses?: ExpenseLocationDataType[] };
   owner?: ProviderDataType;
 }
 

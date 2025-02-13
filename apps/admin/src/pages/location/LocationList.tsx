@@ -1,9 +1,23 @@
-import { Button, Carousel, Divider, Empty, Flex, Input, Pagination, Skeleton } from "antd";
+import { Button, Carousel, Divider, Empty, Flex, Input, Pagination, Rate, Skeleton, Tag } from "antd";
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
 import { useContext, useEffect, useState } from "react";
 import Typography from "antd/es/typography/Typography";
-import { SettingOutlined, EditOutlined, HomeOutlined, ReloadOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  SettingOutlined,
+  EditOutlined,
+  HomeOutlined,
+  ReloadOutlined,
+  DeleteOutlined,
+  NotificationOutlined,
+  NotificationFilled,
+  EditFilled,
+  DeleteFilled,
+  BellFilled,
+  DotChartOutlined,
+  MoreOutlined,
+  SettingFilled,
+} from "@ant-design/icons";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 import { GlobalContext, PathContext, getGlobalContext } from "../../lib/context";
 import { MENU_LIST } from "../Dashboard";
@@ -95,13 +109,12 @@ const LocationList = () => {
         <Flex style={{ alignItems: "center" }}>
           <div>
             <h2>Phòng trọ</h2>
-            <Typography>- Nơi dành cho <b>người thuê nhà</b> từ <b>Chủ sở hữu thuê nhà</b></Typography>
+            <Typography>
+              - Nơi dành cho <b>người thuê nhà</b> từ <b>Chủ sở hữu thuê nhà</b>
+            </Typography>
           </div>
           <div style={{ flex: 1 }}></div>
-          <Input
-            placeholder="Enter search value here"
-            style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
-          />
+          <Input placeholder="Enter search value here" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
           <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={(e) => openLocationForm()}>
             <HomeOutlined /> Add
           </Button>
@@ -137,22 +150,19 @@ const LocationList = () => {
               <Card
                 key={l.locationCode}
                 hoverable
-                style={{ width: 250, marginRight: "0.5rem" }}
-                cover={
-                  l.image ? (
-                    <img alt="example" height={100} src={`${l.image}`} />
-                  ) : (
-                    <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
-                  )
-                }
+                style={{ width: 400, marginRight: "0.5rem" }}
+                cover={l.image ? <img alt="example" height={100} src={`${l.image}`} /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
                 actions={[
-                  <EditOutlined
+                  <BellFilled />,
+                  <EditFilled
+                    value="Chinh sua"
                     key="edit"
                     title="Edit this location!"
                     className="override-antd-icon-item"
                     onClick={() => openLocationForm(l.locationCode)}
                   />,
-                  <DeleteOutlined
+                  <DeleteFilled
+                    size={300}
                     key="delete"
                     className="override-antd-icon-item"
                     title="Delete this location!"
@@ -165,14 +175,17 @@ const LocationList = () => {
                       );
                     }}
                   />,
+                  <SettingFilled />,
                 ]}
               >
                 <Meta
                   title={l.locationCode + ": " + l.locationName}
                   description={
                     <>
-                      <Typography>Room size: {l.roomSize}</Typography>
-                      <Typography
+                      <Tag color="blue">{l.roomSize} người </Tag>
+                      <Tag color="success">Giá phòng : 200.000 VND</Tag>
+                      <Tag
+                        color="warning"
                         style={{
                           whiteSpace: "nowrap",
                           overflow: "hidden",
@@ -180,7 +193,8 @@ const LocationList = () => {
                         }}
                       >
                         {l.locationAddress}
-                      </Typography>
+                      </Tag>
+                      <Rate tooltips={["khủng khiếp", "xấu", "bình thường", "tốt", "tuyệt vời"]} value={Math.random() * 4} />
                     </>
                   }
                 />

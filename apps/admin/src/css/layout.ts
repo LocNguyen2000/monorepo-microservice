@@ -66,6 +66,7 @@ export const contentStyle: React.CSSProperties = {
   color: "#fff",
   // padding: "0 30px",
   backgroundColor: "#EEEEEE",
+  // backgroundImage: "../../../public/background.jpg",
   overflowY: "auto",
 };
 
@@ -90,3 +91,8 @@ export const footerStyle: React.CSSProperties = {
   justifyContent: "space-between",
   alignItems: "center",
 };
+
+export const alignCenter: React.CSSProperties = {
+  display: 'flex',
+  alignItems: 'center',
+}
