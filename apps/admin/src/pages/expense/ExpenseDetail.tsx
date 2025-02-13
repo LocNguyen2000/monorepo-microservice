@@ -1,12 +1,12 @@
 import Modal from "antd/es/modal/Modal";
 import { ChangeEventHandler, FunctionComponent } from "react";
-import { ExpenseDataType, ExpenseType } from "../../lib/interface";
+import { ExpenseDataType, ExpenseType, ExpenseUnitType } from "../../lib/interface";
 import { ACTION_ENUM } from "../../lib/constants";
 import Typography from "antd/es/typography/Typography";
 import Divider from "antd/es/divider";
 import BaseEditableTable from "../../components/BaseEditableTable";
-import { Form, Input, InputNumber, Radio, Select } from "antd";
-import { debounce } from "../../lib/utils";
+import { Button, Form, Input, InputNumber, Radio, Select } from "antd";
+import { debounce, autoGenerateNewCode } from "../../lib/utils";
 import { getGlobalContext } from "../../lib/context";
 
 interface IExpenseDetailProps {
@@ -16,9 +16,10 @@ interface IExpenseDetailProps {
   setData: (data: Partial<ExpenseDataType>) => void;
   setIsFormOpen: (action: ACTION_ENUM, data: Partial<ExpenseDataType>) => void;
   setSubmitEvent?: () => void;
+  codeGenerator?: () => void;
 }
 
-const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, action, setIsFormOpen, setData }) => {
+const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, action, setIsFormOpen, setData, codeGenerator }) => {
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -78,27 +79,28 @@ const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, a
           overflow: "auto",
         }}
       >
-        <Form.Item label="Expense Code" required={true}>
+        <Form.Item label="Mã chi phí" required={true}>
           <Input
             value={data.expenseCode}
             name="expenseCode"
-            placeholder="Enter number here"
+            placeholder="Mã dịch vụ"
             onChange={(e) => formChangeHandler(e)}
+            addonAfter={<Button style={{border: 'none', height: 'auto'}} onClick={() => codeGenerator()}>Tự điền mã nhập</Button>}
           />
         </Form.Item>
-        <Form.Item label="Expense Name" required={true}>
+        <Form.Item label="Tên chi phí" required={true}>
           <Input
             value={data.expenseName}
             name="expenseName"
-            placeholder="Enter service that you will charge here"
+            placeholder="Điền tên loại chi phí dịch vụ"
             onChange={(e) => formChangeHandler(e)}
           />
         </Form.Item>
-        <Form.Item label="Price" required={true}>
+        <Form.Item label="Giá tiền" required={true}>
           <InputNumber
             value={data.price}
             name="price"
-            placeholder="Enter service price here"
+            placeholder="VNĐ"
             onChange={(e) => {
               setData({ ...data, price: e });
             }}
@@ -106,23 +108,23 @@ const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, a
             min="0"
           />
         </Form.Item>
-        <Form.Item label="Service Type" required={true}>
+        <Form.Item label="Loại dịch vụ" required={true}>
           <Select
             showSearch
-            placeholder="Electric, Water or anything"
+            placeholder="theo đầu người, cố định"
             value={data.type}
             onChange={(e) => {
               setData({ ...data, type: e });
             }}
           >
-            {Object.keys(ExpenseType).map((p) => (
+            {Object.keys(ExpenseUnitType).map((p) => (
               <Select.Option key={p} value={p}>
-                {p}
+                {ExpenseUnitType[p]}
               </Select.Option>
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="In Used" required={true}>
+        <Form.Item label="Trạng thái" required={true}>
           <Radio.Group
             value={data.inUsed}
             name="inUsed"
@@ -130,8 +132,8 @@ const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, a
               setData({ ...data, inUsed: e.target.value });
             }}
           >
-            <Radio value={true}> Active </Radio>
-            <Radio value={false}> Disable </Radio>
+            <Radio value={true}> Sử dụng </Radio>
+            <Radio value={false}> Không hoạt động </Radio>
           </Radio.Group>
         </Form.Item>
       </Form>

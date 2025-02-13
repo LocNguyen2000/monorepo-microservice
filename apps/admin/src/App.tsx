@@ -97,9 +97,7 @@ const App: FunctionComponent<AppProps> = () => {
         {notifyContextHolder}
         <BrowserRouter>
           <Routes>
-            <Route
-              path="/"
-              element={
+            <Route path="/" element={
                 <AuthenticatedRoute>
                   <Dashboard />
                 </AuthenticatedRoute>

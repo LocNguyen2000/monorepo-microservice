@@ -1,9 +1,10 @@
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { Form, Input, Checkbox, Button, Flex } from "antd";
 import Card from "antd/es/card/Card";
 import { useNavigate } from "react-router-dom";
 import { getGlobalContext } from "../lib/context";
 import { ScreenRoutes } from "../lib/constant";
+import {useAuthCheck} from "../lib/hooks";
 
 interface LoginPageProps {}
 
@@ -14,6 +15,8 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
+  useAuthCheck()
+
   // Handle form submission
   const handleLogin = async (values: { email: string; password: string }) => {
     setLoading(true);
@@ -21,14 +24,14 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
       const payload = {...values, clientId: process.env.ADMIN_AUTH_RENTAL_CLIENTID}
       const response = await accountClient.post(`account/login?callbackUri=${encodeURIComponent(callbackUri)}`, payload);
       
-      // ✅ Store token in localStorage
       useToast("success", "Đăng nhập thành công!");
-      const data = response.data
-      console.log('Data', data);
+      const {accessToken, refreshToken, id, email, fullName, role} = response.data
 
-      localStorage.setItem('authUser', JSON.stringify(data))
+      localStorage.setItem('accessToken', JSON.stringify(accessToken))
+      localStorage.setItem('refreshToken', JSON.stringify(refreshToken))
+      localStorage.setItem('authUser', JSON.stringify({id, email, fullName, role}))
       
-      setAuthUser({...data})
+      setAuthUser({...response.data})
       navigate(ScreenRoutes.Home)
     } catch (error) {
       useToast("error", error.response?.data?.message || "Đăng nhập thất bại!");

@@ -11,6 +11,7 @@ export interface IGlobalContext {
     authUser?: IAuthUser;
     setAuthUser?: Dispatch<SetStateAction<IAuthUser>>;
     accountClient: AxiosInstance;
+    serviceClient: AxiosInstance;
     useNotify: (type: NotificationType, title: string, message: string) => void;
     useToast: (type: NoticeType, message: string) => void;
     useConfirm: (type: ConfirmType, title: string, content: string, confirmHandler: any) => void;

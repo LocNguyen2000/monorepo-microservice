@@ -2,15 +2,16 @@ import LoginPage from './components/LoginPage'
 import RegisterPage from './components/RegisterPage'
 import './App.css'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import RentalPage from './components/RentalPage'
-import { notification, message, Modal, Divider, Flex } from 'antd'
+import HomePage from './components/HomePage'
+import { notification, message, Modal, Divider, Flex, ConfigProvider } from 'antd'
 import { NoticeType } from 'antd/es/message/interface'
 import { NotificationType, ConfirmType, GlobalContext } from './lib/context'
-import { AccountClient } from './lib/axios'
+import { AccountClient, ServiceClient } from './lib/axios'
 import { useState } from 'react'
 import { IAuthUser } from './lib/interface'
 import { ScreenRoutes } from './lib/constant'
-import { AuthenticatedRoute } from './components/AuthenticatedRoute'
+import { AuthenticatedRoute } from './components/util/AuthenticatedRoute'
+import { globalTheme } from './lib/theme'
 
 function App() {
   const [authUser, setAuthUser] = useState<IAuthUser>(null)
@@ -65,28 +66,31 @@ function App() {
     });
   };
   return (
-    <GlobalContext.Provider
-      value={{
-        authUser: null,
-        setAuthUser,
-        accountClient: AccountClient(),
-        useNotify: openNotification,
-        useToast: openToast,
-        useConfirm: openConfirm,
-      }}
-    >
-    {messageContextHolder}
-    {notifyContextHolder}
-      <BrowserRouter>
-          <Routes>
-            <Route path={"/"} element={<AuthenticatedRoute><RentalPage/></AuthenticatedRoute>}/>
-            <Route path={ScreenRoutes.Login} element={<LoginPage/>}/>
-            <Route path={ScreenRoutes.Register} element={<RegisterPage/>}/>
-            <Route index path={ScreenRoutes.Home} element={<RentalPage/>}/>
-          </Routes>
-        </BrowserRouter>
-    </GlobalContext.Provider>
-)
+    <ConfigProvider theme={globalTheme}>
+        <GlobalContext.Provider
+          value={{
+            authUser: null,
+            setAuthUser,
+            accountClient: AccountClient(),
+            serviceClient: ServiceClient(),
+            useNotify: openNotification,
+            useToast: openToast,
+            useConfirm: openConfirm,
+          }}
+        >
+        {messageContextHolder}
+        {notifyContextHolder}
+          <BrowserRouter>
+              <Routes>
+                <Route path={"/"} element={<AuthenticatedRoute><HomePage/></AuthenticatedRoute>}/>
+                <Route path={ScreenRoutes.Login} element={<LoginPage/>}/>
+                <Route path={ScreenRoutes.Register} element={<RegisterPage/>}/>
+                <Route index path={ScreenRoutes.Home} element={<HomePage/>}/>
+              </Routes>
+            </BrowserRouter>
+        </GlobalContext.Provider>
+      </ConfigProvider>
+  )
 }
 
 export default App

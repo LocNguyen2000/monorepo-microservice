@@ -1,7 +1,8 @@
-import { FunctionComponent, useContext } from "react";
-import { GlobalContext, getGlobalContext } from "../lib/context";
+import { FunctionComponent } from "react";
+import { getGlobalContext } from "../../lib/context";
 import { Navigate } from "react-router-dom";
-import { ScreenRoutes } from "../lib/constant";
+import { ScreenRoutes } from "../../lib/constant";
+import { useSyncAuthUser } from "../../lib/hooks";
 
 interface IAuthenticatedRoute {
   children: JSX.Element;
@@ -10,9 +11,9 @@ interface IAuthenticatedRoute {
 export const AuthenticatedRoute: FunctionComponent<IAuthenticatedRoute> = ({
   children,
 }) => {
-  const globalContext = getGlobalContext();
+  const {authUser} = getGlobalContext()
 
-  if (!globalContext.authUser) {
+  if (!authUser) {
     return <Navigate to={ScreenRoutes.Login} />;
   }
 

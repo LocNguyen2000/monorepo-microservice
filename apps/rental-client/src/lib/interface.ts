@@ -4,5 +4,5 @@ export interface IAuthUser {
     accessToken: string;
     refreshToken: string;
     email: string;
-    role: string;
+    role: number;
   }

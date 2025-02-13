@@ -9,9 +9,9 @@ interface IAuthenticatedRoute {
 export const AuthenticatedRoute: FunctionComponent<IAuthenticatedRoute> = ({
   children,
 }) => {
-  const globalContext = getGlobalContext();
+  const {authUser} = getGlobalContext();
 
-  if (!globalContext.authUser) {
+  if (!authUser) {
     return <Navigate to="/login" />;
   }
 

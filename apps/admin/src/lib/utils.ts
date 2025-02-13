@@ -67,4 +67,11 @@ export const parseMoney = (money: string) => {
 }
 
 
+export const autoGenerateNewCode = (arrayData: unknown[], primaryKey: string) => {
+  const keys = arrayData?.map(val => val[primaryKey])
+  keys.sort((a, b) => a - b)
+  
+  return keys.length > 0 ? keys[keys.length - 1] + 1 : 1
+}
+
 
