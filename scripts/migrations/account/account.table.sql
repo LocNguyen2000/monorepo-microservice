@@ -2,6 +2,17 @@ create database if not exists accounts;
 
 use accounts;
 
+
+create table
+    if not exists roles(
+        `id` int NOT NULL PRIMARY KEY,
+        `role` varchar(50) NOT NULL,
+        `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
+        `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
+        `createdBy` varchar(50) DEFAULT NULL,
+        `updatedBy` varchar(50) DEFAULT NULL
+    );
+
 CREATE TABLE IF NOT EXISTS accounts (
     `id` INT NOT NULL AUTO_INCREMENT,
     `fullName` VARCHAR(50) NOT NULL,
@@ -14,15 +25,6 @@ CREATE TABLE IF NOT EXISTS accounts (
     FOREIGN KEY (`role`) REFERENCES roles(`id`)
 );
 
-create table
-    if not exists roles(
-        `id` int NOT NULL PRIMARY KEY,
-        `role` varchar(50) NOT NULL,
-        `createdAt` datetime DEFAULT CURRENT_TIMESTAMP,
-        `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP,
-        `createdBy` varchar(50) DEFAULT NULL,
-        `updatedBy` varchar(50) DEFAULT NULL
-    );
 
 create table
     if not exists clients(
