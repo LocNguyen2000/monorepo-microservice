@@ -32,14 +32,14 @@ html, body {
   }
   
   .m-login-img{
-    background-image: url('./spaceman.jpg');
+    background-image: url('./resources/spaceman.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
   }
   
   .m-background-dashboard{
-    background-image: url(./background-2.jpg);
+    background-image: url(./resources/background-2.jpg);
     background-size: cover;
     background-repeat: no-repeat;
     background-color: rgba(0, 0, 0, 0.9);
@@ -51,7 +51,7 @@ html, body {
     justify-content: center;
     align-items: center;
     height: 100vh;
-    background-image: url('./spaceman.jpg');
+    background-image: url('./resources/spaceman.jpg');
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;

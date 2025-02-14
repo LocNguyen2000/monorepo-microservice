@@ -4,6 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
+  "packageManager": "pnpm@8.7.5",
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",

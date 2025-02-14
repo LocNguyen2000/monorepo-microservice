@@ -17,6 +17,15 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
 
+      - name: Generate JSON Configuration Files
+        id: export_env
+        run: |
+          mkdir -p config
+          echo '${{ vars.CONFIG_ACCOUNT }}' > config/account.json
+          echo '${{ vars.CONFIG_ADMIN }}' > config/admin.json
+          echo '${{ vars.CONFIG_RENTAL_CLIENT }}' > config/rental-client.json
+          echo '${{ vars.CONFIG_SERVICE }}' > config/service.json
+
       - name: Setup Node.js & pnpm
         uses: actions/setup-node@v4
         with:
@@ -28,66 +37,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install
 
-      - name: Generate JSON Configuration Files
-        id: export_env
-        run: |
-          mkdir -p config
-          echo '${{ vars.CONFIG_ACCOUNT }}' > config/account.json
-          echo '${{ vars.CONFIG_ADMIN }}' > config/admin.json
-          echo '${{ vars.CONFIG_RENTAL_CLIENT }}' > config/rental-client.json
-          echo '${{ vars.CONFIG_SERVICE }}' > config/service.json
 
       - name: Link JSON file
         run: pnpm link-env
-
-  deploy-account:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Deploy Account Service
-        run: |
-          cd apps/account
-          pnpm build
-          pnpm start
-
-  deploy-admin:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Deploy Admin Service
-        run: |
-          cd apps/admin
-          pnpm build
-          pnpm start
-
-  deploy-rental-client:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Deploy Rental Client
-        run: |
-          cd apps/rental-client
-          pnpm build
-          pnpm start
-
-  deploy-service:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Deploy Service
-        run: |
-          cd apps/service
-          pnpm build
-          pnpm start
+      
+      - name: build
+        run: pnpm build
