@@ -1,4 +1,5 @@
 version: "3.9"
+name: monorepo-microservice
 networks:
   my_network:
     driver: bridge
@@ -11,10 +12,36 @@ services:
     environment:
        MYSQL_ROOT_PASSWORD: 
        MYSQL_ALLOW_EMPTY_PASSWORD: true
+    networks:
+      - my_network
     ports:
       - 3307:3306
     volumes:
       - mysql-data:/data/db
+  account:
+    container_name: account
+    build:
+      args:
+        - APP_NAME=account
+      dockerfile: ./Dockerfile.account
+    volumes:
+      - ./config/account.json:/app/config/account.json
+    networks:
+      - my_network
+    ports:
+      - "8081:8081"
+  service:
+    container_name: service
+    build:
+      args:
+        - APP_NAME=service
+      dockerfile: ./Dockerfile.service
+    volumes:
+      - ./config/service.json:/app/config/service.json
+    networks:
+      - my_network
+    ports:
+      - "8082:8082"
   # zookeeper-1:
   #   hostname: zookeeper-1
   #   container_name: zookeeper-1

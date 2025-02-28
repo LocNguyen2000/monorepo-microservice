@@ -8,4 +8,8 @@ export class DatabaseEnv {
   @IsString()
   @IsOptional()
   sqlUrl: string;
+
+  @IsString()
+  @IsOptional()
+  ssl: string;
 }

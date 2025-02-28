@@ -4,7 +4,7 @@ import { EnvModule, EnvService } from '@nhl/env';
 import { Env } from './common/env';
 import { RentProvidersModule } from './rent-providers/rent-providers.module';
 import { TenantModule } from './tenant/tenant.module';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
 import {
   RentProviderSchema,
   TenantSchema,
@@ -24,10 +24,11 @@ import { SocketModule } from './socket/socket.module';
     SequelizeModule.forRootAsync({
       inject: [EnvService],
       useFactory: async (env: EnvService<Env>) => {
-        const { pathname, username, hostname, port } = new URL(
+        const { pathname, username, hostname, password, port } = new URL(
           env.get('db.sqlUrl'),
         );
-        return {
+        const cert = env.get('db.ssl');
+        const defaultConfig: SequelizeModuleOptions = {
           dialect: 'mysql',
           host: hostname,
           port: +port,
@@ -40,11 +41,24 @@ import { SocketModule } from './socket/socket.module';
             ExpenseSchema,
             ExpenseLocationSchema,
           ],
+          retryAttempts: 10,
           logging: false,
           sync: {
-            force: true,
+            force: false,
           },
         };
+
+        if (password) defaultConfig['password'] = password;
+        if (cert) {
+          defaultConfig['ssl'] = true;
+          defaultConfig['dialectOptions'] = {
+            ssl: {
+              ca: cert,
+              rejectUnauthorized: true,
+            },
+          };
+        }
+        return defaultConfig;
       },
     }),
     RentProvidersModule,

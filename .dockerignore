@@ -1,0 +1,13 @@
+.git
+.github
+.idea
+.sonarqube
+.vs
+.vscode
+**/bin
+**/obj
+out
+**/node_modules
+*.pem
+
+apps/**/config

@@ -1,0 +1,51 @@
+# ------------------BUILD---------------------- 
+FROM node:18-alpine AS build
+
+# Set an argument for the app name (default: account)
+ARG APP_NAME=account
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Install PNPM globally
+RUN npm i -g pnpm@8.7.5
+
+# Copy package manager files first (for better caching)
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+
+# Copy shared packages, scripts, and application code
+COPY packages ./packages
+COPY scripts ./scripts
+COPY apps/${APP_NAME} ./apps/${APP_NAME}
+COPY config/${APP_NAME}.json ./config/${APP_NAME}.json
+
+# Enable BuildKit cache for dependencies (if available)
+RUN --mount=type=cache,id=pnpm-cache,target=/pnpm/store \
+    pnpm install --frozen-lockfile
+
+# Link environment variables (if needed)
+RUN pnpm run link-env
+
+# Build the app using Turbo
+RUN pnpm --filter=${APP_NAME} run build 
+RUN pnpm --filter=${APP_NAME} deploy out --prod
+
+# -------------PRODUCTION----------------
+FROM node:18-alpine as production
+
+# Set the working directory inside the container
+WORKDIR /app
+
+ARG APP_NAME=account
+
+# Install PNPM globally (runtime only)
+RUN npm i -g pnpm@8.7.5
+
+# Copy only necessary runtime files from the build stage
+COPY --from=build app/out ./out
+COPY --from=build app/apps/${APP_NAME}/config/env.json ./out/config/env.json
+
+WORKDIR /app/out
+
+EXPOSE 80
+CMD ["node", "dist/main"]

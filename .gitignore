@@ -6,6 +6,7 @@ dist
 .turbo
 .git
 .vscode
+*.pem
 
 # Enviroment
 **/config

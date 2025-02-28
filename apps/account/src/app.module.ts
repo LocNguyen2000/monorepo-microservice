@@ -5,7 +5,7 @@ import { EnvModule, EnvService } from '@nhl/env';
 import { RoleSchema, AccountSchema } from '@nhl/schemas/user';
 import { AuthCodeSchema, ClientSchema } from '@nhl/schemas/account';
 import { Env } from './common/env';
-import { SequelizeModule } from '@nestjs/sequelize';
+import { SequelizeModule, SequelizeModuleOptions } from '@nestjs/sequelize';
 import { AuthModule } from './auth/auth.module';
 @Module({
   imports: [
@@ -13,10 +13,11 @@ import { AuthModule } from './auth/auth.module';
     SequelizeModule.forRootAsync({
       inject: [EnvService],
       useFactory: async (env: EnvService<Env>) => {
-        const { pathname, username, hostname, port } = new URL(
+        const { pathname, username, hostname, password, port } = new URL(
           env.get('db.sqlUrl'),
         );
-        return {
+        const cert = env.get('db.ssl');
+        const defaultConfig: SequelizeModuleOptions = {
           dialect: 'mysql',
           host: hostname,
           port: +port,
@@ -24,9 +25,22 @@ import { AuthModule } from './auth/auth.module';
           database: pathname.replace('/', ''),
           models: [AccountSchema, RoleSchema, AuthCodeSchema, ClientSchema],
           sync: {
-            force: true,
+            force: false,
           },
+          retryAttempts: 10,
         };
+
+        if (password) defaultConfig['password'] = password;
+        if (cert) {
+          defaultConfig['ssl'] = true;
+          defaultConfig['dialectOptions'] = {
+            ssl: {
+              ca: cert,
+              rejectUnauthorized: true,
+            },
+          };
+        }
+        return defaultConfig;
       },
     }),
 

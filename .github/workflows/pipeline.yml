@@ -9,37 +9,43 @@ on:
       - production
 
 jobs:
-  setup:
-    runs-on: ubuntu-latest
-    outputs:
-      env_vars: ${{ steps.export_env.outputs.env_vars }}
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+  # setup:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     env_vars: ${{ steps.export_env.outputs.env_vars }}
+  #   steps:
+  #     - name: Checkout Repository
+  #       uses: actions/checkout@v4
 
-      - name: Generate JSON Configuration Files
-        id: export_env
-        run: |
-          mkdir -p config
-          echo '${{ vars.CONFIG_ACCOUNT }}' > config/account.json
-          echo '${{ vars.CONFIG_ADMIN }}' > config/admin.json
-          echo '${{ vars.CONFIG_RENTAL_CLIENT }}' > config/rental-client.json
-          echo '${{ vars.CONFIG_SERVICE }}' > config/service.json
-
-      - name: Setup Node.js & pnpm
-        uses: actions/setup-node@v4
-        with:
-          node-version: 18
-
-      - name: Install pnpm
-        run: npm install -g pnpm
-
-      - name: Install Dependencies
-        run: pnpm install
-
-
-      - name: Link JSON file
-        run: pnpm link-env
-      
-      - name: build
-        run: pnpm build
+  #     - name: Generate JSON Configuration Files
+  #       id: export_env
+  #       run: |
+  #         mkdir -p config
+  #         echo '${{ vars.CONFIG_ACCOUNT }}' > config/account.json
+  #         echo '${{ vars.CONFIG_ADMIN }}' > config/admin.json
+  #         echo '${{ vars.CONFIG_RENTAL_CLIENT }}' > config/rental-client.json
+  #         echo '${{ vars.CONFIG_SERVICE }}' > config/service.json
+  # push-ec2:
+  #   name: Deploy to EC2
+  #   needs: push-dockerhub
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #       - name: Checkout the files
+  #         uses: actions/checkout@v3
+  #       - name: Deploy to AWS Server
+  #         uses: easingthemes/ssh-deploy@main
+  #         env:
+  #           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_KEY }}
+  #           REMOTE_HOST: ${{ vars.EC2_HOST_DNS }}
+  #           REMOTE_USER: ${{ vars.EC2_USERNAME }}
+  #           TARGET: ${{ vars.EC2_TARGET_DIR }}
+  #       - name: Executing remote ssh commands using ssh key
+  #         uses: appleboy/ssh-action@master
+  #         with:
+  #           host: ${{ vars.EC2_HOST_DNS }}
+  #           username: ${{ vars.EC2_USERNAME }}
+  #           key: ${{ secrets.EC2_SSH_KEY }}
+  #           script: |
+  #             cd ./${{vars.EC2_TARGET_DIR}}
+  #             echo '${{vars.APP_ENV}}' > .env
+  #             sh startup.sh
