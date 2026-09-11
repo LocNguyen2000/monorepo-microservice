@@ -156,23 +156,23 @@ const InvoicePage: React.FunctionComponent = () => {
       });
 
       // Handle success
-      onSuccess("File uploaded successfully");
+      onSuccess("Tải tệp lên thành công");
       setProcessedData(data);
       setSelectedExpenseData({...selectedExpense,
         initialUnit: selectedExpense.currentUnit, 
         currentUnit: +data.electricMeterReading
       })
       notification.success({
-        message: "Upload Successful",
-        description: "The image has been processed successfully.",
+        message: "Tải ảnh lên thành công",
+        description: "Ảnh đã được xử lý thành công.",
       });
     } catch (error) {
       // Handle error
       console.error("Error uploading file:", error);
       onError(error);
       notification.error({
-        message: "Upload Failed",
-        description: "There was an error processing the image. Please try again.",
+        message: "Tải ảnh lên thất bại",
+        description: "Đã xảy ra lỗi khi xử lý ảnh. Vui lòng thử lại.",
       });
     } finally {
       setLoading(false);
@@ -188,8 +188,8 @@ const InvoicePage: React.FunctionComponent = () => {
     const isJpgOrPng = file.type === "image/jpeg" || file.type === "image/png";
     if (!isJpgOrPng) {
       notification.error({
-        message: "Invalid File Type",
-        description: "You can only upload JPG/PNG file!",
+        message: "Định dạng tệp không hợp lệ",
+        description: "Bạn chỉ có thể tải tệp JPG/PNG lên!",
       });
     }
     return isJpgOrPng;
@@ -205,9 +205,9 @@ const InvoicePage: React.FunctionComponent = () => {
           }}
         >
           <div>
-            <h2>Invoices</h2>
+            <h2>Hóa đơn</h2>
             <Typography style={{ marginBottom: "0.25rem" }}>
-              - Summarize all invoices, generate an invoice for a tenant (Require information from location, expense, rent owners)
+              - Tổng hợp chi phí và tạo hóa đơn cho người thuê (cần thông tin về phòng trọ, chi phí và chủ trọ)
             </Typography>
           </div>
           <div style={{ flex: 1 }}></div>
@@ -375,7 +375,7 @@ const InvoicePage: React.FunctionComponent = () => {
                     style={{width: '100%'}}
                     addonAfter={selectedExpense?.unitName || "Kw/h"}
                     value={Number(selectedExpense?.initialUnit || 0)}
-                    placeholder="Enter service price here"                  
+                    placeholder="Nhập giá dịch vụ"
                     onChange={(e) => {
                       debounce(setSelectedExpenseData({ ...selectedExpense, initialUnit: e }), 1000)
                     }}
@@ -388,7 +388,7 @@ const InvoicePage: React.FunctionComponent = () => {
                     style={{width: '100%'}}
                     addonAfter={selectedExpense?.unitName || "Kw/h"}
                     value={Number(selectedExpense?.currentUnit || 0)}
-                    placeholder="Enter service price here"
+                    placeholder="Nhập giá dịch vụ"
                     onChange={(e) => {
                       debounce(setSelectedExpenseData({ ...selectedExpense, currentUnit: e }), 1000);
                     }}
@@ -404,7 +404,7 @@ const InvoicePage: React.FunctionComponent = () => {
                     formatter={(e) => formatMoney(e)}
                     value={Number(selectedExpense?.price || 0)}
                     onChange={(e) => {debounce(setSelectedExpenseData({...selectedExpense, price: e.toString()}), 1000)}}
-                    placeholder="Enter service price here"
+                    placeholder="Nhập giá dịch vụ"
                   />
               </Form.Item>
             </Col>
@@ -423,7 +423,7 @@ const InvoicePage: React.FunctionComponent = () => {
                   >
                     <div>
                       <PlusOutlined />
-                      <div>Upload</div>
+                      <div>Tải lên</div>
                     </div>
                   </Upload>
                   
@@ -432,7 +432,7 @@ const InvoicePage: React.FunctionComponent = () => {
               <Col span={18}>
                 <Form.Item label={<span><SlidersOutlined style={{marginRight: '0.2rem'}}/>Thông số</span>}> 
                   {processedData ? (
-                      <Card title="Processed Image Data" style={{ marginTop: "1rem" }}>
+                      <Card title="Dữ liệu ảnh đã xử lý" style={{ marginTop: "1rem" }}>
                         <pre>{JSON.stringify(processedData, null, 2)}</pre>
                       </Card>
                     ) : <Card><Empty/></Card>}

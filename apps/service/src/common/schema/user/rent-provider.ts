@@ -1,6 +1,5 @@
-import { Column, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
+import { Column, PrimaryKey, Table } from "sequelize-typescript";
 import { BaseEntity } from "../base";
-import { RoleSchema } from "./role";
 
 @Table({ tableName: "rent_providers" })
 export class RentProviderSchema extends BaseEntity {
@@ -32,6 +31,7 @@ export class RentProviderSchema extends BaseEntity {
   @Column
   gender: number;
 
+  @Column
   genderName: string;
 
   @Column

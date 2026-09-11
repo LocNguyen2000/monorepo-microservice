@@ -61,11 +61,11 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
     serviceClient
       .delete(`/expense/${data.expenseCode}`)
       .then(() => {
-        useToast("success", "Delete Location successfully");
+        useToast("success", "Xóa chi phí thành công");
         loadData();
       })
       .catch((err) => {
-        useToast("error", "Delete Location failed");
+        useToast("error", "Xóa chi phí thất bại");
       });
   };
 
@@ -107,15 +107,14 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
       <Card style={{ padding: "0.25rem" }}>
         <Flex style={{ alignItems: "center" }}>
           <div>
-            <h2>Expenses</h2>
+            <h2>Chi phí</h2>
             <Typography>
-              - Expenses (Services fees) must be assigned to Locations so that when billed, the tenant in the Location
-              will be billed for that service.
+              - Chi phí dịch vụ phải được gán cho phòng trọ để tính vào hóa đơn của người thuê.
             </Typography>
           </div>
           <div style={{ flex: 1 }}></div>
           <Button type="primary" style={{ marginRight: "0.5rem" }} onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
-            <PlusCircleOutlined /> Add Service
+            <PlusCircleOutlined /> Thêm dịch vụ
           </Button>
           <Button size="middle" onClick={() => loadData()}>
             <ReloadOutlined />
@@ -142,8 +141,8 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
           onDeleteRow={(t: ExpenseDataType) =>
             useConfirm(
               "warning",
-              "Expense Deletion",
-              `Do you want to delete expense ${t.expenseName}?`,
+              "Xóa chi phí",
+              `Bạn có muốn xóa chi phí ${t.expenseName} không?`,
               async () => await deleteDataHandler(t)
             )
           }

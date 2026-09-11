@@ -30,7 +30,7 @@ export class LocationSchema extends BaseEntity {
   image?: string;
 
   @BelongsToMany(() => ExpenseSchema, () => ExpenseLocationSchema, "locationCode")
-  // @HasMany(() => ExpenseSchema)
+  @HasMany(() => ExpenseSchema)
   expenses?: Array<any>;
 }
 

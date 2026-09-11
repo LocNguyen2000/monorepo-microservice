@@ -39,17 +39,17 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
       if (action === ACTION_ENUM.ADD) {
         await serviceClient.post("/rent-provider", data);
 
-        useNotify("success", "New Owner Added", `Submit form successfully for ${data.providerName}`);
+        useNotify("success", "Thêm chủ trọ mới thành công", `Đã gửi biểu mẫu thành công cho ${data.providerName}`);
       } else if (action === ACTION_ENUM.EDIT) {
         await serviceClient.put(`/rent-provider/${data.providerCode}`, data);
 
-        useNotify("success", "Owner Updated Success", `Submit form successfully for ${data.providerName}`);
+        useNotify("success", "Cập nhật chủ trọ thành công", `Đã gửi biểu mẫu thành công cho ${data.providerName}`);
       }
 
       debounce(setIsFormOpen(ACTION_ENUM.CLOSE, {}));
     } catch (error) {
       console.log("Error", error);
-      useNotify("error", "Owner Submission Error", "Form submission failed");
+      useNotify("error", "Lỗi gửi thông tin chủ trọ", "Gửi biểu mẫu thất bại");
     }
   };
 
@@ -57,15 +57,15 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
     <Modal
       title={
         <Typography>
-          Provider Form
+          Biểu mẫu chủ trọ
           <Divider />
         </Typography>
       }
       centered
       open={isOpen}
-      okText="Submit"
-      onOk={() => useConfirm("confirm", "Owner Confirmation", "Are you sure to submit this owner?", async () => await formSubmitHandler())}
-      cancelText="Return"
+      okText="Gửi"
+      onOk={() => useConfirm("confirm", "Xác nhận chủ trọ", "Bạn có chắc chắn muốn gửi thông tin chủ trọ này không?", async () => await formSubmitHandler())}
+      cancelText="Quay lại"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
       width={800}
     >
@@ -77,22 +77,22 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
           overflow: "auto",
         }}
       >
-        <Form.Item label="Provider Code" required={true}>
-          <Input value={data.providerCode} name="providerCode" placeholder="Enter number here" onChange={(e) => formChangeHandler(e)} 
+        <Form.Item label="Mã chủ trọ" required={true}>
+          <Input value={data.providerCode} name="providerCode" placeholder="Nhập mã chủ trọ" onChange={(e) => formChangeHandler(e)} 
             addonAfter={<Button style={{border: 'none', height: 'auto'}} onClick={() => codeGenerator()}>Tự điền mã nhập</Button>}
           />
         </Form.Item>
-        <Form.Item label="Provider Name" required={true}>
-          <Input value={data.providerName} name="providerName" placeholder="Enter your name here" onChange={(e) => formChangeHandler(e)} />
+        <Form.Item label="Tên chủ trọ" required={true}>
+          <Input value={data.providerName} name="providerName" placeholder="Nhập tên chủ trọ" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Email" required={true}>
-          <Input value={data.email} name="email" placeholder="Enter your email here" onChange={(e) => formChangeHandler(e)} />
+          <Input value={data.email} name="email" placeholder="Nhập email" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Địa chỉ tạm trú">
-          <Input value={data.contactAddress} name="contactAddress" placeholder="Enter your address" onChange={(e) => formChangeHandler(e)} />
+          <Input value={data.contactAddress} name="contactAddress" placeholder="Nhập địa chỉ tạm trú" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Số điện thoại" required={true}>
-          <Input value={data.phoneNumber} name="phoneNumber" onChange={(e) => formChangeHandler(e)} placeholder="Enter your Số điện thoại" />
+          <Input value={data.phoneNumber} name="phoneNumber" onChange={(e) => formChangeHandler(e)} placeholder="Nhập số điện thoại" />
         </Form.Item>
         <Form.Item label="Ngày sinh">
           <DatePicker
@@ -117,7 +117,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
           </Radio.Group>
         </Form.Item>
 
-        <Form.Item label="No. rooms">
+        <Form.Item label="Số phòng">
           <InputNumber
             value={data.roomSize}
             name="roomSize"
@@ -126,8 +126,8 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
             }}
           />
         </Form.Item>
-        <Form.Item label="Description">
-          <TextArea rows={4} value={data.description} name="description" placeholder="Optional" onChange={(e) => formChangeHandler(e)} />
+        <Form.Item label="Mô tả">
+          <TextArea rows={4} value={data.description} name="description" placeholder="Không bắt buộc" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
       </Form>
     </Modal>

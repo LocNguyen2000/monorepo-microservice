@@ -1,4 +1,4 @@
-import { ExpenseSchema, LocationSchema } from '@nhl/schemas/user';
+import { ExpenseSchema, LocationSchema } from './schema/user';
 
 export type LocationWithExpenses = LocationSchema &
   Pick<

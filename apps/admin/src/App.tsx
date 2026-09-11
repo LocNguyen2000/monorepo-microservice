@@ -1,5 +1,3 @@
-import "antd/dist/reset.css";
-import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import { FunctionComponent } from "react";
 import { AuthenticatedRoute } from "./components/AuthenticatedRoute";
@@ -24,6 +22,8 @@ import { ServiceClient } from "./lib/clients";
 import { Divider, Flex } from "antd";
 import ExpenseList from "./pages/expense/ExpenseList";
 import InvoicePage from "./pages/invoice/InvoicePage";
+import './App.css';
+import "antd/dist/reset.css";
 
 export type NotificationType = "success" | "info" | "warning" | "error";
 export type ConfirmType = ModalFuncProps["type"];

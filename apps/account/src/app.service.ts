@@ -17,18 +17,16 @@ import {
   RoleSchema,
   AccountModel,
   AccountSchema,
-} from '@nhl/schemas/user';
+} from './common/schema/user';
 import { InjectModel } from '@nestjs/sequelize';
-import { JwtPayload } from 'jsonwebtoken';
 import { MailSenderClient } from './common/axios.client';
 import { EnvService } from '@nhl/env';
 import { Env } from './common/env';
-import * as bcrypt from 'bcrypt';
 import { AuthCodeService } from './auth/auth-code.service';
 import { TemplateEnum } from './common/constant';
 import { ClientService } from './auth/client.service';
 import { OAuthService } from './auth/oauth.service';
-import { TokenIntrospectionDto } from './common/dto';
+import { hashPassword, verifyPassword } from './common/utils';
 
 @Injectable()
 export class AppService {
@@ -59,8 +57,8 @@ export class AppService {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    // 🔒 Compare password using bcrypt
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    // 🔒 Compare password using argon2
+    const isPasswordValid = await verifyPassword(password, user.password);
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -94,7 +92,7 @@ export class AppService {
     if (existingUser) throw new ConflictException('Email already in use');
 
     // Encrypt password
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     // Generate 3-digit confirmation code
     const confirmationCode = this.authCodeService.generateAuthCode();

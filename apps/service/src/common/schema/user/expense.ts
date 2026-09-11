@@ -1,4 +1,4 @@
-import { BelongsToMany, Column, DataType, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
+import { BelongsToMany, Column, PrimaryKey, Table } from "sequelize-typescript";
 import { BaseEntity } from "../base";
 import { LocationSchema } from "./location";
 import { ExpenseLocationSchema } from "./expense-location";
@@ -22,10 +22,9 @@ export class ExpenseSchema extends BaseEntity {
   inUsed: boolean;
 
   @Column
-  unitName?: string
+  unitName?: string;
 
   @BelongsToMany(() => LocationSchema, () => ExpenseLocationSchema, "expenseCode")
-  // @HasMany(() => ExpenseSchema)
   locations?: Array<any>;
 }
 

@@ -11,7 +11,7 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import { TenantService } from './tenant.service';
-import { PaginatedQuery } from '~/common/pagination';
+import { PaginatedQuery } from '../common/pagination';
 
 @Controller('tenant')
 export class TenantController {

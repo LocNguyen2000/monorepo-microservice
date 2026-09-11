@@ -1,4 +1,4 @@
-import { RentProviderSchema } from '@nhl/schemas/user';
+import { RentProviderSchema } from '../../common/schema/user';
 
 export class UpsertRentProviderDto {
   providerCode: number;

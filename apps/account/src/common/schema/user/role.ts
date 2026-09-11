@@ -1,10 +1,4 @@
-import {
-  Column,
-  PrimaryKey,
-  Table,
-  Model,
-  AllowNull,
-} from "sequelize-typescript";
+import { AllowNull, Column, PrimaryKey, Table } from "sequelize-typescript";
 import { BaseEntity } from "../base";
 
 @Table({ tableName: "roles" })

@@ -7,10 +7,10 @@ import {
 import { Environment, EnvService } from '@nhl/env';
 import OpenAI from 'openai';
 import axios, { AxiosInstance } from 'axios';
-import { Env } from '~/common/env';
+import { Env } from '../common/env';
 import * as moment from 'moment';
-import { parseObjectFromContent } from '~/common/util';
-import { IElectricMeterImageResponse } from '~/common/interface';
+import { parseObjectFromContent } from '../common/util';
+import { IElectricMeterImageResponse } from '../common/interface';
 
 @Injectable()
 export class OpenAiService {

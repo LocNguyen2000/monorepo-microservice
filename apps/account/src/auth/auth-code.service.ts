@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { AuthCodeModel, AuthCodeSchema } from '@nhl/schemas/account';
+import { AuthCodeModel, AuthCodeSchema } from '../common/schema/account';
 import { CreateAuthCodeDto } from '../common/dto';
 
 @Injectable()

@@ -4,11 +4,11 @@ import Card from "antd/es/card/Card";
 
 const GuidanceTab = () => {
   const data = [
-    "Step 1: Create a new location for your rent house in the Location section.",
-    "Step 2: Add a new Rent Provider, as in your land owner. Fil in the form with your basic information and your renting locations.",
-    "Step 3: Everytime there's a new tenant, add their information in the Tenant section",
-    "Step 4: In Schedule section, You can create a schedule email event to inform anything you want with your tenant or your rent provider",
-    "Step 5: Overview section, check your renting progress.",
+    "Bước 1: Tạo phòng trọ mới trong mục Phòng trọ.",
+    "Bước 2: Thêm chủ trọ mới. Điền thông tin cơ bản và các phòng trọ đang cho thuê.",
+    "Bước 3: Mỗi khi có người thuê mới, hãy thêm thông tin của họ trong mục Người thuê.",
+    "Bước 4: Trong mục Lịch, bạn có thể tạo lịch gửi email để trao đổi với người thuê hoặc chủ trọ.",
+    "Bước 5: Kiểm tra tiến độ cho thuê trong mục Tổng quan.",
   ];
 
   return (
@@ -22,8 +22,8 @@ const GuidanceTab = () => {
         style={{ marginRight: "1rem" }}
         title={
           <>
-            <HomeOutlined className="override-antd-icon-item" /> How to manage
-            your dashboard
+            <HomeOutlined className="override-antd-icon-item" /> Cách quản lý
+            bảng điều khiển
           </>
         }
       >
@@ -41,18 +41,18 @@ const GuidanceTab = () => {
       <Card
         title={
           <Typography>
-            <BookOutlined className="override-antd-icon-item" /> Basic Concepts
+            <BookOutlined className="override-antd-icon-item" /> Khái niệm cơ bản
           </Typography>
         }
       >
         <div>
-          <Typography>Locations</Typography>
+          <Typography>Phòng trọ</Typography>
           <Divider />
-          <Typography>Rent Providers</Typography>
+          <Typography>Chủ trọ</Typography>
           <Divider />
-          <Typography>Tenants</Typography>
+          <Typography>Người thuê</Typography>
           <Divider />
-          <Typography>Inventory</Typography>
+          <Typography>Tài sản</Typography>
         </div>
       </Card>
     </div>

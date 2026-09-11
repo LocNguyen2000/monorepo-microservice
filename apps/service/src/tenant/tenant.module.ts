@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { TenantService } from './tenant.service';
 import { TenantController } from './tenant.controller';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { TenantSchema } from '@nhl/schemas/user';
+import { TenantSchema } from '../common/schema/user';
 
 @Module({
   imports: [SequelizeModule.forFeature([TenantSchema])],

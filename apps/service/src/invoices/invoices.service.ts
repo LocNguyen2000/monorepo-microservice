@@ -1,9 +1,9 @@
 import { Injectable, NotImplementedException } from '@nestjs/common';
-import { PaginatedQuery } from '~/common/pagination';
-import { RentProvidersService } from '~/rent-providers/rent-providers.service';
-import { TenantService } from '~/tenant/tenant.service';
-import { LocationsService } from '~/locations/locations.service';
-import { ExpenseService } from '~/expense/expense.service';
+import { PaginatedQuery } from '../common/pagination';
+import { RentProvidersService } from '../rent-providers/rent-providers.service';
+import { TenantService } from '../tenant/tenant.service';
+import { LocationsService } from '../locations/locations.service';
+import { ExpenseService } from '../expense/expense.service';
 
 @Injectable()
 export class InvoicesService {

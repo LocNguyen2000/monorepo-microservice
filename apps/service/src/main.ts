@@ -2,7 +2,7 @@ import { NestFactory, HttpAdapterHost } from '@nestjs/core';
 import { EnvService } from '@nhl/env';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
-import { AllExceptionsFilter } from '@nhl/error/exception.filter';
+import { AllExceptionsFilter } from '@nhl/error/filter';
 import { LoggingInterceptor } from '@nhl/error/interceptor';
 import { Env } from './common/env';
 

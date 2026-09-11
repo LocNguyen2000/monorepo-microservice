@@ -125,7 +125,7 @@ export const expenseColumns: ColumnsType<ExpenseDataType> = [
     dataIndex: "inUsed",
     key: "inUsed",
     align: "center",
-    render: (value) => (value === true ? "Yes" : "No"),
+    render: (value) => (value === true ? "Có" : "Không"),
   },
 ];
 

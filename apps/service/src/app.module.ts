@@ -10,9 +10,9 @@ import {
   TenantSchema,
   LocationSchema,
   ExpenseLocationSchema,
-} from '@nhl/schemas/user';
+} from './common/schema/user';
 import { LocationsModule } from './locations/locations.module';
-import { ExpenseSchema } from '@nhl/schemas/user/expense';
+import { ExpenseSchema } from './common/schema/user/expense';
 import { ExpenseModule } from './expense/expense.module';
 import { InvoicesModule } from './invoices/invoices.module';
 import { OpenAiModule } from './openai/openai.module';
@@ -27,6 +27,13 @@ import { SocketModule } from './socket/socket.module';
         const { pathname, username, hostname, port } = new URL(
           env.get('db.sqlUrl'),
         );
+        console.log('Connecting to database', {
+          dialect: 'mysql',
+          host: hostname,
+          port: +port,
+          username: username,
+          database: pathname.replace('/', ''),
+        });
         return {
           dialect: 'mysql',
           host: hostname,

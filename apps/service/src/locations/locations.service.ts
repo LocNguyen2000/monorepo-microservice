@@ -6,10 +6,10 @@ import {
   ExpenseSchema,
   LocationModel,
   LocationSchema,
-} from '@nhl/schemas/user';
+} from '../common/schema/user';
 import { InjectModel } from '@nestjs/sequelize';
-import { PaginatedQuery, paginatedQuery } from '~/common/pagination';
-import { LocationWithExpenses } from '~/common/types';
+import { PaginatedQuery, paginatedQuery } from '../common/pagination';
+import { LocationWithExpenses } from '../common/types';
 import { omit, pick } from 'lodash';
 
 @Injectable()

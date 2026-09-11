@@ -48,17 +48,17 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
       if (action === ACTION_ENUM.ADD) {
         await serviceClient.post("/tenant", { ...data });
 
-        useNotify("success", "New Tenant Added", `Submit form successfully for ${data.tenantName}`);
+        useNotify("success", "Thêm người thuê mới thành công", `Đã gửi biểu mẫu thành công cho ${data.tenantName}`);
       } else if (action === ACTION_ENUM.EDIT) {
         await serviceClient.put(`/tenant/${data.tenantCode}`, { ...data });
 
-        useNotify("success", "Tenant Updated Success", `Submit form successfully for ${data.tenantName}`);
+        useNotify("success", "Cập nhật người thuê thành công", `Đã gửi biểu mẫu thành công cho ${data.tenantName}`);
       }
 
       debounce(setIsFormOpen(ACTION_ENUM.CLOSE, {}));
     } catch (error) {
       console.log("Error", error);
-      useNotify("error", "Tenant Submission Error", `Form submission failed.`);
+      useNotify("error", "Lỗi gửi thông tin người thuê", "Gửi biểu mẫu thất bại.");
     }
   };
 
@@ -77,15 +77,15 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
     <Modal
       title={
         <Typography>
-          Tenant Form
+          Biểu mẫu người thuê
           <Divider />
         </Typography>
       }
       centered
       open={isOpen}
-      okText="Submit"
-      onOk={() => useConfirm("confirm", "Tenant Confirmation", "Are you sure to submit this tenant?", async () => await formSubmitHandler())}
-      cancelText="Return"
+      okText="Gửi"
+      onOk={() => useConfirm("confirm", "Xác nhận người thuê", "Bạn có chắc chắn muốn gửi thông tin người thuê này không?", async () => await formSubmitHandler())}
+      cancelText="Quay lại"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
       width={900}
     >
@@ -100,20 +100,20 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
           overflow: "auto",
         }}
       >
-        <Form.Item label="Mã chủ trọ" required={true}>
-          <Input name="tenantCode" value={data.tenantCode} placeholder="Enter a number here" onChange={(e) => formChangeHandler(e)} />
+        <Form.Item label="Mã người thuê" required={true}>
+          <Input name="tenantCode" value={data.tenantCode} placeholder="Nhập mã người thuê" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
-        <Form.Item label="Tên chủ trọ" required={true}>
-          <Input name="tenantName" value={data.tenantName} placeholder="Enter Tên chủ trọ" onChange={(e) => formChangeHandler(e)} />
+        <Form.Item label="Tên người thuê" required={true}>
+          <Input name="tenantName" value={data.tenantName} placeholder="Nhập tên người thuê" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Email" required={true}>
-          <Input name="email" value={data.email} placeholder="Enter valid email" onChange={(e) => formChangeHandler(e)} />
+          <Input name="email" value={data.email} placeholder="Nhập email hợp lệ" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Số điện thoại" required={true}>
-          <Input name="phoneNumber" value={data.phoneNumber} placeholder="Enter Số điện thoại" onChange={(e) => formChangeHandler(e)} />
+          <Input name="phoneNumber" value={data.phoneNumber} placeholder="Nhập số điện thoại" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Địa chỉ tạm trú" required={true}>
-          <Input name="contactAddress" value={data.contactAddress} placeholder="Enter contact address" onChange={(e) => formChangeHandler(e)} />
+          <Input name="contactAddress" value={data.contactAddress} placeholder="Nhập địa chỉ tạm trú" onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Ngày sinh">
           <DatePicker
@@ -139,7 +139,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
         <Form.Item label="Phòng trọ" required={true}>
           <Select
             showSearch
-            placeholder="Tenant Location"
+            placeholder="Chọn phòng trọ"
             value={data.locationCode}
             style={{fontWeight: '1000', color: globalTheme.token.colorPrimary}}
             disabled={Number.isSafeInteger(data?.locationCode)}
@@ -166,24 +166,24 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
           <Upload action="/upload.do" listType="picture-card">
             <button style={{ border: 0, background: "none" }} type="button">
               <PlusOutlined />
-              <div style={{ marginTop: 8 }}>Upload</div>
+              <div style={{ marginTop: 8 }}>Tải lên</div>
             </button>
           </Upload>
         </Form.Item>
         <Form.Item label="Thời gian hiệu lực">
           <RangePicker />
         </Form.Item>
-        <Form.Item label="Note">
+        <Form.Item label="Ghi chú">
           <TextArea
             rows={4}
-            placeholder="Take some notes!"
+            placeholder="Nhập ghi chú"
             value={data.description}
             onChange={(e) => {
               setData({ ...data, description: e.target.value });
             }}
           />
         </Form.Item>
-        <Form.Item label="Switch" valuePropName="checked">
+        <Form.Item label="Trạng thái hoạt động" valuePropName="checked">
           <Switch />
         </Form.Item>
       </Form>

@@ -5,8 +5,8 @@ import {
   ExpenseLocationSchema,
   ExpenseModel,
   ExpenseSchema,
-} from '@nhl/schemas/user';
-import { PaginatedQuery, paginatedQuery } from '~/common/pagination';
+} from '../common/schema/user';
+import { PaginatedQuery, paginatedQuery } from '../common/pagination';
 
 @Injectable()
 export class ExpenseService {

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { LocationsService } from './locations.service';
 import { LocationsController } from './locations.controller';
-import { ExpenseLocationSchema, LocationSchema } from '@nhl/schemas/user';
+import { ExpenseLocationSchema, LocationSchema } from '../common/schema/user';
 import { SequelizeModule } from '@nestjs/sequelize';
 
 @Module({

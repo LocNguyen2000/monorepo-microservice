@@ -34,17 +34,17 @@ const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, a
       if (action === ACTION_ENUM.ADD) {
         await serviceClient.post("/expense", data);
 
-        useNotify("success", "New Owner Added", `Submit form successfully for ${data.expenseName}`);
+        useNotify("success", "Thêm chi phí mới thành công", `Đã gửi biểu mẫu thành công cho ${data.expenseName}`);
       } else if (action === ACTION_ENUM.EDIT) {
         await serviceClient.put(`/expense/${data.expenseCode}`, data);
 
-        useNotify("success", "Owner Updated Success", `Submit form successfully for ${data.expenseName}`);
+        useNotify("success", "Cập nhật chi phí thành công", `Đã gửi biểu mẫu thành công cho ${data.expenseName}`);
       }
 
       debounce(setIsFormOpen(ACTION_ENUM.CLOSE, {}));
     } catch (error) {
       console.log("Error", error);
-      useNotify("error", "Owner Submission Error", "Form submission failed");
+      useNotify("error", "Lỗi gửi chi phí", "Gửi biểu mẫu thất bại");
     }
   };
 
@@ -52,19 +52,19 @@ const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, a
     <Modal
       title={
         <Typography>
-          Expense Form
+          Biểu mẫu chi phí
           <Divider />
         </Typography>
       }
       open={isOpen}
-      okText="Submit"
-      cancelText="Return"
+      okText="Gửi"
+      cancelText="Quay lại"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
       onOk={() =>
         useConfirm(
           "confirm",
-          "Expense Confirmation",
-          "Are you sure to submit this expense?",
+          "Xác nhận chi phí",
+          "Bạn có chắc chắn muốn gửi chi phí này không?",
           async () => await formSubmitHandler()
         )
       }

@@ -11,7 +11,7 @@ import {
   Patch,
 } from '@nestjs/common';
 import { LocationsService } from './locations.service';
-import { ExpenseSchema } from '@nhl/schemas/user';
+import { ExpenseSchema } from '../common/schema/user';
 
 @Controller('location')
 export class LocationsController {

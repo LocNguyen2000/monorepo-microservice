@@ -15,11 +15,20 @@ const symlinkFile = (apps) => {
 
       // only create non-exist file
       if (!fs.existsSync(configAppPath)) {
-        // make config folder
-        fs.mkdirSync(appFolderPath + "/config");
+        // make config folder if needed (idempotent for reruns)
+        fs.mkdirSync(appFolderPath + "/config", { recursive: true });
 
-        // create env json file in config app
-        fs.symlinkSync(configFilePath, configAppPath, "file");
+        try {
+          // create env json file in config app
+          fs.symlinkSync(configFilePath, configAppPath, "file");
+        } catch (error) {
+          if (error && error.code === "EPERM") {
+            fs.copyFileSync(configFilePath, configAppPath);
+          } else {
+            throw error;
+          }
+        }
+
         console.log(`Successfully created config file in ../apps/${app}`);
       } else {
         console.log(`Already successufly linked config file in ../apps/${app}`);

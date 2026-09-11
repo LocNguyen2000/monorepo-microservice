@@ -1,6 +1,5 @@
 import { Column, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
 import { BaseEntity } from "../base";
-import { RentProviderSchema } from "./rent-provider";
 import { LocationSchema } from "./location";
 
 @Table({ tableName: "tenants" })
@@ -24,6 +23,7 @@ export class TenantSchema extends BaseEntity {
   @Column
   gender: number;
 
+  @Column
   genderName: string;
 
   @Column

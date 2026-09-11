@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTenantDto } from './dto/create-tenant.dto';
 import { UpdateTenantDto } from './dto/update-tenant.dto';
-import { TenantModel, TenantSchema } from '@nhl/schemas/user';
+import { TenantModel, TenantSchema } from '../common/schema/user';
 import { InjectModel } from '@nestjs/sequelize';
-import { PaginatedQuery, paginatedQuery } from '~/common/pagination';
+import { PaginatedQuery, paginatedQuery } from '../common/pagination';
 
 @Injectable()
 export class TenantService {
