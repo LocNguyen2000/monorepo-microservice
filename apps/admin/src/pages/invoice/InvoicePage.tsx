@@ -36,6 +36,32 @@ import TextArea from "antd/es/input/TextArea";
 import { AxiosResponse } from "axios";
 // import { IElectricMeterImageResponse } from "./InvoiceDrawer";
 
+const invoiceExpenseColumns = expenseLocationColumns.map((column) => {
+  const dataIndex = "dataIndex" in column ? column.dataIndex : undefined;
+
+  if (dataIndex === "initialUnit" || dataIndex === "currentUnit") {
+    return {
+      ...column,
+      render: (value: number, expense: ExpenseLocationDataType) =>
+        String(expense.type) === "per_unit" ? value : "-",
+    };
+  }
+
+  if (dataIndex === "price") {
+    return {
+      ...column,
+      title: "Tổng giá tiền",
+      dataIndex: "price",
+      render: (_value: string, expense: ExpenseLocationDataType) =>
+        formatMoney(
+          (expense.currentUnit - expense.initialUnit) * Number(expense.price),
+        ),
+    };
+  }
+
+  return column;
+});
+
 export class IElectricMeterImageResponse {
   electricMeterReading: string;
   manufacturer: string;
@@ -296,19 +322,6 @@ const InvoicePage: React.FunctionComponent = () => {
         <Card className="expense-info" style={{ width: "50%" }}
           title={
             <Flex style={{ alignItems: "center" }}>
-              <Typography 
-                style={{ marginRight: "1rem", fontSize: "16px" }}>
-                <EuroCircleOutlined style={{ marginRight: "0.5rem" }} />
-                Tổng chi phí: {" "}
-                <span style={{ 
-                  fontWeight: "bold", 
-                  textDecoration: "underline", 
-                  fontStyle: "italic",
-                  color: globalTheme.token.colorPrimary
-                }}>
-                  {totalMoney + " VNĐ"}
-                </span>
-              </Typography>
               <div style={{flex: 1}}></div>
               <Button 
                 style={{marginRight: '0.5rem'}} 
@@ -337,7 +350,7 @@ const InvoicePage: React.FunctionComponent = () => {
         >
           <Typography style={{marginBottom: '0.2rem', color: '#de4614'}}>Kiểm tra kỹ càng các chi phí phía dưới:</Typography>
           <BaseTable
-            columns={expenseLocationColumns}
+            columns={invoiceExpenseColumns}
             data={expensesData}
             editable={true}
             onClickRow={(data: ExpenseLocationDataType) => {
@@ -346,6 +359,22 @@ const InvoicePage: React.FunctionComponent = () => {
               showDrawer();
             }}
           />
+          <Flex justify="flex-end" style={{ marginTop: "1rem" }}>
+            <Typography style={{ fontSize: "16px" }}>
+              <EuroCircleOutlined style={{ marginRight: "0.5rem" }} />
+              Tổng chi phí:{" "}
+              <span
+                style={{
+                  fontWeight: "bold",
+                  textDecoration: "underline",
+                  fontStyle: "italic",
+                  color: globalTheme.token.colorPrimary,
+                }}
+              >
+                {totalMoney + " VNĐ"}
+              </span>
+            </Typography>
+          </Flex>
         </Card>
       </Flex>
 

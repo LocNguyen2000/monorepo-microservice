@@ -97,19 +97,19 @@ const LocationDetail: React.FunctionComponent = () => {
       if (action === ACTION_ENUM.ADD) {
         await serviceClient.post("/location", formData);
 
-        useNotify("success", "New Location Added", `Submit form successfully for Location ${location.locationCode}`);
+        useNotify("success", "Thêm phòng trọ mới thành công", `Đã gửi biểu mẫu thành công cho phòng trọ ${location.locationCode}`);
       } else if (action === ACTION_ENUM.EDIT) {
         // update location
         await serviceClient.put(`/location/${location.locationCode}`, formData);
         // update expense based on location
         await serviceClient.patch(`/location/${location.locationCode}`, locationExpenses);
 
-        useNotify("success", "Location Updated Success", `Submit form successfully for Location ${location.locationCode}`);
+        useNotify("success", "Cập nhật phòng trọ thành công", `Đã gửi biểu mẫu thành công cho phòng trọ ${location.locationCode}`);
       }
       debounce(() => returnLocationTable(), 500);
     } catch (error) {
       console.log("Error", error);
-      useNotify("error", "Location Submission Error", "Form submission failed");
+      useNotify("error", "Lỗi gửi thông tin phòng trọ", "Gửi biểu mẫu thất bại");
     }
   };
 
@@ -162,13 +162,13 @@ const LocationDetail: React.FunctionComponent = () => {
         }}
       >
         <Form.Item label="Mã phòng trọ" required={true}>
-          <Input name="locationCode" placeholder="Enter a number here" value={location.locationCode} onChange={(e) => formChangeHandler(e)} />
+          <Input name="locationCode" placeholder="Nhập mã phòng trọ" value={location.locationCode} onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Tên phòng trọ" required={true}>
-          <Input name="locationName" placeholder="Name for location" value={location.locationName} onChange={(e) => formChangeHandler(e)} />
+          <Input name="locationName" placeholder="Nhập tên phòng trọ" value={location.locationName} onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
         <Form.Item label="Địa chỉ" required={true} style={{}}>
-          <Input name="locationAddress" value={location.locationAddress} onChange={(e) => formChangeHandler(e)} placeholder="Enter a location here" />
+          <Input name="locationAddress" value={location.locationAddress} onChange={(e) => formChangeHandler(e)} placeholder="Nhập địa chỉ phòng trọ" />
         </Form.Item>
         <Form.Item label="Số người ở" required={true}>
           <InputNumber
@@ -177,7 +177,7 @@ const LocationDetail: React.FunctionComponent = () => {
             onChange={(v) => {
               setLocation({ ...location, roomSize: v });
             }}
-            placeholder="A number of room in location"
+            placeholder="Nhập số người ở"
           />
         </Form.Item>
         <Form.Item label="Ảnh">
@@ -205,14 +205,14 @@ const LocationDetail: React.FunctionComponent = () => {
           >
             <button style={{ border: 0, background: "none" }} type="button">
               <PlusOutlined />
-              <div style={{ marginTop: 8 }}>Upload</div>
+              <div style={{ marginTop: 8 }}>Tải lên</div>
             </button>
           </Upload>
         </Form.Item>
         <Form.Item label="Chủ trọ">
           <Select
             showSearch
-            placeholder="Select owner of location"
+            placeholder="Chọn chủ trọ"
             value={location.owner}
             onChange={(e) => {
               setLocation({ ...location, owner: e });
@@ -232,7 +232,7 @@ const LocationDetail: React.FunctionComponent = () => {
           <Select
             showSearch
             mode="multiple"
-            placeholder="Select expenses for location"
+            placeholder="Chọn chi phí cho phòng trọ"
             value={locationExpenses.map((el) => el.expenseCode)}
             style={{ marginBottom: "1rem" }}
             onDeselect={(value) => updateExpense("DESELECT", value)}
@@ -248,7 +248,7 @@ const LocationDetail: React.FunctionComponent = () => {
           <BaseTable columns={expenseLocationColumns} data={locationExpenses} size="small" />
         </Form.Item>
         <Form.Item label="Mô tả">
-          <TextArea rows={4} name="description" placeholder="Enter description" value={location.description} onChange={(e) => formChangeHandler(e)} />
+          <TextArea rows={4} name="description" placeholder="Nhập mô tả" value={location.description} onChange={(e) => formChangeHandler(e)} />
         </Form.Item>
       </Form>
 
@@ -259,16 +259,16 @@ const LocationDetail: React.FunctionComponent = () => {
             returnLocationTable();
           }}
         >
-          Return
+          Quay lại
         </Button>
         <Button
           type="primary"
           htmlType="submit"
           onClick={(e) => {
-            useConfirm("confirm", "New Location", "Are you sure to submit location?", () => formSubmitHandler());
+            useConfirm("confirm", "Xác nhận phòng trọ", "Bạn có chắc chắn muốn gửi thông tin phòng trọ này không?", () => formSubmitHandler());
           }}
         >
-          Submit
+          Gửi
         </Button>
       </Form.Item>
     </Card>

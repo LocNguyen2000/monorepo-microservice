@@ -7,7 +7,7 @@ import { Button, Divider, Pagination } from "antd";
 import { DeleteOutlined, PlusCircleOutlined, ReloadOutlined } from "@ant-design/icons";
 import { expenseColumns } from "../../lib/constants/columns";
 import { PathContext, getGlobalContext } from "../../lib/context";
-import { IPagination, ExpenseDataType, PaginatedResponse } from "../../lib/interface";
+import { IPagination, ExpenseDataType, PaginatedResponse, TenantDataType } from "../../lib/interface";
 import { useNavigate } from "react-router-dom";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 import { MENU_LIST } from "../Dashboard";
@@ -137,7 +137,7 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
           isLoading={isLoading}
           editable
           size="small"
-          // onDblClickRow={(t: TenantDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
+          onDblClickRow={(t: ExpenseDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
           onDeleteRow={(t: ExpenseDataType) =>
             useConfirm(
               "warning",

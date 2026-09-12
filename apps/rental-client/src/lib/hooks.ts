@@ -1,19 +1,19 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { ScreenRoutes } from "../lib/constant";
 import { getGlobalContext } from "../lib/context";
 
 const useAuthCheck = () => {
-  const navigate = useNavigate();
+  const router = useRouter();
   useEffect(() => {
     const authUser = JSON.parse(localStorage.getItem("authUser") || "{}");
     const token = authUser?.accessToken;
 
     if (token) {
-        navigate(ScreenRoutes.Home);
+        router.push(ScreenRoutes.Home);
     }
 
-  }, [navigate]);
+  }, [router]);
 
 };
 

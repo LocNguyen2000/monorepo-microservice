@@ -42,6 +42,7 @@ export interface LocationDataType {
   description?: string;
   owner?: string;
   image?: string;
+  expenses?: ExpenseDataType[];
 }
 
 export enum ExpenseType {
@@ -70,7 +71,6 @@ export interface ExpenseLocationDataType extends ExpenseDataType {
   locationCode: string;
   initialUnit: number;
   currentUnit: number;
-  unitName?: string;
 }
 
 export interface InvoiceDataType {

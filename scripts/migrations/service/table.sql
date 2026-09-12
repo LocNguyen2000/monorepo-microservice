@@ -80,7 +80,7 @@ create table if not exists expenses_location (
 
 alter table tenants add column `contractUrl` varchar(500) default null;
 
-alter table expenses add column `unitName` varchar(30) not null default 'unit';
-alter table expenses_location add column `initialUnit` int not null default 0;
-alter table expenses_location add column `currentUnit` int not null default 0;
-a
+alter table expenses_location add column createdAt datetime DEFAULT NOW();
+alter table expenses_location add column updatedAt datetime DEFAULT NULL;
+alter table expenses_location add column createdBy varchar(50) DEFAULT NULL;
+alter table expenses_location add column updatedBy varchar(50) DEFAULT NULL;

@@ -9,6 +9,7 @@ import notification from "antd/es/notification";
 import Modal, { ModalFuncProps } from "antd/es/modal";
 import OverviewPage from "./pages/overview/Overview";
 import ConfigProvider from "antd/es/config-provider";
+import viVN from "antd/locale/vi_VN";
 import MyProfilePage from "./pages/MyProfile";
 import RentProviderList from "./pages/provider/RentProviderList";
 import TenantList from "./pages/tenant/TenantList";
@@ -72,7 +73,7 @@ const App: FunctionComponent<AppProps> = () => {
         type: "primary",
         style: { backgroundColor: globalTheme.token.colorPrimary, borderRadius: globalTheme.token.borderRadius },
       },
-      okText: "Submit",
+      okText: "Xác nhận",
       onOk(...args) {
         return confirmHandler();
       },
@@ -83,7 +84,7 @@ const App: FunctionComponent<AppProps> = () => {
   };
 
   return (
-    <ConfigProvider theme={globalTheme}>
+    <ConfigProvider locale={viVN} theme={globalTheme}>
       <GlobalContext.Provider
         value={{
           authUser: { userId: 1, name: "Nguyen Huu Loc", role: "Administrator" },

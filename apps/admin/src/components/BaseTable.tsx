@@ -40,7 +40,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
 }) => {
   const withEditColumn = (columns: ColumnsType<any>) => {
     const editTableColumn: ColumnType<any> = {
-      title: "Action",
+      title: "Thao tác",
       dataIndex: "action",
       align: "center",
       render: (value, record) => {
@@ -54,7 +54,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
                     cursor: "pointer",
                   }}
                   color="primary"
-                  title="Double click here to open information"
+                  title="Nhấn để mở thông tin"
                 />
               </Button>
             ) : (
@@ -71,7 +71,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
                     cursor: "pointer",
                   }}
                   color="primary"
-                  title="Click here to delete information"
+                  title="Nhấn để xóa thông tin"
                 />
               </Button>
             ) : (

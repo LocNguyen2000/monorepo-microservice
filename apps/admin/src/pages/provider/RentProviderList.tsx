@@ -59,11 +59,11 @@ const RentProviderList = () => {
     serviceClient
       .delete(`/rent-provider/${data.providerCode}`)
       .then(() => {
-        useToast("success", "Delete Owner successfully");
+        useToast("success", "Xóa chủ trọ thành công");
         loadData();
       })
       .catch((err) => {
-        useToast("error", "Delete Owner failed");
+        useToast("error", "Xóa chủ trọ thất bại");
       });
   };
 
@@ -110,10 +110,10 @@ const RentProviderList = () => {
         </div>
         <div style={{ flex: 1 }}></div>
 
-        <Input placeholder="Enter search value here" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
+        <Input placeholder="Nhập nội dung tìm kiếm" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
 
         <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
-          <UserAddOutlined /> Add
+          <UserAddOutlined /> Thêm
         </Button>
 
         <Button size="middle" onClick={() => loadData()}>
@@ -133,7 +133,7 @@ const RentProviderList = () => {
         size="middle"
         onDblClickRow={(p: ProviderDataType) => openFormHandler(ACTION_ENUM.EDIT, p)}
         onDeleteRow={(t: ProviderDataType) =>
-          useConfirm("warning", "Owner Deletion", `Do you want to delete owner ${t.providerName}?`, async () => await deleteDataHandler(t))
+          useConfirm("warning", "Xóa chủ trọ", `Bạn có muốn xóa chủ trọ ${t.providerName} không?`, async () => await deleteDataHandler(t))
         }
       />
 

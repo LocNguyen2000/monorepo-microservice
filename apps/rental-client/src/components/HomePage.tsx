@@ -1,5 +1,4 @@
 import { FunctionComponent,  useEffect, useState } from "react"
-import { useNavigate } from "react-router-dom"
 import { getGlobalContext } from "../lib/context"
 import { Layout } from "antd"
 import { Content } from "antd/es/layout/layout"
@@ -12,7 +11,6 @@ import { useSyncAuthUser } from "../lib/hooks"
 
 const HomePage: FunctionComponent<{}> = () => {
     const {authUser, setAuthUser} = getGlobalContext()
-    const navigate = useNavigate()
     const [locations, setLocations] = useState([]);
     const { serviceClient } = getGlobalContext()
 

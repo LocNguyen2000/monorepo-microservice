@@ -1,7 +1,7 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { Form, Input, Checkbox, Button, Flex } from "antd";
 import Card from "antd/es/card/Card";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { getGlobalContext } from "../lib/context";
 import { ScreenRoutes } from "../lib/constant";
 import {useAuthCheck} from "../lib/hooks";
@@ -9,10 +9,9 @@ import {useAuthCheck} from "../lib/hooks";
 interface LoginPageProps {}
 
 const LoginPage: FunctionComponent<LoginPageProps> = () => {
-  const params = location.search
-  const callbackUri = params.substring(13, params.length) || ScreenRoutes.Home
+  const router = useRouter();
+  const callbackUri = ScreenRoutes.Home;
   const { setAuthUser, accountClient, useToast } = getGlobalContext()
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   useAuthCheck()
@@ -32,7 +31,7 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
       localStorage.setItem('authUser', JSON.stringify({id, email, fullName, role}))
       
       setAuthUser({...response.data})
-      navigate(ScreenRoutes.Home)
+      router.push(ScreenRoutes.Home)
     } catch (error) {
       useToast("error", error.response?.data?.message || "Đăng nhập thất bại!");
     } finally {
@@ -80,7 +79,7 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
               Đăng nhập
             </Button>
 
-            <Button type="default" size="large" onClick={() => navigate(ScreenRoutes.Register)}>
+            <Button type="default" size="large" onClick={() => router.push(ScreenRoutes.Register)}>
               Đăng ký tài khoản mới?
             </Button>
           </Form.Item>

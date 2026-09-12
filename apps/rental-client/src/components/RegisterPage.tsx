@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Button, Form, Input, Select, Typography, Card, Modal } from "antd";
-import { useNavigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
 import { getGlobalContext } from "../lib/context";
 import { ScreenRoutes } from "../lib/constant";
 
@@ -9,7 +9,7 @@ const { Option } = Select;
 
 const RegisterPage = () => {
   const [form] = Form.useForm();
-  const navigate = useNavigate();
+  const router = useRouter();
   const {accountClient, useToast} = getGlobalContext()
   const [isVerificationModalVisible, setIsVerificationModalVisible] = useState(false);
   const [email, setEmail] = useState("");
@@ -17,7 +17,7 @@ const RegisterPage = () => {
 
   // Redirect to login
   const backToLogin = () => {
-    navigate(ScreenRoutes.Login);
+    router.push(ScreenRoutes.Login);
   };
 
   // Handle form submission
@@ -39,7 +39,7 @@ const RegisterPage = () => {
       await accountClient.post("account/verify", { email, code: +verificationCode });
       useToast("success", "Xác nhận thành công! Đăng nhập ngay.");
       setIsVerificationModalVisible(false);
-      navigate(ScreenRoutes.Login);
+      router.push(ScreenRoutes.Login);
     } catch (error) {
       useToast("error", error.response?.data?.message || "Xác nhận thất bại!");
     }

@@ -63,11 +63,11 @@ const TenantList = () => {
     serviceClient
       .delete(`/tenant/${data.tenantCode}`)
       .then(() => {
-        useToast("success", "Delete Tenant successfully");
+        useToast("success", "Xóa người thuê thành công");
         loadData();
       })
       .catch((err) => {
-        useToast("error", "Delete Tenant failed");
+        useToast("error", "Xóa người thuê thất bại");
       });
   };
 
@@ -113,10 +113,10 @@ const TenantList = () => {
         </div>
         <div style={{ flex: 1 }}></div>
 
-        <Input placeholder="Enter search value here" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
+        <Input placeholder="Nhập nội dung tìm kiếm" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
 
         <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
-          <UserAddOutlined /> Add
+          <UserAddOutlined /> Thêm
         </Button>
 
         <Button size="middle" onClick={() => loadData()}>
@@ -136,7 +136,7 @@ const TenantList = () => {
         size="middle"
         onDblClickRow={(t: TenantDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
         onDeleteRow={(t: TenantDataType) =>
-          useConfirm("warning", "Tenant Deletion", `Do you want to delete tenant ${t.tenantName}?`, async () => await deleteDataHandler(t))
+          useConfirm("warning", "Xóa người thuê", `Bạn có muốn xóa người thuê ${t.tenantName} không?`, async () => await deleteDataHandler(t))
         }
       />
 

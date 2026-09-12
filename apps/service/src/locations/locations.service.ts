@@ -36,7 +36,15 @@ export class LocationsService {
   }
 
   findAll(query: PaginatedQuery) {
-    return paginatedQuery<LocationSchema>(this.locationModel, query);
+    return paginatedQuery<LocationSchema>(this.locationModel, query, {
+      include: [
+        {
+          model: ExpenseSchema,
+          through: { attributes: [] },
+        },
+      ],
+      distinct: true,
+    });
   }
 
   async findOne(id: number) {
@@ -132,6 +140,10 @@ export class LocationsService {
       }, {} as LocationSchema),
       expenseKeys,
     ) as LocationSchema;
+
+    formatLocation.expenses?.sort(
+      (expenseA, expenseB) => Number(expenseB.price) - Number(expenseA.price),
+    );
 
     console.log(formatLocation);
 

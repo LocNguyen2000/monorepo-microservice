@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import { getGlobalContext } from "../../lib/context";
-import { Navigate } from "react-router-dom";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { ScreenRoutes } from "../../lib/constant";
 import { useSyncAuthUser } from "../../lib/hooks";
 
@@ -11,10 +12,28 @@ interface IAuthenticatedRoute {
 export const AuthenticatedRoute: FunctionComponent<IAuthenticatedRoute> = ({
   children,
 }) => {
-  const {authUser} = getGlobalContext()
+  const router = useRouter();
+  const { authUser, setAuthUser } = getGlobalContext();
+  const [checked, setChecked] = useState(false);
 
-  if (!authUser) {
-    return <Navigate to={ScreenRoutes.Login} />;
+  useEffect(() => {
+    const storedUser = localStorage.getItem("authUser");
+    if (!storedUser) {
+      router.replace(ScreenRoutes.Login);
+      return;
+    }
+
+    try {
+      setAuthUser(JSON.parse(storedUser));
+      setChecked(true);
+    } catch {
+      localStorage.removeItem("authUser");
+      router.replace(ScreenRoutes.Login);
+    }
+  }, [router, setAuthUser]);
+
+  if (!checked || !authUser) {
+    return null;
   }
 
   return children;

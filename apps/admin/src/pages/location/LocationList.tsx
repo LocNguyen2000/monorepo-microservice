@@ -37,6 +37,15 @@ const LocationList = () => {
   const { setPathFromKey } = useContext(PathContext);
   const navigate = useNavigate();
 
+  const getConstantExpensePrice = (location: LocationDataType) => {
+    const prices = (location.expenses ?? [])
+      .filter((expense) => String(expense.type) === "constant")
+      .map((expense) => Number(expense.price))
+      .filter((price) => Number.isFinite(price));
+
+    return prices.length > 0 ? Math.max(...prices) : undefined;
+  };
+
   const setLoadingSekeleton = (callback?: () => void) => {
     setIsLoading(true);
 
@@ -61,11 +70,11 @@ const LocationList = () => {
     serviceClient
       .delete(`/location/${data.locationCode}`)
       .then(() => {
-        useToast("success", "Delete Location successfully");
+        useToast("success", "Xóa phòng trọ thành công");
         loadData();
       })
       .catch((err) => {
-        useToast("error", "Delete Location failed");
+        useToast("error", "Xóa phòng trọ thất bại");
       });
   };
 
@@ -114,9 +123,9 @@ const LocationList = () => {
             </Typography>
           </div>
           <div style={{ flex: 1 }}></div>
-          <Input placeholder="Enter search value here" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
+          <Input placeholder="Nhập nội dung tìm kiếm" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
           <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={(e) => openLocationForm()}>
-            <HomeOutlined /> Add
+            <HomeOutlined /> Thêm
           </Button>
 
           <Button size="middle" onClick={() => loadData()}>
@@ -151,13 +160,29 @@ const LocationList = () => {
                 key={l.locationCode}
                 hoverable
                 style={{ width: 400, marginRight: "0.5rem" }}
-                cover={l.image ? <img alt="example" height={100} src={`${l.image}`} /> : <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}
+                cover={
+                  l.image ? (
+                    <img
+                      alt={l.locationName}
+                      src={l.image}
+                      style={{
+                        width: "100%",
+                        aspectRatio: "1 / 1",
+                        objectFit: "cover",
+                      }}
+                    />
+                  ) : (
+                    <div style={{ aspectRatio: "1 / 1", display: "grid", placeItems: "center" }}>
+                      <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    </div>
+                  )
+                }
                 actions={[
                   <BellFilled />,
                   <EditFilled
                     value="Chinh sua"
                     key="edit"
-                    title="Edit this location!"
+                    title="Chỉnh sửa phòng trọ"
                     className="override-antd-icon-item"
                     onClick={() => openLocationForm(l.locationCode)}
                   />,
@@ -165,12 +190,12 @@ const LocationList = () => {
                     size={300}
                     key="delete"
                     className="override-antd-icon-item"
-                    title="Delete this location!"
+                        title="Xóa phòng trọ"
                     onClick={() => {
                       useConfirm(
                         "warning",
-                        "Location Deletion",
-                        `Do you want to delete location ${l.locationCode}?`,
+                        "Xóa phòng trọ",
+                        `Bạn có muốn xóa phòng trọ ${l.locationCode} không?`,
                         async () => await deleteDataHandler(l)
                       );
                     }}
@@ -183,7 +208,9 @@ const LocationList = () => {
                   description={
                     <>
                       <Tag color="blue">{l.roomSize} người </Tag>
-                      <Tag color="success">Giá phòng : 200.000 VND</Tag>
+                      <Tag color="success">
+                        Giá phòng : {getConstantExpensePrice(l)?.toLocaleString("vi-VN") ?? "-"} VND
+                      </Tag>
                       <Tag
                         color="warning"
                         style={{
