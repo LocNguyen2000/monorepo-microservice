@@ -46,6 +46,7 @@ create table if not exists tenants (
     `gender` int not null,
     `roomateCount` int NOT NULL,
     `description` varchar(200),
+    `contractUrl` varchar(500),
     `createdAt` datetime DEFAULT NOW(),
     `updatedAt` datetime DEFAULT NULL,
     `createdBy` varchar(50) DEFAULT NULL,
@@ -76,3 +77,10 @@ create table if not exists expenses_location (
     CONSTRAINT FOREIGN KEY (`locationCode`) REFERENCES locations (`locationCode`),
     CONSTRAINT FOREIGN KEY (`expenseCode`) REFERENCES expenses (`expenseCode`)
 );
+
+alter table tenants add column `contractUrl` varchar(500) default null;
+
+alter table expenses add column `unitName` varchar(30) not null default 'unit';
+alter table expenses_location add column `initialUnit` int not null default 0;
+alter table expenses_location add column `currentUnit` int not null default 0;
+a

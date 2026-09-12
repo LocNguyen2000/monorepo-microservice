@@ -1,4 +1,4 @@
-import { Button, Divider, Flex, Form, InputNumber, Select, Tag, Upload } from "antd";
+import { Button, Divider, Flex, Form, InputNumber, Select, Tag, Typography, Upload } from "antd";
 import Card from "antd/es/card/Card";
 import { useLocation, useNavigate } from "react-router-dom";
 import Input from "antd/es/input";
@@ -20,6 +20,7 @@ const DEFAULT_CURRENT_UNIT = 1;
 const LocationDetail: React.FunctionComponent = () => {
   const [location, setLocation] = useState<Partial<LocationDataType>>({});
   const [locationExpenses, setLocationExpenses] = useState<ExpenseLocationDataType[]>([]);
+  const [imageFile, setImageFile] = useState<File>();
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
   const [expenses, setExpenses] = useState<ExpenseDataType[]>([]);
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.ADD);
@@ -85,13 +86,21 @@ const LocationDetail: React.FunctionComponent = () => {
 
   const formSubmitHandler = async () => {
     try {
+      const formData = new FormData();
+      Object.entries(location).forEach(([key, value]) => {
+        if (key !== "expenses" && value !== undefined && value !== null) {
+          formData.append(key, String(value));
+        }
+      });
+      if (imageFile) formData.append("image", imageFile);
+
       if (action === ACTION_ENUM.ADD) {
-        await serviceClient.post("/location", location);
+        await serviceClient.post("/location", formData);
 
         useNotify("success", "New Location Added", `Submit form successfully for Location ${location.locationCode}`);
       } else if (action === ACTION_ENUM.EDIT) {
         // update location
-        await serviceClient.put(`/location/${location.locationCode}`, location);
+        await serviceClient.put(`/location/${location.locationCode}`, formData);
         // update expense based on location
         await serviceClient.patch(`/location/${location.locationCode}`, locationExpenses);
 
@@ -172,7 +181,28 @@ const LocationDetail: React.FunctionComponent = () => {
           />
         </Form.Item>
         <Form.Item label="Ảnh">
-          <Upload action="/upload.do" listType="picture-card">
+          {location.image && (
+            <Typography.Link href={location.image} target="_blank" rel="noreferrer">
+              Xem ảnh hiện tại
+            </Typography.Link>
+          )}
+          <Upload
+            accept="image/*"
+            maxCount={1}
+            beforeUpload={(file) => {
+              if (file.size > 50 * 1024 * 1024) {
+                useNotify("error", "Tệp quá lớn", "Kích thước tệp không được vượt quá 50 MB.");
+                return Upload.LIST_IGNORE;
+              }
+              setImageFile(file);
+              return false;
+            }}
+            onRemove={() => {
+              setImageFile(undefined);
+              return true;
+            }}
+            listType="picture-card"
+          >
             <button style={{ border: 0, background: "none" }} type="button">
               <PlusOutlined />
               <div style={{ marginTop: 8 }}>Upload</div>

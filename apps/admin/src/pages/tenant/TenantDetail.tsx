@@ -32,6 +32,7 @@ type ISelectLocations = Pick<LocationDataType, "locationCode" | "locationName">[
 
 export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ data, setData, isOpen, setIsFormOpen, action }) => {
   const [locations, setLocations] = useState<ISelectLocations>([]);
+  const [contractFile, setContractFile] = useState<File>();
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -45,16 +46,28 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
     try {
       console.log(action);
 
+      const formData = new FormData();
+      Object.entries(data).forEach(([key, value]) => {
+        if (value !== undefined && value !== null) {
+          formData.append(
+            key,
+            value instanceof Date ? value.toISOString() : String(value),
+          );
+        }
+      });
+      if (contractFile) formData.append("contract", contractFile);
+
       if (action === ACTION_ENUM.ADD) {
-        await serviceClient.post("/tenant", { ...data });
+        await serviceClient.post("/tenant", formData);
 
         useNotify("success", "Thêm người thuê mới thành công", `Đã gửi biểu mẫu thành công cho ${data.tenantName}`);
       } else if (action === ACTION_ENUM.EDIT) {
-        await serviceClient.put(`/tenant/${data.tenantCode}`, { ...data });
+        await serviceClient.put(`/tenant/${data.tenantCode}`, formData);
 
         useNotify("success", "Cập nhật người thuê thành công", `Đã gửi biểu mẫu thành công cho ${data.tenantName}`);
       }
 
+      setContractFile(undefined);
       debounce(setIsFormOpen(ACTION_ENUM.CLOSE, {}));
     } catch (error) {
       console.log("Error", error);
@@ -163,7 +176,28 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
           />
         </Form.Item>
         <Form.Item label="Ảnh hợp đồng/CCCD" valuePropName="fileList">
-          <Upload action="/upload.do" listType="picture-card">
+          {data.contractUrl && (
+            <Typography.Link href={data.contractUrl} target="_blank" rel="noreferrer">
+              Xem hợp đồng đã tải lên
+            </Typography.Link>
+          )}
+          <Upload
+            accept="image/*,.pdf"
+            maxCount={1}
+            beforeUpload={(file) => {
+              if (file.size > 50 * 1024 * 1024) {
+                useNotify("error", "Tệp quá lớn", "Kích thước tệp không được vượt quá 50 MB.");
+                return Upload.LIST_IGNORE;
+              }
+              setContractFile(file);
+              return false;
+            }}
+            onRemove={() => {
+              setContractFile(undefined);
+              return true;
+            }}
+            listType="picture-card"
+          >
             <button style={{ border: 0, background: "none" }} type="button">
               <PlusOutlined />
               <div style={{ marginTop: 8 }}>Tải lên</div>

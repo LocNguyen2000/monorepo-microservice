@@ -1,11 +1,10 @@
-import { BelongsToMany, Column, ForeignKey, HasMany, PrimaryKey, Table } from "sequelize-typescript";
-import { BaseEntity } from "../base";
+import { BelongsToMany, Column, ForeignKey, Model, PrimaryKey, Table } from "sequelize-typescript";
 import { RentProviderSchema } from "./rent-provider";
 import { ExpenseSchema } from "./expense";
 import { ExpenseLocationSchema } from "./expense-location";
 
-@Table({ tableName: "locations" })
-export class LocationSchema extends BaseEntity {
+@Table({ tableName: "locations", timestamps: false })
+export class LocationSchema extends Model {
   @PrimaryKey
   @Column
   locationCode: string;
@@ -30,7 +29,6 @@ export class LocationSchema extends BaseEntity {
   image?: string;
 
   @BelongsToMany(() => ExpenseSchema, () => ExpenseLocationSchema, "locationCode")
-  @HasMany(() => ExpenseSchema)
   expenses?: Array<any>;
 }
 

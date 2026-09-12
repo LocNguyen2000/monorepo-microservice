@@ -9,6 +9,28 @@ class OpenAIRateLimit {
   perMinute: number;
 }
 
+class FilePostRateLimit {
+  @IsNumber()
+  perSecond: number;
+
+  @IsNumber()
+  perMonth: number;
+}
+
+export class FilePost {
+  @IsUrl()
+  url: string;
+
+  @IsString()
+  apiKey: string;
+
+  @IsNumber()
+  maxFileSizeMb: number;
+
+  @IsObject()
+  rateLimit: FilePostRateLimit;
+}
+
 export class OpenAI {
   @IsUrl()
   url: string;
@@ -32,4 +54,7 @@ export class Env extends GlobalEnv {
 
   @IsObject()
   openAi: OpenAI;
+
+  @IsObject()
+  filePost: FilePost;
 }

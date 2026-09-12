@@ -11,6 +11,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { PaginatedQuery, paginatedQuery } from '../common/pagination';
 import { LocationWithExpenses } from '../common/types';
 import { omit, pick } from 'lodash';
+import { FilePostService } from '../filepost/filepost.service';
 
 @Injectable()
 export class LocationsService {
@@ -19,10 +20,19 @@ export class LocationsService {
     private readonly locationModel: LocationModel,
     @InjectModel(ExpenseLocationSchema)
     private readonly expenseLocationRepository: ExpenseLocationModel,
+    private readonly filePostService: FilePostService,
   ) {}
 
-  async create(createLocationDto: Record<string, unknown>) {
-    return this.locationModel.create(createLocationDto);
+  async create(
+    createLocationDto: Record<string, unknown>,
+    image?: Express.Multer.File,
+  ) {
+    const imageUrl = image ? await this.filePostService.upload(image) : undefined;
+
+    return this.locationModel.create({
+      ...createLocationDto,
+      ...(imageUrl ? { image: imageUrl } : {}),
+    });
   }
 
   findAll(query: PaginatedQuery) {
@@ -44,8 +54,14 @@ export class LocationsService {
     return result;
   }
 
-  async update(id: number, payload: Record<string, unknown>) {
+  async update(
+    id: number,
+    payload: Record<string, unknown>,
+    image?: Express.Multer.File,
+  ) {
     try {
+      const imageUrl = image ? await this.filePostService.upload(image) : undefined;
+
       payload = pick(payload, [
         'locationName',
         'locationAddress',
@@ -54,6 +70,7 @@ export class LocationsService {
         'image',
         'owner',
       ]);
+      if (imageUrl) payload.image = imageUrl;
       console.log(payload);
 
       const instance = await this.locationModel.findByPk(id);

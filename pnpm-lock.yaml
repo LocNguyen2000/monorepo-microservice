@@ -28,7 +28,7 @@ importers:
         version: 10.3.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)
       '@nestjs/sequelize':
         specifier: 10.0.0
-        version: 10.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)(sequelize-typescript@2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2))(sequelize@6.35.2)
+        version: 10.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)(sequelize-typescript@2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5)))(sequelize@6.35.2(mysql2@3.6.5))
       '@types/jsonwebtoken':
         specifier: ^9.0.8
         version: 9.0.10
@@ -50,6 +50,9 @@ importers:
       lodash:
         specifier: 4.17.21
         version: 4.17.21
+      mysql2:
+        specifier: 3.6.5
+        version: 3.6.5
       reflect-metadata:
         specifier: 0.1.13
         version: 0.1.13
@@ -59,9 +62,12 @@ importers:
       rxjs:
         specifier: 7.2.0
         version: 7.2.0
+      sequelize:
+        specifier: 6.35.2
+        version: 6.35.2(mysql2@3.6.5)
       sequelize-typescript:
         specifier: 2.1.6
-        version: 2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2)
+        version: 2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5))
     devDependencies:
       '@nestjs/cli':
         specifier: 9.0.0
@@ -93,6 +99,9 @@ importers:
       '@types/node':
         specifier: 18.11.18
         version: 18.11.18
+      '@types/sequelize':
+        specifier: 4.28.19
+        version: 4.28.19
       '@types/supertest':
         specifier: ^2.0.11
         version: 2.0.11
@@ -280,7 +289,7 @@ importers:
         version: 11.2.3(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/websockets@11.2.3)(rxjs@7.2.0)
       '@nestjs/sequelize':
         specifier: 10.0.0
-        version: 10.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)(sequelize-typescript@2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2))(sequelize@6.35.2)
+        version: 10.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)(sequelize-typescript@2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5)))(sequelize@6.35.2(mysql2@3.6.5))
       '@nestjs/websockets':
         specifier: ^11.0.7
         version: 11.2.3(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)
@@ -296,12 +305,18 @@ importers:
       class-validator:
         specifier: 0.14.0
         version: 0.14.0
+      form-data:
+        specifier: 4.0.6
+        version: 4.0.6
       lodash:
         specifier: 4.17.21
         version: 4.17.21
       moment:
         specifier: ^2.30.1
         version: 2.30.1
+      mysql2:
+        specifier: 3.6.5
+        version: 3.6.5
       openai:
         specifier: ^4.76.3
         version: 4.104.0(ws@8.21.3)
@@ -316,10 +331,10 @@ importers:
         version: 7.2.0
       sequelize:
         specifier: 6.35.2
-        version: 6.35.2
+        version: 6.35.2(mysql2@3.6.5)
       sequelize-typescript:
         specifier: 2.1.6
-        version: 2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2)
+        version: 2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5))
       ws:
         specifier: ^8.18.0
         version: 8.21.3
@@ -2277,6 +2292,10 @@ packages:
     resolution: {integrity: sha512-ZySD7Nf91aLB0RxL4KGrKHBXl7Eds1DAmEdcoVawXnLD7SDhpNgtuII2aAkg7a7QS41jxPSZ17p4VdGnMHk3MQ==, tarball: https://registry.npmjs.org/delayed-stream/-/delayed-stream-1.0.0.tgz}
     engines: {node: '>=0.4.0'}
 
+  denque@2.1.0:
+    resolution: {integrity: sha512-HVQE3AAb/pxF8fQAoiqpvg9i3evqug3hoiwakOyZAwJm+6vZehbkYXZ0l4JxS+I3QxM97v5aaRNhj8v5oBhekw==, tarball: https://registry.npmjs.org/denque/-/denque-2.1.0.tgz}
+    engines: {node: '>=0.10'}
+
   depd@2.0.0:
     resolution: {integrity: sha512-g7nH6P6dyDioJogAAGprGpCtVImJhpPk/roCzdb3fIh61/s/nPsfR6onyMwkCAR/OlC3yBC0lESvUoQEAssIrw==, tarball: https://registry.npmjs.org/depd/-/depd-2.0.0.tgz}
     engines: {node: '>= 0.8'}
@@ -2835,6 +2854,9 @@ packages:
   functional-red-black-tree@1.0.1:
     resolution: {integrity: sha512-dsKNQNdj6xA3T+QlADDA7mOSlX0qiMINjn0cgr+eGHGsbSHzTabcIogz2+p/iqP1Xs6EP/sS2SbqH+brGTbq0g==, tarball: https://registry.npmjs.org/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz}
 
+  generate-function@2.3.1:
+    resolution: {integrity: sha512-eeB5GfMNeevm/GRYq20ShmsaGcmI81kIX2K9XQx5miC8KdHaC6Jm0qQ8ZNeGOi7wYB8OsdxKs+Y2oVuTFuVwKQ==, tarball: https://registry.npmjs.org/generate-function/-/generate-function-2.3.1.tgz}
+
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==, tarball: https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz}
     engines: {node: '>=6.9.0'}
@@ -3056,6 +3078,9 @@ packages:
   is-number@7.0.0:
     resolution: {integrity: sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==, tarball: https://registry.npmjs.org/is-number/-/is-number-7.0.0.tgz}
     engines: {node: '>=0.12.0'}
+
+  is-property@1.0.2:
+    resolution: {integrity: sha512-Ks/IoX00TtClbGQr4TWXemAnktAQvYB7HzcCxDGqEZU6oCmb2INHuOoKxbtR+HFkmYWBKv/dOZtGRiAjDhj92g==, tarball: https://registry.npmjs.org/is-property/-/is-property-1.0.2.tgz}
 
   is-stream@2.0.1:
     resolution: {integrity: sha512-hFoiJiTl63nn+kstHGBtewWSKnQLpyb155KHheA1l39uvtO9nWIop1p3udqPcUd/xbF1VLMO4n7OI6p7RbngDg==, tarball: https://registry.npmjs.org/is-stream/-/is-stream-2.0.1.tgz}
@@ -3478,12 +3503,23 @@ packages:
     resolution: {integrity: sha512-8XPvpAA8uyhfteu8pIvQxpJZ7SYYdpUivZpGy6sFsBuKRY/7rQGavedeB8aK+Zkyq6upMFVL/9AW6vOYzfRyLg==, tarball: https://registry.npmjs.org/log-symbols/-/log-symbols-4.1.0.tgz}
     engines: {node: '>=10'}
 
+  long@5.3.2:
+    resolution: {integrity: sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==, tarball: https://registry.npmjs.org/long/-/long-5.3.2.tgz}
+
   loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==, tarball: https://registry.npmjs.org/loose-envify/-/loose-envify-1.4.0.tgz}
     hasBin: true
 
   lru-cache@5.1.1:
     resolution: {integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==, tarball: https://registry.npmjs.org/lru-cache/-/lru-cache-5.1.1.tgz}
+
+  lru-cache@8.0.5:
+    resolution: {integrity: sha512-MhWWlVnuab1RG5/zMRRcVGXZLCXrZTgfwMikgzCegsPnG62yDQo5JnqKkrK4jO5iKqDAZGItAqN5CtKBCBWRUA==, tarball: https://registry.npmjs.org/lru-cache/-/lru-cache-8.0.5.tgz}
+    engines: {node: '>=16.14'}
+
+  lru.min@1.1.5:
+    resolution: {integrity: sha512-5J9ysMYUpYIg9RF2vJpy9SinEmSviFSe0GyPpCQ4L5QSkLAgeLXlTAOu2ZwWUU5m+0SBl6gUU1R1ZQB3aKypfA==, tarball: https://registry.npmjs.org/lru.min/-/lru.min-1.1.5.tgz}
+    engines: {bun: '>=1.0.0', deno: '>=1.30.0', node: '>=8.0.0'}
 
   macos-release@2.5.1:
     resolution: {integrity: sha512-DXqXhEM7gW59OjZO8NIjBCz9AQ1BEMrfiOAl4AYByHCtVHRF4KoGNO8mqQeM8lRCtQe/UnJ4imO/d2HdkKsd+A==, tarball: https://registry.npmjs.org/macos-release/-/macos-release-2.5.1.tgz}
@@ -3600,6 +3636,14 @@ packages:
 
   mute-stream@0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==, tarball: https://registry.npmjs.org/mute-stream/-/mute-stream-0.0.8.tgz}
+
+  mysql2@3.6.5:
+    resolution: {integrity: sha512-pS/KqIb0xlXmtmqEuTvBXTmLoQ5LmAz5NW/r8UyQ1ldvnprNEj3P9GbmuQQ2J0A4LO+ynotGi6TbscPa8OUb+w==, tarball: https://registry.npmjs.org/mysql2/-/mysql2-3.6.5.tgz}
+    engines: {node: '>= 8.0'}
+
+  named-placeholders@1.1.6:
+    resolution: {integrity: sha512-Tz09sEL2EEuv5fFowm419c1+a/jSMiBjI9gHxVLrVdbUkkNUUfjsVYs9pVZu5oCon/kmRh9TfLEObFtkVxmY0w==, tarball: https://registry.npmjs.org/named-placeholders/-/named-placeholders-1.1.6.tgz}
+    engines: {node: '>=8.0.0'}
 
   nanoid@3.3.19:
     resolution: {integrity: sha512-Y2tUNy4ouw6tq5oDSKeQYGOyhkUBhNOcGV/02KC+6kd9eDGqdZd++mjMiIDilrBYvjEnCYvVtsuHCuP+okSfug==, tarball: https://registry.npmjs.org/nanoid/-/nanoid-3.3.19.tgz}
@@ -4266,6 +4310,9 @@ packages:
     resolution: {integrity: sha512-qqWzuOjSFOuqPjFe4NOsMLafToQQwBSOEpS+FwEt3A2V3vKubTquT3vmLTQpFgMXp8AlFWFuP1qKaJZOtPpVXg==, tarball: https://registry.npmjs.org/send/-/send-0.18.0.tgz}
     engines: {node: '>= 0.8.0'}
 
+  seq-queue@0.0.5:
+    resolution: {integrity: sha512-hr3Wtp/GZIc/6DAGPDcV4/9WoZhjrkXsi5B/07QgX8tsdc6ilr7BFM6PM6rbdAX1kFSDYeZGLipIZZKyQP0O5Q==, tarball: https://registry.npmjs.org/seq-queue/-/seq-queue-0.0.5.tgz}
+
   sequelize-pool@7.1.0:
     resolution: {integrity: sha512-G9c0qlIWQSK29pR/5U2JF5dDQeqqHRragoyahj/Nx4KOOQ3CPPfzxnfqFPCSB7x5UgjOgnZ61nSxz+fjDpRlJg==, tarball: https://registry.npmjs.org/sequelize-pool/-/sequelize-pool-7.1.0.tgz}
     engines: {node: '>= 10.0.0'}
@@ -4388,6 +4435,10 @@ packages:
 
   sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==, tarball: https://registry.npmjs.org/sprintf-js/-/sprintf-js-1.0.3.tgz}
+
+  sqlstring@2.3.3:
+    resolution: {integrity: sha512-qC9iz2FlN7DQl3+wjwn3802RTyjCx7sDvfQEXchwa6CWOx07/WVfh91gBmQ9fahw8snwGEWU3xGzOt4tFyHLxg==, tarball: https://registry.npmjs.org/sqlstring/-/sqlstring-2.3.3.tgz}
+    engines: {node: '>= 0.6'}
 
   stack-utils@2.0.6:
     resolution: {integrity: sha512-XlkWvfIm6RmsWtNJx+uqtKLS8eqFbxUg0ZzLXqY0caEy9l7hruX8IpiDnjsLavoBgqCCR71TqWO8MaXYheJ3RQ==, tarball: https://registry.npmjs.org/stack-utils/-/stack-utils-2.0.6.tgz}
@@ -6139,24 +6190,24 @@ snapshots:
     transitivePeerDependencies:
       - chokidar
 
-  '@nestjs/sequelize@10.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)(sequelize-typescript@2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2))(sequelize@6.35.2)':
+  '@nestjs/sequelize@10.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)(sequelize-typescript@2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5)))(sequelize@6.35.2(mysql2@3.6.5))':
     dependencies:
       '@nestjs/common': 9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)
       '@nestjs/core': 9.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/platform-express@10.3.0)(@nestjs/websockets@11.2.3)(reflect-metadata@0.1.13)(rxjs@7.2.0)
       reflect-metadata: 0.1.13
       rxjs: 7.2.0
-      sequelize: 6.35.2
-      sequelize-typescript: 2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2)
+      sequelize: 6.35.2(mysql2@3.6.5)
+      sequelize-typescript: 2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5))
       uuid: 9.0.0
 
-  '@nestjs/sequelize@10.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)(sequelize-typescript@2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2))(sequelize@6.35.2)':
+  '@nestjs/sequelize@10.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)(sequelize-typescript@2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5)))(sequelize@6.35.2(mysql2@3.6.5))':
     dependencies:
       '@nestjs/common': 9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0)
       '@nestjs/core': 9.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/platform-express@10.3.0)(@nestjs/websockets@11.2.3)(reflect-metadata@0.1.13)(rxjs@7.2.0)
       reflect-metadata: 0.1.13
       rxjs: 7.2.0
-      sequelize: 6.35.2
-      sequelize-typescript: 2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2)
+      sequelize: 6.35.2(mysql2@3.6.5)
+      sequelize-typescript: 2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5))
       uuid: 9.0.0
 
   '@nestjs/testing@9.0.0(@nestjs/common@9.0.0(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.1.13)(rxjs@7.2.0))(@nestjs/core@9.0.0)(@nestjs/platform-express@10.3.0)':
@@ -7459,6 +7510,8 @@ snapshots:
 
   delayed-stream@1.0.0: {}
 
+  denque@2.1.0: {}
+
   depd@2.0.0: {}
 
   destroy@1.2.0: {}
@@ -8039,6 +8092,10 @@ snapshots:
 
   functional-red-black-tree@1.0.1: {}
 
+  generate-function@2.3.1:
+    dependencies:
+      is-property: 1.0.2
+
   gensync@1.0.0-beta.2: {}
 
   get-caller-file@2.0.5: {}
@@ -8263,6 +8320,8 @@ snapshots:
   is-interactive@1.0.0: {}
 
   is-number@7.0.0: {}
+
+  is-property@1.0.2: {}
 
   is-stream@2.0.1: {}
 
@@ -9082,6 +9141,8 @@ snapshots:
       chalk: 4.1.2
       is-unicode-supported: 0.1.0
 
+  long@5.3.2: {}
+
   loose-envify@1.4.0:
     dependencies:
       js-tokens: 4.0.0
@@ -9089,6 +9150,10 @@ snapshots:
   lru-cache@5.1.1:
     dependencies:
       yallist: 3.1.1
+
+  lru-cache@8.0.5: {}
+
+  lru.min@1.1.5: {}
 
   macos-release@2.5.1: {}
 
@@ -9193,6 +9258,21 @@ snapshots:
       xtend: 4.0.2
 
   mute-stream@0.0.8: {}
+
+  mysql2@3.6.5:
+    dependencies:
+      denque: 2.1.0
+      generate-function: 2.3.1
+      iconv-lite: 0.6.3
+      long: 5.3.2
+      lru-cache: 8.0.5
+      named-placeholders: 1.1.6
+      seq-queue: 0.0.5
+      sqlstring: 2.3.3
+
+  named-placeholders@1.1.6:
+    dependencies:
+      lru.min: 1.1.5
 
   nanoid@3.3.19: {}
 
@@ -9915,25 +9995,27 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
+  seq-queue@0.0.5: {}
+
   sequelize-pool@7.1.0: {}
 
-  sequelize-typescript@2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2):
+  sequelize-typescript@2.1.6(@types/node@16.0.0)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5)):
     dependencies:
       '@types/node': 16.0.0
       '@types/validator': 13.15.10
       glob: 7.2.0
       reflect-metadata: 0.1.13
-      sequelize: 6.35.2
+      sequelize: 6.35.2(mysql2@3.6.5)
 
-  sequelize-typescript@2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2):
+  sequelize-typescript@2.1.6(@types/node@18.11.18)(@types/validator@13.15.10)(reflect-metadata@0.1.13)(sequelize@6.35.2(mysql2@3.6.5)):
     dependencies:
       '@types/node': 18.11.18
       '@types/validator': 13.15.10
       glob: 7.2.0
       reflect-metadata: 0.1.13
-      sequelize: 6.35.2
+      sequelize: 6.35.2(mysql2@3.6.5)
 
-  sequelize@6.35.2:
+  sequelize@6.35.2(mysql2@3.6.5):
     dependencies:
       '@types/debug': 4.1.13
       '@types/validator': 13.15.10
@@ -9951,6 +10033,8 @@ snapshots:
       uuid: 8.3.2
       validator: 13.15.35
       wkx: 0.5.0
+    optionalDependencies:
+      mysql2: 3.6.5
     transitivePeerDependencies:
       - supports-color
 
@@ -10039,6 +10123,8 @@ snapshots:
   sourcemap-codec@1.4.8: {}
 
   sprintf-js@1.0.3: {}
+
+  sqlstring@2.3.3: {}
 
   stack-utils@2.0.6:
     dependencies:

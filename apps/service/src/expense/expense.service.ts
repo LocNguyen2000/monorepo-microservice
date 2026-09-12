@@ -16,7 +16,10 @@ export class ExpenseService {
   ) {}
 
   create(payload: Record<string, unknown>) {
-    return this.expenseRepository.create(payload);
+    return this.expenseRepository.create({
+      ...payload,
+      unitName: payload.unitName || 'unit',
+    });
   }
 
   findAll(query: PaginatedQuery) {

@@ -23,7 +23,6 @@ export class TenantSchema extends BaseEntity {
   @Column
   gender: number;
 
-  @Column
   genderName: string;
 
   @Column
@@ -44,6 +43,9 @@ export class TenantSchema extends BaseEntity {
 
   @Column
   description?: string;
+
+  @Column
+  contractUrl?: string;
 }
 
 export type TenantModel = typeof TenantSchema;

@@ -8,8 +8,10 @@ import {
   Delete,
   Put,
   Query,
-  UsePipes,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { TenantService } from './tenant.service';
 import { PaginatedQuery } from '../common/pagination';
 
@@ -18,8 +20,12 @@ export class TenantController {
   constructor(private readonly tenantService: TenantService) {}
 
   @Post()
-  create(@Body() createTenantDto: Record<string, unknown>) {
-    return this.tenantService.create(createTenantDto);
+  @UseInterceptors(FileInterceptor('contract'))
+  create(
+    @Body() createTenantDto: Record<string, unknown>,
+    @UploadedFile() contract?: Express.Multer.File,
+  ) {
+    return this.tenantService.create(createTenantDto, contract);
   }
 
   @Get()
@@ -33,11 +39,13 @@ export class TenantController {
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('contract'))
   update(
     @Param('id') id: string,
     @Body() updateTenantDto: Record<string, unknown>,
+    @UploadedFile() contract?: Express.Multer.File,
   ) {
-    return this.tenantService.update(+id, updateTenantDto);
+    return this.tenantService.update(+id, updateTenantDto, contract);
   }
 
   @Delete(':id')

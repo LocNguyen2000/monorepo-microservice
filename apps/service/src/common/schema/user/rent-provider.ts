@@ -31,7 +31,6 @@ export class RentProviderSchema extends BaseEntity {
   @Column
   gender: number;
 
-  @Column
   genderName: string;
 
   @Column

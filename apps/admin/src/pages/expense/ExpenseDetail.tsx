@@ -124,6 +124,14 @@ const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, a
             ))}
           </Select>
         </Form.Item>
+        <Form.Item label="Đơn vị tính" required={true}>
+          <Input
+            value={data.unitName}
+            name="unitName"
+            placeholder="Ví dụ: kWh, người, tháng"
+            onChange={(e) => formChangeHandler(e)}
+          />
+        </Form.Item>
         <Form.Item label="Trạng thái" required={true}>
           <Radio.Group
             value={data.inUsed}

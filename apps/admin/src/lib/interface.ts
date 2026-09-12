@@ -31,6 +31,7 @@ export interface TenantDataType {
   locationCode?: string;
   roomateCount?: number;
   description?: string;
+  contractUrl?: string;
 }
 
 export interface LocationDataType {
@@ -62,6 +63,7 @@ export interface ExpenseDataType {
   type: ExpenseUnitType;
   price: string;
   inUsed: string;
+  unitName: string;
 }
 
 export interface ExpenseLocationDataType extends ExpenseDataType {

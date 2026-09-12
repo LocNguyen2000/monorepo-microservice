@@ -7,9 +7,11 @@ import {
   Delete,
   Put,
   Query,
-  UsePipes,
   Patch,
+  UploadedFile,
+  UseInterceptors,
 } from '@nestjs/common';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { LocationsService } from './locations.service';
 import { ExpenseSchema } from '../common/schema/user';
 
@@ -18,8 +20,12 @@ export class LocationsController {
   constructor(private readonly locationsService: LocationsService) {}
 
   @Post()
-  create(@Body() payload: Record<string, unknown>) {
-    return this.locationsService.create(payload);
+  @UseInterceptors(FileInterceptor('image'))
+  create(
+    @Body() payload: Record<string, unknown>,
+    @UploadedFile() image?: Express.Multer.File,
+  ) {
+    return this.locationsService.create(payload, image);
   }
 
   @Get()
@@ -33,11 +39,13 @@ export class LocationsController {
   }
 
   @Put(':id')
+  @UseInterceptors(FileInterceptor('image'))
   update(
     @Param('id') id: string,
     @Body() updateLocationDto: Record<string, unknown>,
+    @UploadedFile() image?: Express.Multer.File,
   ) {
-    return this.locationsService.update(+id, updateLocationDto);
+    return this.locationsService.update(+id, updateLocationDto, image);
   }
 
   @Patch(':id')

@@ -35,7 +35,9 @@
     "reflect-metadata": "0.1.13",
     "rimraf": "3.0.2",
     "rxjs": "7.2.0",
-    "sequelize-typescript": "2.1.6"
+    "sequelize-typescript": "2.1.6",
+    "mysql2": "3.6.5",
+    "sequelize": "6.35.2"
   },
   "devDependencies": {
     "@nestjs/cli": "9.0.0",
@@ -44,6 +46,7 @@
     "@nestjs/testing": "9.0.0",
     "@nhl/env": "workspace:*",
     "@nhl/error": "workspace:1.0.0",
+    "@types/sequelize": "4.28.19",
     "@types/axios": "0.14.0",
     "@types/express": "4.17.13",
     "@types/jest": "29.2.4",
