@@ -17,6 +17,31 @@ class FilePostRateLimit {
   perMonth: number;
 }
 
+class MailJSTemplate {
+  @IsString()
+  invoice: string;
+}
+
+class MailJS {
+  @IsUrl()
+  url: string;
+
+  @IsString()
+  userId: string;
+
+  @IsString()
+  serviceId: string;
+
+  @IsString()
+  adminEmail: string;
+
+  @IsNumber()
+  timeoutMs: number;
+
+  @IsObject()
+  template: MailJSTemplate;
+}
+
 export class FilePost {
   @IsUrl()
   url: string;
@@ -57,4 +82,7 @@ export class Env extends GlobalEnv {
 
   @IsObject()
   filePost: FilePost;
+
+  @IsObject()
+  mailjs: MailJS;
 }

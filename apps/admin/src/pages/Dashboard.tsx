@@ -74,7 +74,7 @@ export const MENU_LIST: IAntdMenuItem[] = [
     text: "Lệnh lịch thông báo",
     key: "6",
     icon: <ScheduleOutlined className="override-antd-icon-item" />,
-    // path: DASHBOARD_ROUTES.SCHEDULE,
+    path: DASHBOARD_ROUTES.SCHEDULE,
   },
   {
     text: "Trang cá nhân",
@@ -109,7 +109,11 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
         setMenuItem(selected);
         navigate(selected.path);
       } else {
-        useNotify("warning", "Under construction!", "Cannot access this page yet.");
+        useNotify(
+          "warning",
+          "Under construction!",
+          "Cannot access this page yet.",
+        );
       }
     }
   };
@@ -127,7 +131,10 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
 
           <BaseHeader />
 
-          <Content style={contentStyle} className="m-content-child-margin m-background-dashboard">
+          <Content
+            style={contentStyle}
+            className="m-content-child-margin m-background-dashboard"
+          >
             <Outlet />
           </Content>
 

@@ -4,3 +4,6 @@ export * from "./location";
 export * from "./expense";
 export * from "./expense-location";
 export * from "./tenant-location";
+export * from "./invoice";
+export * from "./invoice-expense";
+export * from "./invoice-schedule";

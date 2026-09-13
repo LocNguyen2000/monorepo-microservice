@@ -11,6 +11,9 @@ import {
   LocationSchema,
   ExpenseLocationSchema,
   TenantLocationSchema,
+  InvoiceSchema,
+  InvoiceExpenseSchema,
+  InvoiceScheduleSchema,
 } from './common/schema/user';
 import { LocationsModule } from './locations/locations.module';
 import { ExpenseSchema } from './common/schema/user/expense';
@@ -48,6 +51,9 @@ import { SocketModule } from './socket/socket.module';
             ExpenseSchema,
             ExpenseLocationSchema,
             TenantLocationSchema,
+            InvoiceSchema,
+            InvoiceExpenseSchema,
+            InvoiceScheduleSchema,
           ],
           logging: false,
           sync: {

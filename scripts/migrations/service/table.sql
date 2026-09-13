@@ -139,3 +139,56 @@ deallocate prepare drop_tenant_location_column;
 -- 
 ALTER TABLE tenants 
 DROP COLUMN roomateCount;
+
+-- create invoice table
+
+
+create table if not exists invoices (
+    `invoiceCode` int not null auto_increment,
+    `locationCode` int not null,
+    `totalAmount` decimal(15, 2) not null default 0,
+    `status` varchar(30) not null default 'DRAFT',
+    `createdAt` datetime DEFAULT NOW(),
+    `updatedAt` datetime DEFAULT NULL,
+    `createdBy` varchar(50) DEFAULT NULL,
+    `updatedBy` varchar(50) DEFAULT NULL,
+    PRIMARY KEY (`invoiceCode`),
+    CONSTRAINT FOREIGN KEY (`locationCode`) REFERENCES locations (`locationCode`)
+);
+
+create table if not exists invoice_expenses (
+    `invoiceExpenseCode` int not null auto_increment,
+    `invoiceCode` int not null,
+    `expenseCode` int not null,
+    `expenseName` varchar(100) not null,
+    `type` varchar(100) not null,
+    `unitName` varchar(30),
+    `initialUnit` decimal(15, 2) not null default 0,
+    `currentUnit` decimal(15, 2) not null default 0,
+    `unitPrice` decimal(15, 2) not null default 0,
+    `amount` decimal(15, 2) not null default 0,
+    `createdAt` datetime DEFAULT NOW(),
+    `updatedAt` datetime DEFAULT NULL,
+    `createdBy` varchar(50) DEFAULT NULL,
+    `updatedBy` varchar(50) DEFAULT NULL,
+    PRIMARY KEY (`invoiceExpenseCode`),
+    CONSTRAINT FOREIGN KEY (`invoiceCode`) REFERENCES invoices (`invoiceCode`),
+    CONSTRAINT FOREIGN KEY (`expenseCode`) REFERENCES expenses (`expenseCode`)
+);
+
+create table if not exists invoice_schedules (
+    `locationCode` int not null,
+    `invoiceCode` int default null,
+    `dueDay` int not null,
+    `enabled` boolean not null default true,
+    `lastNotifiedAt` datetime default null,
+    `lastStatus` varchar(30) default null,
+    `lastError` text default null,
+    `createdAt` datetime default NOW(),
+    `updatedAt` datetime default null,
+    `createdBy` varchar(50) default null,
+    `updatedBy` varchar(50) default null,
+    PRIMARY KEY (`locationCode`),
+    CONSTRAINT FOREIGN KEY (`locationCode`) REFERENCES locations (`locationCode`),
+    CONSTRAINT FOREIGN KEY (`invoiceCode`) REFERENCES invoices (`invoiceCode`)
+);

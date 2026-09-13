@@ -78,6 +78,30 @@ export interface InvoiceDataType {
   owner?: ProviderDataType;
 }
 
+export interface InvoiceSummaryDataType {
+  invoiceCode: number;
+  locationCode: number;
+  totalAmount: number;
+  status: string;
+  createdAt?: string;
+}
+
+export interface InvoiceScheduleDataType {
+  locationCode: number;
+  invoiceCode?: number;
+  dueDay: number;
+  enabled: boolean;
+  lastNotifiedAt?: string;
+  lastStatus?: string;
+  lastError?: string;
+}
+
+export interface InvoiceScheduleRowDataType {
+  location: LocationDataType;
+  schedule: InvoiceScheduleDataType | null;
+  invoices: InvoiceSummaryDataType[];
+}
+
 export interface IAntdMenuItem {
   text: string;
   key: string;

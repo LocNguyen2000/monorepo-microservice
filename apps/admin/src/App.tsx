@@ -1,7 +1,7 @@
 import Dashboard from "./pages/Dashboard";
 import { FunctionComponent } from "react";
 import { AuthenticatedRoute } from "./components/AuthenticatedRoute";
-import { BrowserRouter, Navigate, Route, RouterProvider, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DASHBOARD_ROUTES } from "./lib/constants/routes";
 import { GlobalContext } from "./lib/context";
 import LoginPage from "./pages/LoginPage";
@@ -23,7 +23,8 @@ import { ServiceClient } from "./lib/clients";
 import { Divider, Flex } from "antd";
 import ExpenseList from "./pages/expense/ExpenseList";
 import InvoicePage from "./pages/invoice/InvoicePage";
-import './App.css';
+import SchedulePage from "./pages/schedule/SchedulePage";
+import "./App.css";
 import "antd/dist/reset.css";
 
 export type NotificationType = "success" | "info" | "warning" | "error";
@@ -46,7 +47,7 @@ const App: FunctionComponent<AppProps> = () => {
   const openNotification = (
     type: NotificationType,
     title: string = "Notification Title",
-    message: string = "This is the content of the notification. This is the content of the notification. This is the content of the notification."
+    message: string = "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
   ) => {
     api[type]({
       message: title,
@@ -54,7 +55,12 @@ const App: FunctionComponent<AppProps> = () => {
     });
   };
 
-  const openConfirm = (type: ConfirmType, title: string, content: string, confirmHandler: () => void) => {
+  const openConfirm = (
+    type: ConfirmType,
+    title: string,
+    content: string,
+    confirmHandler: () => void,
+  ) => {
     Modal.confirm({
       centered: true,
       type,
@@ -71,7 +77,10 @@ const App: FunctionComponent<AppProps> = () => {
       ),
       okButtonProps: {
         type: "primary",
-        style: { backgroundColor: globalTheme.token.colorPrimary, borderRadius: globalTheme.token.borderRadius },
+        style: {
+          backgroundColor: globalTheme.token.colorPrimary,
+          borderRadius: globalTheme.token.borderRadius,
+        },
       },
       okText: "Xác nhận",
       onOk(...args) {
@@ -87,7 +96,11 @@ const App: FunctionComponent<AppProps> = () => {
     <ConfigProvider locale={viVN} theme={globalTheme}>
       <GlobalContext.Provider
         value={{
-          authUser: { userId: 1, name: "Nguyen Huu Loc", role: "Administrator" },
+          authUser: {
+            userId: 1,
+            name: "Nguyen Huu Loc",
+            role: "Administrator",
+          },
           serviceClient: ServiceClient(),
           useNotify: openNotification,
           useToast: openToast,
@@ -98,23 +111,52 @@ const App: FunctionComponent<AppProps> = () => {
         {notifyContextHolder}
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={
+            <Route
+              path="/"
+              element={
                 <AuthenticatedRoute>
                   <Dashboard />
                 </AuthenticatedRoute>
               }
               errorElement={<Error404Page />}
             >
-              <Route index element={<Navigate to={DASHBOARD_ROUTES.OVERVIEW} replace />} />
-              <Route path={DASHBOARD_ROUTES.OVERVIEW} element={<OverviewPage />} />
-              <Route path={DASHBOARD_ROUTES.PROVIDER} element={<RentProviderList />} />
+              <Route
+                index
+                element={<Navigate to={DASHBOARD_ROUTES.OVERVIEW} replace />}
+              />
+              <Route
+                path={DASHBOARD_ROUTES.OVERVIEW}
+                element={<OverviewPage />}
+              />
+              <Route
+                path={DASHBOARD_ROUTES.PROVIDER}
+                element={<RentProviderList />}
+              />
               <Route path={DASHBOARD_ROUTES.TENANT} element={<TenantList />} />
-              <Route path={DASHBOARD_ROUTES.LOCATION_DETAIL} element={<LocationDetail />} />
-              <Route path={DASHBOARD_ROUTES.LOCATION} element={<LocationList />} />
-              <Route path={DASHBOARD_ROUTES.EXPENSE} element={<ExpenseList />} />
-              <Route path={DASHBOARD_ROUTES.INVOICE} element={<InvoicePage />} />
-              <Route path={DASHBOARD_ROUTES.SCHEDULE} />
-              <Route path={DASHBOARD_ROUTES.MY_PROFILE} element={<MyProfilePage />} />
+              <Route
+                path={DASHBOARD_ROUTES.LOCATION_DETAIL}
+                element={<LocationDetail />}
+              />
+              <Route
+                path={DASHBOARD_ROUTES.LOCATION}
+                element={<LocationList />}
+              />
+              <Route
+                path={DASHBOARD_ROUTES.EXPENSE}
+                element={<ExpenseList />}
+              />
+              <Route
+                path={DASHBOARD_ROUTES.INVOICE}
+                element={<InvoicePage />}
+              />
+              <Route
+                path={DASHBOARD_ROUTES.SCHEDULE}
+                element={<SchedulePage />}
+              />
+              <Route
+                path={DASHBOARD_ROUTES.MY_PROFILE}
+                element={<MyProfilePage />}
+              />
               {/* <Route path="*" element={<Error404Page />} /> */}
             </Route>
             <Route path="/login" element={<LoginPage />} />
