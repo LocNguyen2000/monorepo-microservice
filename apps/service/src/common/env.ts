@@ -1,7 +1,7 @@
 import { GlobalEnv } from '@nhl/env';
 import { IsNumber, IsObject, IsString, IsUrl } from 'class-validator';
 
-class OpenAIRateLimit {
+class AIRateLimit {
   @IsNumber()
   perDay: number;
 
@@ -31,7 +31,7 @@ export class FilePost {
   rateLimit: FilePostRateLimit;
 }
 
-export class OpenAI {
+export class AICredentials {
   @IsUrl()
   url: string;
 
@@ -42,7 +42,7 @@ export class OpenAI {
   apiKey: string;
 
   @IsObject()
-  rateLimit: OpenAIRateLimit;
+  rateLimit: AIRateLimit;
 }
 
 export class Env extends GlobalEnv {
@@ -53,7 +53,7 @@ export class Env extends GlobalEnv {
   port: number;
 
   @IsObject()
-  openAi: OpenAI;
+  ai: AICredentials;
 
   @IsObject()
   filePost: FilePost;

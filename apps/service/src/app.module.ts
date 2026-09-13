@@ -15,7 +15,7 @@ import { LocationsModule } from './locations/locations.module';
 import { ExpenseSchema } from './common/schema/user/expense';
 import { ExpenseModule } from './expense/expense.module';
 import { InvoicesModule } from './invoices/invoices.module';
-import { OpenAiModule } from './openai/openai.module';
+import { OcrModule } from './ocr/ocr.module';
 import { SocketModule } from './socket/socket.module';
 
 @Module({
@@ -59,9 +59,9 @@ import { SocketModule } from './socket/socket.module';
     LocationsModule,
     ExpenseModule,
     InvoicesModule,
-    OpenAiModule,
+    OcrModule,
     SocketModule,
   ],
   controllers: [AppController],
 })
-export class AppModule {}
+export class AppModule { }

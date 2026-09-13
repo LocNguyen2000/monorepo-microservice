@@ -7,13 +7,13 @@ import {
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
-import { OpenAiService } from './openai.service';
+import { OcrService } from './ocr.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
 
 @Controller('openai')
-export class OpenAIController {
-  constructor(private readonly openAiService: OpenAiService) {}
+export class OcrController {
+  constructor(private readonly ocrService: OcrService) { }
   @Get('ping')
   ping(): string {
     return 'hello';
@@ -22,12 +22,6 @@ export class OpenAIController {
   @Post('process-meter-image')
   @UseInterceptors(FilesInterceptor('files'))
   async processMeterImage(@UploadedFiles() file: Express.Multer.File) {
-    if (!this.openAiService.isAllowAccess()) {
-      throw new BadRequestException({
-        status: HttpStatus.BAD_REQUEST,
-        message: 'Config limit exceeded',
-      });
-    }
-    return await this.openAiService.processMeterImage(file);
+    return await this.ocrService.processMeterImage(file);
   }
 }
