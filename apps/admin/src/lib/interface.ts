@@ -29,7 +29,6 @@ export interface TenantDataType {
   email?: string;
   contactAddress?: string;
   locationCode?: string;
-  roomateCount?: number;
   description?: string;
   contractUrl?: string;
 }

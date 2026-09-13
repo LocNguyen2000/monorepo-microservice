@@ -10,6 +10,7 @@ import {
   TenantSchema,
   LocationSchema,
   ExpenseLocationSchema,
+  TenantLocationSchema,
 } from './common/schema/user';
 import { LocationsModule } from './locations/locations.module';
 import { ExpenseSchema } from './common/schema/user/expense';
@@ -46,6 +47,7 @@ import { SocketModule } from './socket/socket.module';
             LocationSchema,
             ExpenseSchema,
             ExpenseLocationSchema,
+            TenantLocationSchema,
           ],
           logging: false,
           sync: {

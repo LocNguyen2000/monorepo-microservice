@@ -13,11 +13,10 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { LocationsService } from './locations.service';
-import { ExpenseSchema } from '../common/schema/user';
 
 @Controller('location')
 export class LocationsController {
-  constructor(private readonly locationsService: LocationsService) {}
+  constructor(private readonly locationsService: LocationsService) { }
 
   @Post()
   @UseInterceptors(FileInterceptor('image'))

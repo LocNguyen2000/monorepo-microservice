@@ -13,11 +13,10 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TenantService } from './tenant.service';
-import { PaginatedQuery } from '../common/pagination';
 
 @Controller('tenant')
 export class TenantController {
-  constructor(private readonly tenantService: TenantService) {}
+  constructor(private readonly tenantService: TenantService) { }
 
   @Post()
   @UseInterceptors(FileInterceptor('contract'))
@@ -36,6 +35,14 @@ export class TenantController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.tenantService.findOne(+id);
+  }
+
+  @Post(':tenantCode/locations/:locationCode')
+  assignLocation(
+    @Param('tenantCode') tenantCode: string,
+    @Param('locationCode') locationCode: string,
+  ) {
+    return this.tenantService.assignLocation(+tenantCode, +locationCode);
   }
 
   @Put(':id')

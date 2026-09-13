@@ -1,6 +1,5 @@
-import { Column, ForeignKey, PrimaryKey, Table } from "sequelize-typescript";
+import { Column, PrimaryKey, Table } from "sequelize-typescript";
 import { BaseEntity } from "../base";
-import { LocationSchema } from "./location";
 
 @Table({ tableName: "tenants" })
 export class TenantSchema extends BaseEntity {
@@ -32,14 +31,7 @@ export class TenantSchema extends BaseEntity {
   email?: string;
 
   @Column
-  @ForeignKey(() => LocationSchema)
-  locationCode?: number;
-
-  @Column
   contactAddress: string;
-
-  @Column
-  roomateCount: number;
 
   @Column
   description?: string;

@@ -11,7 +11,7 @@ export class InvoicesService {
     private readonly locationSvc: LocationsService,
     private readonly rentProviderSvc: RentProvidersService,
     private readonly tenantSvc: TenantService,
-  ) {}
+  ) { }
   create(payload: Record<string, unknown>) {
     throw new NotImplementedException();
   }
@@ -24,8 +24,10 @@ export class InvoicesService {
     const result = {};
     const tenant = await this.tenantSvc.findOne(id);
     Object.assign(result, { tenant });
-    if (tenant.locationCode) {
-      const location = await this.locationSvc.findOne(tenant.locationCode);
+    const assignments = await this.tenantSvc.findLocationsByTenant(id);
+    const [assignment] = assignments;
+    if (assignment) {
+      const location = await this.locationSvc.findOne(assignment.locationCode);
       Object.assign(result, { location });
       if (location.owner) {
         const owner = await this.rentProviderSvc.findOne(+location.owner);

@@ -1,25 +1,32 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTenantDto } from './dto/create-tenant.dto';
-import { UpdateTenantDto } from './dto/update-tenant.dto';
 import { TenantModel, TenantSchema } from '../common/schema/user';
 import { InjectModel } from '@nestjs/sequelize';
 import { PaginatedQuery, paginatedQuery } from '../common/pagination';
 import { FilePostService } from '../filepost/filepost.service';
+import { TenantLocationModel, TenantLocationSchema } from '../common/schema/user';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class TenantService {
   constructor(
     @InjectModel(TenantSchema)
     private readonly tenantRepository: TenantModel,
+    @InjectModel(TenantLocationSchema)
+    private readonly tenantLocationRepository: TenantLocationModel,
     private readonly filePostService: FilePostService,
-  ) {}
+  ) { }
 
   async create(payload: Record<string, unknown>, contract?: Express.Multer.File) {
     const contractUrl = contract
       ? await this.filePostService.upload(contract)
       : undefined;
 
-    return this.tenantRepository.create({ ...payload, contractUrl });
+    const { locationCode, ...tenantPayload } = payload;
+    const tenant = await this.tenantRepository.create({ ...tenantPayload, contractUrl });
+    if (locationCode) {
+      await this.assignLocation(tenant.tenantCode, Number(locationCode));
+    }
+    return tenant;
   }
 
   findAll(query: PaginatedQuery) {
@@ -30,12 +37,33 @@ export class TenantService {
     return this.tenantRepository.findByPk(id);
   }
 
-  findTenantsByLocation(id: number) {
-    return this.tenantRepository.findAll({
-      where: {
-        locationCode: id,
-      },
+  async findTenantsByLocation(id: number) {
+    const assignments = await this.tenantLocationRepository.findAll({
+      where: { locationCode: id },
     });
+    const assignedTenantCodes = assignments.map(({ tenantCode }) => tenantCode);
+
+    return this.tenantRepository.findAll({
+      where: assignedTenantCodes.length
+        ? { tenantCode: { [Op.in]: assignedTenantCodes } }
+        : { tenantCode: { [Op.in]: [] } },
+    });
+  }
+
+  async findLocationsByTenant(tenantCode: number) {
+    return this.tenantLocationRepository.findAll({ where: { tenantCode } });
+  }
+
+  async assignLocation(tenantCode: number, locationCode: number) {
+    const tenant = await this.tenantRepository.findByPk(tenantCode);
+    if (!tenant) throw new Error('Tenant not found');
+
+    await this.tenantLocationRepository.findOrCreate({
+      where: { tenantCode, locationCode },
+      defaults: { tenantCode, locationCode },
+    });
+
+    return tenant;
   }
 
   async update(
@@ -43,6 +71,7 @@ export class TenantService {
     payload: Record<string, unknown>,
     contract?: Express.Multer.File,
   ) {
+    const { locationCode, ...tenantPayload } = payload;
     const instance = await this.tenantRepository.findByPk(id);
 
     if (!instance) throw new Error('Owner not found');
@@ -51,10 +80,13 @@ export class TenantService {
       ? await this.filePostService.upload(contract)
       : undefined;
 
-    return instance.update({
-      ...payload,
+    const result = await instance.update({
+      ...tenantPayload,
       ...(contractUrl ? { contractUrl } : {}),
     });
+
+    if (locationCode) await this.assignLocation(id, Number(locationCode));
+    return result;
   }
 
   async remove(id: number) {

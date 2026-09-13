@@ -6,7 +6,7 @@ import { EnvService } from '@nhl/env';
 
 @Injectable()
 export class FilePostService {
-  constructor(private readonly env: EnvService<Env>) {}
+  constructor(private readonly env: EnvService<Env>) { }
 
   async upload(file: Express.Multer.File): Promise<string | undefined> {
     const filePost = this.env.get('filePost');

@@ -1,6 +1,24 @@
-import { Form, Radio, Input, Select, DatePicker, InputNumber, Switch, Typography, Divider, Upload, Button, theme } from "antd";
+import {
+  Form,
+  Radio,
+  Input,
+  Select,
+  DatePicker,
+  InputNumber,
+  Switch,
+  Typography,
+  Divider,
+  Upload,
+  Button,
+  theme,
+} from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { LocationDataType, PaginatedResponse, ProviderDataType, TenantDataType } from "../../lib/interface";
+import {
+  LocationDataType,
+  PaginatedResponse,
+  ProviderDataType,
+  TenantDataType,
+} from "../../lib/interface";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
 
@@ -28,15 +46,27 @@ interface ITenantDetailProps {
   setSubmitEvent?: () => void;
 }
 
-type ISelectLocations = Pick<LocationDataType, "locationCode" | "locationName">[];
+type ISelectLocations = Pick<
+  LocationDataType,
+  "locationCode" | "locationName"
+>[];
 
-export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ data, setData, isOpen, setIsFormOpen, action }) => {
+export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
+  data,
+  setData,
+  isOpen,
+  setIsFormOpen,
+  action,
+}) => {
   const [locations, setLocations] = useState<ISelectLocations>([]);
   const [contractFile, setContractFile] = useState<File>();
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
-  const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
-    const key = e.target.attributes.getNamedItem("name").value as keyof TenantDataType;
+  const formChangeHandler: ChangeEventHandler<
+    HTMLInputElement | HTMLTextAreaElement
+  > = (e) => {
+    const key = e.target.attributes.getNamedItem("name")
+      .value as keyof TenantDataType;
     const value = e.target.value;
 
     debounce(setData({ ...data, [key]: value }));
@@ -60,18 +90,30 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
       if (action === ACTION_ENUM.ADD) {
         await serviceClient.post("/tenant", formData);
 
-        useNotify("success", "Thêm người thuê mới thành công", `Đã gửi biểu mẫu thành công cho ${data.tenantName}`);
+        useNotify(
+          "success",
+          "Thêm người thuê mới thành công",
+          `Đã gửi biểu mẫu thành công cho ${data.tenantName}`,
+        );
       } else if (action === ACTION_ENUM.EDIT) {
         await serviceClient.put(`/tenant/${data.tenantCode}`, formData);
 
-        useNotify("success", "Cập nhật người thuê thành công", `Đã gửi biểu mẫu thành công cho ${data.tenantName}`);
+        useNotify(
+          "success",
+          "Cập nhật người thuê thành công",
+          `Đã gửi biểu mẫu thành công cho ${data.tenantName}`,
+        );
       }
 
       setContractFile(undefined);
       debounce(setIsFormOpen(ACTION_ENUM.CLOSE, {}));
     } catch (error) {
       console.log("Error", error);
-      useNotify("error", "Lỗi gửi thông tin người thuê", "Gửi biểu mẫu thất bại.");
+      useNotify(
+        "error",
+        "Lỗi gửi thông tin người thuê",
+        "Gửi biểu mẫu thất bại.",
+      );
     }
   };
 
@@ -97,7 +139,14 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
       centered
       open={isOpen}
       okText="Gửi"
-      onOk={() => useConfirm("confirm", "Xác nhận người thuê", "Bạn có chắc chắn muốn gửi thông tin người thuê này không?", async () => await formSubmitHandler())}
+      onOk={() =>
+        useConfirm(
+          "confirm",
+          "Xác nhận người thuê",
+          "Bạn có chắc chắn muốn gửi thông tin người thuê này không?",
+          async () => await formSubmitHandler(),
+        )
+      }
       cancelText="Quay lại"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
       width={900}
@@ -114,19 +163,44 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
         }}
       >
         <Form.Item label="Mã người thuê" required={true}>
-          <Input name="tenantCode" value={data.tenantCode} placeholder="Nhập mã người thuê" onChange={(e) => formChangeHandler(e)} />
+          <Input
+            name="tenantCode"
+            value={data.tenantCode}
+            placeholder="Nhập mã người thuê"
+            onChange={(e) => formChangeHandler(e)}
+          />
         </Form.Item>
         <Form.Item label="Tên người thuê" required={true}>
-          <Input name="tenantName" value={data.tenantName} placeholder="Nhập tên người thuê" onChange={(e) => formChangeHandler(e)} />
+          <Input
+            name="tenantName"
+            value={data.tenantName}
+            placeholder="Nhập tên người thuê"
+            onChange={(e) => formChangeHandler(e)}
+          />
         </Form.Item>
         <Form.Item label="Email" required={true}>
-          <Input name="email" value={data.email} placeholder="Nhập email hợp lệ" onChange={(e) => formChangeHandler(e)} />
+          <Input
+            name="email"
+            value={data.email}
+            placeholder="Nhập email hợp lệ"
+            onChange={(e) => formChangeHandler(e)}
+          />
         </Form.Item>
         <Form.Item label="Số điện thoại" required={true}>
-          <Input name="phoneNumber" value={data.phoneNumber} placeholder="Nhập số điện thoại" onChange={(e) => formChangeHandler(e)} />
+          <Input
+            name="phoneNumber"
+            value={data.phoneNumber}
+            placeholder="Nhập số điện thoại"
+            onChange={(e) => formChangeHandler(e)}
+          />
         </Form.Item>
         <Form.Item label="Địa chỉ tạm trú" required={true}>
-          <Input name="contactAddress" value={data.contactAddress} placeholder="Nhập địa chỉ tạm trú" onChange={(e) => formChangeHandler(e)} />
+          <Input
+            name="contactAddress"
+            value={data.contactAddress}
+            placeholder="Nhập địa chỉ tạm trú"
+            onChange={(e) => formChangeHandler(e)}
+          />
         </Form.Item>
         <Form.Item label="Ngày sinh">
           <DatePicker
@@ -154,7 +228,10 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
             showSearch
             placeholder="Chọn phòng trọ"
             value={data.locationCode}
-            style={{fontWeight: '1000', color: globalTheme.token.colorPrimary}}
+            style={{
+              fontWeight: "1000",
+              color: globalTheme.token.colorPrimary,
+            }}
             disabled={Number.isSafeInteger(data?.locationCode)}
             onChange={(e) => {
               setData({ ...data, locationCode: e });
@@ -167,17 +244,13 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
             ))}
           </Select>
         </Form.Item>
-        <Form.Item label="Số lượng người" required={true}>
-          <InputNumber
-            value={data.roomateCount}
-            onChange={(v) => {
-              setData({ ...data, roomateCount: v });
-            }}
-          />
-        </Form.Item>
         <Form.Item label="Ảnh hợp đồng/CCCD" valuePropName="fileList">
           {data.contractUrl && (
-            <Typography.Link href={data.contractUrl} target="_blank" rel="noreferrer">
+            <Typography.Link
+              href={data.contractUrl}
+              target="_blank"
+              rel="noreferrer"
+            >
               Xem hợp đồng đã tải lên
             </Typography.Link>
           )}
@@ -186,7 +259,11 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({ 
             maxCount={1}
             beforeUpload={(file) => {
               if (file.size > 50 * 1024 * 1024) {
-                useNotify("error", "Tệp quá lớn", "Kích thước tệp không được vượt quá 50 MB.");
+                useNotify(
+                  "error",
+                  "Tệp quá lớn",
+                  "Kích thước tệp không được vượt quá 50 MB.",
+                );
                 return Upload.LIST_IGNORE;
               }
               setContractFile(file);
