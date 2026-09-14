@@ -8,7 +8,7 @@ dist
 .vscode
 
 # cert
-*.pem
+**/*.pem
 
 # Enviroment
 **/config

@@ -20,15 +20,16 @@ import { ExpenseSchema } from './common/schema/user/expense';
 import { ExpenseModule } from './expense/expense.module';
 import { InvoicesModule } from './invoices/invoices.module';
 import { OcrModule } from './ocr/ocr.module';
-
+require('dotenv').config()
 @Module({
   imports: [
     EnvModule.register({ path: '/config/env.json', class: Env }),
     SequelizeModule.forRootAsync({
       inject: [EnvService],
       useFactory: async (env: EnvService<Env>) => {
-        const { pathname, username, hostname, port } = new URL(
-          env.get('db.sqlUrl'),
+        const database = env.get('db');
+        const { pathname, username, password, hostname, port } = new URL(
+          database.sqlUrl,
         );
         console.log('Connecting to database', {
           dialect: 'mysql',
@@ -37,12 +38,21 @@ import { OcrModule } from './ocr/ocr.module';
           username: username,
           database: pathname.replace('/', ''),
         });
+        console.log('Using ssl', database.ssl?.ca, process.env.SQL_CERT)
         return {
           dialect: 'mysql',
           host: hostname,
           port: +port,
           username: username,
           database: pathname.replace('/', ''),
+          ...(password && { password: password }),
+          ...(database.ssl?.ca && {
+            dialectOptions: {
+              ssl: {
+                ca: process.env.SQL_CERT.replace(/\\n/g, '\n'),
+              },
+            },
+          }),
           models: [
             RentProviderSchema,
             TenantSchema,

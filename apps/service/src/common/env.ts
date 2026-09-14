@@ -1,5 +1,35 @@
 import { GlobalEnv } from '@nhl/env';
-import { IsNumber, IsObject, IsString, IsUrl } from 'class-validator';
+import { Type } from 'class-transformer';
+import {
+  IsBoolean,
+  IsNumber,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsUrl,
+  ValidateNested,
+} from 'class-validator';
+
+class DatabaseSsl {
+  @IsBoolean()
+  @IsOptional()
+  ca: boolean;
+}
+
+class Database {
+  @IsString()
+  @IsOptional()
+  mongoUrl: string;
+
+  @IsString()
+  sqlUrl: string;
+
+  @IsObject()
+  @IsOptional()
+  @ValidateNested()
+  @Type(() => DatabaseSsl)
+  ssl: DatabaseSsl;
+}
 
 class AIRateLimit {
   @IsNumber()
@@ -76,6 +106,11 @@ export class Env extends GlobalEnv {
 
   @IsNumber()
   port: number;
+
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Database)
+  db: Database;
 
   @IsObject()
   ai: AICredentials;

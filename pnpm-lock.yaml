@@ -302,6 +302,9 @@ importers:
       class-validator:
         specifier: 0.14.0
         version: 0.14.0
+      dotenv:
+        specifier: 16.4.7
+        version: 16.4.7
       form-data:
         specifier: 4.0.6
         version: 4.0.6
