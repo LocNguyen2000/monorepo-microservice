@@ -429,6 +429,9 @@ importers:
       class-validator:
         specifier: 0.14.0
         version: 0.14.0
+      dotenv:
+        specifier: 16.4.7
+        version: 16.4.7
     devDependencies:
       '@nestjs/common':
         specifier: 9.0.0
@@ -2588,6 +2591,10 @@ packages:
 
   dotenv@16.0.3:
     resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==, tarball: https://registry.npmjs.org/dotenv/-/dotenv-16.0.3.tgz}
+    engines: {node: '>=12'}
+
+  dotenv@16.4.7:
+    resolution: {integrity: sha512-47qPchRCykZC03FhkYAhrvwU4xDBFIj1QPqaarj6mdM/hgUzfPHcpkHJOn3mJAufFeeAxAzeGsr5X0M4k6fLZQ==, tarball: https://registry.npmjs.org/dotenv/-/dotenv-16.4.7.tgz}
     engines: {node: '>=12'}
 
   dottie@2.0.7:
@@ -8019,6 +8026,8 @@ snapshots:
   dotenv-expand@10.0.0: {}
 
   dotenv@16.0.3: {}
+
+  dotenv@16.4.7: {}
 
   dottie@2.0.7: {}
 

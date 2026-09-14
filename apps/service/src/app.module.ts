@@ -20,7 +20,6 @@ import { ExpenseSchema } from './common/schema/user/expense';
 import { ExpenseModule } from './expense/expense.module';
 import { InvoicesModule } from './invoices/invoices.module';
 import { OcrModule } from './ocr/ocr.module';
-import { SocketModule } from './socket/socket.module';
 
 @Module({
   imports: [
@@ -68,7 +67,6 @@ import { SocketModule } from './socket/socket.module';
     ExpenseModule,
     InvoicesModule,
     OcrModule,
-    SocketModule,
   ],
   controllers: [AppController],
 })

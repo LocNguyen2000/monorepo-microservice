@@ -10,8 +10,8 @@ dist
 # cert
 *.pem
 
-
 # Enviroment
 **/config
+.env
 
 pnpm-lock.yaml

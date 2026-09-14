@@ -7,17 +7,9 @@ export enum Environment {
   Production = "dev"
 }
 
-class AuthEnv {
-  @IsString()
-  jwtSecret: string;
-}
-
 export class GlobalEnv {
   @IsDefined()
   db: DatabaseEnv;
-
-  @IsDefined()
-  auth: AuthEnv;
 
   @IsDefined()
   @IsEnum(Environment)

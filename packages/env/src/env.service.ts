@@ -1,6 +1,7 @@
 import { Injectable, Inject } from "@nestjs/common";
 import * as fs from "fs";
-import _ from "lodash";
+import * as path from "path";
+import { parse as parseDotenv } from "dotenv";
 import { Path } from "@nestjs/config";
 import { ClassConstructor, plainToInstance } from "class-transformer";
 import { validateSync } from "class-validator";
@@ -30,6 +31,10 @@ export class EnvService<T extends object> {
   }
 
   private load(path: string): T {
+    if (process.env.NODE_ENV === "staging") {
+      return this.loadDotenv();
+    }
+
     // get root apps path
     const configPath = [process.cwd(), path].join("/");
 
@@ -39,6 +44,23 @@ export class EnvService<T extends object> {
     const jsonFile = fs.readFileSync(configPath, "utf-8");
 
     return JSON.parse(jsonFile || "{}");
+  }
+
+  private loadDotenv(): T {
+    const envPath = path.resolve(process.cwd(), ".env");
+
+    if (!fs.existsSync(envPath)) throw new Error("Not exist .env config");
+
+    const dotenvFile = fs.readFileSync(envPath, "utf-8");
+    const configJson = parseDotenv(dotenvFile).CONFIG_JSON;
+
+    if (!configJson) throw new Error("CONFIG_JSON is required in .env");
+
+    try {
+      return JSON.parse(configJson) as T;
+    } catch {
+      throw new Error("CONFIG_JSON must contain valid JSON");
+    }
   }
 
   private validate(cls: ClassConstructor<T>, config: T) {
