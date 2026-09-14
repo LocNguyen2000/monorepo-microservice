@@ -9,11 +9,12 @@
     "strict": false,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
+    "moduleResolution": "nodenext",
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
     "composite": true,
-    "module": "esnext",
+    "module": "nodenext",
     "outDir": "./dist"
   },
   "include": ["src", "vite.config.ts", "declarations.d.ts"]
