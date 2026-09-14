@@ -7,6 +7,10 @@ dist
 .git
 .vscode
 
+# cert
+*.pem
+
+
 # Enviroment
 **/config
 
