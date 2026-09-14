@@ -457,6 +457,9 @@ importers:
       rxjs:
         specifier: 7.2.0
         version: 7.2.0
+      typescript:
+        specifier: 4.7.4
+        version: 4.7.4
     publishDirectory: dist
 
   packages/error:
@@ -470,6 +473,9 @@ importers:
       rxjs:
         specifier: 7.2.0
         version: 7.2.0
+      typescript:
+        specifier: 4.7.4
+        version: 4.7.4
     publishDirectory: dist
 
 packages:
