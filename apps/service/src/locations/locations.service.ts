@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {} from 'sequelize-typescript';
+import { } from 'sequelize-typescript';
 import {
   ExpenseLocationModel,
   ExpenseLocationSchema,
@@ -12,6 +12,7 @@ import { PaginatedQuery, paginatedQuery } from '../common/pagination';
 import { LocationWithExpenses } from '../common/types';
 import { omit, pick } from 'lodash';
 import { FilePostService } from '../filepost/filepost.service';
+import 'multer';
 
 @Injectable()
 export class LocationsService {
@@ -21,7 +22,7 @@ export class LocationsService {
     @InjectModel(ExpenseLocationSchema)
     private readonly expenseLocationRepository: ExpenseLocationModel,
     private readonly filePostService: FilePostService,
-  ) {}
+  ) { }
 
   async create(
     createLocationDto: Record<string, unknown>,

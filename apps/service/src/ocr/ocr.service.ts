@@ -5,12 +5,11 @@ import {
   Module,
 } from '@nestjs/common';
 import { Environment, EnvService } from '@nhl/env';
-import axios, { AxiosInstance } from 'axios';
 import { GoogleGenAI } from "@google/genai";
 import { Env } from '../common/env';
-import moment from 'moment';
 import { parseObjectFromContent } from '../common/util';
 import { IElectricMeterImageResponse } from '../common/interface';
+import 'multer';
 
 @Injectable()
 export class OcrService {

@@ -5,6 +5,7 @@ import { PaginatedQuery, paginatedQuery } from '../common/pagination';
 import { FilePostService } from '../filepost/filepost.service';
 import { TenantLocationModel, TenantLocationSchema } from '../common/schema/user';
 import { Op } from 'sequelize';
+import 'multer';
 
 @Injectable()
 export class TenantService {

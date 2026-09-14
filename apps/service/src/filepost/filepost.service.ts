@@ -3,6 +3,7 @@ import axios from 'axios';
 import FormData = require('form-data');
 import { Env } from '../common/env';
 import { EnvService } from '@nhl/env';
+import 'multer';
 
 @Injectable()
 export class FilePostService {
