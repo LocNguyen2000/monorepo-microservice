@@ -27,5 +27,10 @@ async function bootstrap() {
   }
   else await app.listen(env.get('port'), env.get('host'));
 
+  return app.getHttpAdapter().getInstance();
 }
-bootstrap();
+
+export default async (req: any, res: any) => {
+  const appInstance = await bootstrap();
+  appInstance(req, res);
+};
