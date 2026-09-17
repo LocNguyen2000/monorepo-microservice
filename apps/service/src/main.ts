@@ -16,12 +16,16 @@ async function bootstrap() {
   const env = app.get(EnvService<Env>);
   const logger = new Logger();
 
-  app.useGlobalPipes(new ValidationPipe({transform: true}));
+  app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalFilters(new AllExceptionsFilter(app.get(HttpAdapterHost)));
   app.useGlobalInterceptors(new LoggingInterceptor(logger))
 
   await app.startAllMicroservices();
 
-  await app.listen(env.get('port'), env.get('host'));
+  if (env.get('env') !== 'dev') {
+    await app.listen(env.get('port'))
+  }
+  else await app.listen(env.get('port'), env.get('host'));
+
 }
 bootstrap();
