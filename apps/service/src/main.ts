@@ -20,15 +20,10 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionsFilter(app.get(HttpAdapterHost)));
   app.useGlobalInterceptors(new LoggingInterceptor(logger))
 
-  await app.startAllMicroservices();
+  // await app.startAllMicroservices();
 
   if (env.get('env') === 'dev' || process.env.NODE_ENV === 'dev') await app.listen(env.get('port'), env.get('host'));
   else await app.listen(env.get('port'))
-
-  return app.getHttpAdapter().getInstance();
 }
 
-export default async (req: any, res: any) => {
-  const appInstance = await bootstrap();
-  appInstance(req, res);
-};
+bootstrap();
