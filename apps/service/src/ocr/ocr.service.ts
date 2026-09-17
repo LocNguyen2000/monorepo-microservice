@@ -9,7 +9,6 @@ import { GoogleGenAI } from "@google/genai";
 import { Env } from '../common/env';
 import { parseObjectFromContent } from '../common/util';
 import { IElectricMeterImageResponse } from '../common/interface';
-import 'multer';
 
 @Injectable()
 export class OcrService {

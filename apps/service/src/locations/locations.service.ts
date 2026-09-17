@@ -12,7 +12,6 @@ import { PaginatedQuery, paginatedQuery } from '../common/pagination';
 import { LocationWithExpenses } from '../common/types';
 import { omit, pick } from 'lodash';
 import { FilePostService } from '../filepost/filepost.service';
-import 'multer';
 
 @Injectable()
 export class LocationsService {

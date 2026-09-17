@@ -10,7 +10,6 @@ import {
 import { OcrService } from './ocr.service';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { Express } from 'express';
-import 'multer';
 
 @Controller('openai')
 export class OcrController {

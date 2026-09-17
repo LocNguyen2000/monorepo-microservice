@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { LocationsService } from './locations.service';
-import 'multer';
 
 @Controller('location')
 export class LocationsController {
