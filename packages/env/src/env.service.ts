@@ -1,7 +1,6 @@
 import { Injectable, Inject } from "@nestjs/common";
 import * as fs from "fs";
 import * as path from "path";
-import { parse as parseDotenv } from "dotenv";
 import { Path } from "@nestjs/config";
 import { ClassConstructor, plainToInstance } from "class-transformer";
 import { validateSync } from "class-validator";
@@ -47,14 +46,9 @@ export class EnvService<T extends object> {
   }
 
   private loadDotenv(): T {
-    const envPath = path.resolve(process.cwd(), ".env");
+    const configJson = process.env.CONFIG_JSON;
 
-    if (!fs.existsSync(envPath)) throw new Error("Not exist .env config");
-
-    const dotenvFile = fs.readFileSync(envPath, "utf-8");
-    const configJson = parseDotenv(dotenvFile).CONFIG_JSON;
-
-    if (!configJson) throw new Error("CONFIG_JSON is required in .env");
+    if (!configJson) throw new Error("CONFIG_JSON is required in the environment");
 
     try {
       return JSON.parse(configJson) as T;

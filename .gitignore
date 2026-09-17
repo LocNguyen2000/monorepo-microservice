@@ -15,3 +15,5 @@ dist
 .env
 
 pnpm-lock.yaml
+.vercel
+.env*
