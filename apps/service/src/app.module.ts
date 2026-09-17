@@ -41,6 +41,7 @@ require('dotenv').config()
         console.log('Using ssl', database.ssl?.ca, process.env.SQL_CERT)
         return {
           dialect: 'mysql',
+          dialectModule: require('mysql2'),
           host: hostname,
           port: +port,
           username: username,

@@ -22,10 +22,8 @@ async function bootstrap() {
 
   await app.startAllMicroservices();
 
-  if (env.get('env') !== 'dev') {
-    await app.listen(env.get('port'))
-  }
-  else await app.listen(env.get('port'), env.get('host'));
+  if (env.get('env') === 'dev' || process.env.NODE_ENV === 'dev') await app.listen(env.get('port'), env.get('host'));
+  else await app.listen(env.get('port'))
 
   return app.getHttpAdapter().getInstance();
 }
