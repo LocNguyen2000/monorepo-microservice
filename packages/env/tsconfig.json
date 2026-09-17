@@ -17,7 +17,9 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "noEmit": true
+    "noEmit": true,
+    "outDir": "./dist",
+    "rootDir": "./src"
   },
   "include": ["src"]
 }
