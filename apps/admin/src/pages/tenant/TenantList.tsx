@@ -2,7 +2,11 @@ import { ReloadOutlined, UserAddOutlined } from "@ant-design/icons";
 import { useContext, useEffect, useReducer, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { tenantColumns } from "../../lib/constants/columns";
-import { IPagination, PaginatedResponse, TenantDataType } from "../../lib/interface";
+import {
+  IPagination,
+  PaginatedResponse,
+  TenantDataType,
+} from "../../lib/interface";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
 import { TenantDetailForm } from "./TenantDetail";
@@ -22,9 +26,12 @@ const TenantList = () => {
     page: 1,
     size: 10,
   });
-  const [isOpenForm, dispatch] = useReducer((_: boolean, action: ACTION_ENUM) => {
-    return action == ACTION_ENUM.ADD || action == ACTION_ENUM.EDIT;
-  }, false);
+  const [isOpenForm, dispatch] = useReducer(
+    (_: boolean, action: ACTION_ENUM) => {
+      return action == ACTION_ENUM.ADD || action == ACTION_ENUM.EDIT;
+    },
+    false,
+  );
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.CLOSE);
   const { serviceClient, useConfirm, useToast } = getGlobalContext();
 
@@ -71,30 +78,9 @@ const TenantList = () => {
       });
   };
 
-  // ON MOUNTED
-  useEffect(() => {
-    setLoadingSekeleton();
-
-    serviceClient
-      .get(`/tenant?page=${pagination.page}&size=${pagination.size}`)
-      .then((json) => json.data)
-      .then((response: PaginatedResponse<TenantDataType>) => {
-        setTenants(response.data);
-        setPagination({
-          total: response.total,
-          size: response.size,
-          page: response.page,
-        });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
-
-  // ON UPDATED
   useEffect(() => {
     loadData();
-  }, [pagination]);
+  }, [pagination.page, pagination.size]);
 
   return (
     <Card style={{ padding: "0.25rem" }}>
@@ -113,9 +99,17 @@ const TenantList = () => {
         </div>
         <div style={{ flex: 1 }}></div>
 
-        <Input placeholder="Nhập nội dung tìm kiếm" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
+        <Input
+          placeholder="Nhập nội dung tìm kiếm"
+          style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
+        />
 
-        <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
+        <Button
+          type="primary"
+          style={{ marginRight: "1rem" }}
+          size="middle"
+          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+        >
           <UserAddOutlined /> Thêm
         </Button>
 
@@ -126,7 +120,13 @@ const TenantList = () => {
 
       <Divider />
 
-      <TenantDetailForm data={tenant} action={action} isOpen={isOpenForm} setData={setTenant} setIsFormOpen={openFormHandler} />
+      <TenantDetailForm
+        data={tenant}
+        action={action}
+        isOpen={isOpenForm}
+        setData={setTenant}
+        setIsFormOpen={openFormHandler}
+      />
 
       <BaseTable
         columns={tenantColumns}
@@ -134,9 +134,16 @@ const TenantList = () => {
         isLoading={isLoading}
         editable
         size="middle"
-        onDblClickRow={(t: TenantDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
+        onDblClickRow={(t: TenantDataType) =>
+          openFormHandler(ACTION_ENUM.EDIT, t)
+        }
         onDeleteRow={(t: TenantDataType) =>
-          useConfirm("warning", "Xóa người thuê", `Bạn có muốn xóa người thuê ${t.tenantName} không?`, async () => await deleteDataHandler(t))
+          useConfirm(
+            "warning",
+            "Xóa người thuê",
+            `Bạn có muốn xóa người thuê ${t.tenantName} không?`,
+            async () => await deleteDataHandler(t),
+          )
         }
       />
 

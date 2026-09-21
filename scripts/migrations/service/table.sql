@@ -201,7 +201,7 @@ create table if not exists accounts (
     `email` VARCHAR(50) NOT NULL UNIQUE, -- Ensures unique emails
     `password` VARCHAR(100) NOT NULL,
     `role` INT NOT NULL DEFAULT 0,
-    `status` INT NOT NULL DEFAULT 0,
+    `status` INT NOT NULL DEFAULT 0, -- 0 = pending approval, 1 = approved
     CONSTRAINT CK_account_status_Range CHECK (`status` >= 0 AND `status` <= 1),
     PRIMARY KEY (`id`)
 );

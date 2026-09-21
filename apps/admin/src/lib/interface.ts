@@ -115,6 +115,7 @@ export interface IAuthUser {
   userId: number;
   name: string;
   role: string;
+  email?: string;
 }
 
 export interface PaginatedResponse<T> {

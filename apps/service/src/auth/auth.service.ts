@@ -1,6 +1,7 @@
 import {
     ConflictException,
     Injectable,
+    NotFoundException,
     UnauthorizedException,
 } from '@nestjs/common';
 import { RoleModel, RoleSchema } from '../common/schema/auth/role.js';
@@ -11,6 +12,7 @@ import { Env } from '../common/env.js';
 import { createHmac, randomBytes, scrypt as callbackScrypt, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 import { LoginDto, RegisterDto } from './auth.dto.js';
+import { UserRole } from './auth.roles.js';
 
 const scrypt = promisify(callbackScrypt);
 const TOKEN_TTL_SECONDS = 24 * 60 * 60;
@@ -33,21 +35,93 @@ export class AuthService {
             fullName: input.fullName.trim(),
             email,
             password,
-            role: 3,
-            status: 1,
+            role: UserRole.User,
+            status: 0,
         } as AccountSchema);
 
-        return this.createAuthResponse(account);
+        return {
+            id: account.id,
+            email: account.email,
+            fullName: account.fullName,
+            role: account.role,
+            status: account.status,
+            message: 'Registration submitted and awaiting administrator approval',
+        };
     }
 
     async login(input: LoginDto) {
         const email = input.email.trim().toLowerCase();
         const account = await this.accountModel.findOne({ where: { email } });
-        if (!account || account.status !== 1 || !(await this.verifyPassword(input.password, account.password))) {
+        if (!account || !(await this.verifyPassword(input.password, account.password))) {
             throw new UnauthorizedException('Invalid email or password');
+        }
+        if (account.status !== 1) {
+            throw new UnauthorizedException('Account is awaiting administrator approval');
         }
 
         return this.createAuthResponse(account);
+    }
+
+    async listPendingAccounts() {
+        return this.accountModel.findAll({
+            where: { status: 0 },
+            attributes: ['id', 'fullName', 'email', 'role', 'status'],
+            order: [['id', 'ASC']],
+        });
+    }
+
+    async listAccounts() {
+        return this.accountModel.findAll({
+            attributes: ['id', 'fullName', 'email', 'role', 'status'],
+            order: [['id', 'ASC']],
+        });
+    }
+
+    async approveAccount(accountId: number, approverId: number) {
+        if (accountId === approverId) {
+            throw new ConflictException('An account cannot approve itself');
+        }
+
+        const account = await this.accountModel.findByPk(accountId);
+        if (!account) throw new NotFoundException('Account not found');
+        if (account.status === 1) {
+            return {
+                id: account.id,
+                status: account.status,
+                message: 'Account is already approved',
+            };
+        }
+
+        account.status = 1;
+        await account.save();
+        return {
+            id: account.id,
+            email: account.email,
+            fullName: account.fullName,
+            role: account.role,
+            status: account.status,
+            message: 'Account approved successfully',
+        };
+    }
+
+    async updateRole(accountId: number, role: UserRole, updaterId: number) {
+        if (accountId === updaterId) {
+            throw new ConflictException('An account cannot change its own role');
+        }
+
+        const account = await this.accountModel.findByPk(accountId);
+        if (!account) throw new NotFoundException('Account not found');
+
+        account.role = role;
+        await account.save();
+        return {
+            id: account.id,
+            email: account.email,
+            fullName: account.fullName,
+            role: account.role,
+            status: account.status,
+            message: 'Account role updated successfully',
+        };
     }
 
     verifyToken(token: string, secret: string): TokenPayload {

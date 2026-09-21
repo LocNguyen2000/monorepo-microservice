@@ -1,12 +1,20 @@
 import { useContext, useEffect, useReducer, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { providerColumns } from "../../lib/constants/columns";
-import { IPagination, PaginatedResponse, ProviderDataType } from "../../lib/interface";
+import {
+  IPagination,
+  PaginatedResponse,
+  ProviderDataType,
+} from "../../lib/interface";
 import Button from "antd/es/button";
 import Input from "antd/es/input/Input";
 import Pagination from "antd/es/pagination/Pagination";
 import { RentProviderDetail } from "./RentProviderDetail";
-import { HomeOutlined, ReloadOutlined, UserAddOutlined } from "@ant-design/icons";
+import {
+  HomeOutlined,
+  ReloadOutlined,
+  UserAddOutlined,
+} from "@ant-design/icons";
 import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
@@ -26,9 +34,12 @@ const RentProviderList = () => {
     size: 10,
   });
 
-  const [isOpenForm, dispatch] = useReducer((_: boolean, action: ACTION_ENUM) => {
-    return action == ACTION_ENUM.ADD || action == ACTION_ENUM.EDIT;
-  }, false);
+  const [isOpenForm, dispatch] = useReducer(
+    (_: boolean, action: ACTION_ENUM) => {
+      return action == ACTION_ENUM.ADD || action == ACTION_ENUM.EDIT;
+    },
+    false,
+  );
   const [action, setAction] = useState<ACTION_ENUM>(ACTION_ENUM.CLOSE);
   const { serviceClient, useToast, useConfirm } = getGlobalContext();
 
@@ -42,9 +53,9 @@ const RentProviderList = () => {
   };
 
   const codeGenerator = () => {
-    const code = autoGenerateNewCode(providers, 'providerCode')
-    setProvider({...provider, providerCode: code})
-  }
+    const code = autoGenerateNewCode(providers, "providerCode");
+    setProvider({ ...provider, providerCode: code });
+  };
 
   const openFormHandler = (action: ACTION_ENUM, data: ProviderDataType) => {
     console.log("FORM", action);
@@ -80,26 +91,9 @@ const RentProviderList = () => {
       });
   };
 
-  // ON MOUNTED
-  useEffect(() => {
-    setLoadingSekeleton();
-
-    serviceClient
-      .get(`/rent-provider?page=${pagination.page}&size=${pagination.size}`)
-      .then((json) => json.data)
-      .then((response: PaginatedResponse<ProviderDataType>) => {
-        setProviders(response.data);
-        setPagination({ total: response.total, size: response.size, page: response.page });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
-
-  // ON UPDATED
   useEffect(() => {
     loadData();
-  }, [pagination]);
+  }, [pagination.page, pagination.size]);
 
   return (
     <Card style={{ padding: "0.25rem" }}>
@@ -110,9 +104,17 @@ const RentProviderList = () => {
         </div>
         <div style={{ flex: 1 }}></div>
 
-        <Input placeholder="Nhập nội dung tìm kiếm" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
+        <Input
+          placeholder="Nhập nội dung tìm kiếm"
+          style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
+        />
 
-        <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
+        <Button
+          type="primary"
+          style={{ marginRight: "1rem" }}
+          size="middle"
+          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+        >
           <UserAddOutlined /> Thêm
         </Button>
 
@@ -123,7 +125,14 @@ const RentProviderList = () => {
 
       <Divider />
 
-      <RentProviderDetail data={provider} setData={setProvider} action={action} isOpen={isOpenForm} setIsFormOpen={openFormHandler} codeGenerator={codeGenerator} />
+      <RentProviderDetail
+        data={provider}
+        setData={setProvider}
+        action={action}
+        isOpen={isOpenForm}
+        setIsFormOpen={openFormHandler}
+        codeGenerator={codeGenerator}
+      />
 
       <BaseTable
         columns={providerColumns}
@@ -131,9 +140,16 @@ const RentProviderList = () => {
         editable
         isLoading={isLoading}
         size="middle"
-        onDblClickRow={(p: ProviderDataType) => openFormHandler(ACTION_ENUM.EDIT, p)}
+        onDblClickRow={(p: ProviderDataType) =>
+          openFormHandler(ACTION_ENUM.EDIT, p)
+        }
         onDeleteRow={(t: ProviderDataType) =>
-          useConfirm("warning", "Xóa chủ trọ", `Bạn có muốn xóa chủ trọ ${t.providerName} không?`, async () => await deleteDataHandler(t))
+          useConfirm(
+            "warning",
+            "Xóa chủ trọ",
+            `Bạn có muốn xóa chủ trọ ${t.providerName} không?`,
+            async () => await deleteDataHandler(t),
+          )
         }
       />
 

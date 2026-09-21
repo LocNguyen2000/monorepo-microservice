@@ -6,6 +6,7 @@ import { AxiosInstance } from "axios";
 
 export interface IGlobalContext {
   authUser?: IAuthUser;
+  setAuthUser: (user?: IAuthUser) => void;
   serviceClient: AxiosInstance;
   useNotify: (type: NotificationType, title: string, message: string) => void;
   useToast: (type: NoticeType, message: string) => void;

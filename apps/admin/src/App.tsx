@@ -1,10 +1,11 @@
 import Dashboard from "./pages/Dashboard";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { AuthenticatedRoute } from "./components/AuthenticatedRoute";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DASHBOARD_ROUTES } from "./lib/constants/routes";
 import { GlobalContext } from "./lib/context";
 import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import notification from "antd/es/notification";
 import Modal, { ModalFuncProps } from "antd/es/modal";
 import OverviewPage from "./pages/overview/Overview";
@@ -33,6 +34,10 @@ export type ConfirmType = ModalFuncProps["type"];
 interface AppProps {}
 
 const App: FunctionComponent<AppProps> = () => {
+  const [authUser, setAuthUserState] = useState(() => {
+    const savedUser = localStorage.getItem("authUser");
+    return savedUser ? JSON.parse(savedUser) : undefined;
+  });
   const [api, notifyContextHolder] = notification.useNotification();
   const [messageApi, messageContextHolder] = message.useMessage();
 
@@ -92,15 +97,26 @@ const App: FunctionComponent<AppProps> = () => {
     });
   };
 
+  const setAuthUser = (user?: {
+    userId: number;
+    name: string;
+    role: string;
+    email?: string;
+  }) => {
+    setAuthUserState(user);
+    if (user) localStorage.setItem("authUser", JSON.stringify(user));
+    else {
+      localStorage.removeItem("authUser");
+      localStorage.removeItem("accessToken");
+    }
+  };
+
   return (
     <ConfigProvider locale={viVN} theme={globalTheme}>
       <GlobalContext.Provider
         value={{
-          authUser: {
-            userId: 1,
-            name: "Nguyen Huu Loc",
-            role: "Administrator",
-          },
+          authUser,
+          setAuthUser,
           serviceClient: ServiceClient(),
           useNotify: openNotification,
           useToast: openToast,
@@ -160,6 +176,7 @@ const App: FunctionComponent<AppProps> = () => {
               {/* <Route path="*" element={<Error404Page />} /> */}
             </Route>
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </BrowserRouter>
       </GlobalContext.Provider>

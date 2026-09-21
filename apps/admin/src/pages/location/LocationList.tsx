@@ -1,4 +1,15 @@
-import { Button, Carousel, Divider, Empty, Flex, Input, Pagination, Rate, Skeleton, Tag } from "antd";
+import {
+  Button,
+  Carousel,
+  Divider,
+  Empty,
+  Flex,
+  Input,
+  Pagination,
+  Rate,
+  Skeleton,
+  Tag,
+} from "antd";
 import Card from "antd/es/card/Card";
 import Meta from "antd/es/card/Meta";
 import { useContext, useEffect, useState } from "react";
@@ -19,10 +30,19 @@ import {
   SettingFilled,
 } from "@ant-design/icons";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
-import { GlobalContext, PathContext, getGlobalContext } from "../../lib/context";
+import {
+  GlobalContext,
+  PathContext,
+  getGlobalContext,
+} from "../../lib/context";
 import { MENU_LIST } from "../Dashboard";
 import { useNavigate } from "react-router-dom";
-import { ExpenseDataType, IPagination, LocationDataType, PaginatedResponse } from "../../lib/interface";
+import {
+  ExpenseDataType,
+  IPagination,
+  LocationDataType,
+  PaginatedResponse,
+} from "../../lib/interface";
 import SkeletonImage from "antd/es/skeleton/Image";
 
 const LocationList = () => {
@@ -91,26 +111,9 @@ const LocationList = () => {
       });
   };
 
-  // ON MOUNTED
-  useEffect(() => {
-    setLoadingSekeleton();
-
-    serviceClient
-      .get(`/location?page=${pagination.page}&size=${pagination.size}`)
-      .then((json) => json.data)
-      .then((response: PaginatedResponse<LocationDataType>) => {
-        setLocations(response.data);
-        setPagination({ total: response.total, page: response.page, size: response.size });
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  }, []);
-
-  // ON UPDATED
   useEffect(() => {
     loadData();
-  }, [pagination]);
+  }, [pagination.page, pagination.size]);
 
   return (
     <>
@@ -123,8 +126,16 @@ const LocationList = () => {
             </Typography>
           </div>
           <div style={{ flex: 1 }}></div>
-          <Input placeholder="Nhập nội dung tìm kiếm" style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }} />
-          <Button type="primary" style={{ marginRight: "1rem" }} size="middle" onClick={(e) => openLocationForm()}>
+          <Input
+            placeholder="Nhập nội dung tìm kiếm"
+            style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
+          />
+          <Button
+            type="primary"
+            style={{ marginRight: "1rem" }}
+            size="middle"
+            onClick={(e) => openLocationForm()}
+          >
             <HomeOutlined /> Thêm
           </Button>
 
@@ -172,7 +183,13 @@ const LocationList = () => {
                       }}
                     />
                   ) : (
-                    <div style={{ aspectRatio: "1 / 1", display: "grid", placeItems: "center" }}>
+                    <div
+                      style={{
+                        aspectRatio: "1 / 1",
+                        display: "grid",
+                        placeItems: "center",
+                      }}
+                    >
                       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     </div>
                   )
@@ -190,13 +207,13 @@ const LocationList = () => {
                     size={300}
                     key="delete"
                     className="override-antd-icon-item"
-                        title="Xóa phòng trọ"
+                    title="Xóa phòng trọ"
                     onClick={() => {
                       useConfirm(
                         "warning",
                         "Xóa phòng trọ",
                         `Bạn có muốn xóa phòng trọ ${l.locationCode} không?`,
-                        async () => await deleteDataHandler(l)
+                        async () => await deleteDataHandler(l),
                       );
                     }}
                   />,
@@ -209,7 +226,10 @@ const LocationList = () => {
                     <>
                       <Tag color="blue">{l.roomSize} người </Tag>
                       <Tag color="success">
-                        Giá phòng : {getConstantExpensePrice(l)?.toLocaleString("vi-VN") ?? "-"} VND
+                        Giá phòng :{" "}
+                        {getConstantExpensePrice(l)?.toLocaleString("vi-VN") ??
+                          "-"}{" "}
+                        VND
                       </Tag>
                       <Tag
                         color="warning"
@@ -221,7 +241,16 @@ const LocationList = () => {
                       >
                         {l.locationAddress}
                       </Tag>
-                      <Rate tooltips={["khủng khiếp", "xấu", "bình thường", "tốt", "tuyệt vời"]} value={Math.random() * 4} />
+                      <Rate
+                        tooltips={[
+                          "khủng khiếp",
+                          "xấu",
+                          "bình thường",
+                          "tốt",
+                          "tuyệt vời",
+                        ]}
+                        value={Math.random() * 4}
+                      />
                     </>
                   }
                 />

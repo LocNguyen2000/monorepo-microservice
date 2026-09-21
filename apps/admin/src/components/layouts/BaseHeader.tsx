@@ -20,6 +20,7 @@ import WebSocketComponent from "../../pages/Websocket";
 const PopoverMenuHeader = () => {
   const navigate = useNavigate();
   const { setPathFromKey } = getPathContext();
+  const { setAuthUser } = getGlobalContext();
 
   return (
     <>
@@ -27,7 +28,9 @@ const PopoverMenuHeader = () => {
       <Button
         style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}
         onClick={() => {
-          const [mePage] = MENU_LIST.filter((i) => i.path && i.path == DASHBOARD_ROUTES.MY_PROFILE);
+          const [mePage] = MENU_LIST.filter(
+            (i) => i.path && i.path == DASHBOARD_ROUTES.MY_PROFILE,
+          );
 
           setPathFromKey(mePage.key);
         }}
@@ -35,9 +38,19 @@ const PopoverMenuHeader = () => {
         My Profile
       </Button>
       <br />
-      <Button style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}>Settings</Button>
+      <Button style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}>
+        Settings
+      </Button>
       <br />
-      <Button style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}>Sign Out</Button>
+      <Button
+        style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}
+        onClick={() => {
+          setAuthUser(undefined);
+          navigate("/login", { replace: true });
+        }}
+      >
+        Sign Out
+      </Button>
       <br />
     </>
   );
@@ -55,7 +68,9 @@ const PopoverMenuTitle = () => {
       }}
     >
       <Typography style={{ marginBottom: "0.25rem" }}>Demo Company</Typography>
-      <span style={{ fontWeight: "lighter", color: "grey" }}>Workbench Administrator</span>
+      <span style={{ fontWeight: "lighter", color: "grey" }}>
+        Workbench Administrator
+      </span>
     </div>
   );
 };
@@ -81,10 +96,16 @@ const BaseHeader = () => {
           size={40}
           icon={<QuestionCircleOutlined />}
           style={{ cursor: "pointer" }}
-        />  
+        />
         <span style={{ flex: 1 }}></span>
         <div style={{ marginRight: "1.5rem" }}>
-          <Badge showZero count={4} overflowCount={10} size="small" color="geekblue">
+          <Badge
+            showZero
+            count={4}
+            overflowCount={10}
+            size="small"
+            color="geekblue"
+          >
             <Avatar
               className="m-hoverable"
               shape="circle"
@@ -95,7 +116,9 @@ const BaseHeader = () => {
           </Badge>
         </div>
 
-        <Typography style={{ color: "white", marginRight: "1rem" }}>{authUser?.name}</Typography>
+        <Typography style={{ color: "white", marginRight: "1rem" }}>
+          {authUser?.name}
+        </Typography>
         <Popover
           content={<PopoverMenuHeader />}
           title={<PopoverMenuTitle />}
@@ -115,7 +138,7 @@ const BaseHeader = () => {
       </Header>
 
       <Header style={navHeaderStyle}>
-        <WebSocketComponent url={process.env.ADMIN_WEBSOCKET_SERVICE}/>
+        <WebSocketComponent url={process.env.ADMIN_WEBSOCKET_SERVICE} />
 
         <BaseBreadCrum selectedMenu={menuItem} />
 
