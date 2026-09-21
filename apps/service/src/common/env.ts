@@ -104,6 +104,9 @@ export class Env extends GlobalEnv {
   @IsUrl()
   host: string;
 
+  @IsString()
+  jwtSecret: string
+
   @IsNumber()
   port: number;
 

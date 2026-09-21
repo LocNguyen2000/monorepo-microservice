@@ -192,3 +192,34 @@ create table if not exists invoice_schedules (
     CONSTRAINT FOREIGN KEY (`locationCode`) REFERENCES locations (`locationCode`),
     CONSTRAINT FOREIGN KEY (`invoiceCode`) REFERENCES invoices (`invoiceCode`)
 );
+
+--- account table
+
+create table if not exists accounts (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `fullName` VARCHAR(50) NOT NULL,
+    `email` VARCHAR(50) NOT NULL UNIQUE, -- Ensures unique emails
+    `password` VARCHAR(100) NOT NULL,
+    `role` INT NOT NULL DEFAULT 0,
+    `status` INT NOT NULL DEFAULT 0,
+    CONSTRAINT CK_account_status_Range CHECK (`status` >= 0 AND `status` <= 1),
+    PRIMARY KEY (`id`)
+);
+
+
+create table
+    if not exists roles(
+        `id` int NOT NULL PRIMARY KEY,
+        `role` varchar(50) NOT NULL,
+        `createdAt` datetime DEFAULT CURRENT_TIMESTAMP(),
+        `updatedAt` datetime DEFAULT CURRENT_TIMESTAMP(),
+        `createdBy` varchar(50) DEFAULT NULL,
+        `updatedBy` varchar(50) DEFAULT NULL
+    );
+
+ALTER TABLE accounts
+ADD CONSTRAINT fk_account_role
+FOREIGN KEY (`role`) 
+REFERENCES roles(`id`)
+ON DELETE CASCADE
+ON UPDATE CASCADE;

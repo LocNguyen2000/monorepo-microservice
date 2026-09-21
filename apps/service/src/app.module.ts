@@ -1,4 +1,5 @@
 import { Module } from '@nestjs/common';
+import { APP_GUARD } from '@nestjs/core';
 import { AppController } from './app.controller.js';
 import { EnvModule, EnvService } from '@nhl/env';
 import { Env } from './common/env.js';
@@ -19,9 +20,13 @@ import { LocationsModule } from './locations/locations.module.js';
 import { ExpenseSchema } from './common/schema/user/expense.js';
 import { ExpenseModule } from './expense/expense.module.js';
 import { InvoicesModule } from './invoices/invoices.module.js';
+import { AccountSchema } from './common/schema/auth/account.js';
+import { RoleSchema } from './common/schema/auth/role.js';
 import { OcrModule } from './ocr/ocr.module.js';
 import mysql2 from 'mysql2';
 import 'dotenv/config';
+import { AuthModule } from './auth/auth.module.js';
+import { AuthGuard } from './auth/auth.guard.js';
 @Module({
   imports: [
     EnvModule.register({ path: '/config/env.json', class: Env }),
@@ -65,6 +70,9 @@ import 'dotenv/config';
             InvoiceSchema,
             InvoiceExpenseSchema,
             InvoiceScheduleSchema,
+            // accounts
+            AccountSchema,
+            RoleSchema
           ],
           logging: false,
           // `sync: { force: true }` DROPS AND RECREATES every table on boot. On
@@ -83,7 +91,9 @@ import 'dotenv/config';
     ExpenseModule,
     InvoicesModule,
     OcrModule,
+    AuthModule,
   ],
   controllers: [AppController],
+  providers: [{ provide: APP_GUARD, useClass: AuthGuard }],
 })
 export class AppModule { }
