@@ -1,6 +1,9 @@
 import Dashboard from "./pages/Dashboard";
 import { FunctionComponent, useState } from "react";
-import { AuthenticatedRoute } from "./components/AuthenticatedRoute";
+import {
+  AdminOnlyRoute,
+  AuthenticatedRoute,
+} from "./components/AuthenticatedRoute";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DASHBOARD_ROUTES } from "./lib/constants/routes";
 import { GlobalContext } from "./lib/context";
@@ -146,28 +149,59 @@ const App: FunctionComponent<AppProps> = () => {
               />
               <Route
                 path={DASHBOARD_ROUTES.PROVIDER}
-                element={<RentProviderList />}
+                element={
+                  <AdminOnlyRoute>
+                    <RentProviderList />
+                  </AdminOnlyRoute>
+                }
               />
-              <Route path={DASHBOARD_ROUTES.TENANT} element={<TenantList />} />
+              <Route
+                path={DASHBOARD_ROUTES.TENANT}
+                element={
+                  <AdminOnlyRoute>
+                    <TenantList />
+                  </AdminOnlyRoute>
+                }
+              />
               <Route
                 path={DASHBOARD_ROUTES.LOCATION_DETAIL}
-                element={<LocationDetail />}
+                element={
+                  <AdminOnlyRoute>
+                    <LocationDetail />
+                  </AdminOnlyRoute>
+                }
               />
               <Route
                 path={DASHBOARD_ROUTES.LOCATION}
-                element={<LocationList />}
+                element={
+                  <AdminOnlyRoute>
+                    <LocationList />
+                  </AdminOnlyRoute>
+                }
               />
               <Route
                 path={DASHBOARD_ROUTES.EXPENSE}
-                element={<ExpenseList />}
+                element={
+                  <AdminOnlyRoute>
+                    <ExpenseList />
+                  </AdminOnlyRoute>
+                }
               />
               <Route
                 path={DASHBOARD_ROUTES.INVOICE}
-                element={<InvoicePage />}
+                element={
+                  <AdminOnlyRoute>
+                    <InvoicePage />
+                  </AdminOnlyRoute>
+                }
               />
               <Route
                 path={DASHBOARD_ROUTES.SCHEDULE}
-                element={<SchedulePage />}
+                element={
+                  <AdminOnlyRoute>
+                    <SchedulePage />
+                  </AdminOnlyRoute>
+                }
               />
               <Route
                 path={DASHBOARD_ROUTES.MY_PROFILE}

@@ -1,7 +1,7 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Req } from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from './auth.service.js';
-import { LoginDto, RegisterDto, UpdateRoleDto } from './auth.dto.js';
+import { LoginDto, RegisterDto, UpdateRoleDto, UpdateStatusDto } from './auth.dto.js';
 import { Public } from './auth.decorator.js';
 import { Roles, UserRole } from './auth.roles.js';
 import { TokenPayload } from './auth.service.js';
@@ -48,5 +48,15 @@ export class AuthController {
         @Req() request: Request & { user: TokenPayload },
     ) {
         return this.authService.updateRole(accountId, input.role, request.user.sub);
+    }
+
+    @Roles(UserRole.SuperAdministrator)
+    @Patch(':id/status')
+    updateStatus(
+        @Param('id', ParseIntPipe) accountId: number,
+        @Body() input: UpdateStatusDto,
+        @Req() request: Request & { user: TokenPayload },
+    ) {
+        return this.authService.updateStatus(accountId, input.status, request.user.sub);
     }
 }

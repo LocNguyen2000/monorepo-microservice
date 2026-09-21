@@ -10,16 +10,21 @@ import {
   Table,
   Tag,
 } from "antd";
-import { CheckOutlined, UserOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  StopOutlined,
+  PlayCircleOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
 import Typography from "antd/es/typography/Typography";
-import { ADMIN_ROLES, UserRole } from "../lib/constants/roles";
+import { ADMIN_ROLES, AccountStatus, UserRole } from "../lib/constants/roles";
 
 interface Account {
   id: number;
   fullName: string;
   email: string;
   role: number;
-  status: number;
+  status: AccountStatus;
 }
 
 const MyProfilePage = () => {
@@ -27,6 +32,7 @@ const MyProfilePage = () => {
   const [accounts, setAccounts] = useState<Account[]>([]);
   const [isLoadingAccounts, setIsLoadingAccounts] = useState(false);
   const [approvingId, setApprovingId] = useState<number>();
+  const [updatingStatusId, setUpdatingStatusId] = useState<number>();
   const isAdmin = ADMIN_ROLES.includes(Number(authUser?.role));
   const isSuperAdmin = Number(authUser?.role) === UserRole.SuperAdministrator;
 
@@ -55,7 +61,9 @@ const MyProfilePage = () => {
       await serviceClient.patch(`auth/${accountId}/approve`);
       setAccounts((accounts) =>
         accounts.map((account) =>
-          account.id === accountId ? { ...account, status: 1 } : account,
+          account.id === accountId
+            ? { ...account, status: AccountStatus.Active }
+            : account,
         ),
       );
       useToast("success", "Account approved successfully.");
@@ -86,6 +94,31 @@ const MyProfilePage = () => {
     }
   };
 
+  const updateStatus = async (accountId: number, status: AccountStatus) => {
+    setUpdatingStatusId(accountId);
+    try {
+      await serviceClient.patch(`auth/${accountId}/status`, { status });
+      setAccounts((accounts) =>
+        accounts.map((account) =>
+          account.id === accountId ? { ...account, status } : account,
+        ),
+      );
+      useToast(
+        "success",
+        status === AccountStatus.Active
+          ? "Account activated successfully."
+          : "Account deactivated successfully.",
+      );
+    } catch (error: any) {
+      useToast(
+        "error",
+        error?.response?.data?.message || "Unable to update account status.",
+      );
+    } finally {
+      setUpdatingStatusId(undefined);
+    }
+  };
+
   const roleLabels: Record<UserRole, string> = {
     [UserRole.SuperAdministrator]: "Super administrator",
     [UserRole.Administrator]: "Administrator",
@@ -107,8 +140,8 @@ const MyProfilePage = () => {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (status: number) =>
-        status === 1 ? (
+      render: (status: AccountStatus) =>
+        status === AccountStatus.Active ? (
           <Tag color="green">Approved</Tag>
         ) : (
           <Tag color="gold">Pending approval</Tag>
@@ -137,15 +170,50 @@ const MyProfilePage = () => {
       key: "action",
       align: "center" as const,
       render: (_: unknown, account: Account) => (
-        <Button
-          type="primary"
-          icon={<CheckOutlined />}
-          loading={approvingId === account.id}
-          onClick={() => approveAccount(account.id)}
-          disabled={account.status === 1}
-        >
-          {account.status === 1 ? "Approved" : "Approve"}
-        </Button>
+        <>
+          <Button
+            type="primary"
+            icon={<CheckOutlined />}
+            loading={approvingId === account.id}
+            onClick={() => approveAccount(account.id)}
+            disabled={account.status === AccountStatus.Active}
+          >
+            Approve
+          </Button>
+          {isSuperAdmin &&
+            account.id !== authUser?.userId &&
+            account.role !== UserRole.SuperAdministrator && (
+              <Button
+                danger={account.status === AccountStatus.Active}
+                type={
+                  account.status === AccountStatus.Active
+                    ? "default"
+                    : "primary"
+                }
+                icon={
+                  account.status === AccountStatus.Active ? (
+                    <StopOutlined />
+                  ) : (
+                    <PlayCircleOutlined />
+                  )
+                }
+                loading={updatingStatusId === account.id}
+                onClick={() =>
+                  updateStatus(
+                    account.id,
+                    account.status === AccountStatus.Active
+                      ? AccountStatus.Inactive
+                      : AccountStatus.Active,
+                  )
+                }
+                style={{ marginLeft: 8 }}
+              >
+                {account.status === AccountStatus.Active
+                  ? "Deactivate"
+                  : "Activate"}
+              </Button>
+            )}
+        </>
       ),
     },
   ];

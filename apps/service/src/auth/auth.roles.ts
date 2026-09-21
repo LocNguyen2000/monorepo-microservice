@@ -6,6 +6,11 @@ export enum UserRole {
     User = 3,
 }
 
+export enum AccountStatus {
+    Inactive = 0,
+    Active = 1,
+}
+
 export const ROLES_KEY = 'roles';
 export const ADMIN_ROLES = [UserRole.SuperAdministrator, UserRole.Administrator];
 export const Roles = (...roles: UserRole[]) => SetMetadata(ROLES_KEY, roles);

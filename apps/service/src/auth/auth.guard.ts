@@ -9,7 +9,7 @@ import { EnvService } from '@nhl/env';
 import { Env } from '../common/env.js';
 import { IS_PUBLIC_KEY } from './auth.constants.js';
 import { AuthService } from './auth.service.js';
-import { ROLES_KEY } from './auth.roles.js';
+import { ADMIN_ROLES, ROLES_KEY } from './auth.roles.js';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
@@ -19,7 +19,7 @@ export class AuthGuard implements CanActivate {
         private readonly env: EnvService<Env>,
     ) { }
 
-    canActivate(context: ExecutionContext): boolean {
+    async canActivate(context: ExecutionContext): Promise<boolean> {
         const isPublic = this.reflector.getAllAndOverride<boolean>(IS_PUBLIC_KEY, [
             context.getHandler(),
             context.getClass(),
@@ -29,7 +29,7 @@ export class AuthGuard implements CanActivate {
         const requiredRoles = this.reflector.getAllAndOverride<number[]>(ROLES_KEY, [
             context.getHandler(),
             context.getClass(),
-        ]);
+        ]) ?? ADMIN_ROLES;
 
         const request = context.switchToHttp().getRequest();
         const authorization = request.headers.authorization;
@@ -40,7 +40,8 @@ export class AuthGuard implements CanActivate {
         if (!token) throw new UnauthorizedException('Authentication required');
 
         try {
-            request.user = this.authService.verifyToken(token, this.env.get('jwtSecret'));
+            const payload = this.authService.verifyToken(token, this.env.get('jwtSecret'));
+            request.user = await this.authService.getActiveTokenPayload(payload);
             if (requiredRoles?.length && !requiredRoles.includes(request.user.role)) {
                 throw new UnauthorizedException('Administrator access required');
             }

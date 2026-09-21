@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { IsEnum } from 'class-validator';
-import { UserRole } from './auth.roles.js';
+import { AccountStatus, UserRole } from './auth.roles.js';
 
 export class RegisterDto {
     @IsString()
@@ -27,4 +27,9 @@ export class LoginDto {
 export class UpdateRoleDto {
     @IsEnum(UserRole)
     role: UserRole;
+}
+
+export class UpdateStatusDto {
+    @IsEnum(AccountStatus)
+    status: AccountStatus;
 }

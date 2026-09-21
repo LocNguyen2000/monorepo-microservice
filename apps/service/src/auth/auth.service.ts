@@ -12,7 +12,7 @@ import { Env } from '../common/env.js';
 import { createHmac, randomBytes, scrypt as callbackScrypt, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 import { LoginDto, RegisterDto } from './auth.dto.js';
-import { UserRole } from './auth.roles.js';
+import { AccountStatus, UserRole } from './auth.roles.js';
 
 const scrypt = promisify(callbackScrypt);
 const TOKEN_TTL_SECONDS = 24 * 60 * 60;
@@ -36,7 +36,7 @@ export class AuthService {
             email,
             password,
             role: UserRole.User,
-            status: 0,
+            status: AccountStatus.Inactive,
         } as AccountSchema);
 
         return {
@@ -55,7 +55,7 @@ export class AuthService {
         if (!account || !(await this.verifyPassword(input.password, account.password))) {
             throw new UnauthorizedException('Invalid email or password');
         }
-        if (account.status !== 1) {
+        if (account.status !== AccountStatus.Active) {
             throw new UnauthorizedException('Account is awaiting administrator approval');
         }
 
@@ -64,7 +64,7 @@ export class AuthService {
 
     async listPendingAccounts() {
         return this.accountModel.findAll({
-            where: { status: 0 },
+            where: { status: AccountStatus.Inactive },
             attributes: ['id', 'fullName', 'email', 'role', 'status'],
             order: [['id', 'ASC']],
         });
@@ -84,7 +84,7 @@ export class AuthService {
 
         const account = await this.accountModel.findByPk(accountId);
         if (!account) throw new NotFoundException('Account not found');
-        if (account.status === 1) {
+        if (account.status === AccountStatus.Active) {
             return {
                 id: account.id,
                 status: account.status,
@@ -92,7 +92,7 @@ export class AuthService {
             };
         }
 
-        account.status = 1;
+        account.status = AccountStatus.Active;
         await account.save();
         return {
             id: account.id,
@@ -124,6 +124,29 @@ export class AuthService {
         };
     }
 
+    async updateStatus(accountId: number, status: AccountStatus, updaterId: number) {
+        if (accountId === updaterId) {
+            throw new ConflictException('An account cannot change its own status');
+        }
+
+        const account = await this.accountModel.findByPk(accountId);
+        if (!account) throw new NotFoundException('Account not found');
+        if (account.role === UserRole.SuperAdministrator) {
+            throw new ConflictException('A super administrator cannot be deactivated here');
+        }
+
+        account.status = status;
+        await account.save();
+        return {
+            id: account.id,
+            email: account.email,
+            fullName: account.fullName,
+            role: account.role,
+            status: account.status,
+            message: status === AccountStatus.Active ? 'Account activated successfully' : 'Account deactivated successfully',
+        };
+    }
+
     verifyToken(token: string, secret: string): TokenPayload {
         const [encodedPayload, encodedSignature] = token.split('.');
         if (!encodedPayload || !encodedSignature) throw new Error('Malformed token');
@@ -138,6 +161,12 @@ export class AuthService {
         const payload = JSON.parse(Buffer.from(encodedPayload, 'base64url').toString()) as TokenPayload;
         if (!payload.exp || payload.exp < Math.floor(Date.now() / 1000)) throw new Error('Expired token');
         return payload;
+    }
+
+    async getActiveTokenPayload(payload: TokenPayload): Promise<TokenPayload> {
+        const account = await this.accountModel.findByPk(payload.sub);
+        if (!account || account.status !== AccountStatus.Active) throw new UnauthorizedException('Account is inactive');
+        return { ...payload, role: account.role };
     }
 
     private async createAuthResponse(account: AccountSchema) {

@@ -19,6 +19,7 @@ import { DASHBOARD_ROUTES } from "../lib/constants/routes";
 import BaseHeader from "../components/layouts/BaseHeader";
 import { PathContext, getGlobalContext } from "../lib/context";
 import BaseFooter from "../components/layouts/BaseFooter";
+import { ADMIN_ROLES } from "../lib/constants/roles";
 
 interface DashboardProps {}
 
@@ -99,8 +100,15 @@ export const MENU_LIST: IAntdMenuItem[] = [
 const Dashboard: FunctionComponent<DashboardProps> = () => {
   const [menuItem, setMenuItem] = useState<IAntdMenuItem>(MENU_LIST[0]);
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
-  const { useNotify } = getGlobalContext();
+  const { useNotify, authUser } = getGlobalContext();
   const navigate = useNavigate();
+  const visibleMenuItems = ADMIN_ROLES.includes(Number(authUser?.role))
+    ? MENU_LIST
+    : MENU_LIST.filter(
+        (item) =>
+          item.path === DASHBOARD_ROUTES.OVERVIEW ||
+          item.path === DASHBOARD_ROUTES.MY_PROFILE,
+      );
 
   const setPathFromKey = (selectedItemKey: string) => {
     const selected = MENU_LIST.find((item) => item.key === selectedItemKey);
@@ -127,7 +135,7 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
     >
       <Space direction="vertical">
         <Layout>
-          <MenuSidebar menuItems={MENU_LIST} isCollapse={isCollapse} />
+          <MenuSidebar menuItems={visibleMenuItems} isCollapse={isCollapse} />
 
           <BaseHeader />
 
