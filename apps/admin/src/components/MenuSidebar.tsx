@@ -1,5 +1,6 @@
 import { FunctionComponent, useContext } from "react";
 import { Divider, Menu, Typography } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 import { headerHight, siderStyle } from "../css/layout";
 import { formatAntdMenuByList } from "../lib/utils";
 import { IAntdMenuItem } from "../lib/interface";
@@ -11,7 +12,10 @@ interface MenuSidebarProps {
   isCollapse: boolean;
 }
 
-const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({ menuItems, isCollapse }) => {
+const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({
+  menuItems,
+  isCollapse,
+}) => {
   const { menuItem, setPathFromKey } = useContext(PathContext);
 
   return (
@@ -34,6 +38,7 @@ const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({ menuItems, isCollaps
             color: "white",
           }}
         >
+          <HomeOutlined style={{ marginRight: "0.35rem" }} />
           Quản lý nhà trọ
         </Typography>
       </div>
@@ -46,7 +51,9 @@ const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({ menuItems, isCollaps
         onClick={(info) => setPathFromKey(info.key)}
         items={formatAntdMenuByList(menuItems)}
         selectedKeys={[menuItem.key]}
-        defaultOpenKeys={MENU_LIST.filter((t) => t.parentKey === undefined).map((t) => t.key)}
+        defaultOpenKeys={MENU_LIST.filter((t) => t.parentKey === undefined).map(
+          (t) => t.key,
+        )}
         inlineCollapsed={isCollapse}
       />
     </div>

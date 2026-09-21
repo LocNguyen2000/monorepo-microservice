@@ -1,5 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { Alert, Button, Card, Form, Input, Typography, Flex } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getGlobalContext } from "../lib/context";
 
@@ -60,9 +61,12 @@ const RegisterPage: FunctionComponent = () => {
           autoComplete="off"
           onFinish={submitRegister}
         >
-          <Typography.Title level={2}>Create admin account</Typography.Title>
+          <Typography.Title level={2} style={{ textAlign: "center" }}>
+            <HomeOutlined style={{ marginRight: "0.5rem" }} />
+            Đăng ký tài khoản
+          </Typography.Title>
           <Typography.Paragraph type="secondary">
-            Set up an account to manage your rental workspace.
+            Tạo tài khoản để sử dụng hệ thống nhà trọ.
           </Typography.Paragraph>
           {error && (
             <Alert
@@ -74,7 +78,7 @@ const RegisterPage: FunctionComponent = () => {
           )}
           {success && (
             <Alert
-              message="Account created. Redirecting to sign in..."
+              message="Đăng ký thành công. Đang chuyển đến trang đăng nhập..."
               type="success"
               showIcon
               style={{ marginBottom: 16 }}
@@ -82,9 +86,9 @@ const RegisterPage: FunctionComponent = () => {
           )}
 
           <Form.Item
-            label="Full name"
+            label="Họ và tên"
             name="fullName"
-            rules={[{ required: true, message: "Enter your full name." }]}
+            rules={[{ required: true, message: "Vui lòng nhập họ và tên." }]}
           >
             <Input
               size="large"
@@ -100,7 +104,7 @@ const RegisterPage: FunctionComponent = () => {
               {
                 required: true,
                 type: "email",
-                message: "Enter a valid email address.",
+                message: "Vui lòng nhập email hợp lệ.",
               },
             ]}
           >
@@ -112,11 +116,11 @@ const RegisterPage: FunctionComponent = () => {
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            label="Mật khẩu"
             name="password"
             rules={[
-              { required: true, message: "Create a password." },
-              { min: 8, message: "Password must be at least 8 characters." },
+              { required: true, message: "Vui lòng tạo mật khẩu." },
+              { min: 8, message: "Mật khẩu phải có ít nhất 8 ký tự." },
             ]}
           >
             <Input.Password
@@ -127,16 +131,16 @@ const RegisterPage: FunctionComponent = () => {
           </Form.Item>
 
           <Form.Item
-            label="Confirm password"
+            label="Xác nhận mật khẩu"
             name="confirmPassword"
             dependencies={["password"]}
             rules={[
-              { required: true, message: "Confirm your password." },
+              { required: true, message: "Vui lòng xác nhận mật khẩu." },
               ({ getFieldValue }) => ({
                 validator(_, value) {
                   return !value || getFieldValue("password") === value
                     ? Promise.resolve()
-                    : Promise.reject(new Error("Passwords do not match."));
+                    : Promise.reject(new Error("Mật khẩu không khớp."));
                 },
               }),
             ]}
@@ -156,12 +160,12 @@ const RegisterPage: FunctionComponent = () => {
               block
               loading={loading}
             >
-              Create account
+              Đăng ký
             </Button>
           </Form.Item>
 
           <Button type="link" block onClick={() => navigate("/login")}>
-            Already have an account? Sign in
+            Đã có tài khoản? Đăng nhập
           </Button>
         </Form>
       </Card>

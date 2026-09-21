@@ -1,5 +1,6 @@
 import { FunctionComponent, useEffect, useState } from "react";
 import { Form, Input, Checkbox, Button, Typography, Flex, Alert } from "antd";
+import { HomeOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getGlobalContext } from "../lib/context";
 import Card from "antd/es/card/Card";
@@ -68,9 +69,12 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
           layout="vertical"
           onFinish={submitLogin}
         >
-          <Typography.Title level={2}>Admin sign in</Typography.Title>
+          <Typography.Title level={2} style={{ textAlign: "center" }}>
+            <HomeOutlined style={{ marginRight: "0.5rem" }} />
+            Đăng nhập quản trị
+          </Typography.Title>
           <Typography.Paragraph type="secondary">
-            Sign in to manage your rental workspace.
+            Đăng nhập để quản lý hệ thống nhà trọ.
           </Typography.Paragraph>
           {error && (
             <Alert
@@ -87,7 +91,7 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
               {
                 required: true,
                 type: "email",
-                message: "Enter a valid email address.",
+                message: "Vui lòng nhập email hợp lệ.",
               },
             ]}
           >
@@ -99,9 +103,9 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
           </Form.Item>
 
           <Form.Item
-            label="Password"
+            label="Mật khẩu"
             name="password"
-            rules={[{ required: true, message: "Enter your password." }]}
+            rules={[{ required: true, message: "Vui lòng nhập mật khẩu." }]}
           >
             <Input.Password
               size="large"
@@ -111,7 +115,7 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
           </Form.Item>
 
           <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>Remember me</Checkbox>
+            <Checkbox>Ghi nhớ đăng nhập</Checkbox>
           </Form.Item>
 
           <Form.Item>
@@ -122,12 +126,12 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
               block
               loading={loading}
             >
-              Sign in
+              Đăng nhập
             </Button>
           </Form.Item>
 
           <Button type="link" block onClick={() => navigate("/register")}>
-            Need an account? Create one
+            Chưa có tài khoản? Đăng ký ngay
           </Button>
         </Form>
       </Card>
