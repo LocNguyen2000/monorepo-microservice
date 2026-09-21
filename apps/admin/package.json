@@ -18,11 +18,13 @@
     "react": "18.0.0",
     "react-dom": "18.0.0",
     "react-router-dom": "6.8.2",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "tslib": "^2.8.1"
   },
   "devDependencies": {
     "@ant-design/cssinjs": "1.6.1",
     "@ant-design/icons": "5.0.1",
+    "@types/node": "^24.13.5",
     "@types/react": "17.0.2",
     "@types/react-dom": "17.0.10",
     "@vitejs/plugin-react": "1.0.7",

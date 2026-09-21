@@ -15,121 +15,6 @@ importers:
         specifier: 6.0.3
         version: 6.0.3
 
-  apps/account:
-    dependencies:
-      '@nestjs/common':
-        specifier: ^12.0.3
-        version: 12.0.3(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.2.0)
-      '@nestjs/core':
-        specifier: ^12.0.3
-        version: 12.0.3(@nestjs/common@12.0.3(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.2.0))(@nestjs/microservices@12.0.3)(@nestjs/platform-express@12.0.3)(@nestjs/websockets@12.0.3)(reflect-metadata@0.2.2)(rxjs@7.2.0)
-      '@nestjs/platform-express':
-        specifier: ^12.0.3
-        version: 12.0.3(@nestjs/common@12.0.3(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.2.0))(@nestjs/core@12.0.3)
-      '@nestjs/sequelize':
-        specifier: ^12.0.0
-        version: 12.0.0(@nestjs/common@12.0.3(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.2.0))(@nestjs/core@12.0.3)(reflect-metadata@0.2.2)(rxjs@7.2.0)(sequelize-typescript@2.1.6(@types/node@24.13.5)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.35.2(mysql2@3.6.5)))(sequelize@6.35.2(mysql2@3.6.5))
-      '@types/jsonwebtoken':
-        specifier: ^9.0.8
-        version: 9.0.10
-      argon2:
-        specifier: ^0.45.1
-        version: 0.45.1
-      axios:
-        specifier: 1.3.4
-        version: 1.3.4
-      class-transformer:
-        specifier: 0.5.1
-        version: 0.5.1
-      class-validator:
-        specifier: 0.14.0
-        version: 0.14.0
-      jsonwebtoken:
-        specifier: ^9.0.2
-        version: 9.0.3
-      lodash:
-        specifier: 4.17.21
-        version: 4.17.21
-      mysql2:
-        specifier: 3.6.5
-        version: 3.6.5
-      reflect-metadata:
-        specifier: ^0.2.2
-        version: 0.2.2
-      rimraf:
-        specifier: 3.0.2
-        version: 3.0.2
-      rxjs:
-        specifier: 7.2.0
-        version: 7.2.0
-      sequelize:
-        specifier: 6.35.2
-        version: 6.35.2(mysql2@3.6.5)
-      sequelize-typescript:
-        specifier: 2.1.6
-        version: 2.1.6(@types/node@24.13.5)(@types/validator@13.15.10)(reflect-metadata@0.2.2)(sequelize@6.35.2(mysql2@3.6.5))
-    devDependencies:
-      '@nestjs/cli':
-        specifier: ^12.0.3
-        version: 12.0.3(@types/node@24.13.5)(prettier@3.9.7)(ts-loader@9.6.2(typescript@6.0.3)(webpack@5.111.0))(webpack-node-externals@3.0.0)(webpack@5.111.0)
-      '@nestjs/config':
-        specifier: ^12.0.0
-        version: 12.0.0(@nestjs/common@12.0.3(class-transformer@0.5.1)(class-validator@0.14.0)(reflect-metadata@0.2.2)(rxjs@7.2.0))(rxjs@7.2.0)
-      '@nestjs/schematics':
-        specifier: ^12.0.3
-        version: 12.0.3(chokidar@5.0.0)(prettier@3.9.7)(typescript@6.0.3)
-      '@nhl/env':
-        specifier: workspace:*
-        version: link:../../packages/env
-      '@nhl/error':
-        specifier: workspace:1.0.0
-        version: link:../../packages/error
-      '@types/axios':
-        specifier: 0.14.0
-        version: 0.14.0
-      '@types/express':
-        specifier: ^5.0.6
-        version: 5.0.6
-      '@types/node':
-        specifier: ^24.0.0
-        version: 24.13.5
-      '@types/sequelize':
-        specifier: 4.28.19
-        version: 4.28.19
-      '@typescript-eslint/eslint-plugin':
-        specifier: 5.0.0
-        version: 5.0.0(@typescript-eslint/parser@5.0.0(eslint@8.0.1)(typescript@6.0.3))(eslint@8.0.1)(typescript@6.0.3)
-      '@typescript-eslint/parser':
-        specifier: 5.0.0
-        version: 5.0.0(eslint@8.0.1)(typescript@6.0.3)
-      eslint:
-        specifier: 8.0.1
-        version: 8.0.1
-      eslint-config-prettier:
-        specifier: 8.3.0
-        version: 8.3.0(eslint@8.0.1)
-      eslint-plugin-prettier:
-        specifier: 4.0.0
-        version: 4.0.0(eslint-config-prettier@8.3.0(eslint@8.0.1))(eslint@8.0.1)(prettier@3.9.7)
-      prettier:
-        specifier: ^3.0.0
-        version: 3.9.7
-      source-map-support:
-        specifier: 0.5.20
-        version: 0.5.20
-      ts-loader:
-        specifier: ^9.5.4
-        version: 9.6.2(typescript@6.0.3)(webpack@5.111.0)
-      ts-node:
-        specifier: 10.0.0
-        version: 10.0.0(@types/node@24.13.5)(typescript@6.0.3)
-      tsconfig-paths:
-        specifier: 4.1.1
-        version: 4.1.1
-      typescript:
-        specifier: 6.0.3
-        version: 6.0.3
-
   apps/admin:
     dependencies:
       '@ant-design/charts':
@@ -162,6 +47,9 @@ importers:
       styled-components:
         specifier: ^6.1.8
         version: 6.5.3(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
+      tslib:
+        specifier: ^2.8.1
+        version: 2.8.1
     devDependencies:
       '@ant-design/cssinjs':
         specifier: 1.6.1
@@ -169,6 +57,9 @@ importers:
       '@ant-design/icons':
         specifier: 5.0.1
         version: 5.0.1(react-dom@18.0.0(react@18.0.0))(react@18.0.0)
+      '@types/node':
+        specifier: ^24.13.5
+        version: 24.13.5
       '@types/react':
         specifier: 17.0.2
         version: 17.0.2
@@ -221,6 +112,9 @@ importers:
       '@eslint/js':
         specifier: ^9.19.0
         version: 9.39.5
+      '@types/node':
+        specifier: 26.6.2
+        version: 26.6.2
       '@types/react':
         specifier: 17.0.2
         version: 17.0.2
@@ -760,9 +654,6 @@ packages:
 
   '@emotion/unitless@0.7.5':
     resolution: {integrity: sha512-OWORNpfjMsSSUBVrRBVGECkhWcULOAJz9ZW8uK9qgxD+87M7jHRcvh/A96XXNhXTLmKcoYSQtBEX7lHMO7YRwg==, tarball: https://registry.npmjs.org/@emotion/unitless/-/unitless-0.7.5.tgz}
-
-  '@epic-web/invariant@1.0.0':
-    resolution: {integrity: sha512-lrTPqgvfFQtR/eY/qkIzp98OGdNJu0m5ji3q/nJI8v3SXkRKEnWiOxMmbvcSoAIzv/cGiuvRy57k4suKQSAdwA==, tarball: https://registry.npmjs.org/@epic-web/invariant/-/invariant-1.0.0.tgz}
 
   '@esbuild/linux-loong64@0.14.54':
     resolution: {integrity: sha512-bZBrLAIX1kpWelV0XemxBZllyRmM6vgFQQG2GdNb+r3Fkp0FOh1NJSvekXDs7jq70k4euu1cryLMfU+mTXlEpw==, tarball: https://registry.npmjs.org/@esbuild/linux-loong64/-/linux-loong64-0.14.54.tgz}
@@ -1407,10 +1298,6 @@ packages:
     resolution: {integrity: sha512-oGB+UxlgWcgQkgwo8GcEGwemoTFt3FIO9ababBmaGwXIoBKZ+GTy0pP185beGg7Llih/NSHSV2XAs1lnznocSg==, tarball: https://registry.npmjs.org/@nodelib/fs.walk/-/fs.walk-1.2.8.tgz}
     engines: {node: '>= 8'}
 
-  '@phc/format@1.0.0':
-    resolution: {integrity: sha512-m7X9U6BG2+J+R1lSOdCiITLLrxm+cWlNI3HUFA92oLO77ObGNzaKdh8pMLqdZcshtkKuV84olNNXDfMc4FezBQ==, tarball: https://registry.npmjs.org/@phc/format/-/format-1.0.0.tgz}
-    engines: {node: '>=10'}
-
   '@protobufjs/aspromise@1.1.2':
     resolution: {integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==, tarball: https://registry.npmjs.org/@protobufjs/aspromise/-/aspromise-1.1.2.tgz}
 
@@ -1629,9 +1516,6 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==, tarball: https://registry.npmjs.org/@types/json-schema/-/json-schema-7.0.15.tgz}
 
-  '@types/jsonwebtoken@9.0.10':
-    resolution: {integrity: sha512-asx5hIG9Qmf/1oStypjanR7iKTv0gXQ1Ov/jfrX6kS/EO0OFni8orbmGCn0672NHR3kXHwpAwR+B368ZGN/2rA==, tarball: https://registry.npmjs.org/@types/jsonwebtoken/-/jsonwebtoken-9.0.10.tgz}
-
   '@types/lodash@4.14.191':
     resolution: {integrity: sha512-BdZ5BCCvho3EIXw6wUCXHe7rS53AIDPLE+JzwgT+OsJk53oBfbSmZZ7CX4VaRoN78N+TJpFi9QPlfIVNmJYWxQ==, tarball: https://registry.npmjs.org/@types/lodash/-/lodash-4.14.191.tgz}
 
@@ -1641,11 +1525,11 @@ packages:
   '@types/multer@2.2.0':
     resolution: {integrity: sha512-3U1troeqGV8Ntp7Q3klwf4zr23VEoqYVocYXaswm9+8z3O9UHDYAqLxjJ/h550iRADTjKdOdhhasXw6gD6kYtg==, tarball: https://registry.npmjs.org/@types/multer/-/multer-2.2.0.tgz}
 
-  '@types/node@18.11.18':
-    resolution: {integrity: sha512-DHQpWGjyQKSHj3ebjFI/wRKcqQcdR+MoFBygntYOZytCqNfkd2ZC4ARDJ2DQqhjH5p85Nnd3jhUJIXrszFX/JA==, tarball: https://registry.npmjs.org/@types/node/-/node-18.11.18.tgz}
-
   '@types/node@24.13.5':
     resolution: {integrity: sha512-TXyindR+lBr22aJIdMQzCFHPHR6cR4js838mRDCSz5hOKWZvZwsXSSiXDmjRj4iJmgl+sR9O+1mkoVBSMadNug==, tarball: https://registry.npmjs.org/@types/node/-/node-24.13.5.tgz}
+
+  '@types/node@26.6.2':
+    resolution: {integrity: sha512-X1P21scMv4zGKLYqjdGjaKa7COa0RKVYYZZN/NfvLQ1JegxFhdhpZG/Lyn8AXx6CDUavKAd11v6BvfpkDByK8g==, tarball: https://registry.npmjs.org/@types/node/-/node-26.6.2.tgz}
 
   '@types/prop-types@15.7.15':
     resolution: {integrity: sha512-F6bEyamV9jKGAFBEmlQnesRPGOQqS2+Uwi0Em15xenOxHaf2hv6L8YCVn3rPdPJOiJfPiCnLIRyvwVaqMY3MIw==, tarball: https://registry.npmjs.org/@types/prop-types/-/prop-types-15.7.15.tgz}
@@ -1915,10 +1799,6 @@ packages:
   arg@4.1.3:
     resolution: {integrity: sha512-58S9QDqG0Xx27YwPSt9fJxivjYl432YCwfDMfZ+71RAqUrZef7LrKQZ3LHLOwCS4FLNBplP533Zx895SeOCHvA==, tarball: https://registry.npmjs.org/arg/-/arg-4.1.3.tgz}
 
-  argon2@0.45.1:
-    resolution: {integrity: sha512-skm+/WCjkGqCQxF7FG1LuZXM5yvbFjgbfiCGsud2oLgaDhh6b6dbH0b1EkghbM+xx4Bj8Ape+KKgixoIlWZicQ==, tarball: https://registry.npmjs.org/argon2/-/argon2-0.45.1.tgz}
-    engines: {node: '>=16.17.0'}
-
   argparse@2.0.1:
     resolution: {integrity: sha512-8+9WqebbFzpX9OR+Wa6O29asIogeRMzcGtAINdpMHHyAg10f05aSFVBbcEqGf/PXw1EjAZ+q2/bEBg3DvurK3Q==, tarball: https://registry.npmjs.org/argparse/-/argparse-2.0.1.tgz}
 
@@ -2140,11 +2020,6 @@ packages:
 
   create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==, tarball: https://registry.npmjs.org/create-require/-/create-require-1.1.1.tgz}
-
-  cross-env@10.1.0:
-    resolution: {integrity: sha512-GsYosgnACZTADcmEyJctkJIoqAhHjttw7RsFrVoJNXbsWWqaq6Ym+7kZjq6mS45O0jij6vtiReppKQEtqWy6Dw==, tarball: https://registry.npmjs.org/cross-env/-/cross-env-10.1.0.tgz}
-    engines: {node: '>=20'}
-    hasBin: true
 
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==, tarball: https://registry.npmjs.org/cross-spawn/-/cross-spawn-7.0.6.tgz}
@@ -3030,10 +2905,6 @@ packages:
   jsonc-parser@3.3.1:
     resolution: {integrity: sha512-HUgH65KyejrUFPvHFPbqOY0rsFip3Bo5wb4ngvdi1EpCYWUQDC5V+Y7mZws+DLkr4M//zQJoanu1SP+87Dv1oQ==, tarball: https://registry.npmjs.org/jsonc-parser/-/jsonc-parser-3.3.1.tgz}
 
-  jsonwebtoken@9.0.3:
-    resolution: {integrity: sha512-MT/xP0CrubFRNLNKvxJ2BYfy53Zkm++5bX9dtuPbqAeQpTVe0MQTFhao8+Cp//EmJp244xt6Drw/GVEGCUj40g==, tarball: https://registry.npmjs.org/jsonwebtoken/-/jsonwebtoken-9.0.3.tgz}
-    engines: {node: '>=12', npm: '>=6'}
-
   jwa@2.0.1:
     resolution: {integrity: sha512-hRF04fqJIP8Abbkq5NKGN0Bbr3JxlQ+qhZufXVr0DvujKy93ZCbXZMHDL4EOtodSbCWxOqR8MS1tXA5hwqCXDg==, tarball: https://registry.npmjs.org/jwa/-/jwa-2.0.1.tgz}
 
@@ -3058,29 +2929,8 @@ packages:
     resolution: {integrity: sha512-iPZK6eYjbxRu3uB4/WZ3EsEIMJFMqAoopl3R+zuq0UjcAm/MO6KCweDgPfP3elTztoKP3KtnVHxTn2NHBSDVUw==, tarball: https://registry.npmjs.org/locate-path/-/locate-path-6.0.0.tgz}
     engines: {node: '>=10'}
 
-  lodash.includes@4.3.0:
-    resolution: {integrity: sha512-W3Bx6mdkRTGtlJISOvVD/lbqjTlPPUDTMnlXZFnVwi9NKJ6tiAk6LVdlhZMm17VZisqhKcgzpO5Wz91PCt5b0w==, tarball: https://registry.npmjs.org/lodash.includes/-/lodash.includes-4.3.0.tgz}
-
-  lodash.isboolean@3.0.3:
-    resolution: {integrity: sha512-Bz5mupy2SVbPHURB98VAcw+aHh4vRV5IPNhILUCsOzRmsTmSQ17jIuqopAentWoehktxGd9e/hbIXq980/1QJg==, tarball: https://registry.npmjs.org/lodash.isboolean/-/lodash.isboolean-3.0.3.tgz}
-
-  lodash.isinteger@4.0.4:
-    resolution: {integrity: sha512-DBwtEWN2caHQ9/imiNeEA5ys1JoRtRfY3d7V9wkqtbycnAmTvRRmbHKDV4a0EYc678/dia0jrte4tjYwVBaZUA==, tarball: https://registry.npmjs.org/lodash.isinteger/-/lodash.isinteger-4.0.4.tgz}
-
-  lodash.isnumber@3.0.3:
-    resolution: {integrity: sha512-QYqzpfwO3/CWf3XP+Z+tkQsfaLL/EnUlXWVkIk5FUPc4sBdTehEqZONuyRt2P67PXAk+NXmTBcc97zw9t1FQrw==, tarball: https://registry.npmjs.org/lodash.isnumber/-/lodash.isnumber-3.0.3.tgz}
-
-  lodash.isplainobject@4.0.6:
-    resolution: {integrity: sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==, tarball: https://registry.npmjs.org/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz}
-
-  lodash.isstring@4.0.1:
-    resolution: {integrity: sha512-0wJxfxH1wgO3GrbuP+dTTk7op+6L41QCXbGINEmD+ny/G/eCqGzxyCsh7159S+mgDDcoarnBw6PC1PS5+wUGgw==, tarball: https://registry.npmjs.org/lodash.isstring/-/lodash.isstring-4.0.1.tgz}
-
   lodash.merge@4.6.2:
     resolution: {integrity: sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==, tarball: https://registry.npmjs.org/lodash.merge/-/lodash.merge-4.6.2.tgz}
-
-  lodash.once@4.1.1:
-    resolution: {integrity: sha512-Sb487aTOCr9drQVL8pIxOzVhafOjZN9UU54hiN8PU3uAiSV7lx1yYNpbNmex2PK6dSJoNTSJUUswT651yww3Mg==, tarball: https://registry.npmjs.org/lodash.once/-/lodash.once-4.1.1.tgz}
 
   lodash@4.17.21:
     resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==, tarball: https://registry.npmjs.org/lodash/-/lodash-4.17.21.tgz}
@@ -3300,10 +3150,6 @@ packages:
       sass:
         optional: true
 
-  node-addon-api@8.9.2:
-    resolution: {integrity: sha512-VijLXbi3UACN69I0JVXJsX4tjACjNoQDgv2gTF6sx2wWEi8tkSg2eX8p5gSIFi8z2+DL3oHmY6OyKce38SDolg==, tarball: https://registry.npmjs.org/node-addon-api/-/node-addon-api-8.9.2.tgz}
-    engines: {node: ^18 || ^20 || >= 21}
-
   node-domexception@1.0.0:
     resolution: {integrity: sha512-/jKZoMpw0F8GRwl4/eLROPA3cfcXtLApP0QzLmUT/HuPCZWyB7IY9ZrMeKw2O/nFIqPQB3PVM9aYm0F312AXDQ==, tarball: https://registry.npmjs.org/node-domexception/-/node-domexception-1.0.0.tgz}
     engines: {node: '>=10.5.0'}
@@ -3316,10 +3162,6 @@ packages:
   node-fetch@3.3.2:
     resolution: {integrity: sha512-dRB78srN/l6gqWulah9SrxeYnxeddIG30+GOqK/9OlLVyLg3HPnr6SqOWTWOXKRwC2eGYCkZ59NNuSgvSrpgOA==, tarball: https://registry.npmjs.org/node-fetch/-/node-fetch-3.3.2.tgz}
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
-
-  node-gyp-build@4.8.4:
-    resolution: {integrity: sha512-LA4ZjwlnUblHVgq0oBF3Jl/6h/Nvs5fzBLwdEF4nuxnFdsfajde4WfxtJr3CaiH+F6ewcIB/q4jQ4UzPyid+CQ==, tarball: https://registry.npmjs.org/node-gyp-build/-/node-gyp-build-4.8.4.tgz}
-    hasBin: true
 
   node-releases@2.0.55:
     resolution: {integrity: sha512-mIrE/Cw9y+9Au6dS5vDKDhQza9YvG6w+ZrS6X+ZzA7yFW/soAeaups4Qzn1bL6g5FVy8WtP79+0j82oPIbqRjQ==, tarball: https://registry.npmjs.org/node-releases/-/node-releases-2.0.55.tgz}
@@ -4140,10 +3982,6 @@ packages:
     resolution: {integrity: sha512-AHx4Euop/dXFC+Vx589alFba8QItjF+8hf8LtmuiCwHyI4rHXQtOOENaM8kvYf5fR0dRChy3wzWIZ9WbB7FWow==, tarball: https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-4.1.0.tgz}
     engines: {node: '>=6'}
 
-  tsconfig-paths@4.1.1:
-    resolution: {integrity: sha512-VgPrtLKpRgEAJsMj5Q/I/mXouC6A/7eJ/X4Nuk6o0cRPwBtznYxTCU4FodbexbzH9somBPEXYi0ZkUViUpJ21Q==, tarball: https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-4.1.1.tgz}
-    engines: {node: '>=6'}
-
   tsconfig-paths@4.2.0:
     resolution: {integrity: sha512-NoZ4roiN7LnbKn9QqE1amc9DJfzvZXxF4xDavcOWt1BPkdx+m+0gJuPM+S0vCe7zTJMYUP0R8pO2XMr+Y8oLIg==, tarball: https://registry.npmjs.org/tsconfig-paths/-/tsconfig-paths-4.2.0.tgz}
     engines: {node: '>=6'}
@@ -4245,6 +4083,9 @@ packages:
 
   undici-types@7.18.2:
     resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==, tarball: https://registry.npmjs.org/undici-types/-/undici-types-7.18.2.tgz}
+
+  undici-types@8.9.0:
+    resolution: {integrity: sha512-KTDyRTYX8sWmKXAikPHHSyc63CRPETMctyjKFupcC6OBLXT3xsN0e9aF7m+mIXutFWpUXuedtowG7iLOzp0kQg==, tarball: https://registry.npmjs.org/undici-types/-/undici-types-8.9.0.tgz}
 
   unicode-emoji-modifier-base@1.0.0:
     resolution: {integrity: sha512-yLSH4py7oFH3oG/9K+XWrz1pSi3dfUrWEnInbxMfArOfc1+33BlGPQtLsOYwvdMy11AwUBetYuaRxSPqgkq+8g==, tarball: https://registry.npmjs.org/unicode-emoji-modifier-base/-/unicode-emoji-modifier-base-1.0.0.tgz}
@@ -4882,8 +4723,6 @@ snapshots:
 
   '@emotion/unitless@0.7.5': {}
 
-  '@epic-web/invariant@1.0.0': {}
-
   '@esbuild/linux-loong64@0.14.54':
     optional: true
 
@@ -5431,8 +5270,6 @@ snapshots:
       '@nodelib/fs.scandir': 2.1.5
       fastq: 1.20.3
 
-  '@phc/format@1.0.0': {}
-
   '@protobufjs/aspromise@1.1.2': {}
 
   '@protobufjs/base64@1.1.2': {}
@@ -5565,11 +5402,11 @@ snapshots:
   '@types/body-parser@1.19.6':
     dependencies:
       '@types/connect': 3.4.38
-      '@types/node': 18.11.18
+      '@types/node': 24.13.5
 
   '@types/connect@3.4.38':
     dependencies:
-      '@types/node': 18.11.18
+      '@types/node': 24.13.5
 
   '@types/continuation-local-storage@3.2.7':
     dependencies:
@@ -5635,14 +5472,14 @@ snapshots:
 
   '@types/express-serve-static-core@4.19.9':
     dependencies:
-      '@types/node': 18.11.18
+      '@types/node': 24.13.5
       '@types/qs': 6.15.1
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
 
   '@types/express-serve-static-core@5.1.3':
     dependencies:
-      '@types/node': 18.11.18
+      '@types/node': 24.13.5
       '@types/qs': 6.15.1
       '@types/range-parser': 1.2.7
       '@types/send': 1.2.1
@@ -5666,11 +5503,6 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/jsonwebtoken@9.0.10':
-    dependencies:
-      '@types/ms': 2.1.0
-      '@types/node': 24.13.5
-
   '@types/lodash@4.14.191': {}
 
   '@types/ms@2.1.0': {}
@@ -5679,11 +5511,13 @@ snapshots:
     dependencies:
       '@types/express': 4.17.13
 
-  '@types/node@18.11.18': {}
-
   '@types/node@24.13.5':
     dependencies:
       undici-types: 7.18.2
+
+  '@types/node@26.6.2':
+    dependencies:
+      undici-types: 8.9.0
 
   '@types/prop-types@15.7.15': {}
 
@@ -5704,7 +5538,7 @@ snapshots:
 
   '@types/send@1.2.1':
     dependencies:
-      '@types/node': 18.11.18
+      '@types/node': 24.13.5
 
   '@types/sequelize@4.28.19':
     dependencies:
@@ -5716,7 +5550,7 @@ snapshots:
   '@types/serve-static@2.2.0':
     dependencies:
       '@types/http-errors': 2.0.5
-      '@types/node': 18.11.18
+      '@types/node': 24.13.5
 
   '@types/validator@13.15.10': {}
 
@@ -6090,13 +5924,6 @@ snapshots:
 
   arg@4.1.3: {}
 
-  argon2@0.45.1:
-    dependencies:
-      '@phc/format': 1.0.0
-      cross-env: 10.1.0
-      node-addon-api: 8.9.2
-      node-gyp-build: 4.8.4
-
   argparse@2.0.1: {}
 
   array-timsort@1.0.3: {}
@@ -6289,11 +6116,6 @@ snapshots:
       vary: 1.1.2
 
   create-require@1.1.1: {}
-
-  cross-env@10.1.0:
-    dependencies:
-      '@epic-web/invariant': 1.0.0
-      cross-spawn: 7.0.6
 
   cross-spawn@7.0.6:
     dependencies:
@@ -7172,19 +6994,6 @@ snapshots:
 
   jsonc-parser@3.3.1: {}
 
-  jsonwebtoken@9.0.3:
-    dependencies:
-      jws: 4.0.1
-      lodash.includes: 4.3.0
-      lodash.isboolean: 3.0.3
-      lodash.isinteger: 4.0.4
-      lodash.isnumber: 3.0.3
-      lodash.isplainobject: 4.0.6
-      lodash.isstring: 4.0.1
-      lodash.once: 4.1.1
-      ms: 2.1.3
-      semver: 7.8.5
-
   jwa@2.0.1:
     dependencies:
       buffer-equal-constant-time: 1.0.1
@@ -7213,21 +7022,7 @@ snapshots:
     dependencies:
       p-locate: 5.0.0
 
-  lodash.includes@4.3.0: {}
-
-  lodash.isboolean@3.0.3: {}
-
-  lodash.isinteger@4.0.4: {}
-
-  lodash.isnumber@3.0.3: {}
-
-  lodash.isplainobject@4.0.6: {}
-
-  lodash.isstring@4.0.1: {}
-
   lodash.merge@4.6.2: {}
-
-  lodash.once@4.1.1: {}
 
   lodash@4.17.21: {}
 
@@ -7388,8 +7183,6 @@ snapshots:
       - '@babel/core'
       - babel-plugin-macros
 
-  node-addon-api@8.9.2: {}
-
   node-domexception@1.0.0: {}
 
   node-emoji@2.2.0:
@@ -7404,8 +7197,6 @@ snapshots:
       data-uri-to-buffer: 4.0.1
       fetch-blob: 3.2.0
       formdata-polyfill: 4.0.10
-
-  node-gyp-build@4.8.4: {}
 
   node-releases@2.0.55: {}
 
@@ -8307,12 +8098,6 @@ snapshots:
       minimist: 1.2.8
       strip-bom: 3.0.0
 
-  tsconfig-paths@4.1.1:
-    dependencies:
-      json5: 2.2.3
-      minimist: 1.2.8
-      strip-bom: 3.0.0
-
   tsconfig-paths@4.2.0:
     dependencies:
       json5: 2.2.3
@@ -8398,6 +8183,8 @@ snapshots:
   uint8array-extras@1.5.0: {}
 
   undici-types@7.18.2: {}
+
+  undici-types@8.9.0: {}
 
   unicode-emoji-modifier-base@1.0.0: {}
 
