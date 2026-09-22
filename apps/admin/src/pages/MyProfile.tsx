@@ -123,6 +123,7 @@ const MyProfilePage = () => {
     [UserRole.SuperAdministrator]: "Super administrator",
     [UserRole.Administrator]: "Administrator",
     [UserRole.User]: "User",
+    [UserRole.LocationOperator]: "Location operator",
   };
 
   const pendingColumns = [

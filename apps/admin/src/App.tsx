@@ -3,6 +3,7 @@ import { FunctionComponent, useState } from "react";
 import {
   AdminOnlyRoute,
   AuthenticatedRoute,
+  LocationOperatorRoute,
 } from "./components/AuthenticatedRoute";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { DASHBOARD_ROUTES } from "./lib/constants/routes";
@@ -28,6 +29,7 @@ import { Divider, Flex } from "antd";
 import ExpenseList from "./pages/expense/ExpenseList";
 import InvoicePage from "./pages/invoice/InvoicePage";
 import SchedulePage from "./pages/schedule/SchedulePage";
+import MeterReadingPage from "./pages/MeterReadingPage";
 import "./App.css";
 import "antd/dist/reset.css";
 
@@ -130,6 +132,16 @@ const App: FunctionComponent<AppProps> = () => {
         {notifyContextHolder}
         <BrowserRouter>
           <Routes>
+            <Route
+              path={DASHBOARD_ROUTES.METER_READING}
+              element={
+                <AuthenticatedRoute>
+                  <LocationOperatorRoute>
+                    <MeterReadingPage />
+                  </LocationOperatorRoute>
+                </AuthenticatedRoute>
+              }
+            />
             <Route
               path="/"
               element={

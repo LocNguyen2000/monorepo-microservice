@@ -13,6 +13,7 @@ import {
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { LocationsService } from './locations.service.js';
+import { Roles, UserRole } from '../auth/auth.roles.js';
 
 @Controller('location')
 export class LocationsController {
@@ -28,11 +29,13 @@ export class LocationsController {
   }
 
   @Get()
+  @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
   findAll(@Query() query: Record<string, unknown>) {
     return this.locationsService.findAll(query);
   }
 
   @Get(':id')
+  @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
   findOne(@Param('id') id: string) {
     return this.locationsService.findOne(+id);
   }
@@ -50,6 +53,20 @@ export class LocationsController {
   @Patch(':id')
   assign(@Param('id') id: string, @Body() payload: number[]) {
     return this.locationsService.updateExpensesByLocation(+id, payload);
+  }
+
+  @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
+  @Patch(':locationCode/expenses/:expenseCode/meter')
+  updateMeterReading(
+    @Param('locationCode') locationCode: string,
+    @Param('expenseCode') expenseCode: string,
+    @Body('currentUnit') currentUnit: number,
+  ) {
+    return this.locationsService.updateMeterReading(
+      Number(locationCode),
+      Number(expenseCode),
+      Number(currentUnit),
+    );
   }
 
   @Delete(':id')

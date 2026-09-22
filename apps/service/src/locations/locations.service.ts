@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { } from 'sequelize-typescript';
 import {
   ExpenseLocationModel,
@@ -164,5 +164,31 @@ export class LocationsService {
         return { ...p, locationCode };
       }),
     );
+  }
+
+  async updateMeterReading(locationCode: number, expenseCode: number, currentUnit: number) {
+    if (!Number.isInteger(locationCode) || !Number.isInteger(expenseCode)) {
+      throw new BadRequestException('Location and expense are required');
+    }
+
+    if (!Number.isFinite(currentUnit) || currentUnit < 0) {
+      throw new BadRequestException('Meter reading must be a non-negative number');
+    }
+
+    const expenseLocation = await this.expenseLocationRepository.findOne({
+      where: { locationCode, expenseCode },
+    });
+
+    if (!expenseLocation) {
+      throw new NotFoundException('Expense is not assigned to this location');
+    }
+
+    if (currentUnit < expenseLocation.currentUnit) {
+      throw new BadRequestException('Meter reading cannot be lower than the previous reading');
+    }
+
+    await expenseLocation.update({ currentUnit });
+
+    return { locationCode, expenseCode, currentUnit };
   }
 }

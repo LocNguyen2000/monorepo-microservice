@@ -4,6 +4,8 @@ import { HomeOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getGlobalContext } from "../lib/context";
 import Card from "antd/es/card/Card";
+import { UserRole } from "../lib/constants/roles";
+import { DASHBOARD_ROUTES } from "../lib/constants/routes";
 
 interface LoginPageProps {}
 
@@ -15,7 +17,12 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
 
   useEffect(() => {
     if (authUser) {
-      navigate("/", { replace: true });
+      navigate(
+        Number(authUser.role) === UserRole.LocationOperator
+          ? DASHBOARD_ROUTES.METER_READING
+          : "/",
+        { replace: true },
+      );
     }
   }, [authUser, navigate]);
 
@@ -39,7 +46,12 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
         email: account.email,
         role: String(account.role),
       });
-      navigate("/", { replace: true });
+      navigate(
+        Number(account.role) === UserRole.LocationOperator
+          ? DASHBOARD_ROUTES.METER_READING
+          : "/",
+        { replace: true },
+      );
     } catch (requestError: any) {
       setError(
         requestError?.response?.data?.message ||

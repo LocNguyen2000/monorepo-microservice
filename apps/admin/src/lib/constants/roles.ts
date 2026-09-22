@@ -2,6 +2,7 @@ export enum UserRole {
     SuperAdministrator = 1,
     Administrator = 2,
     User = 3,
+    LocationOperator = 4,
 }
 
 export enum AccountStatus {

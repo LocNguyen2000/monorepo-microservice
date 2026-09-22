@@ -1,10 +1,12 @@
-:root{
+:root {
   --header-height: 10vh;
   --header-width: 100vw;
   --siderHeight: calc(100% - var(--header-height));
   --siderWidth: 10vw;
-  --contentWidth: calc(100% - var(--siderWidth));;
-  --contentHeight: calc(100% - var(--header-height));;
+  --contentWidth: calc(100% - var(--siderWidth));
+  ;
+  --contentHeight: calc(100% - var(--header-height));
+  ;
 }
 
 @font-face {
@@ -12,28 +14,28 @@
   src: url(./resources/font/static/NunitoSans_10pt-Regular.ttf);
 }
 
-.override-antd-menu-item .ant-menu-title-content{
+.override-antd-menu-item .ant-menu-title-content {
   font-weight: bold;
 }
 
-.m-content-child-margin > * {
+.m-content-child-margin>* {
   margin: 1rem;
 }
 
 /* .override-antd-form > *{
 } */
 
-.override-antd-icon-item{
+.override-antd-icon-item {
   stroke-width: 15;
   stroke: black;
   color: black;
 }
 
-.override-antd-message .ant-message-notice-content{
+.override-antd-message .ant-message-notice-content {
   padding: 2rem;
-} 
+}
 
-.logo{
+.logo {
   width: 48px;
   height: 48px;
   /* background-color: grey; */
@@ -43,14 +45,14 @@
   margin: 4px;
 }
 
-.m-hoverable:hover{
+.m-hoverable:hover {
   background-color: rgba(89, 115, 171, 0.25);
 }
 
 
- /* LOGIN */
+/* LOGIN */
 
- /* .m-login{
+/* .m-login{
   display: flex;
   justify-content: center;
   align-items: center;
@@ -58,23 +60,427 @@
   height: 100vh;
 } */
 
-.m-login-form{
-  display: flex;
-  flex-direction: column;
-  width: 50em;
-  max-width: 50em;
-  padding: 2em;
-}
 
-.m-login-img{
+.m-login-img {
   background-image: url(./resources/spaceman.jpg);
   background-size: contain;
-  background-repeat:round;
+  background-repeat: no-repeat;
+  background-position: center;
+  width: 100%;
 }
 
-.m-background-dashboard{
+.m-background-dashboard {
   background-image: url(./resources/background-2.jpg);
   background-size: cover;
   background-repeat: no-repeat;
   background-color: rgba(0, 0, 0, 0.9);
+}
+
+/* METER READING */
+.meter-page {
+  position: relative;
+  isolation: isolate;
+  width: min(100%, 1060px);
+  margin: 0 auto;
+  padding: 1.25rem 1.5rem 2.5rem;
+  color: #26332b;
+}
+
+.meter-page::before {
+  position: fixed;
+  z-index: -2;
+  content: "";
+  inset: 0;
+  background-image: url(./resources/spaceman.jpg);
+  background-position: center;
+  background-size: cover;
+  pointer-events: none;
+}
+
+.meter-page::after {
+  position: fixed;
+  z-index: -1;
+  content: "";
+  top: 0;
+  right: 0;
+  width: min(42vw, 520px);
+  height: 300px;
+  background: radial-gradient(circle at top right, rgba(76, 175, 80, 0.16), transparent 68%);
+  pointer-events: none;
+}
+
+.meter-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.meter-page-header .ant-typography {
+  margin: 0;
+}
+
+.meter-page-header h2 {
+  margin-top: 0.2rem;
+  color: #203027;
+}
+
+.meter-page-header p {
+  max-width: 560px;
+  color: #66736b;
+}
+
+.meter-eyebrow {
+  color: #4caf50;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.meter-status-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.8rem;
+  border: 1px solid #cde8d0;
+  border-radius: 999px;
+  color: #317b38;
+  background: #f3fbf3;
+  font-size: 0.82rem;
+  white-space: nowrap;
+}
+
+.meter-signout-button {
+  border-color: #d8e1da;
+  color: #536158;
+  box-shadow: none;
+}
+
+.meter-signout-button:hover {
+  border-color: #c45d5d !important;
+  color: #b34141 !important;
+}
+
+.meter-status-dot {
+  width: 0.48rem;
+  height: 0.48rem;
+  border-radius: 50%;
+  background: #4caf50;
+  box-shadow: 0 0 0 4px #dff3e1;
+}
+
+.meter-selection-card,
+.meter-capture-card,
+.meter-confirm-card {
+  border: 1px solid #e3e9e4;
+  box-shadow: 0 10px 30px rgba(42, 68, 49, 0.07);
+}
+
+.meter-selection-card {
+  margin-bottom: 1rem;
+}
+
+.meter-section-heading,
+.meter-card-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.8rem;
+  margin-bottom: 1.1rem;
+}
+
+.meter-section-heading h4,
+.meter-card-heading h4 {
+  margin: 0 0 0.2rem;
+  color: #26332b;
+}
+
+.meter-step {
+  display: grid;
+  flex: 0 0 2.1rem;
+  place-items: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  border-radius: 50%;
+  background: #e7f5e8;
+  color: #368d3e;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.meter-selection-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1rem;
+}
+
+.meter-selection-grid .ant-form-item {
+  margin-bottom: 0;
+}
+
+.meter-previous-reading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 0.25rem;
+  padding: 0.85rem 1rem;
+  border-left: 3px solid #4caf50;
+  background: #f7faf7;
+}
+
+.meter-previous-reading .ant-typography {
+  margin: 0;
+}
+
+.meter-previous-reading h3 {
+  margin-top: 0.2rem;
+}
+
+.meter-workflow-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.meter-capture-card,
+.meter-confirm-card {
+  min-height: 330px;
+}
+
+.meter-camera-frame {
+  position: relative;
+  display: grid;
+  place-items: center;
+  min-height: 245px;
+  margin: 0 0 1rem;
+  overflow: hidden;
+  border-radius: 8px;
+  background: #18221c;
+}
+
+.meter-camera-frame video {
+  display: block;
+  width: 100%;
+  height: 245px;
+  object-fit: cover;
+}
+
+.meter-camera-frame>.ant-typography {
+  position: absolute;
+  bottom: 0.7rem;
+  color: white;
+  text-shadow: 0 1px 2px #000;
+  font-size: 0.78rem;
+}
+
+.meter-camera-guide {
+  position: absolute;
+  width: 68%;
+  height: 58%;
+  border: 2px solid rgba(255, 255, 255, 0.82);
+  border-radius: 7px;
+  box-shadow: 0 0 0 999px rgba(0, 0, 0, 0.16);
+}
+
+.meter-empty-capture {
+  display: grid;
+  place-items: center;
+  gap: 0.45rem;
+  min-height: 180px;
+  margin-bottom: 1rem;
+  border: 1px dashed #c6d8c8;
+  border-radius: 8px;
+  background: #f8fbf8;
+  color: #709077;
+}
+
+.meter-empty-capture .anticon {
+  font-size: 2rem;
+  color: #4caf50;
+}
+
+.meter-action-row {
+  width: 100%;
+  justify-content: center;
+}
+
+.meter-confirm-content {
+  width: 100%;
+  justify-content: center;
+}
+
+.meter-reading-input {
+  width: 100%;
+}
+
+.meter-reading-input input {
+  height: 58px;
+  color: #246b2c;
+  font-size: 1.65rem;
+  font-weight: 800;
+  text-align: center;
+}
+
+.meter-change-note {
+  width: 100%;
+  color: #368d3e;
+  text-align: center;
+}
+
+.meter-confirm-content .ant-btn {
+  width: 100%;
+  height: 42px;
+}
+
+@media (max-width: 760px) {
+  .meter-page {
+    width: 100%;
+    max-width: none;
+    padding: 1rem 0.75rem 2rem;
+  }
+
+  .meter-page-header {
+    display: block;
+  }
+
+  .meter-status-chip {
+    display: inline-flex;
+    margin-top: 0.5rem;
+  }
+
+  .meter-signout-button {
+    margin-top: 0.75rem;
+  }
+
+  .meter-selection-grid,
+  .meter-workflow-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .meter-selection-grid {
+    gap: 0;
+  }
+
+  .meter-selection-grid .ant-form-item {
+    margin-bottom: 1rem;
+  }
+
+  .meter-selection-grid .ant-form-item:last-child {
+    margin-bottom: 0;
+  }
+
+  .meter-capture-card,
+  .meter-confirm-card {
+    min-height: 0;
+  }
+
+  .meter-card-heading {
+    margin-bottom: 0.85rem;
+  }
+
+  .meter-camera-frame,
+  .meter-camera-frame video {
+    min-height: 190px;
+    height: 190px;
+  }
+
+  .meter-empty-capture {
+    min-height: 150px;
+  }
+
+  .meter-action-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .meter-action-row>.ant-btn,
+  .meter-action-row>.ant-upload,
+  .meter-action-row>.ant-upload .ant-btn {
+    width: 100%;
+  }
+
+  .meter-action-row>.ant-upload .ant-btn {
+    display: block;
+  }
+
+  .meter-previous-reading {
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .meter-previous-reading h3 {
+    font-size: 1.35rem;
+  }
+
+  .meter-reading-input input {
+    height: 52px;
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .m-content-child-margin>* {
+    margin: 0.5rem;
+  }
+
+  .meter-page {
+    padding: 0.75rem 0.5rem 1.5rem;
+  }
+
+  .meter-page-header h2 {
+    font-size: 1.65rem;
+  }
+
+  .meter-page-header p {
+    font-size: 0.88rem;
+    line-height: 1.45;
+  }
+
+  .meter-status-chip {
+    font-size: 0.75rem;
+  }
+
+  .meter-signout-button {
+    width: 100%;
+  }
+
+  .meter-selection-card,
+  .meter-capture-card,
+  .meter-confirm-card {
+    border-radius: 6px;
+  }
+
+  .meter-selection-card .ant-card-body,
+  .meter-capture-card .ant-card-body,
+  .meter-confirm-card .ant-card-body {
+    padding: 0.85rem;
+  }
+
+  .meter-section-heading,
+  .meter-card-heading {
+    gap: 0.6rem;
+  }
+
+  .meter-section-heading h4,
+  .meter-card-heading h4 {
+    font-size: 0.98rem;
+  }
+
+  .meter-section-heading .ant-typography-secondary,
+  .meter-card-heading .ant-typography-secondary {
+    display: block;
+    font-size: 0.76rem;
+    line-height: 1.35;
+  }
+
+  .meter-step {
+    flex-basis: 1.85rem;
+    width: 1.85rem;
+    height: 1.85rem;
+  }
+
+  .meter-previous-reading {
+    padding: 0.7rem;
+  }
 }
