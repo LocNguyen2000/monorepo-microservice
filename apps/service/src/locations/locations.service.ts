@@ -187,8 +187,9 @@ export class LocationsService {
       throw new BadRequestException('Meter reading cannot be lower than the previous reading');
     }
 
-    await expenseLocation.update({ currentUnit });
+    const initialUnit = expenseLocation.currentUnit;
+    await expenseLocation.update({ initialUnit, currentUnit });
 
-    return { locationCode, expenseCode, currentUnit };
+    return { locationCode, expenseCode, initialUnit, currentUnit };
   }
 }
