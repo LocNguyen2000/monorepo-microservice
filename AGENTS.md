@@ -60,6 +60,15 @@ Always run the narrowest relevant validation after editing, followed by a produc
 - Only `DRAFT` invoices may be assigned to schedules.
 - Enforce these rules in the service API as well as in the UI.
 
+## Invoice Schedule Cron
+
+- Vercel runs `/internal/cron/invoice-schedules` daily at `0 0 * * *` UTC, which is 07:00 in Vietnam.
+- The cron route is public to the application auth guard but must validate the `Authorization: Bearer <CRON_SECRET>` header.
+- The job selects schedules where `enabled` is `true` and `dueDay` matches the current date in `Asia/Ho_Chi_Minh`.
+- The job sends one Vietnamese summary email to `mailjs.adminEmail` through the `mailjs.template.invoiceSchedule` EmailJS template.
+- Keep the EmailJS template source in `scripts/migrations/emailjs/invoice-schedule-summary.html` and preserve these variables: `{{email}}`, `{{schedule_date}}`, `{{schedule_count}}`, and `{{schedule_list}}`.
+- Configure `CRON_SECRET` in Vercel environment variables. Do not expose it in repository configuration.
+
 ## Meter Readings
 
 - Meter updates are handled by `LocationsService.updateMeterReading`.
