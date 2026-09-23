@@ -78,8 +78,11 @@ const MeterReadingPage = () => {
     setIsCameraOpen(false);
   };
 
-  const signOut = () => {
+  const signOut = async () => {
     stopCamera();
+    await serviceClient.post("auth/logout", {
+      sessionId: localStorage.getItem("sessionId"),
+    }).catch(() => undefined);
     setAuthUser(undefined);
     navigate("/login", { replace: true });
   };

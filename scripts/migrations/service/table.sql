@@ -223,3 +223,12 @@ FOREIGN KEY (`role`)
 REFERENCES roles(`id`)
 ON DELETE CASCADE
 ON UPDATE CASCADE;
+
+create table if not exists sessions (
+    `id` varchar(36) NOT NULL,
+    `accountId` int NOT NULL,
+    `expiresAt` datetime NOT NULL,
+    `deletedAt` datetime DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    CONSTRAINT fk_session_account FOREIGN KEY (`accountId`) REFERENCES accounts(`id`)
+);

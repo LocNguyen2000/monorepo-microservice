@@ -49,6 +49,31 @@
   background-color: rgba(89, 115, 171, 0.25);
 }
 
+@media (max-width: 992px) {
+  .admin-sidebar {
+    width: 84px !important;
+    min-width: 84px !important;
+    max-width: 84px !important;
+    padding: 0.5rem 0.25rem !important;
+  }
+
+  .admin-sidebar .ant-typography,
+  .admin-sidebar .ant-divider,
+  .admin-sidebar .ant-menu-title-content {
+    display: none !important;
+  }
+
+  .admin-sidebar .logo {
+    width: 32px !important;
+    height: 32px !important;
+    margin: 0 auto 0.5rem !important;
+  }
+
+  .admin-sidebar .ant-menu {
+    border-inline-end: none !important;
+  }
+}
+
 
 /* LOGIN */
 

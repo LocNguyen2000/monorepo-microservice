@@ -20,7 +20,7 @@ import WebSocketComponent from "../../pages/Websocket";
 const PopoverMenuHeader = () => {
   const navigate = useNavigate();
   const { setPathFromKey } = getPathContext();
-  const { setAuthUser } = getGlobalContext();
+  const { setAuthUser, serviceClient } = getGlobalContext();
 
   return (
     <>
@@ -45,8 +45,12 @@ const PopoverMenuHeader = () => {
       <Button
         style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}
         onClick={() => {
-          setAuthUser(undefined);
-          navigate("/login", { replace: true });
+          serviceClient.post("auth/logout", {
+            sessionId: localStorage.getItem("sessionId"),
+          }).finally(() => {
+            setAuthUser(undefined);
+            navigate("/login", { replace: true });
+          });
         }}
       >
         Sign Out
@@ -82,39 +86,6 @@ const BaseHeader = () => {
   return (
     <>
       <Header style={headerStyle} color="primary">
-        <Avatar
-          className="m-hoverable"
-          shape="square"
-          size={40}
-          icon={<MenuOutlined />}
-          style={{ cursor: "pointer", marginRight: "1rem" }}
-        />
-
-        <Avatar
-          className="m-hoverable"
-          shape="square"
-          size={40}
-          icon={<QuestionCircleOutlined />}
-          style={{ cursor: "pointer" }}
-        />
-        <span style={{ flex: 1 }}></span>
-        <div style={{ marginRight: "1.5rem" }}>
-          <Badge
-            showZero
-            count={4}
-            overflowCount={10}
-            size="small"
-            color="geekblue"
-          >
-            <Avatar
-              className="m-hoverable"
-              shape="circle"
-              size={40}
-              icon={<BellFilled />}
-              style={{ cursor: "pointer" }}
-            />
-          </Badge>
-        </div>
 
         <Typography style={{ color: "white", marginRight: "1rem" }}>
           {authUser?.name}
@@ -123,7 +94,7 @@ const BaseHeader = () => {
           content={<PopoverMenuHeader />}
           title={<PopoverMenuTitle />}
           overlayStyle={{
-            width: "15vw",
+            width: "15rem",
           }}
           trigger={"click"}
         >

@@ -40,11 +40,13 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
       });
       const account = response.data;
       localStorage.setItem("accessToken", account.accessToken);
+      localStorage.setItem("sessionId", account.sessionId);
       setAuthUser({
         userId: account.id,
         name: account.fullName,
         email: account.email,
         role: String(account.role),
+        sessionId: account.sessionId,
       });
       navigate(
         Number(account.role) === UserRole.LocationOperator

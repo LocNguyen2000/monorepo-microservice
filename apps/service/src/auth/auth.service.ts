@@ -7,6 +7,7 @@ import {
 import { RoleModel, RoleSchema } from '../common/schema/auth/role.js';
 import { InjectModel } from '@nestjs/sequelize';
 import { AccountModel, AccountSchema } from '../common/schema/auth/account.js';
+import { SessionModel, SessionSchema } from '../common/schema/auth/session.js';
 import { EnvService } from '@nhl/env';
 import { Env } from '../common/env.js';
 import { createHmac, randomBytes, scrypt as callbackScrypt, timingSafeEqual } from 'node:crypto';
@@ -22,6 +23,7 @@ export class AuthService {
     constructor(
         @InjectModel(RoleSchema) private readonly roleModel: RoleModel,
         @InjectModel(AccountSchema) private readonly accountModel: AccountModel,
+        @InjectModel(SessionSchema) private readonly sessionModel: SessionModel,
         private readonly env: EnvService<Env>,
     ) { }
 
@@ -60,6 +62,16 @@ export class AuthService {
         }
 
         return this.createAuthResponse(account);
+    }
+
+    async logout(sessionId: string) {
+        const session = await this.sessionModel.findByPk(sessionId);
+        if (session && !session.deletedAt) {
+            session.deletedAt = new Date();
+            await session.save();
+        }
+
+        return { success: true };
     }
 
     async listPendingAccounts() {
@@ -164,16 +176,33 @@ export class AuthService {
     }
 
     async getActiveTokenPayload(payload: TokenPayload): Promise<TokenPayload> {
+        const session = await this.sessionModel.findOne({
+            where: { id: payload.sessionId },
+        });
+        if (!session || session.deletedAt || session.expiresAt.getTime() <= Date.now()) {
+            throw new UnauthorizedException('Session is inactive');
+        }
+
         const account = await this.accountModel.findByPk(payload.sub);
         if (!account || account.status !== AccountStatus.Active) throw new UnauthorizedException('Account is inactive');
         return { ...payload, role: account.role };
     }
 
     private async createAuthResponse(account: AccountSchema) {
+        const sessionId = randomBytes(18).toString('base64url');
+        const expiresAt = new Date(Date.now() + TOKEN_TTL_SECONDS * 1000);
+        await this.sessionModel.create({
+            id: sessionId,
+            accountId: account.id,
+            expiresAt,
+            deletedAt: null,
+        } as SessionSchema);
+
         const payload: TokenPayload = {
             sub: account.id,
             email: account.email,
             role: account.role,
+            sessionId,
             exp: Math.floor(Date.now() / 1000) + TOKEN_TTL_SECONDS,
         };
         const encodedPayload = Buffer.from(JSON.stringify(payload)).toString('base64url');
@@ -181,6 +210,7 @@ export class AuthService {
 
         return {
             accessToken,
+            sessionId,
             id: account.id,
             email: account.email,
             fullName: account.fullName,
@@ -211,5 +241,6 @@ export interface TokenPayload {
     sub: number;
     email: string;
     role: number;
+    sessionId: string;
     exp: number;
 }

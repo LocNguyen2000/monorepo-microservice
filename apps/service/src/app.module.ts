@@ -22,6 +22,7 @@ import { ExpenseModule } from './expense/expense.module.js';
 import { InvoicesModule } from './invoices/invoices.module.js';
 import { AccountSchema } from './common/schema/auth/account.js';
 import { RoleSchema } from './common/schema/auth/role.js';
+import { SessionSchema } from './common/schema/auth/session.js';
 import { OcrModule } from './ocr/ocr.module.js';
 import mysql2 from 'mysql2';
 import 'dotenv/config';
@@ -72,7 +73,8 @@ import { AuthGuard } from './auth/auth.guard.js';
             InvoiceScheduleSchema,
             // accounts
             AccountSchema,
-            RoleSchema
+            RoleSchema,
+            SessionSchema
           ],
           logging: false,
           // `sync: { force: true }` DROPS AND RECREATES every table on boot. On

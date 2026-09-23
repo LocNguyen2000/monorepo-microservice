@@ -107,12 +107,14 @@ const App: FunctionComponent<AppProps> = () => {
     name: string;
     role: string;
     email?: string;
+    sessionId?: string;
   }) => {
     setAuthUserState(user);
     if (user) localStorage.setItem("authUser", JSON.stringify(user));
     else {
       localStorage.removeItem("authUser");
       localStorage.removeItem("accessToken");
+      localStorage.removeItem("sessionId");
     }
   };
 

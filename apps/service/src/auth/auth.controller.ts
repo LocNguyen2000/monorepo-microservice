@@ -22,6 +22,12 @@ export class AuthController {
         return this.authService.login(input);
     }
 
+    @Public()
+    @Post('logout')
+    logout(@Body('sessionId') sessionId: string) {
+        return this.authService.logout(sessionId);
+    }
+
     @Roles(UserRole.SuperAdministrator, UserRole.Administrator)
     @Get('pending')
     listPendingAccounts() {
