@@ -9,6 +9,7 @@ import {
   Select,
   Space,
   Tag,
+  Tabs,
   Typography,
   Upload,
 } from "antd";
@@ -23,6 +24,8 @@ import {
 import type { UploadProps } from "antd";
 import { getGlobalContext } from "../lib/context";
 import { ExpenseLocationDataType } from "../lib/interface";
+import InvoicePage, { InvoiceStatusTab } from "./invoice/InvoicePage";
+import SchedulePage from "./schedule/SchedulePage";
 
 interface OperatorLocation {
   locationCode: string;
@@ -43,7 +46,7 @@ interface MeterOcrResponse {
   electricMeterReading?: string | number;
 }
 
-const MeterReadingPage = () => {
+const MeterReadingContent = () => {
   const { serviceClient, setAuthUser, useToast } = getGlobalContext();
   const navigate = useNavigate();
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -91,7 +94,7 @@ const MeterReadingPage = () => {
     serviceClient
       .get<LocationResponse>("/location?page=1&size=20")
       .then((response) => setLocations(response.data.data))
-      .catch(() => setError("Unable to load locations."));
+      .catch(() => setError("Không thể tải danh sách phòng trọ."));
 
     return stopCamera;
   }, [serviceClient]);
@@ -112,7 +115,7 @@ const MeterReadingPage = () => {
         ),
       );
     } catch {
-      setError("Unable to load expenses for this location.");
+      setError("Không thể tải danh sách chi phí của phòng trọ này.");
     } finally {
       setIsLoadingExpenses(false);
     }
@@ -135,7 +138,7 @@ const MeterReadingPage = () => {
       streamRef.current = stream;
       setIsCameraOpen(true);
     } catch {
-      setError("Camera access was unavailable. Use the upload option instead.");
+      setError("Không thể truy cập camera. Vui lòng sử dụng tùy chọn tải ảnh lên.");
     }
   };
 
@@ -154,9 +157,9 @@ const MeterReadingPage = () => {
       const value = Number(response.data.electricMeterReading);
       if (!Number.isFinite(value)) throw new Error("Invalid OCR result");
       setReading(value);
-      useToast("success", "Meter reading detected. Please confirm it.");
+      useToast("success", "Đã nhận diện chỉ số công tơ. Vui lòng kiểm tra và xác nhận.");
     } catch {
-      setError("The meter image could not be processed. Try another image.");
+      setError("Không thể xử lý ảnh công tơ. Vui lòng thử một ảnh khác.");
     } finally {
       setIsProcessing(false);
     }
@@ -190,7 +193,7 @@ const MeterReadingPage = () => {
   const submitReading = async () => {
     if (!selectedLocation || !selectedExpense || reading === undefined) return;
     if (reading < Number(selectedExpense.currentUnit || 0)) {
-      setError("The new reading cannot be lower than the previous reading.");
+      setError("Chỉ số mới không thể thấp hơn chỉ số trước đó.");
       return;
     }
 
@@ -216,11 +219,11 @@ const MeterReadingPage = () => {
         ),
       );
       setReading(undefined);
-      useToast("success", "Meter reading updated successfully.");
+      useToast("success", "Cập nhật chỉ số công tơ thành công.");
     } catch (requestError: any) {
       setError(
         requestError?.response?.data?.message ||
-          "Unable to update the meter reading.",
+          "Không thể cập nhật chỉ số công tơ.",
       );
     } finally {
       setIsSubmitting(false);
@@ -232,24 +235,23 @@ const MeterReadingPage = () => {
       <header className="meter-page-header">
         <div>
           <Typography.Text className="meter-eyebrow">
-            FIELD UPDATE
+            CẬP NHẬT TẠI CHỖ
           </Typography.Text>
-          <Typography.Title level={2}>Meter reading</Typography.Title>
+          <Typography.Title level={2}>Chỉ số công tơ</Typography.Title>
           <Typography.Paragraph>
-            Capture a meter image, confirm the reading, and update the selected
-            location.
+            Chụp ảnh công tơ, xác nhận chỉ số và cập nhật cho phòng trọ đã chọn.
           </Typography.Paragraph>
         </div>
         <div className="meter-status-chip">
           <span className="meter-status-dot" />
-          Ready to capture
+          Sẵn sàng ghi nhận
         </div>
         <Button
           className="meter-signout-button"
           icon={<LogoutOutlined />}
           onClick={signOut}
         >
-          Sign out
+          Đăng xuất
         </Button>
       </header>
 
@@ -259,18 +261,18 @@ const MeterReadingPage = () => {
         <div className="meter-section-heading">
           <div className="meter-step">01</div>
           <div>
-            <Typography.Title level={4}>Choose what to update</Typography.Title>
+            <Typography.Title level={4}>Chọn thông tin cần cập nhật</Typography.Title>
             <Typography.Text type="secondary">
-              Select a location and one expense before opening the camera.
+              Chọn phòng trọ và một loại chi phí trước khi mở camera.
             </Typography.Text>
           </div>
         </div>
         <Form layout="vertical">
           <div className="meter-selection-grid">
-            <Form.Item label="Location" required>
+            <Form.Item label="Phòng trọ" required>
               <Select
                 value={locationCode}
-                placeholder="Choose a location"
+                placeholder="Chọn phòng trọ"
                 style={{ width: "100%" }}
                 onChange={(value) => {
                   setLocationCode(value);
@@ -284,15 +286,15 @@ const MeterReadingPage = () => {
                 }))}
               />
             </Form.Item>
-            <Form.Item label="Expense" required>
+            <Form.Item label="Chi phí" required>
               <Select
                 value={expenseCode}
                 disabled={!locationCode || isLoadingExpenses}
                 loading={isLoadingExpenses}
                 placeholder={
                   isLoadingExpenses
-                    ? "Loading assigned expenses..."
-                    : "Choose an expense"
+                    ? "Đang tải chi phí đã gán..."
+                    : "Chọn chi phí"
                 }
                 style={{ width: "100%" }}
                 onChange={(value) => {
@@ -310,17 +312,17 @@ const MeterReadingPage = () => {
             <div className="meter-previous-reading">
               <div>
                 <Typography.Text type="secondary">
-                  Previous reading
+                  Chỉ số trước đó
                 </Typography.Text>
                 <Typography.Title level={3}>
                   {selectedExpense.currentUnit ?? 0}
                   <Typography.Text type="secondary">
                     {" "}
-                    {selectedExpense.unitName || "units"}
+                    {selectedExpense.unitName || "đơn vị"}
                   </Typography.Text>
                 </Typography.Title>
               </div>
-              <Tag color="green">Baseline</Tag>
+              <Tag color="green">Mốc hiện tại</Tag>
             </div>
           )}
         </Form>
@@ -331,9 +333,9 @@ const MeterReadingPage = () => {
           <div className="meter-card-heading">
             <div className="meter-step">02</div>
             <div>
-              <Typography.Title level={4}>Capture meter image</Typography.Title>
+              <Typography.Title level={4}>Chụp ảnh công tơ</Typography.Title>
               <Typography.Text type="secondary">
-                Use the rear camera or upload a clear image.
+                Sử dụng camera sau hoặc tải lên một ảnh rõ nét.
               </Typography.Text>
             </div>
           </div>
@@ -342,7 +344,7 @@ const MeterReadingPage = () => {
               <video ref={videoRef} autoPlay muted playsInline />
               <div className="meter-camera-guide" />
               <Typography.Text>
-                Align the meter inside the frame
+                Đưa công tơ vào đúng khung hình
               </Typography.Text>
             </div>
           )}
@@ -350,7 +352,7 @@ const MeterReadingPage = () => {
           {!isCameraOpen && !isProcessing && (
             <div className="meter-empty-capture">
               <CameraOutlined />
-              <Typography.Text>Choose a capture method</Typography.Text>
+              <Typography.Text>Chọn phương thức ghi nhận</Typography.Text>
             </div>
           )}
           <Space wrap className="meter-action-row">
@@ -360,7 +362,7 @@ const MeterReadingPage = () => {
                 onClick={startCamera}
                 disabled={!selectedExpense}
               >
-                Open camera
+                Mở camera
               </Button>
             ) : (
               <>
@@ -369,10 +371,10 @@ const MeterReadingPage = () => {
                   icon={<CheckOutlined />}
                   onClick={captureImage}
                 >
-                  Capture and read
+                  Chụp và đọc chỉ số
                 </Button>
                 <Button icon={<StopOutlined />} onClick={stopCamera}>
-                  Stop
+                  Dừng
                 </Button>
               </>
             )}
@@ -384,12 +386,12 @@ const MeterReadingPage = () => {
                 icon={<UploadOutlined />}
                 disabled={!selectedExpense || isProcessing}
               >
-                Upload image
+                Tải ảnh lên
               </Button>
             </Upload>
             {isProcessing && (
               <Typography.Text type="secondary">
-                Reading image...
+                Đang đọc ảnh...
               </Typography.Text>
             )}
           </Space>
@@ -399,9 +401,9 @@ const MeterReadingPage = () => {
           <div className="meter-card-heading">
             <div className="meter-step">03</div>
             <div>
-              <Typography.Title level={4}>Confirm reading</Typography.Title>
+              <Typography.Title level={4}>Xác nhận chỉ số</Typography.Title>
               <Typography.Text type="secondary">
-                Check the detected value before saving.
+                Kiểm tra giá trị đã nhận diện trước khi lưu.
               </Typography.Text>
             </div>
           </div>
@@ -414,15 +416,15 @@ const MeterReadingPage = () => {
               onChange={(value) =>
                 setReading(value === null ? undefined : value)
               }
-              placeholder="Enter or correct the reading"
+              placeholder="Nhập hoặc điều chỉnh chỉ số"
               className="meter-reading-input"
             />
             {reading !== undefined &&
               readingDelta !== undefined &&
               readingDelta >= 0 && (
                 <Typography.Text className="meter-change-note">
-                  +{readingDelta} {selectedExpense?.unitName || "units"} since
-                  last reading
+                  +{readingDelta} {selectedExpense?.unitName || "đơn vị"} kể từ
+                    lần ghi nhận trước
                 </Typography.Text>
               )}
             <Button
@@ -432,11 +434,47 @@ const MeterReadingPage = () => {
               disabled={!selectedExpense || reading === undefined}
               onClick={submitReading}
             >
-              Update reading
+              Cập nhật chỉ số
             </Button>
           </Space>
         </Card>
       </div>
+    </div>
+  );
+};
+
+const MeterReadingPage = () => {
+  const [activeTab, setActiveTab] = useState("meter");
+
+  return (
+    <div className="operator-workspace">
+      <Tabs
+        className="operator-workspace-tabs"
+        activeKey={activeTab}
+        onChange={setActiveTab}
+        items={[
+          {
+            key: "meter",
+            label: "Chỉ số công tơ",
+            children: <MeterReadingContent />,
+          },
+          {
+            key: "invoice",
+            label: "Tạo hóa đơn",
+            children: <InvoicePage />,
+          },
+          {
+            key: "invoice-status",
+            label: "Trạng thái hóa đơn",
+            children: <InvoiceStatusTab />,
+          },
+          {
+            key: "schedule",
+            label: "Lịch thông báo",
+            children: <SchedulePage />,
+          },
+        ]}
+      />
     </div>
   );
 };

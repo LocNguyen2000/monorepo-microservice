@@ -51,6 +51,7 @@ export class LocationsController {
   }
 
   @Patch(':id')
+  @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
   assign(@Param('id') id: string, @Body() payload: number[]) {
     return this.locationsService.updateExpensesByLocation(+id, payload);
   }

@@ -147,7 +147,6 @@ create table if not exists invoices (
     `invoiceCode` int not null auto_increment,
     `locationCode` int not null,
     `totalAmount` decimal(15, 2) not null default 0,
-    `status` varchar(30) not null default 'DRAFT',
     `createdAt` datetime DEFAULT NOW(),
     `updatedAt` datetime DEFAULT NULL,
     `createdBy` varchar(50) DEFAULT NULL,
@@ -155,6 +154,9 @@ create table if not exists invoices (
     PRIMARY KEY (`invoiceCode`),
     CONSTRAINT FOREIGN KEY (`locationCode`) REFERENCES locations (`locationCode`)
 );
+
+alter table invoices
+modify column `status` enum('DRAFT', 'DONE') not null default 'DRAFT';
 
 create table if not exists invoice_expenses (
     `invoiceExpenseCode` int not null auto_increment,

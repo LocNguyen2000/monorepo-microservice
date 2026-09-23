@@ -28,6 +28,9 @@ import {
   Select,
   Space,
   Typography,
+  Table,
+  Tabs,
+  Tag,
 } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import {
@@ -37,6 +40,8 @@ import {
   PaginatedResponse,
   ProviderDataType,
   TenantDataType,
+  InvoiceStatus,
+  InvoiceSummaryDataType,
 } from "../../lib/interface";
 import { getGlobalContext } from "../../lib/context";
 import { debounce, formatMoney } from "../../lib/utils";
@@ -46,6 +51,7 @@ import { expenseLocationColumns } from "../../lib/constants/columns";
 import { globalTheme } from "../../css/theme";
 import TextArea from "antd/es/input/TextArea";
 import { AxiosResponse } from "axios";
+import { ADMIN_ROLES } from "../../lib/constants/roles";
 // import { IElectricMeterImageResponse } from "./InvoiceDrawer";
 
 const invoiceExpenseColumns = expenseLocationColumns.map((column) => {
@@ -93,6 +99,86 @@ export type WithRow<T> = T & {
   index: number | string;
 };
 
+export const InvoiceStatusTab = () => {
+  const [invoices, setInvoices] = useState<InvoiceSummaryDataType[]>([]);
+  const [loading, setLoading] = useState(false);
+  const { serviceClient, useNotify, useToast, authUser } = getGlobalContext();
+  const canUpdateStatus = ADMIN_ROLES.includes(Number(authUser?.role));
+
+  const loadInvoices = async () => {
+    setLoading(true);
+    try {
+      const { data } = await serviceClient.get<InvoiceSummaryDataType[]>(
+        "/invoices",
+      );
+      setInvoices(data);
+    } catch {
+      useNotify("error", "Không thể tải danh sách hóa đơn", "Vui lòng thử lại sau.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadInvoices();
+  }, []);
+
+  const markAsDone = async (invoiceCode: number) => {
+    try {
+      await serviceClient.patch(`/invoices/${invoiceCode}/status`, {
+        status: InvoiceStatus.DONE,
+      });
+      useToast("success", "Đã cập nhật hóa đơn thành DONE");
+      await loadInvoices();
+    } catch {
+      useNotify("error", "Không thể cập nhật hóa đơn", "Chỉ hóa đơn DRAFT mới được chuyển sang DONE.");
+    }
+  };
+
+  return (
+    <Card
+      title="Danh sách hóa đơn"
+      extra={<Button onClick={loadInvoices}>Làm mới</Button>}
+    >
+      <Table
+        rowKey="invoiceCode"
+        loading={loading}
+        dataSource={invoices}
+        columns={[
+          { title: "Mã hóa đơn", dataIndex: "invoiceCode", render: (value: number) => `#${value}` },
+          { title: "Phòng trọ", dataIndex: "locationCode" },
+          {
+            title: "Tổng tiền",
+            dataIndex: "totalAmount",
+            render: (value: number) => `${Number(value).toLocaleString("vi-VN")} VNĐ`,
+          },
+          {
+            title: "Trạng thái",
+            dataIndex: "status",
+            render: (status: InvoiceStatus) => (
+              <Tag color={status === InvoiceStatus.DONE ? "green" : "gold"}>
+                {status}
+              </Tag>
+            ),
+          },
+          {
+            title: "Thao tác",
+            render: (_: unknown, invoice: InvoiceSummaryDataType) => (
+              <Button
+                type="primary"
+                disabled={invoice.status !== InvoiceStatus.DRAFT || !canUpdateStatus}
+                onClick={() => markAsDone(invoice.invoiceCode)}
+              >
+                Đã thanh toán
+              </Button>
+            ),
+          },
+        ]}
+      />
+    </Card>
+  );
+};
+
 const InvoicePage: React.FunctionComponent = () => {
   const [locations, setLocations] = useState<LocationDataType[]>([]);
   const [locationData, setLocationData] = useState<Partial<LocationDataType>>(
@@ -109,6 +195,7 @@ const InvoicePage: React.FunctionComponent = () => {
   const [processedData, setProcessedData] =
     useState<IElectricMeterImageResponse | null>(null);
   const [openDrawer, setOpenDrawer] = useState(false);
+  const [activeTab, setActiveTab] = useState("create");
   const { serviceClient, useConfirm, useToast } = getGlobalContext();
   const totalMoney = useMemo<string>(
     () =>
@@ -283,6 +370,17 @@ const InvoicePage: React.FunctionComponent = () => {
 
   return (
     <>
+      <Tabs
+        activeKey={activeTab}
+        onChange={setActiveTab}
+        items={[
+          { key: "create", label: "Tạo hóa đơn" },
+          { key: "status", label: "Danh sách hóa đơn" },
+        ]}
+      />
+      {activeTab === "status" ? <InvoiceStatusTab /> : null}
+      {activeTab === "create" ? (
+      <>
       <Card className="summerize" style={{ padding: "0.25rem" }}>
         <Flex
           style={{
@@ -301,7 +399,7 @@ const InvoicePage: React.FunctionComponent = () => {
         </Flex>
       </Card>
 
-      <Flex gap="1.2rem">
+      <Flex gap="1.2rem" className="invoice-editor-layout">
         <div style={{ width: "25%" }}>
           <Card
             className="location-info"
@@ -662,6 +760,8 @@ const InvoicePage: React.FunctionComponent = () => {
           </Row>
         </Form>
       </Drawer>
+      </>
+      ) : null}
     </>
   );
 };

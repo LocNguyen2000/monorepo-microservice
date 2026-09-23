@@ -101,6 +101,53 @@
   background-color: rgba(0, 0, 0, 0.9);
 }
 
+.operator-workspace {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 90vh;
+  min-width: 0;
+  background-image: url(./resources/spaceman.jpg);
+  background-position: end;
+  background-size: cover;
+}
+
+.operator-workspace-tabs {
+  width: min(100%, 1280px);
+  min-width: 0;
+}
+
+.operator-workspace-tabs .ant-tabs-nav {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
+.operator-workspace-tabs .ant-tabs-content {
+  width: 100%;
+  
+}
+
+.operator-workspace-tabs .ant-tabs-content-holder {
+  min-width: 0;
+  overflow: hidden;
+}
+
+.invoice-editor-layout {
+  min-width: 0;
+  align-items: flex-start;
+}
+
+.invoice-editor-layout > * {
+  min-width: 0;
+}
+
+.operator-workspace .ant-table-wrapper {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
 /* METER READING */
 .meter-page {
   position: relative;
@@ -108,30 +155,7 @@
   width: min(100%, 1060px);
   margin: 0 auto;
   padding: 1.25rem 1.5rem 2.5rem;
-  color: #26332b;
-}
 
-.meter-page::before {
-  position: fixed;
-  z-index: -2;
-  content: "";
-  inset: 0;
-  background-image: url(./resources/spaceman.jpg);
-  background-position: center;
-  background-size: cover;
-  pointer-events: none;
-}
-
-.meter-page::after {
-  position: fixed;
-  z-index: -1;
-  content: "";
-  top: 0;
-  right: 0;
-  width: min(42vw, 520px);
-  height: 300px;
-  background: radial-gradient(circle at top right, rgba(76, 175, 80, 0.16), transparent 68%);
-  pointer-events: none;
 }
 
 .meter-page-header {
@@ -148,12 +172,10 @@
 
 .meter-page-header h2 {
   margin-top: 0.2rem;
-  color: #203027;
 }
 
 .meter-page-header p {
   max-width: 560px;
-  color: #66736b;
 }
 
 .meter-eyebrow {
@@ -170,7 +192,6 @@
   padding: 0.55rem 0.8rem;
   border: 1px solid #cde8d0;
   border-radius: 999px;
-  color: #317b38;
   background: #f3fbf3;
   font-size: 0.82rem;
   white-space: nowrap;
@@ -359,6 +380,26 @@
 }
 
 @media (max-width: 760px) {
+  .operator-workspace {
+    padding: 0.25rem;
+  }
+
+  .operator-workspace-tabs .ant-tabs-nav-wrap {
+    overflow-x: auto;
+  }
+
+  .operator-workspace-tabs .ant-tabs-tab {
+    white-space: nowrap;
+  }
+
+  .invoice-editor-layout {
+    flex-direction: column;
+  }
+
+  .invoice-editor-layout > * {
+    width: 100% !important;
+  }
+
   .meter-page {
     width: 100%;
     max-width: none;

@@ -1,5 +1,6 @@
 import { Column, DataType, PrimaryKey, Table } from 'sequelize-typescript';
 import { BaseEntity } from '../base/index.js';
+import { InvoiceStatus } from '../../../invoices/invoice-status.js';
 
 @Table({ tableName: 'invoices' })
 export class InvoiceSchema extends BaseEntity {
@@ -13,8 +14,8 @@ export class InvoiceSchema extends BaseEntity {
     @Column({ type: DataType.DECIMAL(15, 2) })
     totalAmount: number;
 
-    @Column
-    status: string;
+    @Column({ type: DataType.ENUM('DRAFT', 'DONE') })
+    status: InvoiceStatus;
 }
 
 export type InvoiceModel = typeof InvoiceSchema;

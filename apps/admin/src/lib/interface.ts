@@ -82,8 +82,13 @@ export interface InvoiceSummaryDataType {
   invoiceCode: number;
   locationCode: number;
   totalAmount: number;
-  status: string;
+  status: InvoiceStatus;
   createdAt?: string;
+}
+
+export enum InvoiceStatus {
+  DRAFT = "DRAFT",
+  DONE = "DONE",
 }
 
 export interface InvoiceScheduleDataType {

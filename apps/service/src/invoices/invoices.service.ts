@@ -1,4 +1,4 @@
-import { Injectable, NotImplementedException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException, NotImplementedException } from '@nestjs/common';
 import { PaginatedQuery } from '../common/pagination.js';
 import { RentProvidersService } from '../rent-providers/rent-providers.service.js';
 import { TenantService } from '../tenant/tenant.service.js';
@@ -16,6 +16,7 @@ import {
 import { EnvService } from '@nhl/env';
 import { Env } from '../common/env.js';
 import { MailSenderClient } from '../common/mail-sender.client.js';
+import { InvoiceStatus } from './invoice-status.js';
 
 @Injectable()
 export class InvoicesService {
@@ -71,7 +72,7 @@ export class InvoicesService {
 
     try {
       const invoice = await this.invoiceRepository.create(
-        { locationCode, totalAmount, status: 'DRAFT' },
+        { locationCode, totalAmount, status: InvoiceStatus.DRAFT },
         { transaction },
       );
       await this.invoiceExpenseRepository.bulkCreate(
@@ -90,6 +91,32 @@ export class InvoicesService {
     return this.invoiceRepository.findAll({ order: [['createdAt', 'DESC']] });
   }
 
+  listInvoices() {
+    return this.invoiceRepository.findAll({ order: [['createdAt', 'DESC']] });
+  }
+
+  async updateStatus(invoiceCode: number, status: InvoiceStatus) {
+    if (status !== InvoiceStatus.DONE) {
+      throw new BadRequestException('Only DRAFT invoices can be marked as DONE');
+    }
+
+    const invoice = await this.invoiceRepository.findByPk(invoiceCode);
+    if (!invoice) throw new NotFoundException('Invoice not found');
+    if (invoice.status !== InvoiceStatus.DRAFT) {
+      throw new BadRequestException('Only DRAFT invoices can be marked as DONE');
+    }
+
+    await invoice.update({ status });
+    if (status === InvoiceStatus.DONE) {
+      await this.scheduleRepository.update(
+        { invoiceCode: null },
+        { where: { invoiceCode } },
+      );
+    }
+
+    return invoice;
+  }
+
   async listSchedules() {
     const [locations, invoices, schedules] = await Promise.all([
       this.locationSvc.findAll({ page: 1, size: 1000 }),
@@ -97,10 +124,21 @@ export class InvoicesService {
       this.scheduleRepository.findAll(),
     ]);
 
+    for (const schedule of schedules) {
+      const assignedInvoice = schedule.invoiceCode
+        ? invoices.find((invoice) => invoice.invoiceCode === schedule.invoiceCode)
+        : undefined;
+      if (schedule.invoiceCode && assignedInvoice?.status !== InvoiceStatus.DRAFT) {
+        await schedule.update({ invoiceCode: null });
+      }
+    }
+
     return locations.data.map((location) => {
       const locationCode = Number(location.locationCode);
       const schedule = schedules.find((item) => item.locationCode === locationCode);
-      const locationInvoices = invoices.filter((invoice) => invoice.locationCode === locationCode);
+      const locationInvoices = invoices.filter(
+        (invoice) => invoice.locationCode === locationCode && invoice.status === InvoiceStatus.DRAFT,
+      );
 
       return {
         location,
@@ -120,6 +158,9 @@ export class InvoicesService {
       const invoice = await this.invoiceRepository.findOne({ where: { invoiceCode } });
       if (!invoice || invoice.locationCode !== Number(location.locationCode)) {
         throw new Error('Invoice does not belong to this location');
+      }
+      if (invoice.status !== InvoiceStatus.DRAFT) {
+        throw new BadRequestException('Only DRAFT invoices can be assigned to a schedule');
       }
     }
 

@@ -19,6 +19,7 @@ import { getGlobalContext } from "../../lib/context";
 import {
   InvoiceScheduleDataType,
   InvoiceScheduleRowDataType,
+  InvoiceStatus,
 } from "../../lib/interface";
 
 const getNextReminder = (dueDay?: number) => {
@@ -214,7 +215,7 @@ const SchedulePage = () => {
             <Select
               allowClear
               placeholder="Chọn hóa đơn"
-              options={selectedRow?.invoices.map((invoice) => ({
+              options={selectedRow?.invoices.filter((invoice) => invoice.status === InvoiceStatus.DRAFT).map((invoice) => ({
                 value: invoice.invoiceCode,
                 label: `#${invoice.invoiceCode} - ${Number(invoice.totalAmount).toLocaleString("vi-VN")} VNĐ`,
               }))}
