@@ -6,10 +6,11 @@ import { TenantModule } from '../tenant/tenant.module.js';
 import { RentProvidersModule } from '../rent-providers/rent-providers.module.js';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { InvoiceExpenseSchema, InvoiceScheduleSchema, InvoiceSchema } from '../common/schema/user/index.js';
+import { InvoiceCronController } from './cron.controller.js';
 
 @Module({
   imports: [TenantModule, LocationsModule, RentProvidersModule, SequelizeModule.forFeature([InvoiceSchema, InvoiceExpenseSchema, InvoiceScheduleSchema])],
-  controllers: [InvoicesController],
+  controllers: [InvoicesController, InvoiceCronController],
   providers: [InvoicesService],
 })
 export class InvoicesModule { }

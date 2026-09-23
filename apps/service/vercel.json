@@ -1,4 +1,10 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd ../.. && pnpm --filter \"@nhl/*\" build"
+  "buildCommand": "cd ../.. && pnpm --filter \"@nhl/*\" build",
+  "crons": [
+    {
+      "path": "/internal/cron/invoice-schedules",
+      "schedule": "0 0 * * *"
+    }
+  ]
 }

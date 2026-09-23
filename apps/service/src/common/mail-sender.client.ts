@@ -5,6 +5,7 @@ interface MailSenderOptions {
     serviceId: string;
     userId: string;
     invoiceTemplateId: string;
+    invoiceScheduleTemplateId: string;
     timeoutMs?: number;
 }
 
@@ -65,6 +66,40 @@ export class MailSenderClient {
                     : 'Email API request failed';
 
             console.error('Invoice email delivery failed', { responseStatus, errorCode });
+            return { success: false, error: errorMessage };
+        }
+    }
+
+    async sendInvoiceScheduleSummary(payload: {
+        recipientEmail: string;
+        scheduleDate: string;
+        scheduleCount: number;
+        scheduleList: string;
+    }): Promise<{ success: true } | { success: false; error: string }> {
+        try {
+            await this.client.post('/api/v1.0/email/send', {
+                service_id: this.options.serviceId,
+                template_id: this.options.invoiceScheduleTemplateId,
+                user_id: this.options.userId,
+                template_params: {
+                    email: payload.recipientEmail,
+                    schedule_date: payload.scheduleDate,
+                    schedule_count: payload.scheduleCount,
+                    schedule_list: payload.scheduleList,
+                },
+            });
+
+            return { success: true };
+        } catch (error) {
+            const responseStatus = axios.isAxiosError(error) ? error.response?.status : undefined;
+            const errorCode = axios.isAxiosError(error) ? error.code : undefined;
+            const errorMessage = responseStatus
+                ? `Email API returned HTTP ${responseStatus}`
+                : errorCode === 'ECONNABORTED' || errorCode === 'ETIMEDOUT'
+                    ? 'Email API request timed out'
+                    : 'Email API request failed';
+
+            console.error('Invoice schedule summary email delivery failed', { responseStatus, errorCode });
             return { success: false, error: errorMessage };
         }
     }

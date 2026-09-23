@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tổng hợp lịch hóa đơn</title>
+  </head>
+  <body style="margin: 0; background: #f4f6f8; color: #1f2933; font-family: Arial, sans-serif;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding: 32px 16px;">
+      <tr>
+        <td align="center">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width: 680px; background: #ffffff; border: 1px solid #d9e2ec;">
+            <tr>
+              <td style="padding: 32px;">
+                <p style="margin: 0 0 8px; color: #52606d; font-size: 14px;">Thông báo lịch hóa đơn</p>
+                <h1 style="margin: 0 0 24px; color: #102a43; font-size: 26px;">Lịch hóa đơn đến hạn hôm nay</h1>
+
+                <p style="margin: 0 0 8px; font-size: 16px;">
+                  Có <strong>{{schedule_count}}</strong> lịch hóa đơn đến hạn vào ngày
+                  <strong>{{schedule_date}}</strong>.
+                </p>
+
+                <div style="margin-top: 24px; padding: 16px; background: #f0f4f8; border-left: 4px solid #2f80ed; white-space: pre-line; font-size: 15px; line-height: 1.7;">
+                  {{schedule_list}}
+                </div>
+
+                <p style="margin: 28px 0 0; color: #7b8794; font-size: 13px;">
+                  Email này được tự động gửi bởi hệ thống quản lý lịch hóa đơn.
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>

@@ -50,6 +50,9 @@ class FilePostRateLimit {
 class MailJSTemplate {
   @IsString()
   invoice: string;
+
+  @IsString()
+  invoiceSchedule: string;
 }
 
 class MailJS {

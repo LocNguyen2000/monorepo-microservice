@@ -39,6 +39,7 @@ export class InvoicesService {
       serviceId: this.config.get('mailjs.serviceId'),
       userId: this.config.get('mailjs.userId'),
       invoiceTemplateId: this.config.get('mailjs.template.invoice'),
+      invoiceScheduleTemplateId: this.config.get('mailjs.template.invoiceSchedule'),
       timeoutMs: this.config.get('mailjs.timeoutMs'),
     });
   }
@@ -247,6 +248,51 @@ export class InvoicesService {
       status: 'SENT',
       message: 'Invoice notification sent to the rent provider',
     };
+  }
+
+  async sendDueScheduleSummary() {
+    const dateParts = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'Asia/Ho_Chi_Minh',
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    }).formatToParts(new Date());
+    const dateValues = Object.fromEntries(dateParts.map(({ type, value }) => [type, value]));
+    const dueDate = `${dateValues.year}-${dateValues.month}-${dateValues.day}`;
+    const dueDay = Number(dateValues.day);
+
+    const [schedules, locationsResult] = await Promise.all([
+      this.scheduleRepository.findAll({ where: { dueDay, enabled: true } }),
+      this.locationSvc.findAll({ page: 1, size: 1000 }),
+    ]);
+    if (schedules.length === 0) {
+      return { dueDate, scheduleCount: 0, status: 'SKIPPED', message: 'No invoice schedules are due today' };
+    }
+
+    const locations = new Map(
+      locationsResult.data.map((location) => [Number(location.locationCode), location]),
+    );
+    const scheduleList = schedules.map((schedule) => {
+      const location = locations.get(Number(schedule.locationCode));
+      return [
+        `Location: ${location?.locationName || 'Unknown'}`,
+        `Location code: ${schedule.locationCode}`,
+        `Invoice code: ${schedule.invoiceCode || 'Not assigned'}`,
+        `Due day: ${schedule.dueDay}`,
+      ].join(' | ');
+    }).join('\n');
+
+    const mailResult = await this.mailSenderClient.sendInvoiceScheduleSummary({
+      recipientEmail: this.config.get('mailjs.adminEmail'),
+      scheduleDate: dueDate,
+      scheduleCount: schedules.length,
+      scheduleList,
+    });
+    if ('error' in mailResult) {
+      return { dueDate, scheduleCount: schedules.length, status: 'FAILED', message: mailResult.error };
+    }
+
+    return { dueDate, scheduleCount: schedules.length, status: 'SENT', message: 'Invoice schedule summary sent' };
   }
 
   async findOneByTenantId(id: number) {
