@@ -1,0 +1,1552 @@
+openapi: 3.0.3
+info:
+  title: Monorepo Service API
+  version: 1.0.0
+  description: >-
+    HTTP API implemented by apps/service. Protected routes require an access token
+    and active persisted session. Routes without explicit role metadata default
+    to SuperAdministrator or Administrator. The service also exposes a separate
+    WebSocket echo server on port 8080; WebSocket events are not described here.
+tags:
+  - name: Health
+  - name: Authentication
+  - name: Tenants
+  - name: Expenses
+  - name: Locations
+  - name: Rent providers
+  - name: Invoices
+  - name: OCR
+  - name: Cron
+security:
+  - bearerAuth: []
+paths:
+  /:
+    get:
+      tags: [Health]
+      operationId: getHealth
+      summary: Check service availability
+      security: []
+      responses:
+        '200':
+          description: Service is available.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: hello
+
+  /auth/register:
+    post:
+      tags: [Authentication]
+      operationId: registerAccount
+      summary: Register an account pending administrator approval
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: Account registered and awaiting approval.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountMessage'
+        '409':
+          $ref: '#/components/responses/Conflict'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /auth/login:
+    post:
+      tags: [Authentication]
+      operationId: login
+      summary: Log in and create an authenticated session
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '201':
+          description: Access token and persisted session details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+
+  /auth/logout:
+    post:
+      tags: [Authentication]
+      operationId: logout
+      summary: Soft-delete a session
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [sessionId]
+              properties:
+                sessionId:
+                  type: string
+      responses:
+        '201':
+          description: Logout result.
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [success]
+                properties:
+                  success:
+                    type: boolean
+
+  /auth/pending:
+    get:
+      tags: [Authentication]
+      operationId: listPendingAccounts
+      summary: List accounts awaiting approval
+      x-required-roles: [SuperAdministrator, Administrator]
+      responses:
+        '200':
+          description: Accounts with inactive status.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/accounts:
+    get:
+      tags: [Authentication]
+      operationId: listAccounts
+      summary: List accounts
+      x-required-roles: [SuperAdministrator, Administrator]
+      responses:
+        '200':
+          description: Accounts ordered by id.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Account'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /auth/{id}/approve:
+    patch:
+      tags: [Authentication]
+      operationId: approveAccount
+      summary: Approve a pending account
+      x-required-roles: [SuperAdministrator, Administrator]
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      responses:
+        '200':
+          description: Approval result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountMessage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /auth/{id}/role:
+    patch:
+      tags: [Authentication]
+      operationId: updateAccountRole
+      summary: Change an account role
+      x-required-roles: [SuperAdministrator]
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [role]
+              properties:
+                role:
+                  $ref: '#/components/schemas/UserRole'
+      responses:
+        '200':
+          description: Updated account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountMessage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /auth/{id}/status:
+    patch:
+      tags: [Authentication]
+      operationId: updateAccountStatus
+      summary: Change an account status
+      x-required-roles: [SuperAdministrator]
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  $ref: '#/components/schemas/AccountStatus'
+      responses:
+        '200':
+          description: Updated account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountMessage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /tenant:
+    post:
+      tags: [Tenants]
+      operationId: createTenant
+      summary: Create a tenant and optionally upload a contract
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TenantCreateForm'
+      responses:
+        '201':
+          description: Created tenant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    get:
+      tags: [Tenants]
+      operationId: listTenants
+      summary: List tenants with pagination
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+      responses:
+        '200':
+          description: Paginated tenants.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /tenant/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Tenants]
+      operationId: getTenant
+      summary: Get a tenant by id
+      responses:
+        '200':
+          description: Tenant or null when no row exists.
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/Tenant'
+                nullable: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags: [Tenants]
+      operationId: updateTenant
+      summary: Update a tenant and optionally replace its contract
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TenantUpdateForm'
+      responses:
+        '200':
+          description: Updated tenant.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+    delete:
+      tags: [Tenants]
+      operationId: deleteTenant
+      summary: Delete a tenant
+      responses:
+        '200':
+          description: Deleted tenant instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /tenant/{tenantCode}/locations/{locationCode}:
+    post:
+      tags: [Tenants]
+      operationId: assignTenantLocation
+      summary: Assign a tenant to a location
+      parameters:
+        - name: tenantCode
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: locationCode
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '201':
+          description: Tenant after location assignment.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tenant'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /expense:
+    post:
+      tags: [Expenses]
+      operationId: createExpense
+      summary: Create an expense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseWrite'
+      responses:
+        '201':
+          description: Created expense.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      tags: [Expenses]
+      operationId: listExpenses
+      summary: List expenses with pagination
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+      responses:
+        '200':
+          description: Paginated expenses.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExpensePage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /expense/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Expenses]
+      operationId: getExpense
+      summary: Get an expense by id
+      responses:
+        '200':
+          description: Expense or null when no row exists.
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/Expense'
+                nullable: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags: [Expenses]
+      operationId: updateExpense
+      summary: Update an expense
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExpenseWrite'
+      responses:
+        '200':
+          description: Updated expense.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags: [Expenses]
+      operationId: deleteExpense
+      summary: Delete an expense
+      responses:
+        '200':
+          description: Deleted expense instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /openai/ping:
+    get:
+      tags: [OCR]
+      operationId: pingOcrService
+      summary: Check OCR integration route
+      responses:
+        '200':
+          description: Route response.
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: hello
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /openai/process-meter-image:
+    post:
+      tags: [OCR]
+      operationId: processMeterImage
+      summary: Extract meter details from uploaded image files
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              required: [files]
+              properties:
+                files:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '201':
+          description: Extracted meter details. Development mode returns fixture values.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OcrMeterResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /location:
+    post:
+      tags: [Locations]
+      operationId: createLocation
+      summary: Create a location and optionally upload an image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LocationCreateForm'
+      responses:
+        '201':
+          description: Created location.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      tags: [Locations]
+      operationId: listLocations
+      summary: List locations with expenses and pagination
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+      responses:
+        '200':
+          description: Paginated locations with associated expenses.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /location/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Locations]
+      operationId: getLocation
+      summary: Get a location with its expenses
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      responses:
+        '200':
+          description: Location with its associated expenses.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      tags: [Locations]
+      operationId: updateLocation
+      summary: Update a location and optionally upload an image
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/LocationUpdateForm'
+      responses:
+        '200':
+          description: Number of affected rows; may be empty if the service catches an update error.
+          content:
+            application/json:
+              schema:
+                type: array
+                nullable: true
+                items:
+                  type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    patch:
+      tags: [Locations]
+      operationId: assignLocationExpenses
+      summary: Replace expenses assigned to a location
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/ExpenseLocationAssignment'
+      responses:
+        '200':
+          description: Created location-expense assignment rows.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ExpenseLocationAssignment'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags: [Locations]
+      operationId: deleteLocation
+      summary: Delete a location
+      responses:
+        '200':
+          description: Deleted location instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Location'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /location/{locationCode}/expenses/{expenseCode}/meter:
+    patch:
+      tags: [Locations]
+      operationId: updateMeterReading
+      summary: Update a location expense meter reading
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      parameters:
+        - name: locationCode
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: expenseCode
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [currentUnit]
+              properties:
+                currentUnit:
+                  type: number
+                  minimum: 0
+      responses:
+        '200':
+          description: Updated reading; previous currentUnit is returned as initialUnit.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MeterReadingResult'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /rent-provider:
+    post:
+      tags: [Rent providers]
+      operationId: createRentProvider
+      summary: Create a rent provider
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RentProviderWrite'
+      responses:
+        '201':
+          description: Created rent provider.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentProvider'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      tags: [Rent providers]
+      operationId: listRentProviders
+      summary: List rent providers with pagination
+      parameters:
+        - $ref: '#/components/parameters/Page'
+        - $ref: '#/components/parameters/Size'
+      responses:
+        '200':
+          description: Paginated rent providers.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentProviderPage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /rent-provider/{id}:
+    parameters:
+      - $ref: '#/components/parameters/Id'
+    get:
+      tags: [Rent providers]
+      operationId: getRentProvider
+      summary: Get a rent provider by id
+      responses:
+        '200':
+          description: Rent provider or null when no row exists.
+          content:
+            application/json:
+              schema:
+                type: object
+                allOf:
+                  - $ref: '#/components/schemas/RentProvider'
+                nullable: true
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    put:
+      tags: [Rent providers]
+      operationId: updateRentProvider
+      summary: Update a rent provider
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RentProviderWrite'
+      responses:
+        '200':
+          description: Updated rent provider.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentProvider'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    delete:
+      tags: [Rent providers]
+      operationId: deleteRentProvider
+      summary: Delete a rent provider
+      responses:
+        '200':
+          description: Deleted rent provider instance.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RentProvider'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /invoices:
+    post:
+      tags: [Invoices]
+      operationId: createInvoice
+      summary: Create a draft invoice with expense snapshots
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceCreateRequest'
+      responses:
+        '201':
+          description: Created draft invoice and expense snapshots.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceWithExpenses'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    get:
+      tags: [Invoices]
+      operationId: listInvoices
+      summary: List invoices ordered by creation time
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      responses:
+        '200':
+          description: Invoices.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Invoice'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /invoices/{id}/status:
+    patch:
+      tags: [Invoices]
+      operationId: updateInvoiceStatus
+      summary: Mark a draft invoice as done
+      description: Only the DRAFT to DONE transition is allowed; completed invoices cannot be reopened.
+      x-required-roles: [SuperAdministrator, Administrator]
+      parameters:
+        - $ref: '#/components/parameters/Id'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status:
+                  type: string
+                  enum: [DRAFT, DONE]
+      responses:
+        '200':
+          description: Updated invoice.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Invoice'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /invoices/schedules:
+    get:
+      tags: [Invoices]
+      operationId: listInvoiceSchedules
+      summary: List locations with schedules and draft invoices
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      responses:
+        '200':
+          description: One schedule summary per location.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LocationScheduleSummary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /invoices/schedules/{locationCode}:
+    put:
+      tags: [Invoices]
+      operationId: saveInvoiceSchedule
+      summary: Create or update a location invoice schedule
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      parameters:
+        - name: locationCode
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InvoiceScheduleWrite'
+      responses:
+        '200':
+          description: Saved invoice schedule.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InvoiceSchedule'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /invoices/schedules/{locationCode}/notify:
+    post:
+      tags: [Invoices]
+      operationId: notifyInvoiceSchedule
+      summary: Send the scheduled invoice notification to its rent provider
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      parameters:
+        - name: locationCode
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Notification delivery result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotificationResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /invoices/get-summerize-data/{locationId}:
+    get:
+      tags: [Invoices]
+      operationId: getInvoiceSummaryByLocation
+      summary: Get location, tenants, and rent provider summary
+      x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
+      parameters:
+        - name: locationId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Location summary data.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LocationInvoiceSummary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /invoices/{tenantId}:
+    get:
+      tags: [Invoices]
+      operationId: getTenantInvoiceSummary
+      summary: Get tenant and assigned location summary
+      parameters:
+        - name: tenantId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Tenant and, when assigned, its location and rent provider.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TenantInvoiceSummary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+  /internal/cron/invoice-schedules:
+    get:
+      tags: [Cron]
+      operationId: sendDueInvoiceScheduleSummary
+      summary: Send the daily due-schedule summary email
+      description: Requires Authorization to equal Bearer followed by the configured CRON_SECRET.
+      security:
+        - cronBearer: []
+      responses:
+        '200':
+          description: Summary delivery result, or skipped when no schedules are due.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CronSummaryResult'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Access token issued by POST /auth/login; active persisted session required.
+    cronBearer:
+      type: apiKey
+      in: header
+      name: Authorization
+      description: Exact value is Bearer followed by the configured CRON_SECRET.
+  parameters:
+    Id:
+      name: id
+      in: path
+      required: true
+      schema:
+        type: integer
+    Page:
+      name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+    Size:
+      name: size
+      in: query
+      required: false
+      schema:
+        type: integer
+  responses:
+    BadRequest:
+      description: Invalid request or business-rule violation.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing, invalid, expired, or unauthorized credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Conflict:
+      description: Request conflicts with account state or business rules.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        statusCode:
+          type: integer
+        timestamp:
+          type: string
+          format: date-time
+        path:
+          type: string
+        msg:
+          type: string
+    GenericObject:
+      type: object
+      additionalProperties: true
+    RegisterRequest:
+      type: object
+      required: [fullName, email, password]
+      properties:
+        fullName:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          minLength: 8
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+    UserRole:
+      type: integer
+      enum: [1, 2, 3, 4]
+      description: 1 SuperAdministrator, 2 Administrator, 3 User, 4 LocationOperator.
+    AccountStatus:
+      type: integer
+      enum: [0, 1]
+      description: 0 Inactive, 1 Active.
+    Account:
+      type: object
+      properties:
+        id:
+          type: integer
+        fullName:
+          type: string
+        email:
+          type: string
+          format: email
+        role:
+          $ref: '#/components/schemas/UserRole'
+        status:
+          $ref: '#/components/schemas/AccountStatus'
+    AccountMessage:
+      allOf:
+        - $ref: '#/components/schemas/Account'
+        - type: object
+          properties:
+            message:
+              type: string
+    AuthResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        sessionId:
+          type: string
+        id:
+          type: integer
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+        role:
+          $ref: '#/components/schemas/UserRole'
+    PageMetadata:
+      type: object
+      required: [total, page, size, data]
+      properties:
+        total:
+          type: integer
+        page:
+          type: integer
+        size:
+          type: integer
+    Tenant:
+      type: object
+      additionalProperties: true
+      properties:
+        tenantCode:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        tenantName:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date-time
+        gender:
+          type: integer
+        phoneNumber:
+          type: string
+        email:
+          type: string
+          format: email
+        contactAddress:
+          type: string
+        description:
+          type: string
+        contractUrl:
+          type: string
+          format: uri
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    TenantCreateForm:
+      type: object
+      additionalProperties: true
+      properties:
+        tenantCode:
+          type: integer
+        firstName:
+          type: string
+        lastName:
+          type: string
+        tenantName:
+          type: string
+        dateOfBirth:
+          type: string
+        gender:
+          type: integer
+        phoneNumber:
+          type: string
+        email:
+          type: string
+        contactAddress:
+          type: string
+        description:
+          type: string
+        locationCode:
+          type: integer
+        contract:
+          type: string
+          format: binary
+    TenantUpdateForm:
+      allOf:
+        - $ref: '#/components/schemas/TenantCreateForm'
+    TenantPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Tenant'
+    Expense:
+      type: object
+      additionalProperties: true
+      properties:
+        expenseCode:
+          oneOf:
+            - type: integer
+            - type: string
+        expenseName:
+          type: string
+        type:
+          type: string
+        price:
+          type: number
+        inUsed:
+          type: boolean
+        unitName:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    ExpenseWrite:
+      allOf:
+        - $ref: '#/components/schemas/Expense'
+    ExpensePage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Expense'
+    LocationExpense:
+      type: object
+      properties:
+        expenseCode:
+          type: integer
+        expenseName:
+          type: string
+        initialUnit:
+          type: number
+        currentUnit:
+          type: number
+        unitName:
+          type: string
+        type:
+          type: string
+        price:
+          type: number
+        inUsed:
+          type: boolean
+    Location:
+      type: object
+      additionalProperties: true
+      properties:
+        locationCode:
+          oneOf:
+            - type: integer
+            - type: string
+        locationName:
+          type: string
+        locationAddress:
+          type: string
+        roomSize:
+          type: number
+        description:
+          type: string
+        owner:
+          oneOf:
+            - type: integer
+            - type: string
+        image:
+          type: string
+          format: uri
+        expenses:
+          type: array
+          items:
+            $ref: '#/components/schemas/LocationExpense'
+    LocationCreateForm:
+      type: object
+      additionalProperties: true
+      properties:
+        locationName:
+          type: string
+        locationAddress:
+          type: string
+        roomSize:
+          type: number
+        description:
+          type: string
+        owner:
+          oneOf:
+            - type: integer
+            - type: string
+        image:
+          type: string
+          format: binary
+    LocationUpdateForm:
+      allOf:
+        - $ref: '#/components/schemas/LocationCreateForm'
+    LocationPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/Location'
+    ExpenseLocationAssignment:
+      type: object
+      properties:
+        expenseCode:
+          type: integer
+        initialUnit:
+          type: number
+        currentUnit:
+          type: number
+    MeterReadingResult:
+      type: object
+      required: [locationCode, expenseCode, initialUnit, currentUnit]
+      properties:
+        locationCode:
+          type: integer
+        expenseCode:
+          type: integer
+        initialUnit:
+          type: number
+        currentUnit:
+          type: number
+    RentProvider:
+      type: object
+      additionalProperties: true
+      properties:
+        providerCode:
+          type: integer
+        providerName:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        dateOfBirth:
+          type: string
+          format: date-time
+        phoneNumber:
+          type: string
+        email:
+          type: string
+          format: email
+        contactAddress:
+          type: string
+        gender:
+          type: integer
+        description:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    RentProviderWrite:
+      allOf:
+        - $ref: '#/components/schemas/RentProvider'
+    RentProviderPage:
+      allOf:
+        - $ref: '#/components/schemas/PageMetadata'
+        - type: object
+          properties:
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/RentProvider'
+    InvoiceStatus:
+      type: string
+      enum: [DRAFT, DONE]
+    InvoiceExpenseSnapshot:
+      type: object
+      properties:
+        expenseCode:
+          type: integer
+        expenseName:
+          type: string
+        type:
+          type: string
+        unitName:
+          type: string
+        initialUnit:
+          type: number
+        currentUnit:
+          type: number
+        price:
+          type: number
+        unitPrice:
+          type: number
+        amount:
+          type: number
+    InvoiceCreateRequest:
+      type: object
+      required: [locationCode, expenses]
+      properties:
+        locationCode:
+          type: integer
+        expenses:
+          type: array
+          minItems: 1
+          items:
+            $ref: '#/components/schemas/InvoiceExpenseSnapshot'
+    Invoice:
+      type: object
+      additionalProperties: true
+      properties:
+        invoiceCode:
+          type: integer
+        locationCode:
+          type: integer
+        totalAmount:
+          type: number
+        status:
+          $ref: '#/components/schemas/InvoiceStatus'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    InvoiceWithExpenses:
+      allOf:
+        - $ref: '#/components/schemas/Invoice'
+        - type: object
+          properties:
+            expenses:
+              type: array
+              items:
+                $ref: '#/components/schemas/InvoiceExpenseSnapshot'
+    InvoiceSchedule:
+      type: object
+      properties:
+        locationCode:
+          type: integer
+        invoiceCode:
+          type: integer
+          nullable: true
+        dueDay:
+          type: integer
+        enabled:
+          type: boolean
+        lastNotifiedAt:
+          type: string
+          format: date-time
+          nullable: true
+        lastStatus:
+          type: string
+          nullable: true
+        lastError:
+          type: string
+          nullable: true
+    InvoiceScheduleWrite:
+      type: object
+      required: [dueDay]
+      properties:
+        invoiceCode:
+          type: integer
+          nullable: true
+        dueDay:
+          type: integer
+          minimum: 1
+          maximum: 28
+        enabled:
+          type: boolean
+          default: true
+    LocationScheduleSummary:
+      type: object
+      properties:
+        location:
+          $ref: '#/components/schemas/Location'
+        schedule:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/InvoiceSchedule'
+          nullable: true
+        invoices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Invoice'
+    LocationInvoiceSummary:
+      type: object
+      properties:
+        location:
+          $ref: '#/components/schemas/Location'
+        tenants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Tenant'
+        owner:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/RentProvider'
+          nullable: true
+    TenantInvoiceSummary:
+      type: object
+      properties:
+        tenant:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/Tenant'
+          nullable: true
+        location:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/Location'
+          nullable: true
+        owner:
+          type: object
+          allOf:
+            - $ref: '#/components/schemas/RentProvider'
+          nullable: true
+    NotificationResult:
+      type: object
+      properties:
+        locationCode:
+          type: integer
+        invoiceCode:
+          type: integer
+          nullable: true
+        recipient:
+          type: string
+          example: rent-provider
+        tenantCount:
+          type: integer
+        status:
+          type: string
+          enum: [SENT, FAILED]
+        message:
+          type: string
+    CronSummaryResult:
+      type: object
+      properties:
+        dueDate:
+          type: string
+          format: date
+        scheduleCount:
+          type: integer
+        status:
+          type: string
+          enum: [SKIPPED, SENT, FAILED]
+        message:
+          type: string
+    OcrMeterResult:
+      type: object
+      properties:
+        electricMeterReading:
+          type: string
+        manufacturer:
+          type: string
+        model:
+          type: string
+        serialNumber:
+          type: string
+        voltage:
+          type: string
+        current:
+          type: string
+        frequency:
+          type: string
+        powerFactor:
+          type: string
+        temperature:
+          type: string
+        phase:
+          type: string
+        installationYear:
+          type: string
+        locationMarking:
+          type: string
