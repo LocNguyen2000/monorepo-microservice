@@ -266,7 +266,12 @@ export class InvoicesService {
       this.locationSvc.findAll({ page: 1, size: 1000 }),
     ]);
     if (schedules.length === 0) {
-      return { dueDate, scheduleCount: 0, status: 'SKIPPED', message: 'No invoice schedules are due today' };
+      return {
+        dueDate,
+        scheduleCount: 0,
+        status: 'SKIPPED',
+        message: 'No invoice schedules are due today',
+      };
     }
 
     const locations = new Map(
@@ -289,10 +294,20 @@ export class InvoicesService {
       scheduleList,
     });
     if ('error' in mailResult) {
-      return { dueDate, scheduleCount: schedules.length, status: 'FAILED', message: mailResult.error };
+      return {
+        dueDate,
+        scheduleCount: schedules.length,
+        status: 'FAILED',
+        message: mailResult.error,
+      };
     }
 
-    return { dueDate, scheduleCount: schedules.length, status: 'SENT', message: 'Invoice schedule summary sent' };
+    return {
+      dueDate,
+      scheduleCount: schedules.length,
+      status: 'SENT',
+      message: 'Invoice schedule summary sent',
+    };
   }
 
   async findOneByTenantId(id: number) {
