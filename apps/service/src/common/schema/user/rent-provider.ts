@@ -1,11 +1,17 @@
 import { Column, PrimaryKey, Table } from "sequelize-typescript";
 import { BaseEntity } from "../base/index.js";
 
-@Table({ tableName: "rent_providers" })
+@Table({
+  tableName: "rent_providers",
+  indexes: [{ fields: ["accountId"] }],
+})
 export class RentProviderSchema extends BaseEntity {
   @PrimaryKey
   @Column
   providerCode: number;
+
+  @Column
+  accountId?: number;
 
   @Column
   providerName: string;

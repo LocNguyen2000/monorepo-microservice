@@ -11,6 +11,7 @@ This is a pnpm monorepo:
 - `apps/rental-client`: rental client UI.
 - `packages/env` and `packages/error`: shared environment configuration and error handling.
 - `scripts/migrations/service/table.sql`: service database schema/migration source; keep it aligned with Sequelize schema changes.
+- Append new incremental SQL migrations to the end of `table.sql` under a separator, and include required indexes in the migration script.
 
 ## Validation and Change Practices
 
@@ -26,6 +27,7 @@ Prefer the narrowest relevant check first. Follow an affected shared contract or
 
 - Protected service requests validate both the access token and active persisted session. Logout soft-deletes the session using `deletedAt`. Keep session schema changes synchronized with the SQL migration.
 - Admin and super-admin-only operations need role protection at the controller and service layers where applicable.
+- Owner account-isolation POC: the rent-provider HTTP CRUD derives `accountId` from the authenticated token, scopes list/detail/update/delete queries to it, and ignores a body-supplied account ID on writes. Invoice owner projections also scope owner lookups to the authenticated account. The nullable `rent_providers.accountId` column is indexed; legacy rows remain invisible until explicitly assigned. Location, tenant, invoice, and schedule records themselves still need account scoping in later phases.
 - Invoices start as `DRAFT`. Only admins and super admins may transition them to `DONE`; `DONE` invoices cannot be reopened or remain assigned to schedules; only `DRAFT` invoices can be scheduled.
 - Meter readings cannot decrease. On update, move the former `currentUnit` to `initialUnit` and write the submitted reading to `currentUnit`.
 - Invoice schedule cron runs daily at 00:00 UTC (07:00 Vietnam time), selects enabled schedules matching the current `Asia/Ho_Chi_Minh` due day, validates its bearer secret, and sends one Vietnamese summary email. Keep its EmailJS template variables intact.

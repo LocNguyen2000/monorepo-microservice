@@ -182,7 +182,7 @@ export class InvoicesService {
     });
   }
 
-  async notifySchedule(locationCode: number) {
+  async notifySchedule(locationCode: number, accountId: number) {
     const schedule = await this.scheduleRepository.findByPk(locationCode);
     if (!schedule || !schedule.enabled) throw new Error('Schedule is disabled');
 
@@ -197,7 +197,7 @@ export class InvoicesService {
     if (!invoice) throw new Error('Invoice not found');
     if (!location.owner) throw new Error('Location has no rent provider');
 
-    const provider = await this.rentProviderSvc.findOne(Number(location.owner));
+    const provider = await this.rentProviderSvc.findOne(Number(location.owner), accountId);
     if (!provider?.email) throw new Error('Rent provider has no email');
 
     const invoiceExpenses = await this.invoiceExpenseRepository.findAll({
@@ -310,7 +310,7 @@ export class InvoicesService {
     };
   }
 
-  async findOneByTenantId(id: number) {
+  async findOneByTenantId(id: number, accountId: number) {
     const result = {};
     const tenant = await this.tenantSvc.findOne(id);
     Object.assign(result, { tenant });
@@ -320,7 +320,7 @@ export class InvoicesService {
       const location = await this.locationSvc.findOne(assignment.locationCode);
       Object.assign(result, { location });
       if (location.owner) {
-        const owner = await this.rentProviderSvc.findOne(+location.owner);
+        const owner = await this.rentProviderSvc.findOne(+location.owner, accountId);
         Object.assign(result, { owner });
       }
     }
@@ -328,7 +328,7 @@ export class InvoicesService {
     return result;
   }
 
-  async findOneByLocation(id: number) {
+  async findOneByLocation(id: number, accountId: number) {
     const result = {};
     const location = await this.locationSvc.findOne(id);
 
@@ -336,7 +336,7 @@ export class InvoicesService {
       (await this.tenantSvc.findTenantsByLocation(+location.locationCode)) ||
       [];
 
-    const owner = await this.rentProviderSvc.findOne(+location.owner);
+    const owner = await this.rentProviderSvc.findOne(+location.owner, accountId);
 
     Object.assign(result, { location, tenants, owner });
 

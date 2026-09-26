@@ -681,7 +681,7 @@ paths:
         - $ref: '#/components/parameters/Size'
       responses:
         '200':
-          description: Paginated rent providers.
+          description: Paginated rent providers belonging to the authenticated account.
           content:
             application/json:
               schema:
@@ -695,10 +695,10 @@ paths:
     get:
       tags: [Rent providers]
       operationId: getRentProvider
-      summary: Get a rent provider by id
+      summary: Get an account-owned rent provider by id
       responses:
         '200':
-          description: Rent provider or null when no row exists.
+          description: Rent provider or null when no row belongs to the authenticated account.
           content:
             application/json:
               schema:
@@ -711,7 +711,7 @@ paths:
     put:
       tags: [Rent providers]
       operationId: updateRentProvider
-      summary: Update a rent provider
+      summary: Update an account-owned rent provider
       requestBody:
         required: true
         content:
@@ -727,10 +727,12 @@ paths:
                 $ref: '#/components/schemas/RentProvider'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     delete:
       tags: [Rent providers]
       operationId: deleteRentProvider
-      summary: Delete a rent provider
+      summary: Delete an account-owned rent provider
       responses:
         '200':
           description: Deleted rent provider instance.
@@ -740,6 +742,8 @@ paths:
                 $ref: '#/components/schemas/RentProvider'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /invoices:
     post:
@@ -1330,6 +1334,9 @@ components:
           type: integer
         description:
           type: string
+        accountId:
+          type: integer
+          readOnly: true
         createdAt:
           type: string
           format: date-time

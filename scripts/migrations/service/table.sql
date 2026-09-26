@@ -234,3 +234,10 @@ create table if not exists sessions (
     PRIMARY KEY (`id`),
     CONSTRAINT fk_session_account FOREIGN KEY (`accountId`) REFERENCES accounts(`id`)
 );
+
+-- ------------------------------------------------------
+-- Owner account isolation POC
+-- ------------------------------------------------------
+ALTER TABLE rent_providers
+    ADD COLUMN `accountId` int DEFAULT NULL,
+    ADD INDEX `rent_providers_accountId` (`accountId`);

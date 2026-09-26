@@ -1,4 +1,6 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Put, Req } from '@nestjs/common';
+import { Request } from 'express';
+import { TokenPayload } from '../auth/auth.service.js';
 import { InvoicesService } from './invoices.service.js';
 import { Roles, UserRole } from '../auth/auth.roles.js';
 import { InvoiceStatus } from './invoice-status.js';
@@ -45,18 +47,27 @@ export class InvoicesController {
 
   @Post('schedules/:locationCode/notify')
   @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
-  notifySchedule(@Param('locationCode', ParseIntPipe) locationCode: number) {
-    return this.invoiceSvc.notifySchedule(locationCode);
+  notifySchedule(
+    @Param('locationCode', ParseIntPipe) locationCode: number,
+    @Req() request: Request & { user: TokenPayload },
+  ) {
+    return this.invoiceSvc.notifySchedule(locationCode, request.user.sub);
   }
 
   @Get('get-summerize-data/:locationId')
   @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
-  findByLOcationId(@Param('locationId', ParseIntPipe) id: number) {
-    return this.invoiceSvc.findOneByLocation(id);
+  findByLOcationId(
+    @Param('locationId', ParseIntPipe) id: number,
+    @Req() request: Request & { user: TokenPayload },
+  ) {
+    return this.invoiceSvc.findOneByLocation(id, request.user.sub);
   }
 
   @Get(':tenantId')
-  findByTenantId(@Param('tenantId', ParseIntPipe) id: number) {
-    return this.invoiceSvc.findOneByTenantId(id);
+  findByTenantId(
+    @Param('tenantId', ParseIntPipe) id: number,
+    @Req() request: Request & { user: TokenPayload },
+  ) {
+    return this.invoiceSvc.findOneByTenantId(id, request.user.sub);
   }
 }
