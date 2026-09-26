@@ -256,3 +256,37 @@ ALTER TABLE tenants
 ALTER TABLE invoices
     ADD COLUMN `accountId` int DEFAULT NULL,
     ADD INDEX `invoices_accountId` (`accountId`);
+
+-- ------------------------------------------------------
+-- Backfill existing locations, tenants, and invoices to one account
+-- Set @targetAccountId to an existing accounts.id before running.
+-- This overwrites accountId for every row in these three tables.
+-- ------------------------------------------------------
+SET @targetAccountId = NULL;
+
+SELECT id, email
+FROM accounts
+WHERE id = @targetAccountId;
+
+START TRANSACTION;
+UPDATE locations AS l
+JOIN accounts AS a ON a.id = @targetAccountId
+SET l.accountId = a.id;
+SET @locationsUpdated = ROW_COUNT();
+
+UPDATE tenants AS t
+JOIN accounts AS a ON a.id = @targetAccountId
+SET t.accountId = a.id;
+SET @tenantsUpdated = ROW_COUNT();
+
+UPDATE invoices AS i
+JOIN accounts AS a ON a.id = @targetAccountId
+SET i.accountId = a.id;
+SET @invoicesUpdated = ROW_COUNT();
+COMMIT;
+
+SELECT
+    @targetAccountId AS accountId,
+    @locationsUpdated AS locationsUpdated,
+    @tenantsUpdated AS tenantsUpdated,
+    @invoicesUpdated AS invoicesUpdated;
