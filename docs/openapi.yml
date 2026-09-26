@@ -63,7 +63,7 @@ paths:
     post:
       tags: [Authentication]
       operationId: login
-      summary: Log in and create an authenticated session
+      summary: Log in and reuse or create an authenticated session
       security: []
       requestBody:
         required: true

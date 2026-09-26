@@ -12,6 +12,7 @@ import { EnvService } from '@nhl/env';
 import { Env } from '../common/env.js';
 import { createHmac, randomBytes, scrypt as callbackScrypt, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
+import { Op } from 'sequelize';
 import { LoginDto, RegisterDto } from './auth.dto.js';
 import { AccountStatus, UserRole } from './auth.roles.js';
 
@@ -189,21 +190,32 @@ export class AuthService {
     }
 
     private async createAuthResponse(account: AccountSchema) {
-        const sessionId = randomBytes(18).toString('base64url');
-        const expiresAt = new Date(Date.now() + TOKEN_TTL_SECONDS * 1000);
-        await this.sessionModel.create({
-            id: sessionId,
-            accountId: account.id,
-            expiresAt,
-            deletedAt: null,
-        } as SessionSchema);
+        const session = await this.sessionModel.findOne({
+            where: {
+                accountId: account.id,
+                deletedAt: null,
+                expiresAt: { [Op.gt]: new Date() },
+            },
+            order: [['expiresAt', 'DESC']],
+        });
+        const sessionId = session?.id ?? randomBytes(18).toString('base64url');
+        const expiresAt = session?.expiresAt ?? new Date(Date.now() + TOKEN_TTL_SECONDS * 1000);
+
+        if (!session) {
+            await this.sessionModel.create({
+                id: sessionId,
+                accountId: account.id,
+                expiresAt,
+                deletedAt: null,
+            } as SessionSchema);
+        }
 
         const payload: TokenPayload = {
             sub: account.id,
             email: account.email,
             role: account.role,
             sessionId,
-            exp: Math.floor(Date.now() / 1000) + TOKEN_TTL_SECONDS,
+            exp: Math.floor(expiresAt.getTime() / 1000),
         };
         const encodedPayload = Buffer.from(JSON.stringify(payload)).toString('base64url');
         const accessToken = `${encodedPayload}.${this.sign(encodedPayload, this.env.get('jwtSecret'))}`;
