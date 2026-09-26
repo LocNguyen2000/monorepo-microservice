@@ -367,7 +367,7 @@ paths:
     post:
       tags: [Expenses]
       operationId: createExpense
-      summary: Create an expense
+      summary: Create an expense for the authenticated account
       requestBody:
         required: true
         content:
@@ -376,7 +376,7 @@ paths:
               $ref: '#/components/schemas/ExpenseWrite'
       responses:
         '201':
-          description: Created expense.
+          description: Created account-owned expense.
           content:
             application/json:
               schema:
@@ -386,13 +386,13 @@ paths:
     get:
       tags: [Expenses]
       operationId: listExpenses
-      summary: List expenses with pagination
+      summary: List account-owned expenses with pagination
       parameters:
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/Size'
       responses:
         '200':
-          description: Paginated expenses.
+          description: Paginated expenses belonging to the authenticated account.
           content:
             application/json:
               schema:
@@ -406,10 +406,10 @@ paths:
     get:
       tags: [Expenses]
       operationId: getExpense
-      summary: Get an expense by id
+      summary: Get an account-owned expense by id
       responses:
         '200':
-          description: Expense or null when no row exists.
+          description: Expense belonging to the authenticated account, or null when no matching row exists.
           content:
             application/json:
               schema:
@@ -422,7 +422,7 @@ paths:
     put:
       tags: [Expenses]
       operationId: updateExpense
-      summary: Update an expense
+      summary: Update an account-owned expense
       requestBody:
         required: true
         content:
@@ -438,10 +438,12 @@ paths:
                 $ref: '#/components/schemas/Expense'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     delete:
       tags: [Expenses]
       operationId: deleteExpense
-      summary: Delete an expense
+      summary: Delete an account-owned expense
       responses:
         '200':
           description: Deleted expense instance.
@@ -451,6 +453,8 @@ paths:
                 $ref: '#/components/schemas/Expense'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /openai/ping:
     get:
@@ -1210,6 +1214,9 @@ components:
           oneOf:
             - type: integer
             - type: string
+        accountId:
+          type: integer
+          readOnly: true
         expenseName:
           type: string
         type:

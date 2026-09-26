@@ -47,18 +47,36 @@ Existing locations, tenants, and invoices remain invisible to account-scoped end
 
 ## Goal
 
-Provide a safe one-time migration to assign all existing locations, tenants, and invoices to one explicitly selected account.
+Provide a safe one-time migration to assign all existing locations, tenants, invoices, and expenses to one explicitly selected account.
 
 ## Implementation
 
-1. Append a separated plain-SQL backfill transaction to `scripts/migrations/service/table.sql`.
+1. Append a separated plain-SQL backfill transaction to `scripts/migrations/service/table.sql`, including an indexed `expenses.accountId` column migration.
 2. Require the operator to set an existing account ID in a session variable and show a preflight account lookup; each update joins to `accounts`, so an invalid or missing ID changes no rows.
-3. Update all rows in the three requested tables in one transaction and return per-table affected-row counts. Never use a hard-coded account ID.
+3. Update all rows in the four requested tables in one transaction and return per-table affected-row counts. Never use a hard-coded account ID.
 
 ## Verification
 
-- Check SQL diagnostics and verify the account validation, transaction, and three table updates are present.
+- Check SQL diagnostics and verify the account validation, transaction, and four table updates are present.
 - Do not execute the data migration against the configured database.
+
+# Expense Account Isolation
+
+## Goal
+
+Make expense data visible only to the account that owns it, including through location assignments and invoice creation.
+
+## Implementation
+
+1. Add indexed nullable `accountId` to the expense model and SQL schema migration.
+2. Derive expense CRUD ownership from the authenticated request and scope every query/write to that account.
+3. Validate expense ownership before assigning expenses to locations or creating invoice snapshots; filter location expense associations to the same account.
+4. Update OpenAPI and repository knowledge to document the account-owned expense API.
+
+## Verification
+
+- Run the service build and diagnostics for touched TypeScript, SQL, and OpenAPI files.
+- Audit expense controller paths and location/invoice expense link paths for account filtering.
 
 # Reuse Active Login Sessions
 

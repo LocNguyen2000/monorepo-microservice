@@ -53,6 +53,8 @@ export class InvoicesService {
       throw new Error('Location and expenses are required');
     }
     await this.locationSvc.findOne(locationCode, accountId);
+    const expenseCodes = expenses.map((expense: Record<string, unknown>) => Number(expense.expenseCode));
+    await this.locationSvc.validateExpensesForLocation(locationCode, expenseCodes, accountId);
 
     const snapshots = expenses.map((expense: Record<string, unknown>) => {
       const initialUnit = Number(expense.initialUnit || 0);

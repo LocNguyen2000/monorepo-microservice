@@ -12,7 +12,7 @@ This is a pnpm monorepo:
 - `packages/env` and `packages/error`: shared environment configuration and error handling.
 - `scripts/migrations/service/table.sql`: service database schema/migration source; keep it aligned with Sequelize schema changes.
 - Append new incremental SQL migrations to the end of `table.sql` under a separator, and include required indexes in the migration script.
-- The legacy location/tenant/invoice account backfill in `table.sql` is plain SQL using `@targetAccountId`; set it to the chosen existing `accounts.id` before running, and keep all three updates transactional.
+- The legacy location/tenant/invoice/expense account backfill in `table.sql` is plain SQL using `@targetAccountId`; set it to the chosen existing `accounts.id` before running, and keep all four updates transactional.
 
 ## Validation and Change Practices
 
@@ -28,7 +28,7 @@ Prefer the narrowest relevant check first. Follow an affected shared contract or
 
 - Protected service requests validate both the access token and active persisted session. Login reuses the account's newest non-deleted, unexpired session and returns a token with the same session ID and expiry; otherwise it creates a session. Logout soft-deletes the session using `deletedAt`. Keep session schema changes synchronized with the SQL migration.
 - Admin and super-admin-only operations need role protection at the controller and service layers where applicable.
-- Account isolation: rent providers, locations, tenants, and invoices derive `accountId` from the authenticated token, scope dashboard CRUD and projections to it, and ignore client-supplied ownership on writes. Each table has a nullable, indexed `accountId`; legacy rows remain invisible until explicitly assigned. Tenant-location and location-owner relationships must be same-account. Dashboard invoice schedules are filtered through owned locations; the internal cron summary intentionally remains system-wide.
+- Account isolation: rent providers, locations, tenants, invoices, and expenses derive `accountId` from the authenticated token, scope dashboard CRUD and projections to it, and ignore client-supplied ownership on writes. Each table has a nullable, indexed `accountId`; legacy rows remain invisible until explicitly assigned. Tenant-location, location-owner, and location-expense relationships must be same-account. Dashboard invoice schedules are filtered through owned locations; the internal cron summary intentionally remains system-wide.
 - Invoices start as `DRAFT`. Only admins and super admins may transition them to `DONE`; `DONE` invoices cannot be reopened or remain assigned to schedules; only `DRAFT` invoices can be scheduled.
 - Meter readings cannot decrease. On update, move the former `currentUnit` to `initialUnit` and write the submitted reading to `currentUnit`.
 - Invoice schedule cron runs daily at 00:00 UTC (07:00 Vietnam time), selects enabled schedules matching the current `Asia/Ho_Chi_Minh` due day, validates its bearer secret, and sends one Vietnamese summary email. Keep its EmailJS template variables intact.

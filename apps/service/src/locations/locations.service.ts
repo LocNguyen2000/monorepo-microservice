@@ -1,8 +1,9 @@
 import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { } from 'sequelize-typescript';
+import { Op } from 'sequelize';
 import {
   ExpenseLocationModel,
   ExpenseLocationSchema,
+  ExpenseModel,
   ExpenseSchema,
   LocationModel,
   LocationSchema,
@@ -22,6 +23,8 @@ export class LocationsService {
     private readonly locationModel: LocationModel,
     @InjectModel(ExpenseLocationSchema)
     private readonly expenseLocationRepository: ExpenseLocationModel,
+    @InjectModel(ExpenseSchema)
+    private readonly expenseRepository: ExpenseModel,
     private readonly filePostService: FilePostService,
     private readonly rentProviderService: RentProvidersService,
   ) { }
@@ -47,6 +50,8 @@ export class LocationsService {
       include: [
         {
           model: ExpenseSchema,
+          where: { accountId },
+          required: false,
           through: { attributes: [] },
         },
       ],
@@ -68,10 +73,10 @@ export class LocationsService {
 
   async findOne(id: number, accountId: number) {
     await this.findLocationRecord(id, accountId);
-    const sql = 'CALL prcd_FindLocationExpenseById (:id)';
+    const sql = 'CALL prcd_FindLocationExpenseById (:id, :accountId)';
 
     const locations = (await this.locationModel.sequelize.query(sql, {
-      replacements: { id },
+      replacements: { id, accountId },
     })) as unknown as LocationWithExpenses[];
 
     if (locations && locations.length === 0)
@@ -166,6 +171,20 @@ export class LocationsService {
     accountId: number,
   ) {
     await this.findLocationRecord(locationCode, accountId);
+    const expenseCodes = [...new Set(payload.map(({ expenseCode }) => Number(expenseCode)))];
+    if (expenseCodes.some((expenseCode) => !Number.isInteger(expenseCode))) {
+      throw new BadRequestException('Expense codes must be integers');
+    }
+
+    const ownedExpenses = expenseCodes.length
+      ? await this.expenseRepository.findAll({
+          attributes: ['expenseCode'],
+          where: { accountId, expenseCode: { [Op.in]: expenseCodes } },
+        })
+      : [];
+    if (ownedExpenses.length !== expenseCodes.length) {
+      throw new NotFoundException('Expense not found');
+    }
 
     await this.expenseLocationRepository.destroy({
       where: { locationCode: locationCode },
@@ -176,6 +195,28 @@ export class LocationsService {
         return { ...p, locationCode };
       }),
     );
+  }
+
+  async validateExpensesForLocation(
+    locationCode: number,
+    expenseCodes: number[],
+    accountId: number,
+  ) {
+    await this.findLocationRecord(locationCode, accountId);
+    const uniqueCodes = [...new Set(expenseCodes)];
+    const [ownedExpenses, assignments] = await Promise.all([
+      this.expenseRepository.findAll({
+        attributes: ['expenseCode'],
+        where: { accountId, expenseCode: { [Op.in]: uniqueCodes } },
+      }),
+      this.expenseLocationRepository.findAll({
+        attributes: ['expenseCode'],
+        where: { locationCode, expenseCode: { [Op.in]: uniqueCodes } },
+      }),
+    ]);
+    if (ownedExpenses.length !== uniqueCodes.length || assignments.length !== uniqueCodes.length) {
+      throw new NotFoundException('Expense is not assigned to this location');
+    }
   }
 
   async updateMeterReading(
@@ -193,6 +234,10 @@ export class LocationsService {
     }
 
     await this.findLocationRecord(locationCode, accountId);
+    const expense = await this.expenseRepository.findOne({
+      where: { expenseCode, accountId },
+    });
+    if (!expense) throw new NotFoundException('Expense not found');
 
     const expenseLocation = await this.expenseLocationRepository.findOne({
       where: { locationCode, expenseCode },
