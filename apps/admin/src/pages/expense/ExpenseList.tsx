@@ -1,6 +1,6 @@
 import Card from "antd/es/card/Card";
 import Typography from "antd/es/typography/Typography";
-import { FunctionComponent, useContext, useEffect, useReducer, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useReducer, useRef, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import Flex from "antd/es/flex";
 import { Button, Divider, Pagination } from "antd";
@@ -21,6 +21,8 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
   const [expense, setExpense] = useState<Partial<ExpenseDataType>>({});
   const [expenses, setExpenses] = useState<ExpenseDataType[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [reloadVersion, setReloadVersion] = useState(0);
+  const inFlightRequests = useRef(new Map<string, Promise<any>>());
   const [pagination, setPagination] = useState<IPagination>({
     total: 0,
     page: 1,
@@ -38,15 +40,6 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
     const code = autoGenerateNewCode(expenses, 'expenseCode')
     setExpense({...expense, expenseCode: code})
   }
-
-  const setLoadingSekeleton = (callback?: () => void) => {
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      if (callback) callback();
-    }, 500);
-  };
 
   const openFormHandler = (action: ACTION_ENUM, data: Partial<ExpenseDataType>) => {
     console.log("FORM", action);
@@ -70,38 +63,44 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
   };
 
   const loadData = () => {
-    serviceClient
-      .get(`/expense?page=${pagination.page}&size=${pagination.size}`)
-      .then((json) => json.data)
-      .then((response: PaginatedResponse<ExpenseDataType>) => {
-        setLoadingSekeleton();
-        setExpenses(response.data);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    setReloadVersion((current) => current + 1);
   };
 
-  // ON MOUNTED
   useEffect(() => {
-    setLoadingSekeleton();
+    let isActive = true;
+    const requestKey = `${pagination.page}:${pagination.size}`;
+    let request = inFlightRequests.current.get(requestKey);
 
-    serviceClient
-      .get(`/expense?page=${pagination.page}&size=${pagination.size}`)
+    if (!request) {
+      request = serviceClient.get(`/expense?page=${pagination.page}&size=${pagination.size}`);
+      inFlightRequests.current.set(requestKey, request);
+      request.then(
+        () => inFlightRequests.current.delete(requestKey),
+        () => inFlightRequests.current.delete(requestKey),
+      );
+    }
+
+    setIsLoading(true);
+    request
       .then((json) => json.data)
       .then((response: PaginatedResponse<ExpenseDataType>) => {
+        if (!isActive) return;
         setExpenses(response.data);
-        setPagination({ total: response.total, page: response.page, size: response.size });
+        setPagination((current) =>
+          current.total === response.total ? current : { ...current, total: response.total },
+        );
       })
       .catch((e) => {
-        console.log(e);
+        if (isActive) console.log(e);
+      })
+      .finally(() => {
+        if (isActive) setIsLoading(false);
       });
-  }, []);
 
-  // ON UPDATED
-  useEffect(() => {
-    loadData();
-  }, [pagination]);
+    return () => {
+      isActive = false;
+    };
+  }, [pagination.page, pagination.size, reloadVersion]);
   return (
     <>
       <Card style={{ padding: "0.25rem" }}>
