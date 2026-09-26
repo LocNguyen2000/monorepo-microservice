@@ -12,6 +12,7 @@ This is a pnpm monorepo:
 - `packages/env` and `packages/error`: shared environment configuration and error handling.
 - `scripts/migrations/service/table.sql`: service database schema/migration source; keep it aligned with Sequelize schema changes.
 - Append new incremental SQL migrations to the end of `table.sql` under a separator, and include required indexes in the migration script.
+- The legacy location/tenant/invoice account backfill in `table.sql` is plain SQL using `@targetAccountId`; set it to the chosen existing `accounts.id` before running, and keep all three updates transactional.
 
 ## Validation and Change Practices
 

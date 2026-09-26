@@ -43,6 +43,23 @@ Extend account isolation to locations, tenants, and invoices. Derive account own
 
 Existing locations, tenants, and invoices remain invisible to account-scoped endpoints until explicitly assigned to an account. Do not infer ownership from unrelated records or expose unassigned rows.
 
+# Legacy Data Account Backfill
+
+## Goal
+
+Provide a safe one-time migration to assign all existing locations, tenants, and invoices to one explicitly selected account.
+
+## Implementation
+
+1. Append a separated plain-SQL backfill transaction to `scripts/migrations/service/table.sql`.
+2. Require the operator to set an existing account ID in a session variable and show a preflight account lookup; each update joins to `accounts`, so an invalid or missing ID changes no rows.
+3. Update all rows in the three requested tables in one transaction and return per-table affected-row counts. Never use a hard-coded account ID.
+
+## Verification
+
+- Check SQL diagnostics and verify the account validation, transaction, and three table updates are present.
+- Do not execute the data migration against the configured database.
+
 # Reuse Active Login Sessions
 
 ## Goal
