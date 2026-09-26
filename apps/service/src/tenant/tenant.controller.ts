@@ -9,9 +9,12 @@ import {
   Query,
   UploadedFile,
   UseInterceptors,
+  Req,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { TenantService } from './tenant.service.js';
+import { Request } from 'express';
+import { TokenPayload } from '../auth/auth.service.js';
 import 'multer';
 
 @Controller('tenant')
@@ -22,27 +25,35 @@ export class TenantController {
   @UseInterceptors(FileInterceptor('contract'))
   create(
     @Body() createTenantDto: Record<string, unknown>,
+    @Req() request: Request & { user: TokenPayload },
     @UploadedFile() contract?: Express.Multer.File,
   ) {
-    return this.tenantService.create(createTenantDto, contract);
+    return this.tenantService.create(createTenantDto, request.user.sub, contract);
   }
 
   @Get()
-  findAll(@Query() query: Record<string, unknown>) {
-    return this.tenantService.findAll(query);
+  findAll(
+    @Query() query: Record<string, unknown>,
+    @Req() request: Request & { user: TokenPayload },
+  ) {
+    return this.tenantService.findAll(query, request.user.sub);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.tenantService.findOne(+id);
+  findOne(
+    @Param('id') id: string,
+    @Req() request: Request & { user: TokenPayload },
+  ) {
+    return this.tenantService.findOne(+id, request.user.sub);
   }
 
   @Post(':tenantCode/locations/:locationCode')
   assignLocation(
     @Param('tenantCode') tenantCode: string,
     @Param('locationCode') locationCode: string,
+    @Req() request: Request & { user: TokenPayload },
   ) {
-    return this.tenantService.assignLocation(+tenantCode, +locationCode);
+    return this.tenantService.assignLocation(+tenantCode, +locationCode, request.user.sub);
   }
 
   @Put(':id')
@@ -50,13 +61,17 @@ export class TenantController {
   update(
     @Param('id') id: string,
     @Body() updateTenantDto: Record<string, unknown>,
+    @Req() request: Request & { user: TokenPayload },
     @UploadedFile() contract?: Express.Multer.File,
   ) {
-    return this.tenantService.update(+id, updateTenantDto, contract);
+    return this.tenantService.update(+id, updateTenantDto, request.user.sub, contract);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.tenantService.remove(+id);
+  remove(
+    @Param('id') id: string,
+    @Req() request: Request & { user: TokenPayload },
+  ) {
+    return this.tenantService.remove(+id, request.user.sub);
   }
 }

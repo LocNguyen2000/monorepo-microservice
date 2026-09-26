@@ -13,6 +13,7 @@ import { LocationWithExpenses } from '../common/types.js';
 import lodash from 'lodash';
 const { omit, pick } = lodash;
 import { FilePostService } from '../filepost/filepost.service.js';
+import { RentProvidersService } from '../rent-providers/rent-providers.service.js';
 
 @Injectable()
 export class LocationsService {
@@ -22,21 +23,38 @@ export class LocationsService {
     @InjectModel(ExpenseLocationSchema)
     private readonly expenseLocationRepository: ExpenseLocationModel,
     private readonly filePostService: FilePostService,
+    private readonly rentProviderService: RentProvidersService,
   ) { }
 
   async create(
     createLocationDto: Record<string, unknown>,
+    accountId: number,
     image?: Express.Multer.File,
   ) {
+    await this.assertOwnerBelongsToAccount(createLocationDto.owner, accountId);
     const imageUrl = image ? await this.filePostService.upload(image) : undefined;
 
     return this.locationModel.create({
       ...createLocationDto,
       ...(imageUrl ? { image: imageUrl } : {}),
+      accountId,
     });
   }
 
-  findAll(query: PaginatedQuery) {
+  findAll(query: PaginatedQuery, accountId: number) {
+    return paginatedQuery<LocationSchema>(this.locationModel, query, {
+      where: { accountId },
+      include: [
+        {
+          model: ExpenseSchema,
+          through: { attributes: [] },
+        },
+      ],
+      distinct: true,
+    });
+  }
+
+  findAllForSystem(query: PaginatedQuery) {
     return paginatedQuery<LocationSchema>(this.locationModel, query, {
       include: [
         {
@@ -48,7 +66,8 @@ export class LocationsService {
     });
   }
 
-  async findOne(id: number) {
+  async findOne(id: number, accountId: number) {
+    await this.findLocationRecord(id, accountId);
     const sql = 'CALL prcd_FindLocationExpenseById (:id)';
 
     const locations = (await this.locationModel.sequelize.query(sql, {
@@ -66,39 +85,29 @@ export class LocationsService {
   async update(
     id: number,
     payload: Record<string, unknown>,
+    accountId: number,
     image?: Express.Multer.File,
   ) {
-    try {
-      const imageUrl = image ? await this.filePostService.upload(image) : undefined;
+    await this.findLocationRecord(id, accountId);
+    payload = pick(payload, [
+      'locationName',
+      'locationAddress',
+      'roomSize',
+      'description',
+      'image',
+      'owner',
+    ]);
+    await this.assertOwnerBelongsToAccount(payload.owner, accountId);
+    const imageUrl = image ? await this.filePostService.upload(image) : undefined;
+    if (imageUrl) payload.image = imageUrl;
 
-      payload = pick(payload, [
-        'locationName',
-        'locationAddress',
-        'roomSize',
-        'description',
-        'image',
-        'owner',
-      ]);
-      if (imageUrl) payload.image = imageUrl;
-      console.log(payload);
-
-      const instance = await this.locationModel.findByPk(id);
-
-      console.log('instance', instance);
-
-      if (!instance) throw new Error('Cannot find location');
-
-      const response = await this.locationModel.update(payload, {
-        where: { locationCode: id },
-      });
-      return response;
-    } catch (error) {
-      console.log('Ehh', error);
-    }
+    return this.locationModel.update(payload, {
+      where: { locationCode: id, accountId },
+    });
   }
 
-  async remove(id: number) {
-    const location = await this.locationModel.findByPk(id);
+  async remove(id: number, accountId: number) {
+    const location = await this.findLocationRecord(id, accountId);
 
     return location.destroy();
   }
@@ -151,9 +160,12 @@ export class LocationsService {
     return formatLocation;
   }
 
-  async updateExpensesByLocation(locationCode: number, payload: any[]) {
-    console.log(payload);
-    console.log(locationCode);
+  async updateExpensesByLocation(
+    locationCode: number,
+    payload: any[],
+    accountId: number,
+  ) {
+    await this.findLocationRecord(locationCode, accountId);
 
     await this.expenseLocationRepository.destroy({
       where: { locationCode: locationCode },
@@ -166,7 +178,12 @@ export class LocationsService {
     );
   }
 
-  async updateMeterReading(locationCode: number, expenseCode: number, currentUnit: number) {
+  async updateMeterReading(
+    locationCode: number,
+    expenseCode: number,
+    currentUnit: number,
+    accountId: number,
+  ) {
     if (!Number.isInteger(locationCode) || !Number.isInteger(expenseCode)) {
       throw new BadRequestException('Location and expense are required');
     }
@@ -174,6 +191,8 @@ export class LocationsService {
     if (!Number.isFinite(currentUnit) || currentUnit < 0) {
       throw new BadRequestException('Meter reading must be a non-negative number');
     }
+
+    await this.findLocationRecord(locationCode, accountId);
 
     const expenseLocation = await this.expenseLocationRepository.findOne({
       where: { locationCode, expenseCode },
@@ -191,5 +210,19 @@ export class LocationsService {
     await expenseLocation.update({ initialUnit, currentUnit });
 
     return { locationCode, expenseCode, initialUnit, currentUnit };
+  }
+
+  private async findLocationRecord(id: number, accountId: number) {
+    const location = await this.locationModel.findOne({
+      where: { locationCode: id, accountId },
+    });
+    if (!location) throw new NotFoundException('Location not found');
+    return location;
+  }
+
+  private async assertOwnerBelongsToAccount(owner: unknown, accountId: number) {
+    if (owner === undefined || owner === null || owner === '') return;
+    const provider = await this.rentProviderService.findOne(Number(owner), accountId);
+    if (!provider) throw new NotFoundException('Owner not found');
   }
 }

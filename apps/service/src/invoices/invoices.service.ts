@@ -17,6 +17,7 @@ import { EnvService } from '@nhl/env';
 import { Env } from '../common/env.js';
 import { MailSenderClient } from '../common/mail-sender.client.js';
 import { InvoiceStatus } from './invoice-status.js';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class InvoicesService {
@@ -44,13 +45,14 @@ export class InvoicesService {
     });
   }
 
-  async create(payload: Record<string, unknown>) {
+  async create(payload: Record<string, unknown>, accountId: number) {
     const locationCode = Number(payload.locationCode);
     const expenses = Array.isArray(payload.expenses) ? payload.expenses : [];
 
     if (!locationCode || expenses.length === 0) {
       throw new Error('Location and expenses are required');
     }
+    await this.locationSvc.findOne(locationCode, accountId);
 
     const snapshots = expenses.map((expense: Record<string, unknown>) => {
       const initialUnit = Number(expense.initialUnit || 0);
@@ -73,7 +75,7 @@ export class InvoicesService {
 
     try {
       const invoice = await this.invoiceRepository.create(
-        { locationCode, totalAmount, status: InvoiceStatus.DRAFT },
+        { locationCode, totalAmount, status: InvoiceStatus.DRAFT, accountId },
         { transaction },
       );
       await this.invoiceExpenseRepository.bulkCreate(
@@ -88,21 +90,30 @@ export class InvoicesService {
     }
   }
 
-  findAll(query: PaginatedQuery) {
-    return this.invoiceRepository.findAll({ order: [['createdAt', 'DESC']] });
+  findAll(query: PaginatedQuery, accountId: number) {
+    return this.invoiceRepository.findAll({
+      where: { accountId },
+      order: [['createdAt', 'DESC']],
+    });
   }
 
-  listInvoices() {
-    return this.invoiceRepository.findAll({ order: [['createdAt', 'DESC']] });
+  listInvoices(accountId: number) {
+    return this.invoiceRepository.findAll({
+      where: { accountId },
+      order: [['createdAt', 'DESC']],
+    });
   }
 
-  async updateStatus(invoiceCode: number, status: InvoiceStatus) {
+  async updateStatus(invoiceCode: number, status: InvoiceStatus, accountId: number) {
     if (status !== InvoiceStatus.DONE) {
       throw new BadRequestException('Only DRAFT invoices can be marked as DONE');
     }
 
-    const invoice = await this.invoiceRepository.findByPk(invoiceCode);
+    const invoice = await this.invoiceRepository.findOne({
+      where: { invoiceCode, accountId },
+    });
     if (!invoice) throw new NotFoundException('Invoice not found');
+    await this.locationSvc.findOne(invoice.locationCode, accountId);
     if (invoice.status !== InvoiceStatus.DRAFT) {
       throw new BadRequestException('Only DRAFT invoices can be marked as DONE');
     }
@@ -111,19 +122,25 @@ export class InvoicesService {
     if (status === InvoiceStatus.DONE) {
       await this.scheduleRepository.update(
         { invoiceCode: null },
-        { where: { invoiceCode } },
+        { where: { invoiceCode, locationCode: invoice.locationCode } },
       );
     }
 
     return invoice;
   }
 
-  async listSchedules() {
-    const [locations, invoices, schedules] = await Promise.all([
-      this.locationSvc.findAll({ page: 1, size: 1000 }),
-      this.invoiceRepository.findAll({ order: [['createdAt', 'DESC']] }),
-      this.scheduleRepository.findAll(),
+  async listSchedules(accountId: number) {
+    const [locations, invoices] = await Promise.all([
+      this.locationSvc.findAll({ page: 1, size: 1000 }, accountId),
+      this.invoiceRepository.findAll({
+        where: { accountId },
+        order: [['createdAt', 'DESC']],
+      }),
     ]);
+    const locationCodes = locations.data.map(({ locationCode }) => Number(locationCode));
+    const schedules = await this.scheduleRepository.findAll({
+      where: { locationCode: { [Op.in]: locationCodes } },
+    });
 
     for (const schedule of schedules) {
       const assignedInvoice = schedule.invoiceCode
@@ -149,16 +166,16 @@ export class InvoicesService {
     });
   }
 
-  async saveSchedule(locationCode: number, payload: Record<string, unknown>) {
-    const location = await this.locationSvc.findOne(locationCode);
+  async saveSchedule(locationCode: number, payload: Record<string, unknown>, accountId: number) {
+    const location = await this.locationSvc.findOne(locationCode, accountId);
     const dueDay = Number(payload.dueDay);
     if (dueDay < 1 || dueDay > 28) throw new Error('dueDay must be between 1 and 28');
 
     const invoiceCode = payload.invoiceCode ? Number(payload.invoiceCode) : undefined;
     if (invoiceCode) {
-      const invoice = await this.invoiceRepository.findOne({ where: { invoiceCode } });
+      const invoice = await this.invoiceRepository.findOne({ where: { invoiceCode, accountId } });
       if (!invoice || invoice.locationCode !== Number(location.locationCode)) {
-        throw new Error('Invoice does not belong to this location');
+        throw new NotFoundException('Invoice not found');
       }
       if (invoice.status !== InvoiceStatus.DRAFT) {
         throw new BadRequestException('Only DRAFT invoices can be assigned to a schedule');
@@ -183,18 +200,18 @@ export class InvoicesService {
   }
 
   async notifySchedule(locationCode: number, accountId: number) {
+    const location = await this.locationSvc.findOne(locationCode, accountId);
     const schedule = await this.scheduleRepository.findByPk(locationCode);
     if (!schedule || !schedule.enabled) throw new Error('Schedule is disabled');
 
-    const tenants = await this.tenantSvc.findTenantsByLocation(locationCode);
+    const tenants = await this.tenantSvc.findTenantsByLocation(locationCode, accountId);
     if (!tenants.length) throw new Error('Location has no tenants');
     if (!schedule.invoiceCode) throw new Error('No invoice assigned');
 
-    const [invoice, location] = await Promise.all([
-      this.invoiceRepository.findByPk(schedule.invoiceCode),
-      this.locationSvc.findOne(locationCode),
-    ]);
-    if (!invoice) throw new Error('Invoice not found');
+    const invoice = await this.invoiceRepository.findOne({
+      where: { invoiceCode: schedule.invoiceCode, accountId },
+    });
+    if (!invoice) throw new NotFoundException('Invoice not found');
     if (!location.owner) throw new Error('Location has no rent provider');
 
     const provider = await this.rentProviderSvc.findOne(Number(location.owner), accountId);
@@ -263,7 +280,7 @@ export class InvoicesService {
 
     const [schedules, locationsResult] = await Promise.all([
       this.scheduleRepository.findAll({ where: { dueDay, enabled: true } }),
-      this.locationSvc.findAll({ page: 1, size: 1000 }),
+      this.locationSvc.findAllForSystem({ page: 1, size: 1000 }),
     ]);
     if (schedules.length === 0) {
       return {
@@ -312,12 +329,12 @@ export class InvoicesService {
 
   async findOneByTenantId(id: number, accountId: number) {
     const result = {};
-    const tenant = await this.tenantSvc.findOne(id);
+    const tenant = await this.tenantSvc.findOne(id, accountId);
     Object.assign(result, { tenant });
-    const assignments = await this.tenantSvc.findLocationsByTenant(id);
+    const assignments = await this.tenantSvc.findLocationsByTenant(id, accountId);
     const [assignment] = assignments;
     if (assignment) {
-      const location = await this.locationSvc.findOne(assignment.locationCode);
+      const location = await this.locationSvc.findOne(assignment.locationCode, accountId);
       Object.assign(result, { location });
       if (location.owner) {
         const owner = await this.rentProviderSvc.findOne(+location.owner, accountId);
@@ -330,10 +347,10 @@ export class InvoicesService {
 
   async findOneByLocation(id: number, accountId: number) {
     const result = {};
-    const location = await this.locationSvc.findOne(id);
+    const location = await this.locationSvc.findOne(id, accountId);
 
     const tenants =
-      (await this.tenantSvc.findTenantsByLocation(+location.locationCode)) ||
+      (await this.tenantSvc.findTenantsByLocation(+location.locationCode, accountId)) ||
       [];
 
     const owner = await this.rentProviderSvc.findOne(+location.owner, accountId);

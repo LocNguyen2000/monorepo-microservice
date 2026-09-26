@@ -11,14 +11,17 @@ export class InvoicesController {
 
   @Post()
   @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
-  create(@Body() payload: Record<string, unknown>) {
-    return this.invoiceSvc.create(payload);
+  create(
+    @Body() payload: Record<string, unknown>,
+    @Req() request: Request & { user: TokenPayload },
+  ) {
+    return this.invoiceSvc.create(payload, request.user.sub);
   }
 
   @Get()
   @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
-  listInvoices() {
-    return this.invoiceSvc.listInvoices();
+  listInvoices(@Req() request: Request & { user: TokenPayload }) {
+    return this.invoiceSvc.listInvoices(request.user.sub);
   }
 
   @Patch(':id/status')
@@ -26,14 +29,15 @@ export class InvoicesController {
   updateStatus(
     @Param('id', ParseIntPipe) invoiceCode: number,
     @Body('status') status: InvoiceStatus,
+    @Req() request: Request & { user: TokenPayload },
   ) {
-    return this.invoiceSvc.updateStatus(invoiceCode, status);
+    return this.invoiceSvc.updateStatus(invoiceCode, status, request.user.sub);
   }
 
   @Get('schedules')
   @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
-  listSchedules() {
-    return this.invoiceSvc.listSchedules();
+  listSchedules(@Req() request: Request & { user: TokenPayload }) {
+    return this.invoiceSvc.listSchedules(request.user.sub);
   }
 
   @Put('schedules/:locationCode')
@@ -41,8 +45,9 @@ export class InvoicesController {
   saveSchedule(
     @Param('locationCode', ParseIntPipe) locationCode: number,
     @Body() payload: Record<string, unknown>,
+    @Req() request: Request & { user: TokenPayload },
   ) {
-    return this.invoiceSvc.saveSchedule(locationCode, payload);
+    return this.invoiceSvc.saveSchedule(locationCode, payload, request.user.sub);
   }
 
   @Post('schedules/:locationCode/notify')
