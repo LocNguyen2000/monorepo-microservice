@@ -25,7 +25,7 @@ Prefer the narrowest relevant check first. Follow an affected shared contract or
 
 ## Backend Invariants
 
-- Protected service requests validate both the access token and active persisted session. Logout soft-deletes the session using `deletedAt`. Keep session schema changes synchronized with the SQL migration.
+- Protected service requests validate both the access token and active persisted session. Login reuses the account's newest non-deleted, unexpired session and returns a token with the same session ID and expiry; otherwise it creates a session. Logout soft-deletes the session using `deletedAt`. Keep session schema changes synchronized with the SQL migration.
 - Admin and super-admin-only operations need role protection at the controller and service layers where applicable.
 - Owner account-isolation POC: the rent-provider HTTP CRUD derives `accountId` from the authenticated token, scopes list/detail/update/delete queries to it, and ignores a body-supplied account ID on writes. Invoice owner projections also scope owner lookups to the authenticated account. The nullable `rent_providers.accountId` column is indexed; legacy rows remain invisible until explicitly assigned. Location, tenant, invoice, and schedule records themselves still need account scoping in later phases.
 - Invoices start as `DRAFT`. Only admins and super admins may transition them to `DONE`; `DONE` invoices cannot be reopened or remain assigned to schedules; only `DRAFT` invoices can be scheduled.

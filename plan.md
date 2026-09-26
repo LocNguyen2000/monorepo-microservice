@@ -19,3 +19,20 @@ Scope rent-provider (owner) records to the authenticated account, preventing one
 ## Legacy Data
 
 Existing owner rows need an explicit account assignment before their data can be visible under account-scoped queries. Do not infer ownership or expose unassigned rows. Invoice/location/tenant/schedule records themselves remain outside this owner-only POC and need account scoping in a follow-up phase.
+
+# Reuse Active Login Sessions
+
+## Goal
+
+When an active account logs in again, reuse its existing session and return the same access token instead of creating a new session.
+
+## Implementation
+
+1. Query for the account's newest session that is not deleted and has not expired.
+2. Rebuild the existing token from its session ID and original expiry; create a session only when no active session exists.
+3. Keep the session schema and API response unchanged.
+
+## Verification
+
+- Build the service TypeScript project.
+- Check diagnostics for the modified service file.
