@@ -3,11 +3,17 @@ import { BaseEntity } from "../base/index.js";
 import { LocationSchema } from "./location.js";
 import { ExpenseLocationSchema } from "./expense-location.js";
 
-@Table({ tableName: "expenses" })
+@Table({
+  tableName: "expenses",
+  indexes: [{ fields: ["accountId"] }],
+})
 export class ExpenseSchema extends BaseEntity {
   @PrimaryKey
   @Column
   expenseCode: string;
+
+  @Column
+  accountId?: number;
 
   @Column
   expenseName: string;

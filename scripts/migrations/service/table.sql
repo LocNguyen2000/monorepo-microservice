@@ -257,10 +257,14 @@ ALTER TABLE invoices
     ADD COLUMN `accountId` int DEFAULT NULL,
     ADD INDEX `invoices_accountId` (`accountId`);
 
+ALTER TABLE expenses
+    ADD COLUMN `accountId` int DEFAULT NULL,
+    ADD INDEX `expenses_accountId` (`accountId`);
+
 -- ------------------------------------------------------
--- Backfill existing locations, tenants, and invoices to one account
+-- Backfill existing locations, tenants, invoices, and expenses to one account
 -- Set @targetAccountId to an existing accounts.id before running.
--- This overwrites accountId for every row in these three tables.
+-- This overwrites accountId for every row in these four tables.
 -- ------------------------------------------------------
 SET @targetAccountId = NULL;
 
@@ -283,10 +287,16 @@ UPDATE invoices AS i
 JOIN accounts AS a ON a.id = @targetAccountId
 SET i.accountId = a.id;
 SET @invoicesUpdated = ROW_COUNT();
+
+UPDATE expenses AS e
+JOIN accounts AS a ON a.id = @targetAccountId
+SET e.accountId = a.id;
+SET @expensesUpdated = ROW_COUNT();
 COMMIT;
 
 SELECT
     @targetAccountId AS accountId,
     @locationsUpdated AS locationsUpdated,
     @tenantsUpdated AS tenantsUpdated,
-    @invoicesUpdated AS invoicesUpdated;
+    @invoicesUpdated AS invoicesUpdated,
+    @expensesUpdated AS expensesUpdated;
