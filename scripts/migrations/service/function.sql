@@ -1,9 +1,11 @@
 -- Active: 1733974675535@@127.0.0.1@3307@services
-DROP PROCEDURE prcd_FindLocationExpenseById;
-CREATE DEFINER=`root`@`%` PROCEDURE `prcd_FindLocationExpenseById`(LocationId int)
+DROP PROCEDURE IF EXISTS `prcd_FindLocationExpenseById`;
+CREATE PROCEDURE `prcd_FindLocationExpenseById`(IN LocationId INT)
+SQL SECURITY INVOKER
 BEGIN 
 	SELECT
 	    l.`locationCode`,
+	    l.`accountId`,
 	    l.`locationName`,
 	    l.`locationAddress`,
 	    l.image,

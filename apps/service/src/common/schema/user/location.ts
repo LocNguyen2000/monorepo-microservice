@@ -3,11 +3,18 @@ import { RentProviderSchema } from "./rent-provider.js";
 import { ExpenseSchema } from "./expense.js";
 import { ExpenseLocationSchema } from "./expense-location.js";
 
-@Table({ tableName: "locations", timestamps: false })
+@Table({
+  tableName: "locations",
+  timestamps: false,
+  indexes: [{ fields: ["accountId"] }],
+})
 export class LocationSchema extends Model {
   @PrimaryKey
   @Column
   locationCode: string;
+
+  @Column
+  accountId?: number;
 
   @Column
   locationName: string;

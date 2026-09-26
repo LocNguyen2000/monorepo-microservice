@@ -2,11 +2,17 @@ import { Column, DataType, PrimaryKey, Table } from 'sequelize-typescript';
 import { BaseEntity } from '../base/index.js';
 import { InvoiceStatus } from '../../../invoices/invoice-status.js';
 
-@Table({ tableName: 'invoices' })
+@Table({
+    tableName: 'invoices',
+    indexes: [{ fields: ['accountId'] }],
+})
 export class InvoiceSchema extends BaseEntity {
     @PrimaryKey
     @Column({ autoIncrement: true })
     invoiceCode: number;
+
+    @Column
+    accountId?: number;
 
     @Column
     locationCode: number;

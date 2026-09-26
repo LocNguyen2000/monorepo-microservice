@@ -241,3 +241,18 @@ create table if not exists sessions (
 ALTER TABLE rent_providers
     ADD COLUMN `accountId` int DEFAULT NULL,
     ADD INDEX `rent_providers_accountId` (`accountId`);
+
+-- ------------------------------------------------------
+-- Location, tenant, and invoice account isolation
+-- ------------------------------------------------------
+ALTER TABLE locations
+    ADD COLUMN `accountId` int DEFAULT NULL,
+    ADD INDEX `locations_accountId` (`accountId`);
+
+ALTER TABLE tenants
+    ADD COLUMN `accountId` int DEFAULT NULL,
+    ADD INDEX `tenants_accountId` (`accountId`);
+
+ALTER TABLE invoices
+    ADD COLUMN `accountId` int DEFAULT NULL,
+    ADD INDEX `invoices_accountId` (`accountId`);

@@ -241,7 +241,7 @@ paths:
     post:
       tags: [Tenants]
       operationId: createTenant
-      summary: Create a tenant and optionally upload a contract
+      summary: Create an account-owned tenant and optionally upload a contract
       requestBody:
         required: true
         content:
@@ -259,6 +259,8 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
     get:
       tags: [Tenants]
       operationId: listTenants
@@ -268,7 +270,7 @@ paths:
         - $ref: '#/components/parameters/Size'
       responses:
         '200':
-          description: Paginated tenants.
+          description: Paginated tenants belonging to the authenticated account.
           content:
             application/json:
               schema:
@@ -282,23 +284,22 @@ paths:
     get:
       tags: [Tenants]
       operationId: getTenant
-      summary: Get a tenant by id
+      summary: Get an account-owned tenant by id
       responses:
         '200':
-          description: Tenant or null when no row exists.
+          description: Tenant belonging to the authenticated account.
           content:
             application/json:
               schema:
-                type: object
-                allOf:
-                  - $ref: '#/components/schemas/Tenant'
-                nullable: true
+                $ref: '#/components/schemas/Tenant'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     put:
       tags: [Tenants]
       operationId: updateTenant
-      summary: Update a tenant and optionally replace its contract
+      summary: Update an account-owned tenant and optionally replace its contract
       requestBody:
         required: true
         content:
@@ -316,10 +317,12 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '400':
           $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
     delete:
       tags: [Tenants]
       operationId: deleteTenant
-      summary: Delete a tenant
+      summary: Delete an account-owned tenant
       responses:
         '200':
           description: Deleted tenant instance.
@@ -329,12 +332,14 @@ paths:
                 $ref: '#/components/schemas/Tenant'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /tenant/{tenantCode}/locations/{locationCode}:
     post:
       tags: [Tenants]
       operationId: assignTenantLocation
-      summary: Assign a tenant to a location
+      summary: Assign an account-owned tenant to an account-owned location
       parameters:
         - name: tenantCode
           in: path
@@ -355,6 +360,8 @@ paths:
                 $ref: '#/components/schemas/Tenant'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /expense:
     post:
@@ -497,7 +504,7 @@ paths:
     post:
       tags: [Locations]
       operationId: createLocation
-      summary: Create a location and optionally upload an image
+      summary: Create an account-owned location and optionally upload an image
       requestBody:
         required: true
         content:
@@ -513,17 +520,19 @@ paths:
                 $ref: '#/components/schemas/Location'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     get:
       tags: [Locations]
       operationId: listLocations
-      summary: List locations with expenses and pagination
+      summary: List account-owned locations with expenses and pagination
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       parameters:
         - $ref: '#/components/parameters/Page'
         - $ref: '#/components/parameters/Size'
       responses:
         '200':
-          description: Paginated locations with associated expenses.
+          description: Paginated locations belonging to the authenticated account, with associated expenses.
           content:
             application/json:
               schema:
@@ -537,7 +546,7 @@ paths:
     get:
       tags: [Locations]
       operationId: getLocation
-      summary: Get a location with its expenses
+      summary: Get an account-owned location with its expenses
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       responses:
         '200':
@@ -553,7 +562,7 @@ paths:
     put:
       tags: [Locations]
       operationId: updateLocation
-      summary: Update a location and optionally upload an image
+      summary: Update an account-owned location and optionally upload an image
       requestBody:
         required: true
         content:
@@ -562,7 +571,7 @@ paths:
               $ref: '#/components/schemas/LocationUpdateForm'
       responses:
         '200':
-          description: Number of affected rows; may be empty if the service catches an update error.
+          description: Number of affected rows.
           content:
             application/json:
               schema:
@@ -572,10 +581,12 @@ paths:
                   type: integer
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     patch:
       tags: [Locations]
       operationId: assignLocationExpenses
-      summary: Replace expenses assigned to a location
+      summary: Replace expenses assigned to an account-owned location
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       requestBody:
         required: true
@@ -596,10 +607,12 @@ paths:
                   $ref: '#/components/schemas/ExpenseLocationAssignment'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     delete:
       tags: [Locations]
       operationId: deleteLocation
-      summary: Delete a location
+      summary: Delete an account-owned location
       responses:
         '200':
           description: Deleted location instance.
@@ -609,12 +622,14 @@ paths:
                 $ref: '#/components/schemas/Location'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /location/{locationCode}/expenses/{expenseCode}/meter:
     patch:
       tags: [Locations]
       operationId: updateMeterReading
-      summary: Update a location expense meter reading
+      summary: Update an expense meter reading for an account-owned location
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       parameters:
         - name: locationCode
@@ -749,7 +764,7 @@ paths:
     post:
       tags: [Invoices]
       operationId: createInvoice
-      summary: Create a draft invoice with expense snapshots
+      summary: Create a draft invoice for an account-owned location
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       requestBody:
         required: true
@@ -768,14 +783,16 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
     get:
       tags: [Invoices]
       operationId: listInvoices
-      summary: List invoices ordered by creation time
+      summary: List invoices belonging to the authenticated account
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       responses:
         '200':
-          description: Invoices.
+          description: Account-owned invoices ordered by creation time.
           content:
             application/json:
               schema:
@@ -823,11 +840,11 @@ paths:
     get:
       tags: [Invoices]
       operationId: listInvoiceSchedules
-      summary: List locations with schedules and draft invoices
+      summary: List account-owned locations with schedules and draft invoices
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       responses:
         '200':
-          description: One schedule summary per location.
+          description: One schedule summary per location belonging to the authenticated account.
           content:
             application/json:
               schema:
@@ -841,7 +858,7 @@ paths:
     put:
       tags: [Invoices]
       operationId: saveInvoiceSchedule
-      summary: Create or update a location invoice schedule
+      summary: Create or update a schedule for an account-owned location
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       parameters:
         - name: locationCode
@@ -866,12 +883,14 @@ paths:
           $ref: '#/components/responses/BadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /invoices/schedules/{locationCode}/notify:
     post:
       tags: [Invoices]
       operationId: notifyInvoiceSchedule
-      summary: Send the scheduled invoice notification to its rent provider
+      summary: Send the account-owned location's scheduled invoice notification
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       parameters:
         - name: locationCode
@@ -888,12 +907,14 @@ paths:
                 $ref: '#/components/schemas/NotificationResult'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /invoices/get-summerize-data/{locationId}:
     get:
       tags: [Invoices]
       operationId: getInvoiceSummaryByLocation
-      summary: Get location, tenants, and rent provider summary
+      summary: Get an account-owned location, its tenants, and rent provider
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       parameters:
         - name: locationId
@@ -910,12 +931,14 @@ paths:
                 $ref: '#/components/schemas/LocationInvoiceSummary'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /invoices/{tenantId}:
     get:
       tags: [Invoices]
       operationId: getTenantInvoiceSummary
-      summary: Get tenant and assigned location summary
+      summary: Get an account-owned tenant and assigned location summary
       parameters:
         - name: tenantId
           in: path
@@ -931,6 +954,8 @@ paths:
                 $ref: '#/components/schemas/TenantInvoiceSummary'
         '401':
           $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
 
   /internal/cron/invoice-schedules:
     get:
@@ -1104,6 +1129,9 @@ components:
       properties:
         tenantCode:
           type: integer
+        accountId:
+          type: integer
+          readOnly: true
         firstName:
           type: string
         lastName:
@@ -1237,6 +1265,9 @@ components:
           oneOf:
             - type: integer
             - type: string
+        accountId:
+          type: integer
+          readOnly: true
         locationName:
           type: string
         locationAddress:
@@ -1396,6 +1427,9 @@ components:
       properties:
         invoiceCode:
           type: integer
+        accountId:
+          type: integer
+          readOnly: true
         locationCode:
           type: integer
         totalAmount:
