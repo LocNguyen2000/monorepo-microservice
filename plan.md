@@ -112,3 +112,38 @@ Render a dedicated mobile dashboard shell when the viewport is in the mobile ran
 
 - Run the admin TypeScript check and production build.
 - Confirm the mobile navigation adapts as the viewport crosses the breakpoint and preserves current route selection.
+
+# List Page Header Controls
+
+## Goal
+
+Place list-page search and action controls below each page title and description.
+
+## Implementation
+
+1. Apply a shared vertical header layout to the location, provider, tenant, and expense list cards.
+2. Keep controls together in a wrapping action row, with search fields allowed to shrink to the available width.
+3. Constrain the LocationList card strip to its parent and enable horizontal scrolling within that strip.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Review the affected headers at narrow viewport widths for overflow.
+- Confirm LocationList cards scroll inside their list container without widening the page.
+
+# List Card Table Scrolling
+
+## Goal
+
+Keep wide tenant, rent-provider, and expense tables scrollable within their own cards instead of widening the page.
+
+## Implementation
+
+1. Allow `BaseTable` to accept Ant Design's optional table scroll configuration.
+2. Enable intrinsic-width horizontal scrolling only for the tenant, rent-provider, and expense list tables.
+3. Bound each table scroll region to its card width.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Check diagnostics for the shared table and the three list pages.

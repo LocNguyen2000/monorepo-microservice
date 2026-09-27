@@ -1,4 +1,4 @@
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { providerColumns } from "../../lib/constants/columns";
 import {
@@ -11,15 +11,13 @@ import Input from "antd/es/input/Input";
 import Pagination from "antd/es/pagination/Pagination";
 import { RentProviderDetail } from "./RentProviderDetail";
 import {
-  HomeOutlined,
   ReloadOutlined,
   UserAddOutlined,
 } from "@ant-design/icons";
-import { ServiceClient } from "../../lib/clients";
 import Card from "antd/es/card/Card";
 import { ACTION_ENUM } from "../../lib/constants";
 import Flex from "antd/es/flex";
-import { GlobalContext, getGlobalContext } from "../../lib/context";
+import { getGlobalContext } from "../../lib/context";
 import Divider from "antd/es/divider";
 import { Typography } from "antd";
 import { autoGenerateNewCode } from "../../lib/utils";
@@ -97,30 +95,28 @@ const RentProviderList = () => {
 
   return (
     <Card style={{ padding: "0.25rem" }}>
-      <Flex style={{ alignItems: "center" }}>
-        <div>
+      <Flex vertical align="stretch" className="list-page-header">
+        <div className="list-page-heading">
           <h2>Chủ sở hữu thuê</h2>
           <Typography>- Chủ đất, chủ địa điểm</Typography>
         </div>
-        <div style={{ flex: 1 }}></div>
+        <Flex className="list-page-actions">
+          <Input
+            className="list-page-search"
+            placeholder="Nhập nội dung tìm kiếm"
+          />
+          <Button
+            type="primary"
+            size="middle"
+            onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+          >
+            <UserAddOutlined /> Thêm
+          </Button>
 
-        <Input
-          placeholder="Nhập nội dung tìm kiếm"
-          style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
-        />
-
-        <Button
-          type="primary"
-          style={{ marginRight: "1rem" }}
-          size="middle"
-          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
-        >
-          <UserAddOutlined /> Thêm
-        </Button>
-
-        <Button size="middle" onClick={() => loadData()}>
-          <ReloadOutlined />
-        </Button>
+          <Button size="middle" onClick={() => loadData()}>
+            <ReloadOutlined />
+          </Button>
+        </Flex>
       </Flex>
 
       <Divider />
@@ -134,24 +130,27 @@ const RentProviderList = () => {
         codeGenerator={codeGenerator}
       />
 
-      <BaseTable
-        columns={providerColumns}
-        data={providers}
-        editable
-        isLoading={isLoading}
-        size="middle"
-        onDblClickRow={(p: ProviderDataType) =>
-          openFormHandler(ACTION_ENUM.EDIT, p)
-        }
-        onDeleteRow={(t: ProviderDataType) =>
-          useConfirm(
-            "warning",
-            "Xóa chủ trọ",
-            `Bạn có muốn xóa chủ trọ ${t.providerName} không?`,
-            async () => await deleteDataHandler(t),
-          )
-        }
-      />
+      <div className="list-page-table-scroll">
+        <BaseTable
+          columns={providerColumns}
+          data={providers}
+          editable
+          isLoading={isLoading}
+          size="middle"
+          scroll={{ x: "max-content" }}
+          onDblClickRow={(p: ProviderDataType) =>
+            openFormHandler(ACTION_ENUM.EDIT, p)
+          }
+          onDeleteRow={(t: ProviderDataType) =>
+            useConfirm(
+              "warning",
+              "Xóa chủ trọ",
+              `Bạn có muốn xóa chủ trọ ${t.providerName} không?`,
+              async () => await deleteDataHandler(t),
+            )
+          }
+        />
+      </div>
 
       <Pagination
         current={pagination.page}

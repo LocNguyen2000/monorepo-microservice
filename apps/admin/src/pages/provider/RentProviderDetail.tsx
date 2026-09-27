@@ -5,10 +5,9 @@ import React, { ChangeEventHandler, useContext } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
 import Modal from "antd/es/modal/Modal";
-import { GlobalContext, getGlobalContext } from "../../lib/context";
+import { getGlobalContext } from "../../lib/context";
 import { ACTION_ENUM } from "../../lib/constants";
 import { debounce } from "../../lib/utils";
-import { ServiceClient } from "../../lib/clients";
 
 dayjs.extend(customParseFormat);
 /** Manually entering any of the following formats will perform date parsing */

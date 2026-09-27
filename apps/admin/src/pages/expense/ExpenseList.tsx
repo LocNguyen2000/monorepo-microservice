@@ -4,13 +4,11 @@ import { FunctionComponent, useContext, useEffect, useReducer, useRef, useState 
 import BaseTable from "../../components/BaseTable";
 import Flex from "antd/es/flex";
 import { Button, Divider, Pagination } from "antd";
-import { DeleteOutlined, PlusCircleOutlined, ReloadOutlined } from "@ant-design/icons";
+import { PlusCircleOutlined, ReloadOutlined } from "@ant-design/icons";
 import { expenseColumns } from "../../lib/constants/columns";
 import { PathContext, getGlobalContext } from "../../lib/context";
 import { IPagination, ExpenseDataType, PaginatedResponse, TenantDataType } from "../../lib/interface";
 import { useNavigate } from "react-router-dom";
-import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
-import { MENU_LIST } from "../Dashboard";
 import ExpenseDetail from "./ExpenseDetail";
 import { ACTION_ENUM } from "../../lib/constants";
 import { autoGenerateNewCode } from "../../lib/utils";
@@ -104,20 +102,21 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
   return (
     <>
       <Card style={{ padding: "0.25rem" }}>
-        <Flex style={{ alignItems: "center" }}>
-          <div>
+        <Flex vertical align="stretch" className="list-page-header">
+          <div className="list-page-heading">
             <h2>Chi phí</h2>
             <Typography>
               - Chi phí dịch vụ phải được gán cho phòng trọ để tính vào hóa đơn của người thuê.
             </Typography>
           </div>
-          <div style={{ flex: 1 }}></div>
-          <Button type="primary" style={{ marginRight: "0.5rem" }} onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
-            <PlusCircleOutlined /> Thêm dịch vụ
-          </Button>
-          <Button size="middle" onClick={() => loadData()}>
-            <ReloadOutlined />
-          </Button>
+          <Flex className="list-page-actions">
+            <Button type="primary" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
+              <PlusCircleOutlined /> Thêm dịch vụ
+            </Button>
+            <Button size="middle" onClick={() => loadData()}>
+              <ReloadOutlined />
+            </Button>
+          </Flex>
         </Flex>
         <Divider />
 
@@ -130,22 +129,25 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
           codeGenerator={expenseCodeGenerator}
         />
 
-        <BaseTable
-          columns={expenseColumns}
-          data={expenses}
-          isLoading={isLoading}
-          editable
-          size="small"
-          onDblClickRow={(t: ExpenseDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
-          onDeleteRow={(t: ExpenseDataType) =>
-            useConfirm(
-              "warning",
-              "Xóa chi phí",
-              `Bạn có muốn xóa chi phí ${t.expenseName} không?`,
-              async () => await deleteDataHandler(t)
-            )
-          }
-        />
+        <div className="list-page-table-scroll">
+          <BaseTable
+            columns={expenseColumns}
+            data={expenses}
+            isLoading={isLoading}
+            editable
+            size="small"
+            scroll={{ x: "max-content" }}
+            onDblClickRow={(t: ExpenseDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}
+            onDeleteRow={(t: ExpenseDataType) =>
+              useConfirm(
+                "warning",
+                "Xóa chi phí",
+                `Bạn có muốn xóa chi phí ${t.expenseName} không?`,
+                async () => await deleteDataHandler(t)
+              )
+            }
+          />
+        </div>
 
         <Pagination
           current={pagination.page}

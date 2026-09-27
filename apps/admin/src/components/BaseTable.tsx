@@ -13,6 +13,7 @@ export interface IBaseTableProps {
   isLoading?: boolean;
   editable?: boolean;
   size?: SizeType;
+  scroll?: TableProps<AnyObject>["scroll"];
   onDblClickRow?: (data: any) => void;
   onClickRow?: (data: any) => void;
   onDeleteRow?: (data: any) => void;
@@ -34,6 +35,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
   isLoading,
   editable,
   size,
+  scroll,
   onDblClickRow,
   onClickRow,
   onDeleteRow,
@@ -102,6 +104,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
           style={{ marginRight: "16px" }}
           columns={editable ? withEditColumn(columns) : columns}
           dataSource={data}
+          scroll={scroll}
           showSorterTooltip={true}
           bordered
           onRow={(data) => addRowEventHandler(data)}
@@ -111,6 +114,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
         <StyledTable
           style={{ marginRight: "16px" }}
           columns={editable ? withEditColumn(columns) : columns}
+          scroll={scroll}
           showSorterTooltip={true}
           bordered
         />

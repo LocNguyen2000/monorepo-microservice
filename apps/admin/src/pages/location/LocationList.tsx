@@ -15,30 +15,20 @@ import Meta from "antd/es/card/Meta";
 import { useContext, useEffect, useState } from "react";
 import Typography from "antd/es/typography/Typography";
 import {
-  SettingOutlined,
-  EditOutlined,
   HomeOutlined,
   ReloadOutlined,
-  DeleteOutlined,
-  NotificationOutlined,
-  NotificationFilled,
   EditFilled,
   DeleteFilled,
   BellFilled,
-  DotChartOutlined,
-  MoreOutlined,
   SettingFilled,
 } from "@ant-design/icons";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
 import {
-  GlobalContext,
   PathContext,
   getGlobalContext,
 } from "../../lib/context";
-import { MENU_LIST } from "../Dashboard";
 import { useNavigate } from "react-router-dom";
 import {
-  ExpenseDataType,
   IPagination,
   LocationDataType,
   PaginatedResponse,
@@ -118,35 +108,35 @@ const LocationList = () => {
   return (
     <>
       <Card style={{ padding: "0.25rem" }}>
-        <Flex style={{ alignItems: "center" }}>
-          <div>
+        <Flex vertical align="stretch" className="list-page-header">
+          <div className="list-page-heading">
             <h2>Phòng trọ</h2>
             <Typography>
               - Nơi dành cho <b>người thuê nhà</b> từ <b>Chủ sở hữu thuê nhà</b>
             </Typography>
           </div>
-          <div style={{ flex: 1 }}></div>
-          <Input
-            placeholder="Nhập nội dung tìm kiếm"
-            style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
-          />
-          <Button
-            type="primary"
-            style={{ marginRight: "1rem" }}
-            size="middle"
-            onClick={(e) => openLocationForm()}
-          >
-            <HomeOutlined /> Thêm
-          </Button>
+          <Flex className="list-page-actions">
+            <Input
+              className="list-page-search"
+              placeholder="Nhập nội dung tìm kiếm"
+            />
+            <Button
+              type="primary"
+              size="middle"
+              onClick={(e) => openLocationForm()}
+            >
+              <HomeOutlined /> Thêm
+            </Button>
 
-          <Button size="middle" onClick={() => loadData()}>
-            <ReloadOutlined />
-          </Button>
+            <Button size="middle" onClick={() => loadData()}>
+              <ReloadOutlined />
+            </Button>
+          </Flex>
         </Flex>
 
         <Divider />
 
-        <Flex style={{ width: "100%" }}>
+        <Flex className="location-card-list">
           {isLoading ? (
             <>
               <Card style={{ width: 300 }} cover={<SkeletonImage />}>

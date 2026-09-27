@@ -27,6 +27,9 @@ Prefer the narrowest relevant check first. Follow an affected shared contract or
 ## Admin UI
 
 - `apps/admin/src/pages/Dashboard.tsx` switches between desktop and mobile shells using `matchMedia("(max-width: 767px)")`; the mobile shell retains the shared nested route outlet and role-filtered dashboard menu. Keep its app bar `#474747`, navigation surface `#2f3330`, and primary accent `#4CAF50` aligned with the desktop shell.
+- List cards in the location, provider, tenant, and expense pages use shared `.list-page-header`, `.list-page-heading`, and `.list-page-actions` classes from `apps/admin/src/App.css` to stack page descriptions above wrapping controls. `.list-page-search` flexes into the available action-row width.
+- The LocationList horizontal card strip uses `.location-card-list` to bound overflow to the list itself; card children use `flex: 0 0 auto` so horizontal scrolling does not resize them or widen the page.
+- `BaseTable` accepts an optional Ant Design `scroll` configuration. Tenant, rent-provider, and expense list pages opt into `scroll={{ x: "max-content" }}` inside `.list-page-table-scroll`; other `BaseTable` consumers retain default behavior unless they pass this prop.
 
 ## Backend Invariants
 

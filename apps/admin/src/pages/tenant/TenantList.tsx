@@ -1,5 +1,5 @@
 import { ReloadOutlined, UserAddOutlined } from "@ant-design/icons";
-import { useContext, useEffect, useReducer, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import BaseTable from "../../components/BaseTable";
 import { tenantColumns } from "../../lib/constants/columns";
 import {
@@ -84,38 +84,30 @@ const TenantList = () => {
 
   return (
     <Card style={{ padding: "0.25rem" }}>
-      <Flex
-        style={{
-          display: "flex",
-          marginBottom: "1rem",
-          alignItems: "center",
-        }}
-      >
-        <div>
+      <Flex vertical align="stretch" className="list-page-header">
+        <div className="list-page-heading">
           <h2>Người thuê nhà</h2>
           <Typography>
             - <b>Người thuê</b> địa điểm, trả tiền cho <b>chủ sở hữu</b>
           </Typography>
         </div>
-        <div style={{ flex: 1 }}></div>
+        <Flex className="list-page-actions">
+          <Input
+            className="list-page-search"
+            placeholder="Nhập nội dung tìm kiếm"
+          />
+          <Button
+            type="primary"
+            size="middle"
+            onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+          >
+            <UserAddOutlined /> Thêm
+          </Button>
 
-        <Input
-          placeholder="Nhập nội dung tìm kiếm"
-          style={{ width: "20rem", height: "2.5rem", marginRight: "1rem" }}
-        />
-
-        <Button
-          type="primary"
-          style={{ marginRight: "1rem" }}
-          size="middle"
-          onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
-        >
-          <UserAddOutlined /> Thêm
-        </Button>
-
-        <Button size="middle" onClick={() => loadData()}>
-          <ReloadOutlined />
-        </Button>
+          <Button size="middle" onClick={() => loadData()}>
+            <ReloadOutlined />
+          </Button>
+        </Flex>
       </Flex>
 
       <Divider />
@@ -128,24 +120,27 @@ const TenantList = () => {
         setIsFormOpen={openFormHandler}
       />
 
-      <BaseTable
-        columns={tenantColumns}
-        data={tenants}
-        isLoading={isLoading}
-        editable
-        size="middle"
-        onDblClickRow={(t: TenantDataType) =>
-          openFormHandler(ACTION_ENUM.EDIT, t)
-        }
-        onDeleteRow={(t: TenantDataType) =>
-          useConfirm(
-            "warning",
-            "Xóa người thuê",
-            `Bạn có muốn xóa người thuê ${t.tenantName} không?`,
-            async () => await deleteDataHandler(t),
-          )
-        }
-      />
+      <div className="list-page-table-scroll">
+        <BaseTable
+          columns={tenantColumns}
+          data={tenants}
+          isLoading={isLoading}
+          editable
+          size="middle"
+          scroll={{ x: "max-content" }}
+          onDblClickRow={(t: TenantDataType) =>
+            openFormHandler(ACTION_ENUM.EDIT, t)
+          }
+          onDeleteRow={(t: TenantDataType) =>
+            useConfirm(
+              "warning",
+              "Xóa người thuê",
+              `Bạn có muốn xóa người thuê ${t.tenantName} không?`,
+              async () => await deleteDataHandler(t),
+            )
+          }
+        />
+      </div>
 
       <Pagination
         current={pagination.page}
