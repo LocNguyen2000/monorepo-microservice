@@ -276,14 +276,17 @@ const MyProfilePage = () => {
           title="Account management"
           style={{ width: "100%", marginTop: "1rem" }}
         >
-          <Table<Account>
-            rowKey="id"
-            columns={pendingColumns}
-            dataSource={accounts}
-            loading={isLoadingAccounts}
-            locale={{ emptyText: "No registered accounts found." }}
-            pagination={{ pageSize: 10 }}
-          />
+          <div className="list-page-table-scroll">
+            <Table<Account>
+              rowKey="id"
+              columns={pendingColumns}
+              dataSource={accounts}
+              loading={isLoadingAccounts}
+              locale={{ emptyText: "No registered accounts found." }}
+              pagination={{ pageSize: 10 }}
+              scroll={{ x: "max-content" }}
+            />
+          </div>
         </Card>
       )}
     </>

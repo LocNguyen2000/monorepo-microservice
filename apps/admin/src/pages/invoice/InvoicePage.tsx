@@ -140,41 +140,44 @@ export const InvoiceStatusTab = () => {
       title="Danh sách hóa đơn"
       extra={<Button onClick={loadInvoices}>Làm mới</Button>}
     >
-      <Table
-        rowKey="invoiceCode"
-        loading={loading}
-        dataSource={invoices}
-        columns={[
-          { title: "Mã hóa đơn", dataIndex: "invoiceCode", render: (value: number) => `#${value}` },
-          { title: "Phòng trọ", dataIndex: "locationCode" },
-          {
-            title: "Tổng tiền",
-            dataIndex: "totalAmount",
-            render: (value: number) => `${Number(value).toLocaleString("vi-VN")} VNĐ`,
-          },
-          {
-            title: "Trạng thái",
-            dataIndex: "status",
-            render: (status: InvoiceStatus) => (
-              <Tag color={status === InvoiceStatus.DONE ? "green" : "gold"}>
-                {status}
-              </Tag>
-            ),
-          },
-          {
-            title: "Thao tác",
-            render: (_: unknown, invoice: InvoiceSummaryDataType) => (
-              <Button
-                type="primary"
-                disabled={invoice.status !== InvoiceStatus.DRAFT || !canUpdateStatus}
-                onClick={() => markAsDone(invoice.invoiceCode)}
-              >
-                Đã thanh toán
-              </Button>
-            ),
-          },
-        ]}
-      />
+      <div className="list-page-table-scroll">
+        <Table
+          rowKey="invoiceCode"
+          loading={loading}
+          dataSource={invoices}
+          columns={[
+            { title: "Mã hóa đơn", dataIndex: "invoiceCode", render: (value: number) => `#${value}` },
+            { title: "Phòng trọ", dataIndex: "locationCode" },
+            {
+              title: "Tổng tiền",
+              dataIndex: "totalAmount",
+              render: (value: number) => `${Number(value).toLocaleString("vi-VN")} VNĐ`,
+            },
+            {
+              title: "Trạng thái",
+              dataIndex: "status",
+              render: (status: InvoiceStatus) => (
+                <Tag color={status === InvoiceStatus.DONE ? "green" : "gold"}>
+                  {status}
+                </Tag>
+              ),
+            },
+            {
+              title: "Thao tác",
+              render: (_: unknown, invoice: InvoiceSummaryDataType) => (
+                <Button
+                  type="primary"
+                  disabled={invoice.status !== InvoiceStatus.DRAFT || !canUpdateStatus}
+                  onClick={() => markAsDone(invoice.invoiceCode)}
+                >
+                  Đã thanh toán
+                </Button>
+              ),
+            },
+          ]}
+          scroll={{ x: "max-content" }}
+        />
+      </div>
     </Card>
   );
 };

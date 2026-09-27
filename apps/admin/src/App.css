@@ -154,6 +154,8 @@
 }
 
 .mobile-dashboard {
+  display: flex;
+  flex-direction: column;
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
@@ -186,7 +188,10 @@
 }
 
 .mobile-dashboard-content {
+  flex: 1 1 auto;
   min-height: 0;
+  height: calc(100vh - 56px);
+  height: calc(100dvh - 56px);
   overflow: auto;
   padding: 0.75rem;
   color: white;

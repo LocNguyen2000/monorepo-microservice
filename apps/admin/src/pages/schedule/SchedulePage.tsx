@@ -130,77 +130,80 @@ const SchedulePage = () => {
         Thiết lập nhắc thanh toán hàng tháng cho từng phòng trọ. Thông báo được
         gửi trước ngày đến hạn một ngày.
       </Typography.Paragraph>
-      <Table
-        rowKey={(row) => row.location.locationCode}
-        dataSource={rows}
-        columns={[
-          {
-            title: "Phòng trọ",
-            render: (_: unknown, row: InvoiceScheduleRowDataType) => (
-              <Space direction="vertical" size={0}>
-                <Typography.Text strong>
-                  {row.location.locationName}
-                </Typography.Text>
-                <Typography.Text type="secondary">
-                  #{row.location.locationCode}
-                </Typography.Text>
-              </Space>
-            ),
-          },
-          {
-            title: "Hóa đơn",
-            render: (_: unknown, row: InvoiceScheduleRowDataType) =>
-              row.schedule?.invoiceCode ? (
-                `#${row.schedule.invoiceCode}`
-              ) : (
-                <Tag>Chưa gán</Tag>
+      <div className="list-page-table-scroll">
+        <Table
+          rowKey={(row) => row.location.locationCode}
+          dataSource={rows}
+          columns={[
+            {
+              title: "Phòng trọ",
+              render: (_: unknown, row: InvoiceScheduleRowDataType) => (
+                <Space direction="vertical" size={0}>
+                  <Typography.Text strong>
+                    {row.location.locationName}
+                  </Typography.Text>
+                  <Typography.Text type="secondary">
+                    #{row.location.locationCode}
+                  </Typography.Text>
+                </Space>
               ),
-          },
-          {
-            title: "Ngày đến hạn",
-            render: (_: unknown, row: InvoiceScheduleRowDataType) =>
-              row.schedule ? `Ngày ${row.schedule.dueDay}` : "Chưa thiết lập",
-          },
-          {
-            title: "Nhắc tiếp theo",
-            render: (_: unknown, row: InvoiceScheduleRowDataType) =>
-              getNextReminder(row.schedule?.dueDay),
-          },
-          {
-            title: "Trạng thái",
-            render: (_: unknown, row: InvoiceScheduleRowDataType) =>
-              row.schedule?.enabled ? (
-                <Tag color="green">Đang bật</Tag>
-              ) : (
-                <Tag>Đang tắt</Tag>
+            },
+            {
+              title: "Hóa đơn",
+              render: (_: unknown, row: InvoiceScheduleRowDataType) =>
+                row.schedule?.invoiceCode ? (
+                  `#${row.schedule.invoiceCode}`
+                ) : (
+                  <Tag>Chưa gán</Tag>
+                ),
+            },
+            {
+              title: "Ngày đến hạn",
+              render: (_: unknown, row: InvoiceScheduleRowDataType) =>
+                row.schedule ? `Ngày ${row.schedule.dueDay}` : "Chưa thiết lập",
+            },
+            {
+              title: "Nhắc tiếp theo",
+              render: (_: unknown, row: InvoiceScheduleRowDataType) =>
+                getNextReminder(row.schedule?.dueDay),
+            },
+            {
+              title: "Trạng thái",
+              render: (_: unknown, row: InvoiceScheduleRowDataType) =>
+                row.schedule?.enabled ? (
+                  <Tag color="green">Đang bật</Tag>
+                ) : (
+                  <Tag>Đang tắt</Tag>
+                ),
+            },
+            {
+              title: "Lần gửi gần nhất",
+              render: (_: unknown, row: InvoiceScheduleRowDataType) =>
+                row.schedule?.lastNotifiedAt
+                  ? dayjs(row.schedule.lastNotifiedAt).format("DD/MM/YYYY HH:mm")
+                  : "Chưa gửi",
+            },
+            {
+              title: "Thao tác",
+              render: (_: unknown, row: InvoiceScheduleRowDataType) => (
+                <Space>
+                  <Button icon={<EditOutlined />} onClick={() => openEdit(row)}>
+                    Thiết lập
+                  </Button>
+                  <Button
+                    icon={<SendOutlined />}
+                    disabled={!row.schedule?.enabled}
+                    onClick={() => notifyNow(row)}
+                  >
+                    Gửi ngay
+                  </Button>
+                </Space>
               ),
-          },
-          {
-            title: "Lần gửi gần nhất",
-            render: (_: unknown, row: InvoiceScheduleRowDataType) =>
-              row.schedule?.lastNotifiedAt
-                ? dayjs(row.schedule.lastNotifiedAt).format("DD/MM/YYYY HH:mm")
-                : "Chưa gửi",
-          },
-          {
-            title: "Thao tác",
-            render: (_: unknown, row: InvoiceScheduleRowDataType) => (
-              <Space>
-                <Button icon={<EditOutlined />} onClick={() => openEdit(row)}>
-                  Thiết lập
-                </Button>
-                <Button
-                  icon={<SendOutlined />}
-                  disabled={!row.schedule?.enabled}
-                  onClick={() => notifyNow(row)}
-                >
-                  Gửi ngay
-                </Button>
-              </Space>
-            ),
-          },
-        ]}
-      />
+            },
+          ]}
+          scroll={{ x: "max-content" }}
+        />
+      </div>
 
       <Modal
         title={`Thiết lập lịch: ${selectedRow?.location.locationName ?? ""}`}

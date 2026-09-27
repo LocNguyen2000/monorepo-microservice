@@ -123,7 +123,9 @@ const AnalysistTab = () => {
         </Col>
         <Col span={12}>
           <Card bordered={false} title="Top 10 Best Selling Locations">
-            <Table columns={columns} dataSource={tableData} size="small" pagination={false} />
+            <div className="list-page-table-scroll">
+              <Table columns={columns} dataSource={tableData} size="small" pagination={false} scroll={{ x: "max-content" }} />
+            </div>
           </Card>
         </Col>
       </Row>

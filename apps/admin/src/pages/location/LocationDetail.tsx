@@ -389,11 +389,14 @@ const LocationDetail: React.FunctionComponent = () => {
             ))}
           </Select>
 
-          <BaseTable
-            columns={expenseLocationColumns}
-            data={locationExpenses}
-            size="small"
-          />
+          <div className="list-page-table-scroll">
+            <BaseTable
+              columns={expenseLocationColumns}
+              data={locationExpenses}
+              size="small"
+              scroll={{ x: "max-content" }}
+            />
+          </div>
         </Form.Item>
         <Form.Item label="Mô tả">
           <TextArea
@@ -427,7 +430,9 @@ const LocationDetail: React.FunctionComponent = () => {
           </Button>
         </div>
       </Flex>
-      <BaseTable columns={tenantColumns} data={tenants} size="small" />
+      <div className="list-page-table-scroll">
+        <BaseTable columns={tenantColumns} data={tenants} size="small" scroll={{ x: "max-content" }} />
+      </div>
 
       <Modal
         title="Gán người thuê hiện có"

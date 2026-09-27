@@ -16,10 +16,17 @@ const GuidanceTab = () => {
       style={{
         display: "flex",
         justifyContent: "center",
+        flexWrap: "wrap",
+        gap: "1rem",
+        width: "100%",
       }}
     >
       <Card
-        style={{ marginRight: "1rem" }}
+        style={{
+          flex: "1 1 420px",
+          maxWidth: "100%",
+          minWidth: 0,
+        }}
         title={
           <>
             <HomeOutlined className="override-antd-icon-item" /> Cách quản lý
@@ -28,7 +35,7 @@ const GuidanceTab = () => {
         }
       >
         <List
-          style={{ width: "max-content" }}
+          style={{ width: "100%" }}
           bordered
           dataSource={data}
           renderItem={(item) => (
@@ -39,6 +46,11 @@ const GuidanceTab = () => {
         />
       </Card>
       <Card
+        style={{
+          flex: "1 1 240px",
+          maxWidth: "100%",
+          minWidth: 0,
+        }}
         title={
           <Typography>
             <BookOutlined className="override-antd-icon-item" /> Khái niệm cơ bản
