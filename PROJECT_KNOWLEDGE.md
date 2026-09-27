@@ -26,7 +26,7 @@ Prefer the narrowest relevant check first. Follow an affected shared contract or
 
 ## Admin UI
 
-- `apps/admin/src/pages/Dashboard.tsx` switches between desktop and mobile shells using `matchMedia("(max-width: 767px)")`; the mobile shell retains the shared nested route outlet and role-filtered dashboard menu.
+- `apps/admin/src/pages/Dashboard.tsx` switches between desktop and mobile shells using `matchMedia("(max-width: 767px)")`; the mobile shell retains the shared nested route outlet and role-filtered dashboard menu. Keep its app bar `#474747`, navigation surface `#2f3330`, and primary accent `#4CAF50` aligned with the desktop shell.
 
 ## Backend Invariants
 

@@ -106,6 +106,7 @@ Render a dedicated mobile dashboard shell when the viewport is in the mobile ran
 1. Detect viewport changes with `matchMedia` at the mobile width boundary (`max-width: 767px`).
 2. Add a mobile shell with compact page identity, account actions, and role-filtered navigation for the existing dashboard routes.
 3. Keep authentication, route permissions, and the shared nested route outlet unchanged.
+4. Match the mobile header and navigation surfaces to the existing desktop dashboard colors and text contrast.
 
 ## Verification
 

@@ -45,6 +45,8 @@ const MobileDashboard: FunctionComponent<MobileDashboardProps> = ({
         <Button
           aria-label="Open navigation"
           icon={<MenuOutlined />}
+          type="text"
+          className="mobile-dashboard-menu-button"
           onClick={() => setIsMenuOpen(true)}
         />
         <Typography.Text className="mobile-dashboard-title" strong>
@@ -72,7 +74,11 @@ const MobileDashboard: FunctionComponent<MobileDashboardProps> = ({
           <Avatar
             aria-label="Account menu"
             icon={<UserOutlined />}
-            style={{ cursor: "pointer", flex: "none" }}
+            style={{
+              cursor: "pointer",
+              flex: "none",
+              backgroundColor: "#4CAF50",
+            }}
           />
         </Popover>
       </header>
@@ -84,6 +90,7 @@ const MobileDashboard: FunctionComponent<MobileDashboardProps> = ({
       <Drawer
         title="Quản lý nhà trọ"
         placement="left"
+        rootClassName="mobile-dashboard-drawer"
         open={isMenuOpen}
         onClose={() => setIsMenuOpen(false)}
         width={280}

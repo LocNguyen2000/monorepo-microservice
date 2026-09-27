@@ -115,8 +115,14 @@
   gap: 0.75rem;
   height: 56px;
   padding: 0 0.75rem;
-  background: white;
-  border-bottom: 1px solid #e5e5e5;
+  color: white;
+  background: #474747;
+  border-bottom: 1px solid white;
+}
+
+.mobile-dashboard-menu-button,
+.mobile-dashboard-menu-button:hover {
+  color: white !important;
 }
 
 .mobile-dashboard-title {
@@ -131,12 +137,28 @@
   min-height: 0;
   overflow: auto;
   padding: 0.75rem;
+  color: white;
 }
 
 .mobile-dashboard-account-menu {
   display: grid;
   gap: 0.75rem;
   min-width: 10rem;
+}
+
+.mobile-dashboard-drawer .ant-drawer-header,
+.mobile-dashboard-drawer .ant-drawer-body {
+  color: white;
+  background: #2f3330;
+}
+
+.mobile-dashboard-drawer .ant-drawer-title,
+.mobile-dashboard-drawer .ant-drawer-close {
+  color: white;
+}
+
+.mobile-dashboard-drawer .ant-menu {
+  border-inline-end: 0;
 }
 
 .operator-workspace {
