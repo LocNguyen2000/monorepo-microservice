@@ -11,5 +11,18 @@ export const ServiceClient = (url?: string) => {
     return config;
   });
 
+  axiosIntance.interceptors.response.use(
+    (response) => response,
+    (error) => {
+      if (error.response?.status === 401) {
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("authUser");
+        localStorage.removeItem("sessionId");
+        window.location.href = "/login";
+      }
+      return Promise.reject(error);
+    },
+  );
+
   return axiosIntance;
 };
