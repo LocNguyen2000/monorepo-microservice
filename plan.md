@@ -94,3 +94,20 @@ When an active account logs in again, reuse its existing session and return the 
 
 - Build the service TypeScript project.
 - Check diagnostics for the modified service file.
+
+# Mobile Admin Dashboard
+
+## Goal
+
+Render a dedicated mobile dashboard shell when the viewport is in the mobile range, while preserving the existing desktop dashboard and route content.
+
+## Implementation
+
+1. Detect viewport changes with `matchMedia` at the mobile width boundary (`max-width: 767px`).
+2. Add a mobile shell with compact page identity, account actions, and role-filtered navigation for the existing dashboard routes.
+3. Keep authentication, route permissions, and the shared nested route outlet unchanged.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Confirm the mobile navigation adapts as the viewport crosses the breakpoint and preserves current route selection.

@@ -101,6 +101,44 @@
   background-color: rgba(0, 0, 0, 0.9);
 }
 
+.mobile-dashboard {
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.mobile-dashboard-header {
+  display: flex;
+  flex: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  height: 56px;
+  padding: 0 0.75rem;
+  background: white;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.mobile-dashboard-title {
+  min-width: 0;
+  overflow: hidden;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-dashboard-content {
+  min-height: 0;
+  overflow: auto;
+  padding: 0.75rem;
+}
+
+.mobile-dashboard-account-menu {
+  display: grid;
+  gap: 0.75rem;
+  min-width: 10rem;
+}
+
 .operator-workspace {
   display: flex;
   flex-direction: column;

@@ -24,6 +24,10 @@ Run commands from the repository root. Relevant documented checks include:
 
 Prefer the narrowest relevant check first. Follow an affected shared contract or user workflow with a production build. Keep edits focused, preserve local TypeScript/NestJS/Sequelize/React patterns, and do not revert unrelated user changes or commit unless asked. On Windows, the documented pnpm executable path is `C:\Users\<user>\AppData\Roaming\npm\pnpm.cmd` if shell execution policy or aliases interfere.
 
+## Admin UI
+
+- `apps/admin/src/pages/Dashboard.tsx` switches between desktop and mobile shells using `matchMedia("(max-width: 767px)")`; the mobile shell retains the shared nested route outlet and role-filtered dashboard menu.
+
 ## Backend Invariants
 
 - Protected service requests validate both the access token and active persisted session. Login reuses the account's newest non-deleted, unexpired session and returns a token with the same session ID and expiry; otherwise it creates a session. Logout soft-deletes the session using `deletedAt`. Keep session schema changes synchronized with the SQL migration.

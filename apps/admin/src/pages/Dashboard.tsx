@@ -10,7 +10,7 @@ import {
   EuroOutlined,
 } from "@ant-design/icons";
 import { Space, Layout } from "antd";
-import { FunctionComponent, useState } from "react";
+import { FunctionComponent, useEffect, useState } from "react";
 import { useNavigate, Outlet } from "react-router-dom";
 import MenuSidebar from "../components/MenuSidebar";
 import { contentStyle } from "../css/layout";
@@ -20,6 +20,7 @@ import BaseHeader from "../components/layouts/BaseHeader";
 import { PathContext, getGlobalContext } from "../lib/context";
 import BaseFooter from "../components/layouts/BaseFooter";
 import { ADMIN_ROLES } from "../lib/constants/roles";
+import MobileDashboard from "./MobileDashboard";
 
 interface DashboardProps {}
 
@@ -100,8 +101,19 @@ export const MENU_LIST: IAntdMenuItem[] = [
 const Dashboard: FunctionComponent<DashboardProps> = () => {
   const [menuItem, setMenuItem] = useState<IAntdMenuItem>(MENU_LIST[0]);
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
+  const [isMobile, setIsMobile] = useState(() =>
+    window.matchMedia("(max-width: 767px)").matches,
+  );
   const { useNotify, authUser } = getGlobalContext();
   const navigate = useNavigate();
+  useEffect(() => {
+    const mobileMediaQuery = window.matchMedia("(max-width: 767px)");
+    const updateIsMobile = () => setIsMobile(mobileMediaQuery.matches);
+
+    mobileMediaQuery.addEventListener("change", updateIsMobile);
+    return () => mobileMediaQuery.removeEventListener("change", updateIsMobile);
+  }, []);
+
   const visibleMenuItems = ADMIN_ROLES.includes(Number(authUser?.role))
     ? MENU_LIST
     : MENU_LIST.filter(
@@ -133,22 +145,30 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
         setPathFromKey,
       }}
     >
-      <Space direction="vertical">
-        <Layout>
-          <MenuSidebar menuItems={visibleMenuItems} isCollapse={isCollapse} />
+      {isMobile ? (
+        <MobileDashboard
+          menuItem={menuItem}
+          menuItems={visibleMenuItems}
+          onNavigate={setPathFromKey}
+        />
+      ) : (
+        <Space direction="vertical">
+          <Layout>
+            <MenuSidebar menuItems={visibleMenuItems} isCollapse={isCollapse} />
 
-          <BaseHeader />
+            <BaseHeader />
 
-          <Content
-            style={contentStyle}
-            className="m-content-child-margin m-background-dashboard"
-          >
-            <Outlet />
-          </Content>
+            <Content
+              style={contentStyle}
+              className="m-content-child-margin m-background-dashboard"
+            >
+              <Outlet />
+            </Content>
 
-          <BaseFooter />
-        </Layout>
-      </Space>
+            <BaseFooter />
+          </Layout>
+        </Space>
+      )}
     </PathContext.Provider>
   );
 };
