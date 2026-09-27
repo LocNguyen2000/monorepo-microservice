@@ -147,3 +147,37 @@ Keep wide tenant, rent-provider, and expense tables scrollable within their own 
 
 - Run the admin TypeScript check and production build.
 - Check diagnostics for the shared table and the three list pages.
+
+# Tenant, Provider, and Expense Table Columns
+
+## Goal
+
+Hide entity code columns from tenant, rent-provider, and expense listings while keeping identifying data available in records and forms. Keep each listing's name column fixed on the left and action column fixed on the right during horizontal scrolling.
+
+## Implementation
+
+1. Remove tenant, provider, and expense code columns from their shared listing column definitions.
+2. Fix the provider and expense name columns on the left alongside the already-fixed tenant name column.
+3. Add an opt-in fixed-right action column to `BaseTable` and enable it only for these three listing tables.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Check diagnostics for the shared table and column definitions.
+
+# Generate Entity Codes in Add Forms
+
+## Goal
+
+Disable tenant, rent-provider, and expense code inputs and prefill the next code from the maximum existing code plus one.
+
+## Implementation
+
+1. Reuse paginated list endpoints to load all current records when an add form is opened, then calculate numeric max + 1.
+2. Make the shared code generation handle numeric and numeric-string codes; preserve expense codes as strings where required by the UI type.
+3. Disable code inputs in add and edit forms and remove manual code-generation controls.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Check diagnostics for the shared utility and the three list/detail flows.

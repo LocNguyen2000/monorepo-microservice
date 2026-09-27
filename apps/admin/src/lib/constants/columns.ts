@@ -4,12 +4,6 @@ import { formatMoney } from "../utils";
 
 export const tenantColumns: ColumnsType<TenantDataType> = [
   {
-    title: "Mã người thuê",
-    dataIndex: "tenantCode",
-    key: "tenantCode",
-    align: "center",
-  },
-  {
     title: "Tên người thuê",
     dataIndex: "tenantName",
     key: "tenantName",
@@ -44,15 +38,10 @@ export const tenantColumns: ColumnsType<TenantDataType> = [
 
 export const providerColumns: ColumnsType<ProviderDataType> = [
   {
-    title: "Mã chủ trọ",
-    dataIndex: "providerCode",
-    key: "providerCode",
-    align: "center",
-  },
-  {
     title: "Tên chủ trọ",
     dataIndex: "providerName",
     key: "providerName",
+    fixed: "left",
   },
   {
     title: "Ngày sinh nhật",
@@ -82,17 +71,11 @@ export const providerColumns: ColumnsType<ProviderDataType> = [
 
 export const expenseColumns: ColumnsType<ExpenseDataType> = [
   {
-    title: "Mã chi phí",
-    dataIndex: "expenseCode",
-    key: "expenseCode",
-    align: "center",
-    width: "150px",
-  },
-  {
     title: "Tên chi phí",
     dataIndex: "expenseName",
     key: "expenseName",
     align: "center",
+    fixed: "left",
   },
   {
     title: "Loại chi phí",

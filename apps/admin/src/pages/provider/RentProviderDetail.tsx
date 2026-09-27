@@ -1,4 +1,4 @@
-import { Form, Radio, Input, DatePicker, InputNumber, Divider, Typography, Button } from "antd";
+import { Form, Radio, Input, DatePicker, InputNumber, Divider, Typography } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import { ProviderDataType } from "../../lib/interface";
 import React, { ChangeEventHandler, useContext } from "react";
@@ -20,10 +20,9 @@ interface IRentProviderProps {
   action: ACTION_ENUM;
   setIsFormOpen: (action: ACTION_ENUM, data: ProviderDataType) => void;
   setSubmitEvent?: () => void;
-  codeGenerator?: () => void;
 }
 
-export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = ({ data, setData, isOpen, setIsFormOpen, action, codeGenerator }) => {
+export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = ({ data, setData, isOpen, setIsFormOpen, action }) => {
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -77,9 +76,7 @@ export const RentProviderDetail: React.FunctionComponent<IRentProviderProps> = (
         }}
       >
         <Form.Item label="Mã chủ trọ" required={true}>
-          <Input value={data.providerCode} name="providerCode" placeholder="Nhập mã chủ trọ" onChange={(e) => formChangeHandler(e)} 
-            addonAfter={<Button style={{border: 'none', height: 'auto'}} onClick={() => codeGenerator()}>Tự điền mã nhập</Button>}
-          />
+          <Input value={data.providerCode} name="providerCode" disabled />
         </Form.Item>
         <Form.Item label="Tên chủ trọ" required={true}>
           <Input value={data.providerName} name="providerName" placeholder="Nhập tên chủ trọ" onChange={(e) => formChangeHandler(e)} />

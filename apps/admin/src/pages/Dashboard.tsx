@@ -33,12 +33,11 @@ export const MENU_LIST: IAntdMenuItem[] = [
     icon: <BarChartOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.OVERVIEW,
   },
-
   {
-    text: "Người thuê nhà",
-    key: "1",
-    icon: <UserOutlined className="override-antd-icon-item" />,
-    path: DASHBOARD_ROUTES.TENANT,
+    text: "Phòng trọ",
+    key: "4",
+    icon: <HomeOutlined className="override-antd-icon-item" />,
+    path: DASHBOARD_ROUTES.LOCATION,
   },
   {
     text: "Chủ trọ",
@@ -46,12 +45,11 @@ export const MENU_LIST: IAntdMenuItem[] = [
     icon: <IdcardOutlined className="override-antd-icon-item" />,
     path: DASHBOARD_ROUTES.PROVIDER,
   },
-
   {
-    text: "Phòng trọ",
-    key: "4",
-    icon: <HomeOutlined className="override-antd-icon-item" />,
-    path: DASHBOARD_ROUTES.LOCATION,
+    text: "Người thuê nhà",
+    key: "1",
+    icon: <UserOutlined className="override-antd-icon-item" />,
+    path: DASHBOARD_ROUTES.TENANT,
   },
   {
     text: "Chi tiết phòng trọ",

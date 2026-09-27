@@ -166,8 +166,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
           <Input
             name="tenantCode"
             value={data.tenantCode}
-            placeholder="Nhập mã người thuê"
-            onChange={(e) => formChangeHandler(e)}
+            disabled
           />
         </Form.Item>
         <Form.Item label="Tên người thuê" required={true}>

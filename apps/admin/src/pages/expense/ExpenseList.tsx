@@ -11,7 +11,7 @@ import { IPagination, ExpenseDataType, PaginatedResponse, TenantDataType } from 
 import { useNavigate } from "react-router-dom";
 import ExpenseDetail from "./ExpenseDetail";
 import { ACTION_ENUM } from "../../lib/constants";
-import { autoGenerateNewCode } from "../../lib/utils";
+import { autoGenerateNewCodeFromPages } from "../../lib/utils";
 
 export interface IExpenseListProps {}
 
@@ -34,11 +34,6 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
   const { setPathFromKey } = useContext(PathContext);
   const navigate = useNavigate();
 
-  const expenseCodeGenerator = () => {
-    const code = autoGenerateNewCode(expenses, 'expenseCode')
-    setExpense({...expense, expenseCode: code})
-  }
-
   const openFormHandler = (action: ACTION_ENUM, data: Partial<ExpenseDataType>) => {
     console.log("FORM", action);
     console.log("isFormOpen", isOpenForm);
@@ -46,6 +41,21 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
     setAction(action);
     dispatch(action);
     setExpense(data);
+  };
+
+  const openAddFormHandler = async () => {
+    try {
+      const expenseCode = await autoGenerateNewCodeFromPages(
+        async (page, size) => {
+          const response = await serviceClient.get(`/expense?page=${page}&size=${size}`);
+          return response.data;
+        },
+        "expenseCode",
+      );
+      openFormHandler(ACTION_ENUM.ADD, { expenseCode: String(expenseCode) });
+    } catch (error) {
+      useToast("error", "Không thể tạo mã chi phí mới");
+    }
   };
 
   const deleteDataHandler = async (data: ExpenseDataType) => {
@@ -110,7 +120,7 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
             </Typography>
           </div>
           <Flex className="list-page-actions">
-            <Button type="primary" onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}>
+            <Button type="primary" onClick={openAddFormHandler}>
               <PlusCircleOutlined /> Thêm dịch vụ
             </Button>
             <Button size="middle" onClick={() => loadData()}>
@@ -126,7 +136,6 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
           setIsFormOpen={openFormHandler}
           data={expense}
           setData={(d) => setExpense(d)}
-          codeGenerator={expenseCodeGenerator}
         />
 
         <div className="list-page-table-scroll">
@@ -135,6 +144,7 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
             data={expenses}
             isLoading={isLoading}
             editable
+            fixedActionColumn
             size="small"
             scroll={{ x: "max-content" }}
             onDblClickRow={(t: ExpenseDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}

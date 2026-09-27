@@ -20,7 +20,7 @@ import Flex from "antd/es/flex";
 import { getGlobalContext } from "../../lib/context";
 import Divider from "antd/es/divider";
 import { Typography } from "antd";
-import { autoGenerateNewCode } from "../../lib/utils";
+import { autoGenerateNewCodeFromPages } from "../../lib/utils";
 
 const RentProviderList = () => {
   const [providers, setProviders] = useState<ProviderDataType[]>([]);
@@ -50,9 +50,19 @@ const RentProviderList = () => {
     }, 500);
   };
 
-  const codeGenerator = () => {
-    const code = autoGenerateNewCode(providers, "providerCode");
-    setProvider({ ...provider, providerCode: code });
+  const openAddFormHandler = async () => {
+    try {
+      const providerCode = await autoGenerateNewCodeFromPages(
+        async (page, size) => {
+          const response = await serviceClient.get(`/rent-provider?page=${page}&size=${size}`);
+          return response.data;
+        },
+        "providerCode",
+      );
+      openFormHandler(ACTION_ENUM.ADD, { providerCode });
+    } catch (error) {
+      useToast("error", "Không thể tạo mã chủ trọ mới");
+    }
   };
 
   const openFormHandler = (action: ACTION_ENUM, data: ProviderDataType) => {
@@ -108,7 +118,7 @@ const RentProviderList = () => {
           <Button
             type="primary"
             size="middle"
-            onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+            onClick={openAddFormHandler}
           >
             <UserAddOutlined /> Thêm
           </Button>
@@ -127,7 +137,6 @@ const RentProviderList = () => {
         action={action}
         isOpen={isOpenForm}
         setIsFormOpen={openFormHandler}
-        codeGenerator={codeGenerator}
       />
 
       <div className="list-page-table-scroll">
@@ -135,6 +144,7 @@ const RentProviderList = () => {
           columns={providerColumns}
           data={providers}
           editable
+          fixedActionColumn
           isLoading={isLoading}
           size="middle"
           scroll={{ x: "max-content" }}

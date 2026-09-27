@@ -5,8 +5,8 @@ import { ACTION_ENUM } from "../../lib/constants";
 import Typography from "antd/es/typography/Typography";
 import Divider from "antd/es/divider";
 import BaseEditableTable from "../../components/BaseEditableTable";
-import { Button, Form, Input, InputNumber, Radio, Select } from "antd";
-import { debounce, autoGenerateNewCode } from "../../lib/utils";
+import { Form, Input, InputNumber, Radio, Select } from "antd";
+import { debounce } from "../../lib/utils";
 import { getGlobalContext } from "../../lib/context";
 
 interface IExpenseDetailProps {
@@ -16,10 +16,9 @@ interface IExpenseDetailProps {
   setData: (data: Partial<ExpenseDataType>) => void;
   setIsFormOpen: (action: ACTION_ENUM, data: Partial<ExpenseDataType>) => void;
   setSubmitEvent?: () => void;
-  codeGenerator?: () => void;
 }
 
-const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, action, setIsFormOpen, setData, codeGenerator }) => {
+const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, action, setIsFormOpen, setData }) => {
   const { serviceClient, useNotify, useConfirm } = getGlobalContext();
 
   const formChangeHandler: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -83,9 +82,7 @@ const ExpenseDetail: FunctionComponent<IExpenseDetailProps> = ({ data, isOpen, a
           <Input
             value={data.expenseCode}
             name="expenseCode"
-            placeholder="Mã dịch vụ"
-            onChange={(e) => formChangeHandler(e)}
-            addonAfter={<Button style={{border: 'none', height: 'auto'}} onClick={() => codeGenerator()}>Tự điền mã nhập</Button>}
+            disabled
           />
         </Form.Item>
         <Form.Item label="Tên chi phí" required={true}>

@@ -16,6 +16,7 @@ import { ACTION_ENUM } from "../../lib/constants";
 import { Divider, Flex, Pagination } from "antd";
 import { GlobalContext, getGlobalContext } from "../../lib/context";
 import Typography from "antd/es/typography/Typography";
+import { autoGenerateNewCodeFromPages } from "../../lib/utils";
 
 const TenantList = () => {
   const [tenants, setTenants] = useState<TenantDataType[]>([]);
@@ -51,6 +52,21 @@ const TenantList = () => {
     setAction(action);
     dispatch(action);
     setTenant(data);
+  };
+
+  const openAddFormHandler = async () => {
+    try {
+      const tenantCode = await autoGenerateNewCodeFromPages(
+        async (page, size) => {
+          const response = await serviceClient.get(`/tenant?page=${page}&size=${size}`);
+          return response.data;
+        },
+        "tenantCode",
+      );
+      openFormHandler(ACTION_ENUM.ADD, { tenantCode });
+    } catch (error) {
+      useToast("error", "Không thể tạo mã người thuê mới");
+    }
   };
 
   const loadData = () => {
@@ -99,7 +115,7 @@ const TenantList = () => {
           <Button
             type="primary"
             size="middle"
-            onClick={() => openFormHandler(ACTION_ENUM.ADD, {})}
+            onClick={openAddFormHandler}
           >
             <UserAddOutlined /> Thêm
           </Button>
@@ -126,6 +142,7 @@ const TenantList = () => {
           data={tenants}
           isLoading={isLoading}
           editable
+          fixedActionColumn
           size="middle"
           scroll={{ x: "max-content" }}
           onDblClickRow={(t: TenantDataType) =>

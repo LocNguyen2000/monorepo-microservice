@@ -12,6 +12,7 @@ export interface IBaseTableProps {
   data: any[];
   isLoading?: boolean;
   editable?: boolean;
+  fixedActionColumn?: boolean;
   size?: SizeType;
   scroll?: TableProps<AnyObject>["scroll"];
   onDblClickRow?: (data: any) => void;
@@ -34,6 +35,7 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
   data,
   isLoading,
   editable,
+  fixedActionColumn,
   size,
   scroll,
   onDblClickRow,
@@ -45,6 +47,8 @@ const BaseTable: FunctionComponent<IBaseTableProps> = ({
       title: "Thao tác",
       dataIndex: "action",
       align: "center",
+      fixed: fixedActionColumn ? "right" : undefined,
+      width: fixedActionColumn ? 110 : undefined,
       render: (value, record) => {
         return (
           <Flex style={{ flexDirection: "row", justifyContent: "center" }}>

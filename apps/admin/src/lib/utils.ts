@@ -68,10 +68,30 @@ export const parseMoney = (money: string) => {
 
 
 export const autoGenerateNewCode = (arrayData: unknown[], primaryKey: string) => {
-  const keys = arrayData?.map(val => val[primaryKey])
-  keys.sort((a, b) => a - b)
-  
-  return keys.length > 0 ? keys[keys.length - 1] + 1 : 1
-}
+  const codes = arrayData
+    .map((record) => Number((record as Record<string, unknown>)[primaryKey]))
+    .filter(Number.isFinite);
+
+  return codes.reduce((maximum, code) => Math.max(maximum, code), 0) + 1;
+};
+
+export const autoGenerateNewCodeFromPages = async <T>(
+  loadPage: (page: number, size: number) => Promise<{ total: number; data: T[] }>,
+  primaryKey: keyof T,
+) => {
+  const pageSize = 100;
+  const firstPage = await loadPage(1, pageSize);
+  const pageCount = Math.ceil(firstPage.total / pageSize);
+  const remainingPages = await Promise.all(
+    Array.from({ length: Math.max(0, pageCount - 1) }, (_, index) =>
+      loadPage(index + 2, pageSize),
+    ),
+  );
+
+  return autoGenerateNewCode(
+    [firstPage, ...remainingPages].flatMap((page) => page.data),
+    String(primaryKey),
+  );
+};
 
 

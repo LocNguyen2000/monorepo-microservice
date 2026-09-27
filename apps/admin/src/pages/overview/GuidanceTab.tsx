@@ -7,8 +7,9 @@ const GuidanceTab = () => {
     "Bước 1: Tạo phòng trọ mới trong mục Phòng trọ.",
     "Bước 2: Thêm chủ trọ mới. Điền thông tin cơ bản và các phòng trọ đang cho thuê.",
     "Bước 3: Mỗi khi có người thuê mới, hãy thêm thông tin của họ trong mục Người thuê.",
-    "Bước 4: Trong mục Lịch, bạn có thể tạo lịch gửi email để trao đổi với người thuê hoặc chủ trọ.",
-    "Bước 5: Kiểm tra tiến độ cho thuê trong mục Tổng quan.",
+    "Bước 4: Bạn có thể thêm các chi phí dịch vụ để tính vào hóa đơn của người thuê.",
+    "Bước 5: Trong mục Hóa đơn, bạn có thể tạo hóa đơn cho người thuê dựa trên các chi phí đã được gán cho phòng trọ.",
+    "Bước 6: Trong mục Lịch thông báo, bạn có thể tạo lịch gửi email để trao đổi với người thuê hoặc chủ trọ.",
   ];
 
   return (
@@ -64,7 +65,7 @@ const GuidanceTab = () => {
           <Divider />
           <Typography>Người thuê</Typography>
           <Divider />
-          <Typography>Tài sản</Typography>
+          <Typography>Chi phí / Hóa đơn</Typography>
         </div>
       </Card>
     </div>
