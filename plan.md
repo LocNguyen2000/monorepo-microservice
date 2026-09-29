@@ -216,22 +216,23 @@ Keep the invoice expense editor usable on narrow screens without horizontal over
 - Run the admin TypeScript check and production build.
 - Check touched files for diagnostics and whitespace errors.
 
-# Super-Admin Resource Account Assignment
+# Account-Level Read Sharing
 
 ## Goal
 
-Allow a super administrator to assign legacy tenants, locations, invoices, and rent providers to an existing account without creating cross-account links.
+Allow an account to share its account-owned data with another account, without assigning individual resources to the recipient. Resource ownership remains on the original account; shared accounts gain read-only visibility.
 
 ## Implementation
 
-1. Add a dedicated `PATCH /admin/resources/{resourceType}/{resourceId}/account` endpoint protected for super administrators and accepting an `accountId`.
-2. Support only tenant, location, invoice, and rent-provider resources; assign only unowned records, allow idempotent requests for the current account, and reject conflicting reassignment.
-3. Check linked resources before assignment and document request, response, and error behavior in OpenAPI. Reuse existing ownership columns; no SQL migration is expected.
+1. Add an indexed account-share relation storing the owner account and the account granted access, with endpoints for an account to list, create, and revoke its shares.
+2. Resolve readable owner account IDs from the authenticated account and apply them to tenant, location, expense, invoice, rent-provider, and related read queries. Keep all create, update, and delete operations restricted to the caller's own account.
+3. Replace the per-resource assignment endpoint and document account-share request, response, authorization, and read-only behavior in OpenAPI.
+4. Update durable repository knowledge after implementation.
 
 ## Verification
 
 - Run the service TypeScript build and diagnostics on changed files.
-- Validate the OpenAPI document and confirm the endpoint role restriction and resource allowlist.
+- Validate OpenAPI and verify reads include owner and shared accounts while writes remain scoped to the authenticated account.
 
 # Invoice Tab Contrast
 

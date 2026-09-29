@@ -15,6 +15,7 @@ import lodash from 'lodash';
 const { omit, pick } = lodash;
 import { FilePostService } from '../filepost/filepost.service.js';
 import { RentProvidersService } from '../rent-providers/rent-providers.service.js';
+import { AccountSharesService } from '../account-shares/account-shares.service.js';
 
 @Injectable()
 export class LocationsService {
@@ -27,6 +28,7 @@ export class LocationsService {
     private readonly expenseRepository: ExpenseModel,
     private readonly filePostService: FilePostService,
     private readonly rentProviderService: RentProvidersService,
+    private readonly accountSharesService: AccountSharesService,
   ) { }
 
   async create(
@@ -44,13 +46,14 @@ export class LocationsService {
     });
   }
 
-  findAll(query: PaginatedQuery, accountId: number) {
+  async findAll(query: PaginatedQuery, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
     return paginatedQuery<LocationSchema>(this.locationModel, query, {
-      where: { accountId },
+      where: { accountId: { [Op.in]: readableAccountIds } },
       include: [
         {
           model: ExpenseSchema,
-          where: { accountId },
+          where: { accountId: { [Op.in]: readableAccountIds } },
           required: false,
           through: { attributes: [] },
         },
@@ -72,7 +75,7 @@ export class LocationsService {
   }
 
   async findOne(id: number, accountId: number) {
-    await this.findLocationRecord(id, accountId);
+    await this.findReadableLocationRecord(id, accountId);
     const sql = 'CALL prcd_FindLocationExpenseById (:id, :accountId)';
 
     const locations = (await this.locationModel.sequelize.query(sql, {
@@ -265,9 +268,22 @@ export class LocationsService {
     return location;
   }
 
+  async findOwnedOne(id: number, accountId: number) {
+    return this.findLocationRecord(id, accountId);
+  }
+
+  private async findReadableLocationRecord(id: number, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
+    const location = await this.locationModel.findOne({
+      where: { locationCode: id, accountId: { [Op.in]: readableAccountIds } },
+    });
+    if (!location) throw new NotFoundException('Location not found');
+    return location;
+  }
+
   private async assertOwnerBelongsToAccount(owner: unknown, accountId: number) {
     if (owner === undefined || owner === null || owner === '') return;
-    const provider = await this.rentProviderService.findOne(Number(owner), accountId);
+    const provider = await this.rentProviderService.findOwnedOne(Number(owner), accountId);
     if (!provider) throw new NotFoundException('Owner not found');
   }
 }

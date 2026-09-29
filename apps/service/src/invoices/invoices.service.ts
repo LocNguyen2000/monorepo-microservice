@@ -18,6 +18,7 @@ import { Env } from '../common/env.js';
 import { MailSenderClient } from '../common/mail-sender.client.js';
 import { InvoiceStatus } from './invoice-status.js';
 import { Op } from 'sequelize';
+import { AccountSharesService } from '../account-shares/account-shares.service.js';
 
 @Injectable()
 export class InvoicesService {
@@ -34,6 +35,7 @@ export class InvoicesService {
     @InjectModel(InvoiceScheduleSchema)
     private readonly scheduleRepository: InvoiceScheduleModel,
     private readonly config: EnvService<Env>,
+    private readonly accountSharesService: AccountSharesService,
   ) {
     this.mailSenderClient = new MailSenderClient({
       baseURL: this.config.get('mailjs.url'),
@@ -52,7 +54,7 @@ export class InvoicesService {
     if (!locationCode || expenses.length === 0) {
       throw new Error('Location and expenses are required');
     }
-    await this.locationSvc.findOne(locationCode, accountId);
+    await this.locationSvc.findOwnedOne(locationCode, accountId);
     const expenseCodes = expenses.map((expense: Record<string, unknown>) => Number(expense.expenseCode));
     await this.locationSvc.validateExpensesForLocation(locationCode, expenseCodes, accountId);
 
@@ -92,16 +94,18 @@ export class InvoicesService {
     }
   }
 
-  findAll(query: PaginatedQuery, accountId: number) {
+  async findAll(query: PaginatedQuery, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
     return this.invoiceRepository.findAll({
-      where: { accountId },
+      where: { accountId: { [Op.in]: readableAccountIds } },
       order: [['createdAt', 'DESC']],
     });
   }
 
-  listInvoices(accountId: number) {
+  async listInvoices(accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
     return this.invoiceRepository.findAll({
-      where: { accountId },
+      where: { accountId: { [Op.in]: readableAccountIds } },
       order: [['createdAt', 'DESC']],
     });
   }
@@ -115,7 +119,7 @@ export class InvoicesService {
       where: { invoiceCode, accountId },
     });
     if (!invoice) throw new NotFoundException('Invoice not found');
-    await this.locationSvc.findOne(invoice.locationCode, accountId);
+    await this.locationSvc.findOwnedOne(invoice.locationCode, accountId);
     if (invoice.status !== InvoiceStatus.DRAFT) {
       throw new BadRequestException('Only DRAFT invoices can be marked as DONE');
     }
@@ -132,14 +136,20 @@ export class InvoicesService {
   }
 
   async listSchedules(accountId: number) {
-    const [locations, invoices] = await Promise.all([
+    const [locations, readableAccountIds] = await Promise.all([
       this.locationSvc.findAll({ page: 1, size: 1000 }, accountId),
-      this.invoiceRepository.findAll({
-        where: { accountId },
-        order: [['createdAt', 'DESC']],
-      }),
+      this.accountSharesService.getReadableAccountIds(accountId),
     ]);
+    const invoices = await this.invoiceRepository.findAll({
+      where: { accountId: { [Op.in]: readableAccountIds } },
+      order: [['createdAt', 'DESC']],
+    });
     const locationCodes = locations.data.map(({ locationCode }) => Number(locationCode));
+    const ownedLocationCodes = new Set(
+      locations.data
+        .filter(({ accountId: ownerAccountId }) => Number(ownerAccountId) === accountId)
+        .map(({ locationCode }) => Number(locationCode)),
+    );
     const schedules = await this.scheduleRepository.findAll({
       where: { locationCode: { [Op.in]: locationCodes } },
     });
@@ -148,7 +158,11 @@ export class InvoicesService {
       const assignedInvoice = schedule.invoiceCode
         ? invoices.find((invoice) => invoice.invoiceCode === schedule.invoiceCode)
         : undefined;
-      if (schedule.invoiceCode && assignedInvoice?.status !== InvoiceStatus.DRAFT) {
+      if (
+        ownedLocationCodes.has(Number(schedule.locationCode)) &&
+        schedule.invoiceCode &&
+        assignedInvoice?.status !== InvoiceStatus.DRAFT
+      ) {
         await schedule.update({ invoiceCode: null });
       }
     }
@@ -169,7 +183,7 @@ export class InvoicesService {
   }
 
   async saveSchedule(locationCode: number, payload: Record<string, unknown>, accountId: number) {
-    const location = await this.locationSvc.findOne(locationCode, accountId);
+    const location = await this.locationSvc.findOwnedOne(locationCode, accountId);
     const dueDay = Number(payload.dueDay);
     if (dueDay < 1 || dueDay > 28) throw new Error('dueDay must be between 1 and 28');
 
@@ -202,11 +216,11 @@ export class InvoicesService {
   }
 
   async notifySchedule(locationCode: number, accountId: number) {
-    const location = await this.locationSvc.findOne(locationCode, accountId);
+    const location = await this.locationSvc.findOwnedOne(locationCode, accountId);
     const schedule = await this.scheduleRepository.findByPk(locationCode);
     if (!schedule || !schedule.enabled) throw new Error('Schedule is disabled');
 
-    const tenants = await this.tenantSvc.findTenantsByLocation(locationCode, accountId);
+    const tenants = await this.tenantSvc.findTenantsByLocation(locationCode, accountId, false);
     if (!tenants.length) throw new Error('Location has no tenants');
     if (!schedule.invoiceCode) throw new Error('No invoice assigned');
 
@@ -216,7 +230,7 @@ export class InvoicesService {
     if (!invoice) throw new NotFoundException('Invoice not found');
     if (!location.owner) throw new Error('Location has no rent provider');
 
-    const provider = await this.rentProviderSvc.findOne(Number(location.owner), accountId);
+    const provider = await this.rentProviderSvc.findOwnedOne(Number(location.owner), accountId);
     if (!provider?.email) throw new Error('Rent provider has no email');
 
     const invoiceExpenses = await this.invoiceExpenseRepository.findAll({

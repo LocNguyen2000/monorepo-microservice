@@ -3,27 +3,38 @@ import { RentProviderModel, RentProviderSchema } from '../common/schema/user/ind
 import { UpsertRentProviderDto } from './dto/upsert-provider.dto.js';
 import { InjectModel } from '@nestjs/sequelize';
 import { PaginatedQuery, paginatedQuery } from '../common/pagination.js';
+import { AccountSharesService } from '../account-shares/account-shares.service.js';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class RentProvidersService {
   constructor(
     @InjectModel(RentProviderSchema)
     private readonly rentProviderRepository: RentProviderModel,
+    private readonly accountSharesService: AccountSharesService,
   ) {}
 
   create(payload: Record<string, unknown>, accountId: number) {
     return this.rentProviderRepository.create({ ...payload, accountId });
   }
 
-  findAll(query: PaginatedQuery, accountId: number) {
+  async findAll(query: PaginatedQuery, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
     return paginatedQuery<RentProviderSchema>(
       this.rentProviderRepository,
       query,
-      { where: { accountId } },
+      { where: { accountId: { [Op.in]: readableAccountIds } } },
     );
   }
 
-  findOne(id: number, accountId: number) {
+  async findOne(id: number, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
+    return this.rentProviderRepository.findOne({
+      where: { providerCode: id, accountId: { [Op.in]: readableAccountIds } },
+    });
+  }
+
+  findOwnedOne(id: number, accountId: number) {
     return this.rentProviderRepository.findOne({
       where: { providerCode: id, accountId },
     });

@@ -28,7 +28,8 @@ import mysql2 from 'mysql2';
 import 'dotenv/config';
 import { AuthModule } from './auth/auth.module.js';
 import { AuthGuard } from './auth/auth.guard.js';
-import { ResourceAssignmentsModule } from './resource-assignments/resource-assignments.module.js';
+import { AccountShareSchema } from './common/schema/auth/account-share.js';
+import { AccountSharesModule } from './account-shares/account-shares.module.js';
 @Module({
   imports: [
     EnvModule.register({ path: '/config/env.json', class: Env }),
@@ -74,6 +75,7 @@ import { ResourceAssignmentsModule } from './resource-assignments/resource-assig
             InvoiceScheduleSchema,
             // accounts
             AccountSchema,
+            AccountShareSchema,
             RoleSchema,
             SessionSchema
           ],
@@ -95,7 +97,7 @@ import { ResourceAssignmentsModule } from './resource-assignments/resource-assig
     InvoicesModule,
     OcrModule,
     AuthModule,
-    ResourceAssignmentsModule,
+    AccountSharesModule,
   ],
   controllers: [AppController],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }],

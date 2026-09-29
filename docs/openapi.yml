@@ -5,12 +5,14 @@ info:
   description: >-
     HTTP API implemented by apps/service. Protected routes require an access token
     and active persisted session. Routes without explicit role metadata default
-    to SuperAdministrator or Administrator. The service also exposes a separate
-    WebSocket echo server on port 8080; WebSocket events are not described here.
+    to SuperAdministrator or Administrator. Tenants, locations, expenses, invoices,
+    and rent providers shared with an account are visible through read routes only.
+    The service also exposes a separate WebSocket echo server on port 8080; WebSocket
+    events are not described here.
 tags:
   - name: Health
   - name: Authentication
-  - name: Resource administration
+  - name: Account sharing
   - name: Tenants
   - name: Expenses
   - name: Locations
@@ -238,37 +240,37 @@ paths:
         '409':
           $ref: '#/components/responses/Conflict'
 
-  /admin/resources/{resourceType}/{resourceId}/account:
-    patch:
-      tags: [Resource administration]
-      operationId: assignResourceAccount
-      summary: Assign an unowned resource to an account
-      x-required-roles: [SuperAdministrator]
-      parameters:
-        - name: resourceType
-          in: path
-          required: true
-          schema:
-            $ref: '#/components/schemas/AssignableResourceType'
-        - name: resourceId
-          in: path
-          required: true
-          schema:
-            type: integer
-            minimum: 1
+  /account-shares:
+    get:
+      tags: [Account sharing]
+      operationId: listAccountShares
+      summary: List accounts granted read access by the authenticated account
+      responses:
+        '200':
+          description: Shared account IDs owned by the authenticated account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SharedAccountIds'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      tags: [Account sharing]
+      operationId: shareAccount
+      summary: Grant another account read-only access to this account's data
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/AssignResourceAccountRequest'
+              $ref: '#/components/schemas/ShareAccountRequest'
       responses:
-        '200':
-          description: Resource is assigned to the requested account or was already assigned to it.
+        '201':
+          description: Account share created, or reported as already existing.
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ResourceAccountAssignment'
+                $ref: '#/components/schemas/AccountShareGrant'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -277,6 +279,28 @@ paths:
           $ref: '#/components/responses/NotFound'
         '409':
           $ref: '#/components/responses/Conflict'
+
+  /account-shares/{sharedAccountId}:
+    delete:
+      tags: [Account sharing]
+      operationId: revokeAccountShare
+      summary: Revoke another account's read access to this account's data
+      parameters:
+        - name: sharedAccountId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        '200':
+          description: Revocation result.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccountShareRevocation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
 
   /tenant:
     post:
@@ -1142,27 +1166,36 @@ components:
           properties:
             message:
               type: string
-    AssignableResourceType:
-      type: string
-      enum: [tenant, location, invoice, rent-provider]
-    AssignResourceAccountRequest:
+    ShareAccountRequest:
       type: object
-      required: [accountId]
+      required: [sharedAccountId]
       properties:
-        accountId:
+        sharedAccountId:
           type: integer
           minimum: 1
-    ResourceAccountAssignment:
+    SharedAccountIds:
+      type: array
+      items:
+        type: integer
+    AccountShareGrant:
       type: object
-      required: [resourceType, resourceId, accountId, alreadyAssigned]
+      required: [ownerAccountId, sharedAccountId, alreadyShared]
       properties:
-        resourceType:
-          $ref: '#/components/schemas/AssignableResourceType'
-        resourceId:
+        ownerAccountId:
           type: integer
-        accountId:
+        sharedAccountId:
           type: integer
-        alreadyAssigned:
+        alreadyShared:
+          type: boolean
+    AccountShareRevocation:
+      type: object
+      required: [ownerAccountId, sharedAccountId, revoked]
+      properties:
+        ownerAccountId:
+          type: integer
+        sharedAccountId:
+          type: integer
+        revoked:
           type: boolean
     AuthResponse:
       type: object

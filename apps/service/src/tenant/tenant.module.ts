@@ -4,9 +4,10 @@ import { TenantController } from './tenant.controller.js';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { LocationSchema, TenantLocationSchema, TenantSchema } from '../common/schema/user/index.js';
 import { FilePostModule } from '../filepost/filepost.module.js';
+import { AccountSharesModule } from '../account-shares/account-shares.module.js';
 
 @Module({
-  imports: [SequelizeModule.forFeature([TenantSchema, TenantLocationSchema, LocationSchema]), FilePostModule],
+  imports: [SequelizeModule.forFeature([TenantSchema, TenantLocationSchema, LocationSchema]), FilePostModule, AccountSharesModule],
   controllers: [TenantController],
   providers: [TenantService],
   exports: [TenantService],

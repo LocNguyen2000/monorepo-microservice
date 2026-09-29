@@ -300,3 +300,17 @@ SELECT
     @tenantsUpdated AS tenantsUpdated,
     @invoicesUpdated AS invoicesUpdated,
     @expensesUpdated AS expensesUpdated;
+
+-- ------------------------------------------------------
+-- Account-level read sharing
+-- ------------------------------------------------------
+CREATE TABLE IF NOT EXISTS account_shares (
+    `ownerAccountId` int NOT NULL,
+    `sharedAccountId` int NOT NULL,
+    PRIMARY KEY (`ownerAccountId`, `sharedAccountId`),
+    INDEX `account_shares_sharedAccountId` (`sharedAccountId`),
+    CONSTRAINT `fk_account_shares_owner`
+        FOREIGN KEY (`ownerAccountId`) REFERENCES accounts (`id`) ON DELETE CASCADE,
+    CONSTRAINT `fk_account_shares_shared`
+        FOREIGN KEY (`sharedAccountId`) REFERENCES accounts (`id`) ON DELETE CASCADE
+);

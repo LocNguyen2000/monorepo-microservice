@@ -11,6 +11,7 @@ import { FilePostService } from '../filepost/filepost.service.js';
 import { TenantLocationModel, TenantLocationSchema } from '../common/schema/user/index.js';
 import { Op } from 'sequelize';
 import 'multer';
+import { AccountSharesService } from '../account-shares/account-shares.service.js';
 
 @Injectable()
 export class TenantService {
@@ -22,6 +23,7 @@ export class TenantService {
     @InjectModel(LocationSchema)
     private readonly locationRepository: LocationModel,
     private readonly filePostService: FilePostService,
+    private readonly accountSharesService: AccountSharesService,
   ) { }
 
   async create(
@@ -48,22 +50,27 @@ export class TenantService {
     return tenant;
   }
 
-  findAll(query: PaginatedQuery, accountId: number) {
+  async findAll(query: PaginatedQuery, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
     return paginatedQuery<TenantSchema>(this.tenantRepository, query, {
-      where: { accountId },
+      where: { accountId: { [Op.in]: readableAccountIds } },
     });
   }
 
   async findOne(id: number, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
     const tenant = await this.tenantRepository.findOne({
-      where: { tenantCode: id, accountId },
+      where: { tenantCode: id, accountId: { [Op.in]: readableAccountIds } },
     });
     if (!tenant) throw new NotFoundException('Tenant not found');
     return tenant;
   }
 
-  async findTenantsByLocation(id: number, accountId: number) {
-    await this.findLocationForAccount(id, accountId);
+  async findTenantsByLocation(id: number, accountId: number, includeShared = true) {
+    await this.findLocationForReadableAccount(id, accountId);
+    const readableAccountIds = includeShared
+      ? await this.accountSharesService.getReadableAccountIds(accountId)
+      : [accountId];
     const assignments = await this.tenantLocationRepository.findAll({
       where: { locationCode: id },
     });
@@ -71,7 +78,7 @@ export class TenantService {
 
     return this.tenantRepository.findAll({
       where: {
-        accountId,
+        accountId: { [Op.in]: readableAccountIds },
         tenantCode: { [Op.in]: assignedTenantCodes },
       },
     });
@@ -79,6 +86,7 @@ export class TenantService {
 
   async findLocationsByTenant(tenantCode: number, accountId: number) {
     await this.findOne(tenantCode, accountId);
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
     const assignments = await this.tenantLocationRepository.findAll({
       where: { tenantCode },
     });
@@ -86,7 +94,7 @@ export class TenantService {
     const locations = await this.locationRepository.findAll({
       attributes: ['locationCode'],
       where: {
-        accountId,
+        accountId: { [Op.in]: readableAccountIds },
         locationCode: { [Op.in]: assignedLocationCodes },
       },
     });
@@ -95,7 +103,7 @@ export class TenantService {
   }
 
   async assignLocation(tenantCode: number, locationCode: number, accountId: number) {
-    const tenant = await this.findOne(tenantCode, accountId);
+    const tenant = await this.findOwnedTenant(tenantCode, accountId);
     await this.findLocationForAccount(locationCode, accountId);
 
     await this.tenantLocationRepository.findOrCreate({
@@ -151,5 +159,22 @@ export class TenantService {
     });
     if (!location) throw new NotFoundException('Location not found');
     return location;
+  }
+
+  private async findLocationForReadableAccount(locationCode: number, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
+    const location = await this.locationRepository.findOne({
+      where: { locationCode, accountId: { [Op.in]: readableAccountIds } },
+    });
+    if (!location) throw new NotFoundException('Location not found');
+    return location;
+  }
+
+  private async findOwnedTenant(tenantCode: number, accountId: number) {
+    const tenant = await this.tenantRepository.findOne({
+      where: { tenantCode, accountId },
+    });
+    if (!tenant) throw new NotFoundException('Tenant not found');
+    return tenant;
   }
 }

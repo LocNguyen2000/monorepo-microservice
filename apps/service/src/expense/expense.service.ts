@@ -7,12 +7,15 @@ import {
   ExpenseSchema,
 } from '../common/schema/user/index.js';
 import { PaginatedQuery, paginatedQuery } from '../common/pagination.js';
+import { AccountSharesService } from '../account-shares/account-shares.service.js';
+import { Op } from 'sequelize';
 
 @Injectable()
 export class ExpenseService {
   constructor(
     @InjectModel(ExpenseSchema)
     private readonly expenseRepository: ExpenseModel,
+    private readonly accountSharesService: AccountSharesService,
   ) {}
 
   create(payload: Record<string, unknown>, accountId: number) {
@@ -23,15 +26,17 @@ export class ExpenseService {
     });
   }
 
-  findAll(query: PaginatedQuery, accountId: number) {
+  async findAll(query: PaginatedQuery, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
     return paginatedQuery<ExpenseSchema>(this.expenseRepository, query, {
-      where: { accountId },
+      where: { accountId: { [Op.in]: readableAccountIds } },
     });
   }
 
-  findOne(id: number, accountId: number) {
+  async findOne(id: number, accountId: number) {
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
     return this.expenseRepository.findOne({
-      where: { expenseCode: id, accountId },
+      where: { expenseCode: id, accountId: { [Op.in]: readableAccountIds } },
     });
   }
 

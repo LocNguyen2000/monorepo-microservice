@@ -5,12 +5,14 @@ import { ExpenseLocationSchema, ExpenseSchema, LocationSchema } from '../common/
 import { SequelizeModule } from '@nestjs/sequelize';
 import { FilePostModule } from '../filepost/filepost.module.js';
 import { RentProvidersModule } from '../rent-providers/rent-providers.module.js';
+import { AccountSharesModule } from '../account-shares/account-shares.module.js';
 
 @Module({
   imports: [
     SequelizeModule.forFeature([LocationSchema, ExpenseLocationSchema, ExpenseSchema]),
     FilePostModule,
     RentProvidersModule,
+    AccountSharesModule,
   ],
   controllers: [LocationsController],
   providers: [LocationsService],

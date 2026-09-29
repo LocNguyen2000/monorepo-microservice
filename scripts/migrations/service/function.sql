@@ -27,8 +27,24 @@ BEGIN
 	FROM
 	    locations l
 	    LEFT JOIN expenses_location el ON l.`locationCode` = el.`locationCode`
-	    LEFT JOIN expenses e ON e.`expenseCode` = el.`expenseCode` AND e.`accountId` = AccountId
+	    LEFT JOIN expenses e ON e.`expenseCode` = el.`expenseCode`
+	        AND (
+	            e.`accountId` = AccountId
+	            OR EXISTS (
+	                SELECT 1 FROM account_shares s
+	                WHERE s.`ownerAccountId` = e.`accountId`
+	                  AND s.`sharedAccountId` = AccountId
+	            )
+	        )
 	WHERE
-	    l.`locationCode` = LocationId AND l.`accountId` = AccountId
+	    l.`locationCode` = LocationId
+	    AND (
+	        l.`accountId` = AccountId
+	        OR EXISTS (
+	            SELECT 1 FROM account_shares s
+	            WHERE s.`ownerAccountId` = l.`accountId`
+	              AND s.`sharedAccountId` = AccountId
+	        )
+	    )
 	ORDER BY e.`expenseName`;
 END
