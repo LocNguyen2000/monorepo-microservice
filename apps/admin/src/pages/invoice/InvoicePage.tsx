@@ -26,7 +26,6 @@ import {
   Radio,
   Row,
   Select,
-  Space,
   Typography,
   Table,
   Tabs,
@@ -49,7 +48,6 @@ import Upload from "antd/es/upload/Upload";
 import BaseTable from "../../components/BaseTable";
 import { expenseLocationColumns } from "../../lib/constants/columns";
 import { globalTheme } from "../../css/theme";
-import TextArea from "antd/es/input/TextArea";
 import { AxiosResponse } from "axios";
 import { ADMIN_ROLES } from "../../lib/constants/roles";
 // import { IElectricMeterImageResponse } from "./InvoiceDrawer";
@@ -374,6 +372,7 @@ const InvoicePage: React.FunctionComponent = () => {
   return (
     <>
       <Tabs
+        className="invoice-page-tabs"
         activeKey={activeTab}
         onChange={setActiveTab}
         items={[
@@ -402,130 +401,93 @@ const InvoicePage: React.FunctionComponent = () => {
         </Flex>
       </Card>
 
-      <Flex gap="1.2rem" className="invoice-editor-layout">
-        <div style={{ width: "25%" }}>
-          <Card
-            className="location-info"
-            style={{ marginBottom: "0.5rem" }}
-            title={
-              <Flex style={{ alignItems: "center", marginRight: "2rem" }}>
-                <Typography style={{ marginRight: "0.5rem" }}>
-                  <HomeOutlined style={{ marginRight: "0.5rem" }} />
-                  Phòng trọ
-                </Typography>
-                <Select
-                  showSearch
-                  placeholder="Chọn phòng trọ"
-                  value={locationData.locationCode}
-                  onChange={async (e) => await getSummerizeData(+e)}
-                  style={{ width: "100%" }}
-                >
-                  {locations.map((p) => (
-                    <Select.Option key={p.locationCode} value={p.locationCode}>
-                      {p.locationName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Flex>
-            }
-          >
-            <Form
-              labelCol={{ span: 6 }}
-              wrapperCol={{ span: 18 }}
-              layout="horizontal"
+      <div className="invoice-editor-layout">
+        <Card
+          className="location-info"
+          title={
+            <div className="invoice-panel-title">
+              <HomeOutlined />
+              <span>Phòng trọ</span>
+            </div>
+          }
+        >
+          <div className="invoice-location-picker">
+            <Typography.Text type="secondary">Chọn phòng trọ</Typography.Text>
+            <Select
+              showSearch
+              placeholder="Chọn phòng trọ"
+              value={locationData.locationCode}
+              onChange={async (e) => await getSummerizeData(+e)}
+              style={{ width: "100%" }}
             >
-              <Form.Item label="Địa chỉ">
-                <Input
-                  disabled={true}
-                  style={{ fontWeight: "bold" }}
-                  value={locationData.locationAddress}
-                  placeholder="Vị trí phòng trọ"
-                />
-              </Form.Item>
-              <Form.Item label="Chủ trọ">
-                <Input
-                  disabled={true}
-                  style={{ fontWeight: "bold", width: "100%" }}
-                  value={ownerData.providerName}
-                  placeholder="Tên chủ trọ"
-                />
-              </Form.Item>
-              <Form.Item label="Số người">
-                <Input
-                  disabled={true}
-                  style={{ fontWeight: "bold" }}
-                  value={locationData.roomSize}
-                  placeholder="Số lượng người ở phòng trọ"
-                />
-              </Form.Item>
-              <Form.Item label="Ghi chú">
-                <TextArea
-                  rows={4}
-                  style={{ fontWeight: "bold" }}
-                  placeholder="Nội dung ghi chú..."
-                  value={locationData.description}
-                  disabled={true}
-                />
-              </Form.Item>
-            </Form>
-          </Card>
-        </div>
+              {locations.map((p) => (
+                <Select.Option key={p.locationCode} value={p.locationCode}>
+                  {p.locationName}
+                </Select.Option>
+              ))}
+            </Select>
+          </div>
+          <div className="invoice-detail-grid">
+            <div className="invoice-detail-item invoice-detail-item-wide">
+              <span className="invoice-detail-label">Địa chỉ</span>
+              <Typography.Text strong className="invoice-detail-value">
+                {locationData.locationAddress || "Chưa có thông tin"}
+              </Typography.Text>
+            </div>
+            <div className="invoice-detail-item">
+              <span className="invoice-detail-label">Chủ trọ</span>
+              <Typography.Text strong className="invoice-detail-value">
+                {ownerData.providerName || "Chưa có thông tin"}
+              </Typography.Text>
+            </div>
+            <div className="invoice-detail-item">
+              <span className="invoice-detail-label">Số người</span>
+              <Typography.Text strong className="invoice-detail-value">
+                {locationData.roomSize ?? "Chưa có thông tin"}
+              </Typography.Text>
+            </div>
+          </div>
+        </Card>
 
         <Card
           className="tenant-info"
-          style={{ width: "25%" }}
           title={
-            <Flex style={{ alignItems: "center" }}>
-              <Typography style={{ marginRight: "0.5rem" }}>
-                <UserOutlined style={{ marginRight: "0.5rem" }} />
-                Người thuê nhà
-              </Typography>
-            </Flex>
+            <div className="invoice-panel-title">
+              <UserOutlined />
+              <span>Người thuê nhà</span>
+              <Tag>{tenants.length}</Tag>
+            </div>
           }
         >
           {tenants.length > 0 ? (
-            tenants.map((tenantData) => {
-              return (
-                <Form
-                  labelCol={{ span: 6 }}
-                  wrapperCol={{ span: 18 }}
-                  layout="horizontal"
-                  style={{ width: "100%" }}
-                >
-                  <Form.Item label="Họ và tên">
-                    <Input
-                      disabled={true}
-                      style={{ fontWeight: "bold", width: "100%" }}
-                      value={tenantData.tenantName}
-                      placeholder="Tên người thuê nhà"
-                    />
-                  </Form.Item>
-                  <Form.Item label="Email">
-                    <Input
-                      disabled={true}
-                      style={{ fontWeight: "bold" }}
-                      value={tenantData.email}
-                      placeholder="Valid email"
-                    />
-                  </Form.Item>
-                  <Form.Item label="Số điện thoại">
-                    <Input
-                      disabled={true}
-                      style={{ fontWeight: "bold" }}
-                      value={tenantData.phoneNumber}
-                      placeholder="Số điện thoại"
-                    />
-                  </Form.Item>
-                  <Form.Item label="Giới tính">
-                    <Radio.Group value={tenantData.gender} disabled={true}>
-                      <Radio value={0}> Nam </Radio>
-                      <Radio value={1}> Nữ </Radio>
-                    </Radio.Group>
-                  </Form.Item>
-                  <Divider />
-                </Form>
-              );
-            })
+            tenants.map((tenantData) => (
+              <section
+                className="invoice-tenant-item"
+                key={tenantData.tenantCode}
+              >
+                <Typography.Text strong className="invoice-tenant-name">
+                  {tenantData.tenantName || "Chưa có tên"}
+                </Typography.Text>
+                <div className="invoice-detail-grid">
+                  <div className="invoice-detail-item">
+                    <span className="invoice-detail-label">Số điện thoại</span>
+                    <Typography.Text className="invoice-detail-value">
+                      {tenantData.phoneNumber || "Chưa có thông tin"}
+                    </Typography.Text>
+                  </div>
+                  <div className="invoice-detail-item">
+                    <span className="invoice-detail-label">Giới tính</span>
+                    <Typography.Text className="invoice-detail-value">
+                      {tenantData.gender === 0
+                        ? "Nam"
+                        : tenantData.gender === 1
+                          ? "Nữ"
+                          : "Chưa có thông tin"}
+                    </Typography.Text>
+                  </div>
+                </div>
+              </section>
+            ))
           ) : (
             <Empty />
           )}
@@ -533,7 +495,6 @@ const InvoicePage: React.FunctionComponent = () => {
 
         <Card
           className="expense-info"
-          style={{ width: "50%" }}
           title={
             <Flex style={{ alignItems: "center" }}>
               <div style={{ flex: 1 }}></div>
@@ -600,31 +561,27 @@ const InvoicePage: React.FunctionComponent = () => {
             </Typography>
           </Flex>
         </Card>
-      </Flex>
+      </div>
 
       <Drawer
+        className="invoice-expense-drawer"
         title={`Sửa ${selectedExpense?.expenseName.toLowerCase()}`}
         onClose={onClose}
         open={openDrawer}
-        width={720}
-        styles={{
-          body: {
-            paddingBottom: 80,
-          },
-        }}
-        extra={
-          <Space>
+        width="min(720px, 100vw)"
+        footer={
+          <div className="invoice-drawer-actions">
             <Button onClick={onClose}>Hủy</Button>
             <Button onClick={onEditedSelectExpense} type="primary">
               Xác nhận chỉnh sửa
             </Button>
-          </Space>
+          </div>
         }
         destroyOnClose={true}
       >
         <Form layout="vertical">
           <Row gutter={12}>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6}>
               <Form.Item
                 label={
                   <span>
@@ -651,7 +608,7 @@ const InvoicePage: React.FunctionComponent = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={6}>
+            <Col xs={24} sm={12} md={6}>
               <Form.Item
                 label={
                   <span>
@@ -678,7 +635,7 @@ const InvoicePage: React.FunctionComponent = () => {
                 />
               </Form.Item>
             </Col>
-            <Col span={12}>
+            <Col xs={24} sm={24} md={12}>
               <Form.Item
                 label={
                   <span>
@@ -712,7 +669,7 @@ const InvoicePage: React.FunctionComponent = () => {
             </Col>
           </Row>
           <Row>
-            <Col span={6}>
+            <Col xs={24} sm={8} md={6}>
               <Form.Item
                 label={
                   <span>
@@ -737,7 +694,7 @@ const InvoicePage: React.FunctionComponent = () => {
                 </Upload>
               </Form.Item>
             </Col>
-            <Col span={18}>
+            <Col xs={24} sm={16} md={18}>
               <Form.Item
                 label={
                   <span>
@@ -748,13 +705,16 @@ const InvoicePage: React.FunctionComponent = () => {
               >
                 {processedData ? (
                   <Card
+                    className="invoice-meter-result"
                     title="Dữ liệu ảnh đã xử lý"
                     style={{ marginTop: "1rem" }}
                   >
-                    <pre>{JSON.stringify(processedData, null, 2)}</pre>
+                    <pre className="invoice-meter-result-json">
+                      {JSON.stringify(processedData, null, 2)}
+                    </pre>
                   </Card>
                 ) : (
-                  <Card>
+                  <Card className="invoice-meter-result">
                     <Empty />
                   </Card>
                 )}

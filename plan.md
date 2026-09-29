@@ -181,3 +181,128 @@ Disable tenant, rent-provider, and expense code inputs and prefill the next code
 
 - Run the admin TypeScript check and production build.
 - Check diagnostics for the shared utility and the three list/detail flows.
+
+# Invoice Location and Tenant Panels
+
+## Goal
+
+Make the location and tenant sections of the invoice editor easier to scan and more visually balanced across desktop and mobile.
+
+## Implementation
+
+1. Replace disabled read-only form controls with compact labeled summaries while preserving displayed location and tenant data.
+2. Give the location selector a clear panel header and arrange editor columns with flexible sizing; retain the existing mobile stacking behavior.
+3. Add focused styling for location and tenant summaries without changing invoice behavior or API contracts.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Check touched files for diagnostics and review the resulting diff.
+
+# Responsive Expense Edit Drawer
+
+## Goal
+
+Keep the invoice expense editor usable on narrow screens without horizontal overflow or crowded drawer actions.
+
+## Implementation
+
+1. Constrain the drawer width to the viewport and place its actions in a responsive footer.
+2. Reflow meter inputs, upload control, and processed image data across desktop, tablet, and mobile breakpoints.
+3. Bound processed JSON content so it wraps or scrolls within the drawer.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Check touched files for diagnostics and whitespace errors.
+
+# Super-Admin Resource Account Assignment
+
+## Goal
+
+Allow a super administrator to assign legacy tenants, locations, invoices, and rent providers to an existing account without creating cross-account links.
+
+## Implementation
+
+1. Add a dedicated `PATCH /admin/resources/{resourceType}/{resourceId}/account` endpoint protected for super administrators and accepting an `accountId`.
+2. Support only tenant, location, invoice, and rent-provider resources; assign only unowned records, allow idempotent requests for the current account, and reject conflicting reassignment.
+3. Check linked resources before assignment and document request, response, and error behavior in OpenAPI. Reuse existing ownership columns; no SQL migration is expected.
+
+## Verification
+
+- Run the service TypeScript build and diagnostics on changed files.
+- Validate the OpenAPI document and confirm the endpoint role restriction and resource allowlist.
+
+# Invoice Tab Contrast
+
+## Goal
+
+Make the invoice page tabs and active selection readable over the page background.
+
+## Implementation
+
+1. Scope an explicit class to the invoice page tabs.
+2. Add a high-contrast tab surface and distinct active-state styling without changing tab behavior.
+
+## Verification
+
+- Run the admin TypeScript check and check diagnostics for touched files.
+
+# Meter Reading Tab Contrast
+
+## Goal
+
+Make the meter-reading workspace tabs readable over the photographic background and clearly identify the active view.
+
+## Implementation
+
+1. Apply the invoice tab contrast treatment to the operator workspace tab bar.
+2. Preserve the existing centered desktop navigation and narrow-screen horizontal scrolling.
+
+## Verification
+
+- Check diagnostics for the stylesheet and run the admin TypeScript check.
+
+# Meter Reading Background Height
+
+## Goal
+
+Keep the meter-reading workspace background image visible across the full viewport and all page content.
+
+## Implementation
+
+1. Replace the fixed workspace height with a full-viewport minimum height and content-driven growth.
+
+## Verification
+
+- Check diagnostics for the stylesheet.
+
+# Account Resource Assignment UI
+
+## Goal
+
+Expose the super-admin resource-to-account assignment API from account management.
+
+## Implementation
+
+1. Add a super-admin-only form to choose one of the API-supported resource types, enter its ID, and select a target account.
+2. Call the documented assignment endpoint and surface success or API errors using existing page conventions.
+
+## Verification
+
+- Run the admin TypeScript check and check diagnostics for touched files.
+
+# Vietnamese Profile Page
+
+## Goal
+
+Present the profile and account-management page in Vietnamese while keeping its existing behavior unchanged.
+
+## Implementation
+
+1. Translate profile metadata, account table columns, role and status labels, actions, empty state, and fallback notifications.
+2. Keep API paths, role checks, and account state updates unchanged.
+
+## Verification
+
+- Run the admin TypeScript check and check diagnostics for the page.

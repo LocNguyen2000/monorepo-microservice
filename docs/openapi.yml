@@ -10,6 +10,7 @@ info:
 tags:
   - name: Health
   - name: Authentication
+  - name: Resource administration
   - name: Tenants
   - name: Expenses
   - name: Locations
@@ -228,6 +229,46 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/AccountMessage'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /admin/resources/{resourceType}/{resourceId}/account:
+    patch:
+      tags: [Resource administration]
+      operationId: assignResourceAccount
+      summary: Assign an unowned resource to an account
+      x-required-roles: [SuperAdministrator]
+      parameters:
+        - name: resourceType
+          in: path
+          required: true
+          schema:
+            $ref: '#/components/schemas/AssignableResourceType'
+        - name: resourceId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignResourceAccountRequest'
+      responses:
+        '200':
+          description: Resource is assigned to the requested account or was already assigned to it.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResourceAccountAssignment'
         '400':
           $ref: '#/components/responses/BadRequest'
         '401':
@@ -1101,6 +1142,28 @@ components:
           properties:
             message:
               type: string
+    AssignableResourceType:
+      type: string
+      enum: [tenant, location, invoice, rent-provider]
+    AssignResourceAccountRequest:
+      type: object
+      required: [accountId]
+      properties:
+        accountId:
+          type: integer
+          minimum: 1
+    ResourceAccountAssignment:
+      type: object
+      required: [resourceType, resourceId, accountId, alreadyAssigned]
+      properties:
+        resourceType:
+          $ref: '#/components/schemas/AssignableResourceType'
+        resourceId:
+          type: integer
+        accountId:
+          type: integer
+        alreadyAssigned:
+          type: boolean
     AuthResponse:
       type: object
       properties:

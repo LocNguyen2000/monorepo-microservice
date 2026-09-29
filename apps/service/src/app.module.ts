@@ -28,6 +28,7 @@ import mysql2 from 'mysql2';
 import 'dotenv/config';
 import { AuthModule } from './auth/auth.module.js';
 import { AuthGuard } from './auth/auth.guard.js';
+import { ResourceAssignmentsModule } from './resource-assignments/resource-assignments.module.js';
 @Module({
   imports: [
     EnvModule.register({ path: '/config/env.json', class: Env }),
@@ -94,6 +95,7 @@ import { AuthGuard } from './auth/auth.guard.js';
     InvoicesModule,
     OcrModule,
     AuthModule,
+    ResourceAssignmentsModule,
   ],
   controllers: [AppController],
   providers: [{ provide: APP_GUARD, useClass: AuthGuard }],

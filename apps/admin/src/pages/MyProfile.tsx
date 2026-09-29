@@ -44,7 +44,7 @@ const MyProfilePage = () => {
     } catch (error: any) {
       useToast(
         "error",
-        error?.response?.data?.message || "Unable to load accounts.",
+        error?.response?.data?.message || "Không thể tải danh sách tài khoản.",
       );
     } finally {
       setIsLoadingAccounts(false);
@@ -66,11 +66,11 @@ const MyProfilePage = () => {
             : account,
         ),
       );
-      useToast("success", "Account approved successfully.");
+      useToast("success", "Duyệt tài khoản thành công.");
     } catch (error: any) {
       useToast(
         "error",
-        error?.response?.data?.message || "Unable to approve this account.",
+        error?.response?.data?.message || "Không thể duyệt tài khoản này.",
       );
     } finally {
       setApprovingId(undefined);
@@ -85,11 +85,11 @@ const MyProfilePage = () => {
           account.id === accountId ? { ...account, role } : account,
         ),
       );
-      useToast("success", "Account role updated successfully.");
+      useToast("success", "Cập nhật vai trò tài khoản thành công.");
     } catch (error: any) {
       useToast(
         "error",
-        error?.response?.data?.message || "Unable to update this account role.",
+        error?.response?.data?.message || "Không thể cập nhật vai trò tài khoản.",
       );
     }
   };
@@ -106,13 +106,13 @@ const MyProfilePage = () => {
       useToast(
         "success",
         status === AccountStatus.Active
-          ? "Account activated successfully."
-          : "Account deactivated successfully.",
+          ? "Kích hoạt tài khoản thành công."
+          : "Vô hiệu hóa tài khoản thành công.",
       );
     } catch (error: any) {
       useToast(
         "error",
-        error?.response?.data?.message || "Unable to update account status.",
+        error?.response?.data?.message || "Không thể cập nhật trạng thái tài khoản.",
       );
     } finally {
       setUpdatingStatusId(undefined);
@@ -120,15 +120,15 @@ const MyProfilePage = () => {
   };
 
   const roleLabels: Record<UserRole, string> = {
-    [UserRole.SuperAdministrator]: "Super administrator",
-    [UserRole.Administrator]: "Administrator",
-    [UserRole.User]: "User",
-    [UserRole.LocationOperator]: "Location operator",
+    [UserRole.SuperAdministrator]: "Siêu quản trị viên",
+    [UserRole.Administrator]: "Quản trị viên",
+    [UserRole.User]: "Người dùng",
+    [UserRole.LocationOperator]: "Nhân viên vận hành",
   };
 
   const pendingColumns = [
     {
-      title: "Full name",
+      title: "Họ và tên",
       dataIndex: "fullName",
       key: "fullName",
     },
@@ -138,18 +138,18 @@ const MyProfilePage = () => {
       key: "email",
     },
     {
-      title: "Status",
+      title: "Trạng thái",
       dataIndex: "status",
       key: "status",
       render: (status: AccountStatus) =>
         status === AccountStatus.Active ? (
-          <Tag color="green">Approved</Tag>
+          <Tag color="green">Đã duyệt</Tag>
         ) : (
-          <Tag color="gold">Pending approval</Tag>
+          <Tag color="gold">Chờ duyệt</Tag>
         ),
     },
     {
-      title: "Role",
+      title: "Vai trò",
       dataIndex: "role",
       key: "role",
       render: (role: UserRole, account: Account) =>
@@ -163,11 +163,11 @@ const MyProfilePage = () => {
               .map((value) => ({ value, label: roleLabels[value] }))}
           />
         ) : (
-          roleLabels[role] || "Unknown"
+          roleLabels[role] || "Không xác định"
         ),
     },
     {
-      title: "Action",
+      title: "Thao tác",
       key: "action",
       align: "center" as const,
       render: (_: unknown, account: Account) => (
@@ -179,7 +179,7 @@ const MyProfilePage = () => {
             onClick={() => approveAccount(account.id)}
             disabled={account.status === AccountStatus.Active}
           >
-            Approve
+            Duyệt
           </Button>
           {isSuperAdmin &&
             account.id !== authUser?.userId &&
@@ -210,8 +210,8 @@ const MyProfilePage = () => {
                 style={{ marginLeft: 8 }}
               >
                 {account.status === AccountStatus.Active
-                  ? "Deactivate"
-                  : "Activate"}
+                  ? "Vô hiệu hóa"
+                  : "Kích hoạt"}
               </Button>
             )}
         </>
@@ -222,38 +222,39 @@ const MyProfilePage = () => {
   const items: DescriptionsProps["items"] = [
     {
       key: "1",
-      label: "Username",
+      label: "Tên người dùng",
       children: authUser.name,
       span: 1.5,
     },
     {
       key: "2",
-      label: "User ID",
+      label: "Mã người dùng",
       children: authUser.userId,
       span: 1.5,
     },
     {
       key: "3",
-      label: "Role",
-      children: authUser.role,
+      label: "Vai trò",
+      children:
+        roleLabels[Number(authUser.role) as UserRole] || "Không xác định",
       span: 1.5,
     },
     {
       key: "4",
-      label: "Status",
-      children: <Badge status="processing" text="Running" />,
+      label: "Trạng thái",
+      children: <Badge status="processing" text="Đang hoạt động" />,
       span: 1.5,
     },
     {
       key: "5",
-      label: "Create on",
-      children: new Date().toLocaleDateString(),
+      label: "Ngày tạo",
+      children: new Date().toLocaleDateString("vi-VN"),
       span: 1.5,
     },
     {
       key: "6",
-      label: "Create by",
-      children: "admin",
+      label: "Người tạo",
+      children: "Quản trị viên",
       span: 1.5,
     },
   ];
@@ -264,7 +265,7 @@ const MyProfilePage = () => {
         <Descriptions
           title={
             <div>
-              <UserOutlined /> My Profile<Typography></Typography>
+              <UserOutlined /> Hồ sơ của tôi<Typography></Typography>
             </div>
           }
           bordered
@@ -273,7 +274,7 @@ const MyProfilePage = () => {
       </Card>
       {isAdmin && (
         <Card
-          title="Account management"
+          title="Quản lý tài khoản"
           style={{ width: "100%", marginTop: "1rem" }}
         >
           <div className="list-page-table-scroll">
@@ -282,7 +283,7 @@ const MyProfilePage = () => {
               columns={pendingColumns}
               dataSource={accounts}
               loading={isLoadingAccounts}
-              locale={{ emptyText: "No registered accounts found." }}
+              locale={{ emptyText: "Chưa có tài khoản nào được đăng ký." }}
               pagination={{ pageSize: 10 }}
               scroll={{ x: "max-content" }}
             />
