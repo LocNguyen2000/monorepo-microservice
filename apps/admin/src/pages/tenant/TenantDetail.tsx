@@ -4,25 +4,20 @@ import {
   Input,
   Select,
   DatePicker,
-  InputNumber,
-  Switch,
   Typography,
   Divider,
   Upload,
-  Button,
-  theme,
+  Row,
+  Col,
 } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import {
   LocationDataType,
   PaginatedResponse,
-  ProviderDataType,
   TenantDataType,
 } from "../../lib/interface";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { PlusOutlined } from "@ant-design/icons";
-
-const { RangePicker } = DatePicker;
 
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
@@ -31,7 +26,6 @@ import { getGlobalContext } from "../../lib/context";
 import Modal from "antd/es/modal/Modal";
 import { ACTION_ENUM } from "../../lib/constants";
 import { debounce } from "../../lib/utils";
-import { globalTheme } from "../../css/theme";
 
 dayjs.extend(customParseFormat);
 /** Manually entering any of the following formats will perform date parsing */
@@ -131,10 +125,14 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
   return (
     <Modal
       title={
-        <Typography>
-          Biểu mẫu người thuê
-          <Divider />
-        </Typography>
+        <div>
+          <Typography.Title level={4} style={{ margin: 0 }}>
+            Thông tin người thuê
+          </Typography.Title>
+          <Typography.Text type="secondary">
+            Cập nhật hồ sơ, liên hệ và thông tin thuê
+          </Typography.Text>
+        </div>
       }
       centered
       open={isOpen}
@@ -149,100 +147,120 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
       }
       cancelText="Quay lại"
       onCancel={() => setIsFormOpen(ACTION_ENUM.CLOSE, {})}
-      width={900}
+      width="min(920px, calc(100vw - 32px))"
     >
       <Form
-        labelCol={{ span: 4 }}
-        wrapperCol={{ span: 18 }}
-        layout="horizontal"
+        layout="vertical"
+        requiredMark
         style={{
-          height: "50vh",
-          maxHeight: "65vh",
+          maxHeight: "min(68vh, 680px)",
           width: "100%",
-          overflow: "auto",
+          overflowY: "auto",
+          overflowX: "hidden",
+          padding: "8px 8px 0 2px",
         }}
       >
-        <Form.Item label="Mã người thuê" required={true}>
-          <Input
-            name="tenantCode"
-            value={data.tenantCode}
-            disabled
-          />
-        </Form.Item>
-        <Form.Item label="Tên người thuê" required={true}>
-          <Input
-            name="tenantName"
-            value={data.tenantName}
-            placeholder="Nhập tên người thuê"
-            onChange={(e) => formChangeHandler(e)}
-          />
-        </Form.Item>
-        <Form.Item label="Email" required={true}>
-          <Input
-            name="email"
-            value={data.email}
-            placeholder="Nhập email hợp lệ"
-            onChange={(e) => formChangeHandler(e)}
-          />
-        </Form.Item>
-        <Form.Item label="Số điện thoại" required={true}>
-          <Input
-            name="phoneNumber"
-            value={data.phoneNumber}
-            placeholder="Nhập số điện thoại"
-            onChange={(e) => formChangeHandler(e)}
-          />
-        </Form.Item>
-        <Form.Item label="Địa chỉ tạm trú" required={true}>
-          <Input
-            name="contactAddress"
-            value={data.contactAddress}
-            placeholder="Nhập địa chỉ tạm trú"
-            onChange={(e) => formChangeHandler(e)}
-          />
-        </Form.Item>
-        <Form.Item label="Ngày sinh">
-          <DatePicker
-            value={dayjs(data.dateOfBirth, { format: dateFormatList[0] })}
-            format={dateFormatList}
-            onChange={(e) => {
-              setData({ ...data, dateOfBirth: e.toDate() });
-            }}
-          />
-        </Form.Item>
+        <Divider orientation="left" plain>Thông tin cá nhân</Divider>
+        <Row gutter={[20, 0]}>
+          <Col xs={24} sm={12}>
+            <Form.Item label="Mã người thuê" required>
+              <Input name="tenantCode" value={data.tenantCode} disabled />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Form.Item label="Tên người thuê" required>
+              <Input
+                name="tenantName"
+                value={data.tenantName}
+                placeholder="Nhập tên người thuê"
+                onChange={(e) => formChangeHandler(e)}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Form.Item label="Ngày sinh">
+              <DatePicker
+                value={dayjs(data.dateOfBirth, { format: dateFormatList[0] })}
+                format={dateFormatList}
+                style={{ width: "100%" }}
+                onChange={(e) => {
+                  setData({ ...data, dateOfBirth: e.toDate() });
+                }}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Form.Item label="Giới tính">
+              <Radio.Group
+                value={data.gender}
+                onChange={(e) => {
+                  setData({ ...data, gender: e.target.value });
+                }}
+              >
+                <Radio value={0}>Nam</Radio>
+                <Radio value={1}>Nữ</Radio>
+              </Radio.Group>
+            </Form.Item>
+          </Col>
+        </Row>
 
-        <Form.Item label="Giới tính">
-          <Radio.Group
-            value={data.gender}
-            onChange={(e) => {
-              setData({ ...data, gender: e.target.value });
-            }}
-          >
-            <Radio value={0}> Nam </Radio>
-            <Radio value={1}> Nữ </Radio>
-          </Radio.Group>
-        </Form.Item>
-        <Form.Item label="Phòng trọ" required={true}>
-          <Select
-            showSearch
-            placeholder="Chọn phòng trọ"
-            value={data.locationCode}
-            style={{
-              fontWeight: "1000",
-              color: globalTheme.token.colorPrimary,
-            }}
-            disabled={Number.isSafeInteger(data?.locationCode)}
-            onChange={(e) => {
-              setData({ ...data, locationCode: e });
-            }}
-          >
-            {locations.map((p) => (
-              <Select.Option key={p.locationCode} value={p.locationCode}>
-                {p.locationName}
-              </Select.Option>
-            ))}
-          </Select>
-        </Form.Item>
+        <Divider orientation="left" plain>Thông tin liên hệ</Divider>
+        <Row gutter={[20, 0]}>
+          <Col xs={24} sm={12}>
+            <Form.Item label="Email" required>
+              <Input
+                name="email"
+                value={data.email}
+                placeholder="Nhập email hợp lệ"
+                onChange={(e) => formChangeHandler(e)}
+              />
+            </Form.Item>
+          </Col>
+          <Col xs={24} sm={12}>
+            <Form.Item label="Số điện thoại" required>
+              <Input
+                name="phoneNumber"
+                value={data.phoneNumber}
+                placeholder="Nhập số điện thoại"
+                onChange={(e) => formChangeHandler(e)}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <Form.Item label="Địa chỉ tạm trú" required>
+              <Input
+                name="contactAddress"
+                value={data.contactAddress}
+                placeholder="Nhập địa chỉ tạm trú"
+                onChange={(e) => formChangeHandler(e)}
+              />
+            </Form.Item>
+          </Col>
+        </Row>
+
+        <Divider orientation="left" plain>Thông tin thuê</Divider>
+        <Row gutter={[20, 0]}>
+          <Col xs={24} sm={12}>
+            <Form.Item label="Phòng trọ" required>
+              <Select
+                showSearch
+                placeholder="Chọn phòng trọ"
+                value={data.locationCode}
+                disabled={Number.isSafeInteger(data?.locationCode)}
+                style={{ width: "100%" }}
+                onChange={(e) => {
+                  setData({ ...data, locationCode: e });
+                }}
+              >
+                {locations.map((p) => (
+                  <Select.Option key={p.locationCode} value={p.locationCode}>
+                    {p.locationName}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+          </Col>
+        </Row>
         <Form.Item label="Ảnh hợp đồng/CCCD" valuePropName="fileList">
           {data.contractUrl && (
             <Typography.Link
@@ -280,9 +298,8 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
             </button>
           </Upload>
         </Form.Item>
-        <Form.Item label="Thời gian hiệu lực">
-          <RangePicker />
-        </Form.Item>
+
+        <Divider orientation="left" plain>Ghi chú</Divider>
         <Form.Item label="Ghi chú">
           <TextArea
             rows={4}
@@ -293,11 +310,7 @@ export const TenantDetailForm: React.FunctionComponent<ITenantDetailProps> = ({
             }}
           />
         </Form.Item>
-        <Form.Item label="Trạng thái hoạt động" valuePropName="checked">
-          <Switch />
-        </Form.Item>
       </Form>
-      <Divider />
     </Modal>
   );
 };

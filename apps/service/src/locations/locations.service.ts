@@ -236,9 +236,12 @@ export class LocationsService {
       throw new BadRequestException('Meter reading must be a non-negative number');
     }
 
-    await this.findLocationRecord(locationCode, accountId);
+        // get shared account ids for the current account
+    const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
+
+    await this.findLocationRecord(locationCode, readableAccountIds);
     const expense = await this.expenseRepository.findOne({
-      where: { expenseCode, accountId },
+      where: { expenseCode, accountId: { [Op.in]: readableAccountIds } },
     });
     if (!expense) throw new NotFoundException('Expense not found');
 
@@ -260,9 +263,11 @@ export class LocationsService {
     return { locationCode, expenseCode, initialUnit, currentUnit };
   }
 
-  private async findLocationRecord(id: number, accountId: number) {
+  private async findLocationRecord(id: number, accountId: number | number[]) {
+    let accountIdFilter = Array.isArray(accountId) && accountId.length > 0 ? { [Op.in]: accountId } : accountId;
+
     const location = await this.locationModel.findOne({
-      where: { locationCode: id, accountId },
+      where: { locationCode: id, accountId: accountIdFilter },
     });
     if (!location) throw new NotFoundException('Location not found');
     return location;

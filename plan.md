@@ -165,6 +165,24 @@ Hide entity code columns from tenant, rent-provider, and expense listings while 
 - Run the admin TypeScript check and production build.
 - Check diagnostics for the shared table and column definitions.
 
+# Tenant and Rent Provider Detail Forms
+
+## Goal
+
+Improve the tenant and rent-provider detail dialogs' visual hierarchy and responsiveness without changing their data or submission behavior.
+
+## Implementation
+
+1. Replace fixed horizontal label layouts with responsive grouped form sections and aligned fields.
+2. Improve dialog titles and content spacing while preserving all existing controls and handlers.
+3. Keep the tenant form content naturally scrollable instead of tying its height to a fixed viewport value.
+4. Explicitly display required-field markers on both detail forms.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Check diagnostics for the two changed form components.
+
 # Generate Entity Codes in Add Forms
 
 ## Goal
