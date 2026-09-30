@@ -36,8 +36,8 @@ export const headerStyle: React.CSSProperties = {
   alignItems: "center",
   textAlign: "center",
   color: "#fff",
-  backgroundColor: "#474747",
-  borderBottom: "1px solid white",
+  backgroundColor: "#20372f",
+  borderBottom: "2px solid #b64939",
 };
 
 export const navHeaderStyle: React.CSSProperties = {
@@ -51,8 +51,8 @@ export const navHeaderStyle: React.CSSProperties = {
   justifyContent: "space-between",
   flexDirection: "row",
   alignItems: "center",
-  backgroundColor: "#fff",
-  borderBottom: "0.5px solid rgba(0, 0, 0, 0.2)",
+  backgroundColor: "#fffefa",
+  borderBottom: "1px solid #d6d9d0",
 };
 
 export const contentStyle: React.CSSProperties = {
@@ -63,9 +63,9 @@ export const contentStyle: React.CSSProperties = {
   height: contentHeight,
   maxHeight: contentOverflow,
   // textAlign: "center",
-  color: "#fff",
+  color: "#29332d",
   // padding: "0 30px",
-  backgroundColor: "#EEEEEE",
+  backgroundColor: "#eef0ea",
   // backgroundImage: "../../../public/background.jpg",
   overflowY: "auto",
 };
@@ -77,7 +77,7 @@ export const siderStyle: React.CSSProperties = {
   width: siderWidth,
   height: siderHeight,
   padding: "0.5rem",
-  backgroundColor: "#2f3330",
+  backgroundColor: "#20372f",
 };
 
 export const footerStyle: React.CSSProperties = {
@@ -86,7 +86,7 @@ export const footerStyle: React.CSSProperties = {
   left: footerLeft,
   width: footerWidth,
   height: footerHeight,
-  backgroundColor: "white",
+  backgroundColor: "#fffefa",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",

@@ -464,11 +464,6 @@ const MeterReadingPage = () => {
             children: <InvoicePage />,
           },
           {
-            key: "invoice-status",
-            label: "Trạng thái hóa đơn",
-            children: <InvoiceStatusTab />,
-          },
-          {
             key: "schedule",
             label: "Lịch thông báo",
             children: <SchedulePage />,

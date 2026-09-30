@@ -26,7 +26,8 @@ Prefer the narrowest relevant check first. Follow an affected shared contract or
 
 ## Admin UI
 
-- `apps/admin/src/pages/Dashboard.tsx` switches between desktop and mobile shells using `matchMedia("(max-width: 767px)")`; the mobile shell retains the shared nested route outlet and role-filtered dashboard menu. Keep its app bar `#474747`, navigation surface `#2f3330`, and primary accent `#4CAF50` aligned with the desktop shell.
+- `apps/admin/src/pages/Dashboard.tsx` switches between desktop and mobile shells using `matchMedia("(max-width: 767px)")`; the mobile shell retains the shared nested route outlet and role-filtered dashboard menu. Keep both shells aligned with the shared ink, forest-green, vermilion, and paper palette.
+- The admin UI uses a Japanese-inspired shared theme: ink text, forest-green primary/navigation, vermilion accents, and light paper surfaces. Keep Ant Design tokens in `apps/admin/src/css/theme.ts`, shell colors in `apps/admin/src/css/layout.ts`, and shared surface/background styling in `apps/admin/src/App.css`; preserve the existing Vietnamese UI copy and behavior.
 - List cards in the location, provider, tenant, and expense pages use shared `.list-page-header`, `.list-page-heading`, and `.list-page-actions` classes from `apps/admin/src/App.css` to stack page descriptions above wrapping controls. `.list-page-search` flexes into the available action-row width.
 - Tenant and rent-provider detail dialogs use vertical, sectioned forms with responsive Ant Design columns and explicitly enable `requiredMark`; keep text, date, and numeric controls full-width and let long tenant forms scroll within a viewport-bounded content area.
 - The Guidance tab's process steps link to existing admin routes and use `PathContext.setPathFromKey` with `MENU_LIST` keys to keep the sidebar selection synchronized; its six-step flow is location, provider, tenant, expense, invoice, then schedule.

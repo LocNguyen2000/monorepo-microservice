@@ -1,4 +1,13 @@
 :root {
+  --jp-ink: #29332d;
+  --jp-ink-muted: #66726a;
+  --jp-forest: #2f6c52;
+  --jp-forest-deep: #20372f;
+  --jp-forest-soft: #e8eee8;
+  --jp-vermilion: #b64939;
+  --jp-paper: #f2f2ec;
+  --jp-surface: #fffefa;
+  --jp-line: #d6d9d0;
   --header-height: 10vh;
   --header-width: 100vw;
   --siderHeight: calc(100% - var(--header-height));
@@ -257,8 +266,8 @@
 
 .override-antd-icon-item {
   stroke-width: 15;
-  stroke: black;
-  color: black;
+  stroke: currentColor;
+  color: inherit;
 }
 
 .override-antd-message .ant-message-notice-content {
@@ -276,7 +285,7 @@
 }
 
 .m-hoverable:hover {
-  background-color: rgba(89, 115, 171, 0.25);
+  background-color: rgba(244, 241, 230, 0.16);
 }
 
 @media (max-width: 992px) {
@@ -317,18 +326,24 @@
 
 
 .m-login-img {
-  background-image: url(./resources/spaceman.jpg);
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
+  background-color: var(--jp-paper);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 35px, rgba(41, 51, 45, 0.026) 35px 36px),
+    repeating-linear-gradient(90deg, transparent 0 35px, rgba(41, 51, 45, 0.026) 35px 36px);
+  background-size: 36px 36px;
+  background-repeat: repeat;
+  background-position: 0 0;
   width: 100%;
 }
 
 .m-background-dashboard {
-  background-image: url(./resources/background-2.jpg);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: var(--jp-paper);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 35px, rgba(41, 51, 45, 0.026) 35px 36px),
+    repeating-linear-gradient(90deg, transparent 0 35px, rgba(41, 51, 45, 0.026) 35px 36px);
+  background-size: 36px 36px;
+  background-repeat: repeat;
+  background-position: 0 0;
 }
 
 .mobile-dashboard {
@@ -347,9 +362,9 @@
   gap: 0.75rem;
   height: 56px;
   padding: 0 0.75rem;
-  color: white;
-  background: #474747;
-  border-bottom: 1px solid white;
+  color: #f7f5ed;
+  background: var(--jp-forest-deep);
+  border-bottom: 2px solid var(--jp-vermilion);
 }
 
 .mobile-dashboard-menu-button,
@@ -372,7 +387,7 @@
   height: calc(100dvh - 56px);
   overflow: auto;
   padding: 0.75rem;
-  color: white;
+  color: var(--jp-ink);
 }
 
 .mobile-dashboard-account-menu {
@@ -383,13 +398,13 @@
 
 .mobile-dashboard-drawer .ant-drawer-header,
 .mobile-dashboard-drawer .ant-drawer-body {
-  color: white;
-  background: #2f3330;
+  color: #f7f5ed;
+  background: var(--jp-forest-deep);
 }
 
 .mobile-dashboard-drawer .ant-drawer-title,
 .mobile-dashboard-drawer .ant-drawer-close {
-  color: white;
+  color: #f7f5ed;
 }
 
 .mobile-dashboard-drawer .ant-menu {
@@ -404,9 +419,11 @@
   height: auto;
   min-height: 100vh;
   min-width: 0;
-  background-image: url(./resources/spaceman.jpg);
-  background-position: end;
-  background-size: cover;
+  color: var(--jp-ink);
+  background-color: var(--jp-paper);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 31px, rgba(41, 51, 45, 0.025) 31px 32px),
+    repeating-linear-gradient(90deg, transparent 0 31px, rgba(41, 51, 45, 0.025) 31px 32px);
 }
 
 .operator-workspace-tabs {
@@ -584,7 +601,7 @@
 }
 
 .meter-eyebrow {
-  color: #4caf50;
+  color: var(--jp-forest);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.12em;
@@ -595,9 +612,9 @@
   align-items: center;
   gap: 0.5rem;
   padding: 0.55rem 0.8rem;
-  border: 1px solid #cde8d0;
+  border: 1px solid #d0ded2;
   border-radius: 999px;
-  background: #f3fbf3;
+  background: #eef4ed;
   font-size: 0.82rem;
   white-space: nowrap;
 }
@@ -617,8 +634,8 @@
   width: 0.48rem;
   height: 0.48rem;
   border-radius: 50%;
-  background: #4caf50;
-  box-shadow: 0 0 0 4px #dff3e1;
+  background: var(--jp-forest);
+  box-shadow: 0 0 0 4px #dfeae0;
 }
 
 .meter-selection-card,
@@ -653,8 +670,8 @@
   width: 2.1rem;
   height: 2.1rem;
   border-radius: 50%;
-  background: #e7f5e8;
-  color: #368d3e;
+  background: #e4eee5;
+  color: var(--jp-forest);
   font-size: 0.78rem;
   font-weight: 800;
 }
@@ -675,8 +692,8 @@
   justify-content: space-between;
   margin-top: 0.25rem;
   padding: 0.85rem 1rem;
-  border-left: 3px solid #4caf50;
-  background: #f7faf7;
+  border-left: 3px solid var(--jp-forest);
+  background: #f6f7f1;
 }
 
 .meter-previous-reading .ant-typography {
@@ -748,7 +765,7 @@
 
 .meter-empty-capture .anticon {
   font-size: 2rem;
-  color: #4caf50;
+  color: var(--jp-forest);
 }
 
 .meter-action-row {
@@ -767,7 +784,7 @@
 
 .meter-reading-input input {
   height: 58px;
-  color: #246b2c;
+  color: var(--jp-forest-deep);
   font-size: 1.65rem;
   font-weight: 800;
   text-align: center;
@@ -775,7 +792,7 @@
 
 .meter-change-note {
   width: 100%;
-  color: #368d3e;
+  color: var(--jp-forest);
   text-align: center;
 }
 
@@ -974,4 +991,120 @@
   .meter-previous-reading {
     padding: 0.7rem;
   }
+}
+
+body,
+#root {
+  min-height: 100%;
+  color: var(--jp-ink);
+  font-family: "GoogleRoboto", "Yu Gothic UI", "Meiryo", sans-serif;
+}
+
+body {
+  background: var(--jp-paper);
+}
+
+.ant-layout,
+.ant-layout-content {
+  background-color: transparent;
+}
+
+.ant-card {
+  border-color: var(--jp-line);
+  background: var(--jp-surface);
+  box-shadow: 0 4px 16px rgba(35, 49, 40, 0.045);
+}
+
+.ant-card-head {
+  border-bottom-color: var(--jp-line);
+}
+
+.ant-btn {
+  border-radius: 5px;
+  font-weight: 600;
+}
+
+.ant-input,
+.ant-input-affix-wrapper,
+.ant-input-number,
+.ant-picker,
+.ant-select-selector {
+  border-color: var(--jp-line);
+  border-radius: 5px !important;
+  background-color: var(--jp-surface);
+}
+
+.ant-table-wrapper .ant-table {
+  color: var(--jp-ink);
+  background: var(--jp-surface);
+}
+
+.ant-table-wrapper .ant-table-thead > tr > th {
+  color: #34483c;
+  background: #e9eee8;
+}
+
+.ant-table-wrapper .ant-table-tbody > tr.ant-table-row:hover > td {
+  background: #f2f5ef;
+}
+
+.ant-tabs .ant-tabs-tab.ant-tabs-tab-active .ant-tabs-tab-btn {
+  color: var(--jp-forest);
+}
+
+.ant-tabs .ant-tabs-ink-bar {
+  background: var(--jp-vermilion);
+}
+
+.m-background-dashboard,
+.m-login-img {
+  background-color: var(--jp-paper);
+  background-image:
+    repeating-linear-gradient(0deg, transparent 0 35px, rgba(41, 51, 45, 0.026) 35px 36px),
+    repeating-linear-gradient(90deg, transparent 0 35px, rgba(41, 51, 45, 0.026) 35px 36px);
+  color: var(--jp-ink);
+}
+
+.mobile-dashboard-menu-button,
+.mobile-dashboard-menu-button:hover {
+  color: #f7f5ed !important;
+}
+
+.mobile-dashboard-drawer .ant-menu {
+  color: #f7f5ed;
+  background: transparent;
+}
+
+.mobile-dashboard-drawer .ant-menu-item-selected {
+  background: #3a624e !important;
+}
+
+.operator-workspace-tabs .ant-tabs-nav {
+  border-color: var(--jp-line);
+  background: var(--jp-surface);
+}
+
+.meter-selection-card,
+.meter-capture-card,
+.meter-confirm-card {
+  border-color: var(--jp-line);
+}
+
+.meter-camera-frame {
+  background: #20372f;
+}
+
+.meter-empty-capture {
+  border-color: #cbd8cd;
+  background: #f8f8f2;
+  color: #65786a;
+}
+
+.meter-empty-capture .anticon {
+  color: var(--jp-forest);
+}
+
+.meter-signout-button:hover {
+  border-color: var(--jp-vermilion) !important;
+  color: var(--jp-vermilion) !important;
 }

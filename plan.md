@@ -343,3 +343,20 @@ Replace the static guidance list with a visual, responsive business-process flow
 
 - Run the admin TypeScript check and production build.
 - Verify all six navigation targets and sidebar selection, hover/focus behavior, keyboard activation, and narrow-screen layout.
+
+# Japanese-Inspired Admin Theme
+
+## Goal
+
+Give the admin application a cohesive contemporary Japanese-inspired visual style while preserving its Vietnamese UI copy and existing workflows.
+
+## Implementation
+
+1. Refresh shared Ant Design color, typography, border, and surface tokens with an ink, forest-green, vermilion, and light-paper palette.
+2. Align desktop navigation/header/footer, mobile dashboard, login screen, and location-operator workspace with the same palette and subtle geometric paper texture.
+3. Apply restrained shared surface styling to common Ant Design cards, forms, tables, and controls; preserve component behavior, copy, routing, and role restrictions.
+
+## Verification
+
+- Run admin TypeScript diagnostics and production build.
+- Review global color contrast and desktop/mobile layouts across the shared shells.
