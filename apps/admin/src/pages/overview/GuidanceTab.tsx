@@ -1,57 +1,126 @@
-import { BookOutlined, HomeOutlined } from "@ant-design/icons";
-import { Divider, List, Typography } from "antd";
+import {
+  BookOutlined,
+  EuroOutlined,
+  HomeOutlined,
+  IdcardOutlined,
+  MoneyCollectOutlined,
+  ScheduleOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Divider, Tooltip, Typography } from "antd";
 import Card from "antd/es/card/Card";
+import { Link } from "react-router-dom";
+import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
+import { getPathContext } from "../../lib/context";
+
+const processSteps = [
+  {
+    key: "4",
+    route: DASHBOARD_ROUTES.LOCATION,
+    title: "Phòng trọ",
+    description: "Tạo phòng trọ và thông tin địa điểm.",
+    icon: <HomeOutlined />,
+  },
+  {
+    key: "2",
+    route: DASHBOARD_ROUTES.PROVIDER,
+    title: "Chủ trọ",
+    description: "Quản lý chủ sở hữu và liên kết với phòng trọ.",
+    icon: <IdcardOutlined />,
+  },
+  {
+    key: "1",
+    route: DASHBOARD_ROUTES.TENANT,
+    title: "Người thuê",
+    description: "Thêm người thuê và gắn với phòng phù hợp.",
+    icon: <UserOutlined />,
+  },
+  {
+    key: "5",
+    route: DASHBOARD_ROUTES.EXPENSE,
+    title: "Chi phí",
+    description: "Khai báo các khoản chi phí của phòng trọ.",
+    icon: <EuroOutlined />,
+  },
+  {
+    key: "8",
+    route: DASHBOARD_ROUTES.INVOICE,
+    title: "Hóa đơn",
+    description: "Lập và theo dõi hóa đơn từ các khoản chi phí.",
+    icon: <MoneyCollectOutlined />,
+  },
+  {
+    key: "6",
+    route: DASHBOARD_ROUTES.SCHEDULE,
+    title: "Lịch thông báo",
+    description: "Thiết lập lịch gửi email nhắc việc.",
+    icon: <ScheduleOutlined />,
+  },
+];
 
 const GuidanceTab = () => {
-  const data = [
-    "Bước 1: Tạo phòng trọ mới trong mục Phòng trọ.",
-    "Bước 2: Thêm chủ trọ mới. Điền thông tin cơ bản và các phòng trọ đang cho thuê.",
-    "Bước 3: Mỗi khi có người thuê mới, hãy thêm thông tin của họ trong mục Người thuê.",
-    "Bước 4: Bạn có thể thêm các chi phí dịch vụ để tính vào hóa đơn của người thuê.",
-    "Bước 5: Trong mục Hóa đơn, bạn có thể tạo hóa đơn cho người thuê dựa trên các chi phí đã được gán cho phòng trọ.",
-    "Bước 6: Trong mục Lịch thông báo, bạn có thể tạo lịch gửi email để trao đổi với người thuê hoặc chủ trọ.",
-  ];
+  const { setPathFromKey } = getPathContext();
 
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        flexWrap: "wrap",
-        gap: "1rem",
-        width: "100%",
-      }}
-    >
+    <div className="guidance-tab-layout">
       <Card
-        style={{
-          flex: "1 1 420px",
-          maxWidth: "100%",
-          minWidth: 0,
-        }}
+        className="guidance-process-card"
         title={
-          <>
-            <HomeOutlined className="override-antd-icon-item" /> Cách quản lý
-            bảng điều khiển
-          </>
+          <Typography.Text strong>
+            <HomeOutlined className="override-antd-icon-item" /> Quy trình quản lý
+            nhà trọ
+          </Typography.Text>
         }
       >
-        <List
-          style={{ width: "100%" }}
-          bordered
-          dataSource={data}
-          renderItem={(item) => (
-            <List.Item>
-              <Typography.Text>{item}</Typography.Text>
-            </List.Item>
-          )}
-        />
+        <Typography.Paragraph
+          type="secondary"
+          className="guidance-process-intro"
+        >
+          Từ thiết lập phòng trọ đến quản lý hóa đơn và lịch thông báo.
+        </Typography.Paragraph>
+        <ol className="guidance-process-flow">
+          {processSteps.map((step, index) => (
+            <li className="guidance-process-step" key={step.route}>
+              <Tooltip title={step.description} mouseEnterDelay={0.15}>
+                <Link
+                  className="guidance-process-link"
+                  to={step.route}
+                  aria-label={`${step.title}: ${step.description}`}
+                  onClick={(event) => {
+                    if (
+                      event.button !== 0 ||
+                      event.metaKey ||
+                      event.ctrlKey ||
+                      event.shiftKey ||
+                      event.altKey
+                    ) {
+                      return;
+                    }
+                    event.preventDefault();
+                    setPathFromKey(step.key);
+                  }}
+                >
+                  <span className="guidance-process-icon" aria-hidden="true">
+                    {step.icon}
+                  </span>
+                  <Typography.Text strong className="guidance-process-title">
+                    {step.title}
+                  </Typography.Text>
+                  <Typography.Text
+                    type="secondary"
+                    className="guidance-process-description"
+                  >
+                    {step.description}
+                  </Typography.Text>
+                  <span className="sr-only">Bước {index + 1}</span>
+                </Link>
+              </Tooltip>
+            </li>
+          ))}
+        </ol>
       </Card>
       <Card
-        style={{
-          flex: "1 1 240px",
-          maxWidth: "100%",
-          minWidth: 0,
-        }}
+        className="guidance-concepts-card"
         title={
           <Typography>
             <BookOutlined className="override-antd-icon-item" /> Khái niệm cơ bản

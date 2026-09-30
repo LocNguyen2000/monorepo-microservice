@@ -325,3 +325,21 @@ Present the profile and account-management page in Vietnamese while keeping its 
 ## Verification
 
 - Run the admin TypeScript check and check diagnostics for the page.
+
+# Guidance Process Screen
+
+## Goal
+
+Replace the static guidance list with a visual, responsive business-process flow whose steps navigate to their existing admin pages.
+
+## Implementation
+
+1. Show a single sequence: Location → Rent Provider → Tenant → Expense → Invoice → Schedule.
+2. Use Ant Design icons, existing `DASHBOARD_ROUTES`, and `PathContext.setPathFromKey` so each step links to the page and synchronizes the selected sidebar item.
+3. Add hover and keyboard-focus affordances with concise step descriptions; preserve the existing concepts panel.
+4. Reflow the process for narrow screens without horizontal page overflow. Do not change route definitions, permissions, or APIs.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Verify all six navigation targets and sidebar selection, hover/focus behavior, keyboard activation, and narrow-screen layout.
