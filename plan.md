@@ -360,3 +360,49 @@ Give the admin application a cohesive contemporary Japanese-inspired visual styl
 
 - Run admin TypeScript diagnostics and production build.
 - Review global color contrast and desktop/mobile layouts across the shared shells.
+
+# Expo Rental Client Migration
+
+## Goal
+
+Replace the existing Next.js rental client with a native Expo mobile app centered on the operator workspace currently shown by the admin meter-reading page.
+
+## Implementation
+
+1. Remove the current rental-client web pages, components, and Next.js setup; configure the Expo application entry, routing, native app metadata, dependencies, and scripts.
+2. Port the meter-reading workflow to native controls: authenticated location/expense selection, camera or image-library capture for OCR, reading validation and submission, and logout.
+3. Preserve the operator workspace's invoice creation/status and schedule tabs using only API paths and contracts documented in `docs/openapi.yml`.
+4. Store session credentials using platform-secure storage and source API endpoint configuration without embedding secrets in the mobile bundle.
+5. Update project knowledge with the confirmed Expo app structure and verification commands.
+
+## Verification
+
+- Run the rental-client TypeScript check and Expo production/export validation.
+- Check changed-file diagnostics and confirm no Next.js-only imports or web-only camera APIs remain.
+- Do not alter the admin meter-reading page or service API contract.
+
+# Rental Client Next.js Removal
+
+## Implementation
+
+1. Remove Next.js scripts, dependencies, configuration, generated type references, and app-specific files.
+2. Remove remaining Next.js imports from retained rental-client utilities without removing the requested hooks, helpers, clients, or HOCs.
+3. Update the lockfile and verify the rental-client package no longer references Next.js.
+
+## Verification
+
+- Run the rental-client build and check changed-file diagnostics.
+- Search the rental-client source and configuration for remaining Next.js references.
+
+# Service API Origin Allowlist
+
+## Implementation
+
+1. Replace unrestricted HTTP API CORS with an explicit `CORS_ORIGINS` allowlist for the admin and rental-client deployments.
+2. Apply the same origin restrictions to the service WebSocket and document the required environment configuration.
+3. Update project knowledge with the service origin policy.
+
+## Verification
+
+- Build the service and check changed-file diagnostics.
+- Confirm no wildcard CORS configuration remains in the service.

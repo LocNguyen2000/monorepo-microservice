@@ -1,19 +1,17 @@
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { ScreenRoutes } from "../lib/constant";
 import { getGlobalContext } from "../lib/context";
 
 const useAuthCheck = () => {
-  const router = useRouter();
   useEffect(() => {
     const authUser = JSON.parse(localStorage.getItem("authUser") || "{}");
     const token = authUser?.accessToken;
 
     if (token) {
-        router.push(ScreenRoutes.Home);
+      window.location.assign(ScreenRoutes.Home);
     }
 
-  }, [router]);
+  }, []);
 
 };
 
@@ -40,4 +38,3 @@ const useSyncAuthUser = () => {
 };
 
 export {useSyncAuthUser, useAuthCheck};
-

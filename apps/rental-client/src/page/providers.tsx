@@ -1,9 +1,7 @@
-"use client";
-
 import { useState } from "react";
 import { ConfigProvider, Divider, Flex, Modal, message, notification } from "antd";
 import { NoticeType } from "antd/es/message/interface";
-import { AccountClient, ServiceClient } from "../lib/axios";
+import { ServiceClient } from "../lib/axios";
 import { ConfirmType, GlobalContext, NotificationType } from "../lib/context";
 import { IAuthUser } from "../lib/interface";
 import { globalTheme } from "../lib/theme";
@@ -47,7 +45,6 @@ export function Providers({ children }: Readonly<{ children: React.ReactNode }>)
         value={{
           authUser,
           setAuthUser,
-          accountClient: AccountClient(),
           serviceClient: ServiceClient(),
           useNotify: openNotification,
           useToast: openToast,

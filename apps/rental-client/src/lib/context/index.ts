@@ -10,7 +10,6 @@ export type ConfirmType = ModalFuncProps["type"];
 export interface IGlobalContext {
     authUser?: IAuthUser;
     setAuthUser?: Dispatch<SetStateAction<IAuthUser>>;
-    accountClient: AxiosInstance;
     serviceClient: AxiosInstance;
     useNotify: (type: NotificationType, title: string, message: string) => void;
     useToast: (type: NoticeType, message: string) => void;

@@ -5,13 +5,18 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { AllExceptionsFilter } from '@nhl/error/filter';
 import { LoggingInterceptor } from '@nhl/error/interceptor';
 import { Env } from './common/env.js';
+import { getAllowedOrigins } from './common/cors.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
     logger: ['error', 'warn', "log"],
   });
-  app.enableCors({ origin: '*' });
+  app.enableCors({ 
+    origin: getAllowedOrigins(),
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+    credentials: true
+  });
 
   const env = app.get(EnvService<Env>);
   const logger = new Logger();

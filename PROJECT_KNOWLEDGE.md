@@ -40,6 +40,7 @@ Prefer the narrowest relevant check first. Follow an affected shared contract or
 
 ## Backend Invariants
 
+- The service HTTP API and WebSocket accept browser origins only from the comma-separated `CORS_ORIGINS` environment variable. Configure the deployed admin and rental-client origins as HTTP(S) origins without paths; trailing slashes are normalized. An unset or invalid allowlist prevents service startup.
 - Protected service requests validate both the access token and active persisted session. Login reuses the account's newest non-deleted, unexpired session and returns a token with the same session ID and expiry; otherwise it creates a session. Logout soft-deletes the session using `deletedAt`. Keep session schema changes synchronized with the SQL migration.
 - Admin and super-admin-only operations need role protection at the controller and service layers where applicable.
 - Account isolation: rent providers, locations, tenants, invoices, and expenses derive `accountId` from the authenticated token, scope dashboard CRUD and projections to it, and ignore client-supplied ownership on writes. Each table has a nullable, indexed `accountId`; legacy rows remain invisible until explicitly assigned. Tenant-location, location-owner, and location-expense relationships must be same-account. Dashboard invoice schedules are filtered through owned locations; the internal cron summary intentionally remains system-wide.

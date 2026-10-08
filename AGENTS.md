@@ -22,12 +22,6 @@ pnpm --dir apps/service build
 pnpm --dir apps/admin exec tsc --noEmit
 ```
 
-On Windows PowerShell, invoke pnpm directly when execution policy or shell aliases interfere:
-
-```text
-C:\Users\<user>\AppData\Roaming\npm\pnpm.cmd --dir <path> build
-```
-
 Always run the narrowest relevant validation after editing, followed by a production build when the change affects a shared contract or user workflow.
 
 ## Editing Rules

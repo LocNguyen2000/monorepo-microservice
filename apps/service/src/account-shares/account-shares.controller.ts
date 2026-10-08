@@ -15,20 +15,21 @@ import { ShareAccountDto } from './account-shares.dto.js';
 import { AccountSharesService } from './account-shares.service.js';
 
 @Controller('account-shares')
-@Roles(
-  UserRole.SuperAdministrator,
-  UserRole.Administrator,
-  UserRole.User,
-  UserRole.LocationOperator,
-)
 export class AccountSharesController {
   constructor(private readonly accountSharesService: AccountSharesService) {}
 
+  @Roles(
+    UserRole.SuperAdministrator,
+    UserRole.Administrator,
+    UserRole.User,
+    UserRole.LocationOperator,
+  )
   @Get()
   list(@Req() request: Request & { user: TokenPayload }) {
     return this.accountSharesService.listSharedAccounts(request.user.sub);
   }
 
+  @Roles(UserRole.SuperAdministrator, UserRole.Administrator)
   @Post()
   share(
     @Body() input: ShareAccountDto,
@@ -37,6 +38,7 @@ export class AccountSharesController {
     return this.accountSharesService.shareAccount(request.user.sub, input.sharedAccountId);
   }
 
+  @Roles(UserRole.SuperAdministrator)
   @Delete(':sharedAccountId')
   revoke(
     @Param('sharedAccountId', ParseIntPipe) sharedAccountId: number,
