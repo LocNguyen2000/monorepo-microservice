@@ -528,6 +528,7 @@ const MyProfilePage = () => {
             }}
             pagination={{ pageSize: 5 }}
             size="small"
+            scroll={{ x: "max-content" }}
           />
         </div>
       </Card>

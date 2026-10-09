@@ -406,3 +406,35 @@ Replace the existing Next.js rental client with a native Expo mobile app centere
 
 - Build the service and check changed-file diagnostics.
 - Confirm no wildcard CORS configuration remains in the service.
+
+# Profile Sharing Table Scroll
+
+## Goal
+
+Keep the account-level read-sharing table within the profile card while allowing horizontal scrolling when its columns exceed the available width.
+
+## Implementation
+
+1. Enable intrinsic-width horizontal scrolling on the account-level sharing table.
+2. Preserve the existing bounded wrapper and sharing behavior.
+
+## Verification
+
+- Run the admin TypeScript check.
+- Check diagnostics for the modified profile page.
+
+# Compact Tables on Narrow Screens
+
+## Goal
+
+Use a compact table layout across the admin UI when the viewport reaches the existing mobile breakpoint.
+
+## Implementation
+
+1. Apply Ant Design small-table cell spacing and typography to all tables at `max-width: 767px`.
+2. Preserve existing table behavior and desktop sizing.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
+- Check diagnostics for the changed stylesheet.
