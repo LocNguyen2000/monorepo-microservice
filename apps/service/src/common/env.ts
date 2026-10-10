@@ -103,6 +103,27 @@ export class AICredentials {
   rateLimit: AIRateLimit;
 }
 
+class CacheDB{
+  @IsString()
+  location: string;
+
+  @IsString()
+  tenant: string;
+
+  @IsString()
+  rentOwner: string;
+}
+
+class Cache {
+  @IsString()
+  url: string;
+
+  @IsObject()
+  @ValidateNested()
+  @Type(() => CacheDB)
+  db: CacheDB;
+}
+
 export class Env extends GlobalEnv {
   @IsUrl()
   host: string;
@@ -117,6 +138,11 @@ export class Env extends GlobalEnv {
   @ValidateNested()
   @Type(() => Database)
   db: Database;
+
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Cache)
+  cache: Cache;
 
   @IsObject()
   ai: AICredentials;

@@ -12,8 +12,10 @@ import {
 import { Request } from 'express';
 import { TokenPayload } from '../auth/auth.service.js';
 import { ExpenseService } from './expense.service.js';
+import { Roles, UserRole } from '../auth/auth.roles.js';
 
 @Controller('expense')
+@Roles(UserRole.SuperAdministrator, UserRole.Administrator)
 export class ExpenseController {
   constructor(private readonly expense: ExpenseService) {}
 

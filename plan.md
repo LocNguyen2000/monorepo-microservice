@@ -78,6 +78,23 @@ Make expense data visible only to the account that owns it, including through lo
 - Run the service build and diagnostics for touched TypeScript, SQL, and OpenAPI files.
 - Audit expense controller paths and location/invoice expense link paths for account filtering.
 
+# Location Pagination Cache Keys
+
+## Goal
+
+Ensure cached location list results are scoped to the requested pagination page and size.
+
+## Implementation
+
+1. Traced location pagination inputs and Redis cache reads/writes.
+2. Included account ID, page, and size in the shared key used by cache reads and write events.
+3. Parse cached JSON before returning the pagination response.
+
+## Verification
+
+- `pnpm.cmd --dir apps/service build` passes.
+- Confirmed generated cache keys differ by account, page, and size.
+
 # Reuse Active Login Sessions
 
 ## Goal
@@ -438,3 +455,35 @@ Use a compact table layout across the admin UI when the viewport reaches the exi
 
 - Run the admin TypeScript check and production build.
 - Check diagnostics for the changed stylesheet.
+# Location Cache Invalidation
+
+## Goal
+
+Invalidate cached paginated location lists when a location is updated or deleted.
+
+## Implementation
+
+1. Added Redis SCAN-based deletion for location cache key patterns.
+2. Location updates/deletes emit invalidation for the owner's and shared accounts' page/size cache variants after successful mutations.
+3. Updated repository knowledge with the invalidation behavior.
+
+## Verification
+
+- `pnpm.cmd --dir apps/service build` passes.
+- `git diff --check` passes.
+
+# Location Detail Cache
+
+## Goal
+
+Cache `findOne` location detail results without bypassing account authorization or returning stale data after mutations.
+
+## Implementation
+
+1. Added a location-detail cache read/write using the account-and-location key.
+2. Kept the existing account authorization check before reading the cache.
+3. Expanded update/delete invalidation to cover detail entries for owner and shared accounts.
+
+## Verification
+
+- `pnpm.cmd --dir apps/service build` passes.

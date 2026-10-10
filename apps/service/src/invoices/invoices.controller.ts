@@ -69,6 +69,7 @@ export class InvoicesController {
   }
 
   @Get(':tenantId')
+  @Roles(UserRole.SuperAdministrator, UserRole.Administrator, UserRole.LocationOperator)
   findByTenantId(
     @Param('tenantId', ParseIntPipe) id: number,
     @Req() request: Request & { user: TokenPayload },

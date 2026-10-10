@@ -20,9 +20,12 @@ import { Roles, UserRole } from '../auth/auth.roles.js';
 
 @Controller('location')
 export class LocationsController {
-  constructor(private readonly locationsService: LocationsService) { }
+  constructor(
+    private readonly locationsService: LocationsService,
+  ) { }
 
   @Post()
+  @Roles(UserRole.SuperAdministrator, UserRole.Administrator)
   @UseInterceptors(FileInterceptor('image'))
   create(
     @Body() payload: Record<string, unknown>,
@@ -51,6 +54,7 @@ export class LocationsController {
   }
 
   @Put(':id')
+  @Roles(UserRole.SuperAdministrator, UserRole.Administrator)
   @UseInterceptors(FileInterceptor('image'))
   update(
     @Param('id') id: string,
@@ -88,6 +92,7 @@ export class LocationsController {
   }
 
   @Delete(':id')
+  @Roles(UserRole.SuperAdministrator, UserRole.Administrator)
   remove(
     @Param('id') id: string,
     @Req() request: Request & { user: TokenPayload },

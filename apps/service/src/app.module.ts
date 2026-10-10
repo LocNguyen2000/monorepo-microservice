@@ -30,9 +30,13 @@ import { AuthModule } from './auth/auth.module.js';
 import { AuthGuard } from './auth/auth.guard.js';
 import { AccountShareSchema } from './common/schema/auth/account-share.js';
 import { AccountSharesModule } from './account-shares/account-shares.module.js';
+import { RedisModule } from './common/redis/redis.module.js';
+import { EventEmitterModule } from '@nestjs/event-emitter';
 @Module({
   imports: [
     EnvModule.register({ path: '/config/env.json', class: Env }),
+    EventEmitterModule.forRoot(),
+    RedisModule,
     SequelizeModule.forRootAsync({
       inject: [EnvService],
       useFactory: async (env: EnvService<Env>) => {

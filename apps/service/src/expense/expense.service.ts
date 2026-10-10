@@ -35,9 +35,10 @@ export class ExpenseService {
 
   async findOne(id: number, accountId: number) {
     const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
-    return this.expenseRepository.findOne({
+    const response = await this.expenseRepository.findOne({
       where: { expenseCode: id, accountId: { [Op.in]: readableAccountIds } },
     });
+    return response
   }
 
   async update(id: number, payload: Record<string, unknown>, accountId: number) {

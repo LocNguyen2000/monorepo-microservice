@@ -50,6 +50,7 @@ Prefer the narrowest relevant check first. Follow an affected shared contract or
 - Meter readings cannot decrease. On update, move the former `currentUnit` to `initialUnit` and write the submitted reading to `currentUnit`.
 - Invoice schedule cron runs daily at 00:00 UTC (07:00 Vietnam time), selects enabled schedules matching the current `Asia/Ho_Chi_Minh` due day, validates its bearer secret, and sends one Vietnamese summary email. Keep its EmailJS template variables intact.
 - Keep the unique `expenses_location(locationCode, expenseCode)` index; add other indexes only for frequent filtering, joins, cleanup, or authorization needs.
+- `RedisModule` is registered globally and connects using `cache.url`. Inject `REDIS_CLIENT` for the Redis client or `RedisManagerService` for managed `set`/`delete` writes; the manager emits the typed `redis.write` event through Nest's `EventEmitter2` after those operations succeed. Direct writes through the raw client do not emit manager events. Location list cache keys include account ID, page, and size; location detail keys include account ID and location ID. Detail reads still verify account access before checking cache. Location updates and deletes emit account-scoped invalidation for list and detail keys across the owner and shared accounts.
 
 ## API Contract Workflow
 

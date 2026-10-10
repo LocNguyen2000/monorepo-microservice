@@ -16,6 +16,18 @@ const { omit, pick } = lodash;
 import { FilePostService } from '../filepost/filepost.service.js';
 import { RentProvidersService } from '../rent-providers/rent-providers.service.js';
 import { AccountSharesService } from '../account-shares/account-shares.service.js';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import {
+  REDIS_DELETE_EVENT,
+  REDIS_WRITE_EVENT,
+  RedisManagerService,
+} from '../common/redis/redis-manager.service.js';
+import {
+  cacheLocationsByAccountKey,
+  cacheLocationIdByAccountKey,
+  cacheLocationIdByAccountPattern,
+  cacheLocationsByAccountPattern,
+} from '../common/redis/redis.constants.js';
 
 @Injectable()
 export class LocationsService {
@@ -29,6 +41,10 @@ export class LocationsService {
     private readonly filePostService: FilePostService,
     private readonly rentProviderService: RentProvidersService,
     private readonly accountSharesService: AccountSharesService,
+
+    // inject cache manager and event emitter
+    private readonly redisManager: RedisManagerService,
+    private readonly eventEmitter: EventEmitter2
   ) { }
 
   async create(
@@ -48,7 +64,20 @@ export class LocationsService {
 
   async findAll(query: PaginatedQuery, accountId: number) {
     const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
-    return paginatedQuery<LocationSchema>(this.locationModel, query, {
+    let isCached = false;
+
+    try{
+      const cachedLocations = await this.redisManager.getCacheLocationsByAccount(
+        readableAccountIds[0],
+        query.page,
+        query.size,
+      );
+      if (cachedLocations) return cachedLocations;
+    } catch (error) {
+      console.log('Cache miss for locations, fetching from database', error);
+    }
+
+    const response = await paginatedQuery<LocationSchema>(this.locationModel, query, {
       where: { accountId: { [Op.in]: readableAccountIds } },
       include: [
         {
@@ -60,6 +89,21 @@ export class LocationsService {
       ],
       distinct: true,
     });
+
+    if (!isCached) {
+      const key = cacheLocationsByAccountKey(
+        readableAccountIds[0],
+        query.page,
+        query.size,
+      );
+      this.eventEmitter.emit(REDIS_WRITE_EVENT, {
+        operation: 'set',
+        keys: [ key ],
+        payload: response,
+      });
+    }
+
+    return response;
   }
 
   findAllForSystem(query: PaginatedQuery) {
@@ -76,6 +120,17 @@ export class LocationsService {
 
   async findOne(id: number, accountId: number) {
     await this.findReadableLocationRecord(id, accountId);
+
+    try {
+      const cachedLocation = await this.redisManager.getCacheLocationByAccount(
+        accountId,
+        id,
+      );
+      if (cachedLocation) return cachedLocation;
+    } catch (error) {
+      console.log('Cache miss for location, fetching from database', error);
+    }
+
     const sql = 'CALL prcd_FindLocationExpenseById (:id, :accountId)';
 
     const locations = (await this.locationModel.sequelize.query(sql, {
@@ -87,6 +142,10 @@ export class LocationsService {
 
     const result = this.formatLocationExpense(locations);
 
+    this.eventEmitter.emit(REDIS_WRITE_EVENT, {
+      keys: [cacheLocationIdByAccountKey(accountId, id)],
+      payload: result,
+    });
     return result;
   }
 
@@ -109,15 +168,35 @@ export class LocationsService {
     const imageUrl = image ? await this.filePostService.upload(image) : undefined;
     if (imageUrl) payload.image = imageUrl;
 
-    return this.locationModel.update(payload, {
+    const sharedAccountIds =
+      await this.accountSharesService.listSharedAccounts(accountId);
+    const result = await this.locationModel.update(payload, {
       where: { locationCode: id, accountId },
     });
+    this.invalidateLocationCaches(accountId, sharedAccountIds);
+    return result;
   }
 
   async remove(id: number, accountId: number) {
     const location = await this.findLocationRecord(id, accountId);
+    const sharedAccountIds =
+      await this.accountSharesService.listSharedAccounts(accountId);
+    const result = await location.destroy();
 
-    return location.destroy();
+    this.invalidateLocationCaches(accountId, sharedAccountIds);
+    return result;
+  }
+
+  private invalidateLocationCaches(
+    accountId: number,
+    sharedAccountIds: number[],
+  ) {
+    this.eventEmitter.emit(REDIS_DELETE_EVENT, {
+      patterns: [accountId, ...sharedAccountIds].flatMap((id) => [
+        cacheLocationsByAccountPattern(id),
+        cacheLocationIdByAccountPattern(id),
+      ]),
+    });
   }
 
   formatLocationExpense(data: LocationWithExpenses[]): LocationSchema {
