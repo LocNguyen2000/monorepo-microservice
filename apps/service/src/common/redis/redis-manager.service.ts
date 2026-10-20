@@ -5,32 +5,26 @@ import {
   OnModuleDestroy,
   OnModuleInit,
 } from '@nestjs/common';
-import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
+import { OnEvent } from '@nestjs/event-emitter';
 import type { RedisClientType, SetOptions } from 'redis';
 import {
   cacheLocationIdByAccountKey,
+  cacheLocationIdByAccountPattern,
   cacheLocationsByAccountKey,
+  cacheLocationsByAccountPattern,
   REDIS_CLIENT,
 } from './redis.constants.js';
 
 export const REDIS_WRITE_EVENT = 'redis.write';
-export const REDIS_DELETE_EVENT = 'redis.delete';
 export type RedisWriteEvent = {
   keys: string[];
   payload?: any;
 };
 
-export type RedisDeleteEvent = {
-  keys?: string[];
-  patterns?: string[];
-};
-
-
 @Injectable()
 export class RedisManagerService implements OnModuleInit, OnModuleDestroy {
   constructor(
     @Inject(REDIS_CLIENT) readonly redis: RedisClientType,
-    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async onModuleInit(): Promise<void> {
@@ -64,6 +58,14 @@ export class RedisManagerService implements OnModuleInit, OnModuleDestroy {
     return typeof cachedData === 'string' ? JSON.parse(cachedData) : null;
   }
 
+  async invalidateLocationCaches(accountIds: number[]): Promise<void> {
+    const patterns = [...new Set(accountIds)].flatMap((accountId) => [
+      cacheLocationsByAccountPattern(accountId),
+      cacheLocationIdByAccountPattern(accountId),
+    ]);
+    await Promise.all(patterns.map((pattern) => this.deleteByPattern(pattern)));
+  }
+
   @OnEvent(REDIS_WRITE_EVENT)
   handleRedisWriteEvent(event: RedisWriteEvent) {
     Logger.log(
@@ -79,41 +81,12 @@ export class RedisManagerService implements OnModuleInit, OnModuleDestroy {
     }
   }
 
-  @OnEvent(REDIS_DELETE_EVENT)
-  handleRedisDeleteEvent(event: RedisDeleteEvent) {
-    const deletes = [
-      ...(event.keys?.length
-        ? [this.delete(...event.keys)]
-        : []),
-      ...(event.patterns?.length
-        ? event.patterns.map((pattern) => this.deleteByPattern(pattern))
-        : []),
-    ];
-
-    Promise.all(deletes).catch((error: unknown) => {
-      Logger.error(
-        'Error deleting Redis cache keys',
-        error instanceof Error ? error.stack : String(error),
-        RedisManagerService.name,
-      );
-    });
-  }
-
   private async set(
     key: string,
     value: string,
     options?: SetOptions,
   ) {
     const result = await this.redis.set(key, value, options);
-    return result;
-  }
-
-  private async delete(...keys: string[]): Promise<number> {
-    if (keys.length === 0) {
-      throw new Error('At least one Redis key is required');
-    }
-
-    const result = await this.redis.del(keys);
     return result;
   }
 

@@ -35,11 +35,7 @@ const PopoverMenuHeader = () => {
           setPathFromKey(mePage.key);
         }}
       >
-        My Profile
-      </Button>
-      <br />
-      <Button style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}>
-        Settings
+        Trang cá nhân
       </Button>
       <br />
       <Button
@@ -61,6 +57,7 @@ const PopoverMenuHeader = () => {
 };
 
 const PopoverMenuTitle = () => {
+  const { authUser } = getGlobalContext();
   return (
     <div
       style={{
@@ -71,9 +68,9 @@ const PopoverMenuTitle = () => {
         height: "4rem",
       }}
     >
-      <Typography style={{ marginBottom: "0.25rem" }}>Demo Company</Typography>
+      <Typography style={{ marginBottom: "0.25rem" }}> {authUser.email}</Typography>
       <span style={{ fontWeight: "lighter", color: "grey" }}>
-        Workbench Administrator
+        Quản lý nhà trọ
       </span>
     </div>
   );

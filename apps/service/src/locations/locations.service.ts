@@ -18,15 +18,12 @@ import { RentProvidersService } from '../rent-providers/rent-providers.service.j
 import { AccountSharesService } from '../account-shares/account-shares.service.js';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 import {
-  REDIS_DELETE_EVENT,
   REDIS_WRITE_EVENT,
   RedisManagerService,
 } from '../common/redis/redis-manager.service.js';
 import {
   cacheLocationsByAccountKey,
   cacheLocationIdByAccountKey,
-  cacheLocationIdByAccountPattern,
-  cacheLocationsByAccountPattern,
 } from '../common/redis/redis.constants.js';
 
 @Injectable()
@@ -55,11 +52,15 @@ export class LocationsService {
     await this.assertOwnerBelongsToAccount(createLocationDto.owner, accountId);
     const imageUrl = image ? await this.filePostService.upload(image) : undefined;
 
-    return this.locationModel.create({
+    const sharedAccountIds =
+      await this.accountSharesService.listSharedAccounts(accountId);
+    const result = await this.locationModel.create({
       ...createLocationDto,
       ...(imageUrl ? { image: imageUrl } : {}),
       accountId,
     });
+    await this.invalidateLocationCaches(accountId, sharedAccountIds);
+    return result;
   }
 
   async findAll(query: PaginatedQuery, accountId: number) {
@@ -173,7 +174,7 @@ export class LocationsService {
     const result = await this.locationModel.update(payload, {
       where: { locationCode: id, accountId },
     });
-    this.invalidateLocationCaches(accountId, sharedAccountIds);
+    await this.invalidateLocationCaches(accountId, sharedAccountIds);
     return result;
   }
 
@@ -183,7 +184,7 @@ export class LocationsService {
       await this.accountSharesService.listSharedAccounts(accountId);
     const result = await location.destroy();
 
-    this.invalidateLocationCaches(accountId, sharedAccountIds);
+    await this.invalidateLocationCaches(accountId, sharedAccountIds);
     return result;
   }
 
@@ -191,12 +192,10 @@ export class LocationsService {
     accountId: number,
     sharedAccountIds: number[],
   ) {
-    this.eventEmitter.emit(REDIS_DELETE_EVENT, {
-      patterns: [accountId, ...sharedAccountIds].flatMap((id) => [
-        cacheLocationsByAccountPattern(id),
-        cacheLocationIdByAccountPattern(id),
-      ]),
-    });
+    return this.redisManager.invalidateLocationCaches([
+      accountId,
+      ...sharedAccountIds,
+    ]);
   }
 
   formatLocationExpense(data: LocationWithExpenses[]): LocationSchema {
@@ -253,6 +252,8 @@ export class LocationsService {
     accountId: number,
   ) {
     await this.findLocationRecord(locationCode, accountId);
+    const sharedAccountIds =
+      await this.accountSharesService.listSharedAccounts(accountId);
     const expenseCodes = [...new Set(payload.map(({ expenseCode }) => Number(expenseCode)))];
     if (expenseCodes.some((expenseCode) => !Number.isInteger(expenseCode))) {
       throw new BadRequestException('Expense codes must be integers');
@@ -272,11 +273,13 @@ export class LocationsService {
       where: { locationCode: locationCode },
     });
 
-    return this.expenseLocationRepository.bulkCreate(
+    const result = await this.expenseLocationRepository.bulkCreate(
       payload.map((p) => {
         return { ...p, locationCode };
       }),
     );
+    await this.invalidateLocationCaches(accountId, sharedAccountIds);
+    return result;
   }
 
   async validateExpensesForLocation(
@@ -318,7 +321,10 @@ export class LocationsService {
         // get shared account ids for the current account
     const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
 
-    await this.findLocationRecord(locationCode, readableAccountIds);
+    const location = await this.findLocationRecord(locationCode, readableAccountIds);
+    const locationOwnerAccountId = Number(location.accountId);
+    const sharedAccountIds =
+      await this.accountSharesService.listSharedAccounts(locationOwnerAccountId);
     const expense = await this.expenseRepository.findOne({
       where: { expenseCode, accountId: { [Op.in]: readableAccountIds } },
     });
@@ -338,6 +344,10 @@ export class LocationsService {
 
     const initialUnit = expenseLocation.currentUnit;
     await expenseLocation.update({ initialUnit, currentUnit });
+    await this.invalidateLocationCaches(
+      locationOwnerAccountId,
+      sharedAccountIds,
+    );
 
     return { locationCode, expenseCode, initialUnit, currentUnit };
   }

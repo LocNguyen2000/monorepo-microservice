@@ -5,6 +5,7 @@ import {
   AccountShareModel,
   AccountShareSchema,
 } from '../common/schema/auth/account-share.js';
+import { RedisManagerService } from '../common/redis/redis-manager.service.js';
 
 @Injectable()
 export class AccountSharesService {
@@ -13,6 +14,7 @@ export class AccountSharesService {
     private readonly accountShareModel: AccountShareModel,
     @InjectModel(AccountSchema)
     private readonly accountModel: AccountModel,
+    private readonly redisManager: RedisManagerService,
   ) {}
 
   async getReadableAccountIds(accountId: number) {
@@ -44,6 +46,7 @@ export class AccountSharesService {
       where: { ownerAccountId, sharedAccountId },
       defaults: { ownerAccountId, sharedAccountId },
     });
+    await this.redisManager.invalidateLocationCaches([sharedAccountId]);
     return { ownerAccountId, sharedAccountId, alreadyShared: !created };
   }
 
@@ -51,6 +54,9 @@ export class AccountSharesService {
     const revoked = (await this.accountShareModel.destroy({
       where: { ownerAccountId, sharedAccountId },
     })) > 0;
+    if (revoked) {
+      await this.redisManager.invalidateLocationCaches([sharedAccountId]);
+    }
     return { ownerAccountId, sharedAccountId, revoked };
   }
 }

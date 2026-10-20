@@ -9,6 +9,7 @@ import {
 import { PaginatedQuery, paginatedQuery } from '../common/pagination.js';
 import { AccountSharesService } from '../account-shares/account-shares.service.js';
 import { Op } from 'sequelize';
+import { RedisManagerService } from '../common/redis/redis-manager.service.js';
 
 @Injectable()
 export class ExpenseService {
@@ -16,14 +17,22 @@ export class ExpenseService {
     @InjectModel(ExpenseSchema)
     private readonly expenseRepository: ExpenseModel,
     private readonly accountSharesService: AccountSharesService,
+    private readonly redisManager: RedisManagerService,
   ) {}
 
-  create(payload: Record<string, unknown>, accountId: number) {
-    return this.expenseRepository.create({
+  async create(payload: Record<string, unknown>, accountId: number) {
+    const sharedAccountIds =
+      await this.accountSharesService.listSharedAccounts(accountId);
+    const result = await this.expenseRepository.create({
       ...payload,
       unitName: payload.unitName || 'unit',
       accountId,
     });
+    await this.redisManager.invalidateLocationCaches([
+      accountId,
+      ...sharedAccountIds,
+    ]);
+    return result;
   }
 
   async findAll(query: PaginatedQuery, accountId: number) {
@@ -48,7 +57,14 @@ export class ExpenseService {
 
     if (!instance) throw new NotFoundException('Expense not found');
 
-    return instance.update({ ...payload, accountId });
+    const sharedAccountIds =
+      await this.accountSharesService.listSharedAccounts(accountId);
+    const result = await instance.update({ ...payload, accountId });
+    await this.redisManager.invalidateLocationCaches([
+      accountId,
+      ...sharedAccountIds,
+    ]);
+    return result;
   }
 
   async remove(id: number, accountId: number) {
@@ -57,6 +73,13 @@ export class ExpenseService {
     });
     if (!expense) throw new NotFoundException('Expense not found');
 
-    return expense.destroy();
+    const sharedAccountIds =
+      await this.accountSharesService.listSharedAccounts(accountId);
+    const result = await expense.destroy();
+    await this.redisManager.invalidateLocationCaches([
+      accountId,
+      ...sharedAccountIds,
+    ]);
+    return result;
   }
 }
