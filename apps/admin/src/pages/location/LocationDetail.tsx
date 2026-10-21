@@ -240,17 +240,14 @@ const LocationDetail: React.FunctionComponent = () => {
 
     if (isId) {
       serviceClient
-        .get(`/location/${isId}`)
-        .then((res) => {
-          setLocation(res.data);
-          loadTenants(res.data.locationCode ?? isId);
-          if (res.data.expenses) {
-            setLocationExpenses(res.data.expenses);
-            console.log("RES EXPENSE", res.data.expenses);
+        .get<InvoiceDataType>(`/invoices/get-summerize-data/${isId}`)
+        .then(({ data }) => {
+          if (data.location) {
+            setLocation(data.location);
+            setLocationExpenses(data.location.expenses ?? []);
           }
-
+          setTenants(Array.isArray(data.tenants) ? data.tenants : []);
           setAction(ACTION_ENUM.EDIT);
-          console.log("RES", res.data);
         })
         .catch((e) => {
           console.log(e);

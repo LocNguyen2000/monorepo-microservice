@@ -501,3 +501,20 @@ Keep the selected admin menu item synchronized with the current route, including
 ## Verification
 
 - Run the admin TypeScript check and production build.
+
+# Reusing Location Summary for Detail
+
+## Goal
+
+Avoid making separate location-detail and location-summary requests when the summary response already contains the location, expenses, and tenants.
+
+## Implementation
+
+1. Load the location detail page's initial location, expenses, and tenants from one location summary API response.
+2. Preserve the existing tenant refresh after adding or assigning a tenant.
+
+## Verification
+
+- `pnpm.cmd --dir apps/admin exec tsc --noEmit` passes.
+- `pnpm.cmd --dir apps/admin build` passes.
+- `git diff --check` passes.
