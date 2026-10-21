@@ -11,7 +11,7 @@ import {
 } from "@ant-design/icons";
 import { Space, Layout } from "antd";
 import { FunctionComponent, useEffect, useState } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import MenuSidebar from "../components/MenuSidebar";
 import { contentStyle } from "../css/layout";
 import { IAntdMenuItem } from "../lib/interface";
@@ -97,13 +97,13 @@ export const MENU_LIST: IAntdMenuItem[] = [
 ];
 
 const Dashboard: FunctionComponent<DashboardProps> = () => {
-  const [menuItem, setMenuItem] = useState<IAntdMenuItem>(MENU_LIST[0]);
   const [isCollapse, setIsCollapse] = useState<boolean>(false);
   const [isMobile, setIsMobile] = useState(() =>
     window.matchMedia("(max-width: 767px)").matches,
   );
   const { useNotify, authUser } = getGlobalContext();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   useEffect(() => {
     const mobileMediaQuery = window.matchMedia("(max-width: 767px)");
     const updateIsMobile = () => setIsMobile(mobileMediaQuery.matches);
@@ -120,11 +120,22 @@ const Dashboard: FunctionComponent<DashboardProps> = () => {
           item.path === DASHBOARD_ROUTES.MY_PROFILE,
       );
 
+  const matchingMenuItems = visibleMenuItems
+    .filter(
+      (item) =>
+        item.path &&
+        (pathname === item.path || pathname.startsWith(`${item.path}/`)),
+    )
+    .sort((a, b) => (b.path?.length ?? 0) - (a.path?.length ?? 0));
+  const menuItem =
+    matchingMenuItems.find((item) => !item.hidden) ??
+    matchingMenuItems.find((item) => item.path === pathname) ??
+    MENU_LIST[0];
+
   const setPathFromKey = (selectedItemKey: string) => {
     const selected = MENU_LIST.find((item) => item.key === selectedItemKey);
     if (selected) {
       if (selected.path) {
-        setMenuItem(selected);
         navigate(selected.path);
       } else {
         useNotify(

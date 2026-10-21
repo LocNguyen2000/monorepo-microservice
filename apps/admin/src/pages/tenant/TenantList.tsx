@@ -142,7 +142,6 @@ const TenantList = () => {
           data={tenants}
           isLoading={isLoading}
           editable
-          fixedActionColumn
           size="middle"
           scroll={{ x: "max-content" }}
           onDblClickRow={(t: TenantDataType) =>

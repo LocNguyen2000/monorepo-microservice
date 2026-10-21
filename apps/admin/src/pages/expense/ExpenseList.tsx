@@ -144,7 +144,6 @@ const ExpenseList: FunctionComponent<IExpenseListProps> = () => {
             data={expenses}
             isLoading={isLoading}
             editable
-            fixedActionColumn
             size="small"
             scroll={{ x: "max-content" }}
             onDblClickRow={(t: ExpenseDataType) => openFormHandler(ACTION_ENUM.EDIT, t)}

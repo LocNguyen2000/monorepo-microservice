@@ -144,7 +144,6 @@ const RentProviderList = () => {
           columns={providerColumns}
           data={providers}
           editable
-          fixedActionColumn
           isLoading={isLoading}
           size="middle"
           scroll={{ x: "max-content" }}

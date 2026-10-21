@@ -7,7 +7,6 @@ export const tenantColumns: ColumnsType<TenantDataType> = [
     title: "Tên người thuê",
     dataIndex: "tenantName",
     key: "tenantName",
-    fixed: "left",
   },
   {
     title: "Ngày sinh nhật",
@@ -41,7 +40,6 @@ export const providerColumns: ColumnsType<ProviderDataType> = [
     title: "Tên chủ trọ",
     dataIndex: "providerName",
     key: "providerName",
-    fixed: "left",
   },
   {
     title: "Ngày sinh nhật",
@@ -75,7 +73,6 @@ export const expenseColumns: ColumnsType<ExpenseDataType> = [
     dataIndex: "expenseName",
     key: "expenseName",
     align: "center",
-    fixed: "left",
   },
   {
     title: "Loại chi phí",

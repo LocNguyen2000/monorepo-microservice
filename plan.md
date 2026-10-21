@@ -470,7 +470,6 @@ Invalidate cached paginated location lists when a location is updated or deleted
 ## Verification
 
 - `pnpm.cmd --dir apps/service build` passes.
-- `git diff --check` passes.
 
 # Location Detail Cache
 
@@ -487,3 +486,18 @@ Cache `findOne` location detail results without bypassing account authorization 
 ## Verification
 
 - `pnpm.cmd --dir apps/service build` passes.
+
+# Admin Sidebar Route Selection
+
+## Goal
+
+Keep the selected admin menu item synchronized with the current route, including direct links and browser navigation.
+
+## Implementation
+
+1. Derive the dashboard's selected menu item from the current React Router pathname instead of menu-click-only state.
+2. Prefer the longest matching visible route so detail routes select their parent menu item; preserve exact matching for hidden profile routes.
+
+## Verification
+
+- Run the admin TypeScript check and production build.
