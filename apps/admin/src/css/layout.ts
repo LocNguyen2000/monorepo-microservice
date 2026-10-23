@@ -1,32 +1,32 @@
 import React from "react";
 
-export const siderHeight = "100vw";
-export const siderWidth = "12vw";
+export const siderHeight = "100vh";
+export const siderWidth = "var(--admin-sidebar-width)";
 
-export const headerHight = "7vh";
+export const headerHight = "64px";
 export const headerWidth = `calc(100vw - ${siderWidth})`;
 
-const navHight = "5vh";
+const navHight = "48px";
 const navWidth = headerWidth;
 
-export const footerHeight = `55px`;
-export const footerWidth = `calc(100% - ${siderWidth})`;
+export const footerHeight = "52px";
+export const footerWidth = `calc(100vw - ${siderWidth})`;
 
-export const contentHeight = `calc(100% - ${headerHight} - ${footerHeight})`;
-export const contentWidth = `calc(100% - ${siderWidth})`;
+export const contentHeight = `calc(100vh - ${headerHight} - ${navHight} - ${footerHeight})`;
+export const contentWidth = `calc(100vw - ${siderWidth})`;
 
 const headerTop = "0";
-const headerLeft = `calc(${siderWidth})`;
-const navTop = `calc(${headerHight})`;
-const navLeft = `calc(${siderWidth})`;
+const headerLeft = siderWidth;
+const navTop = headerHight;
+const navLeft = siderWidth;
 const contentTop = `calc(${headerHight} + ${navHight})`;
-const contentLeft = `calc(${siderWidth})`;
-const contentOverflow = `calc(${contentHeight} - ${footerHeight})`;
-const footerBottom = `0`;
-const footerLeft = `calc(${siderWidth})`;
+const contentLeft = siderWidth;
+const footerBottom = "0";
+const footerLeft = siderWidth;
 
 export const headerStyle: React.CSSProperties = {
   position: "fixed",
+  zIndex: 20,
   top: headerTop,
   left: headerLeft,
   width: headerWidth,
@@ -34,14 +34,16 @@ export const headerStyle: React.CSSProperties = {
   minHeight: headerHight,
   display: "flex",
   alignItems: "center",
-  textAlign: "center",
-  color: "#fff",
-  backgroundColor: "#20372f",
-  borderBottom: "2px solid #b64939",
+  justifyContent: "flex-end",
+  gap: "1rem",
+  padding: "0 1.5rem",
+  color: "#ffffff",
+  backgroundColor: "#232f3e",
 };
 
 export const navHeaderStyle: React.CSSProperties = {
   position: "fixed",
+  zIndex: 19,
   top: navTop,
   left: navLeft,
   width: navWidth,
@@ -51,8 +53,10 @@ export const navHeaderStyle: React.CSSProperties = {
   justifyContent: "space-between",
   flexDirection: "row",
   alignItems: "center",
-  backgroundColor: "#fffefa",
-  borderBottom: "1px solid #d6d9d0",
+  gap: "1rem",
+  padding: "0 1.5rem",
+  backgroundColor: "#ffffff",
+  borderBottom: "1px solid #d5dbdb",
 };
 
 export const contentStyle: React.CSSProperties = {
@@ -61,38 +65,38 @@ export const contentStyle: React.CSSProperties = {
   left: contentLeft,
   width: contentWidth,
   height: contentHeight,
-  maxHeight: contentOverflow,
-  // textAlign: "center",
-  color: "#29332d",
-  // padding: "0 30px",
-  backgroundColor: "#eef0ea",
-  // backgroundImage: "../../../public/background.jpg",
+  color: "#16191f",
+  backgroundColor: "#f2f3f3",
   overflowY: "auto",
 };
 
 export const siderStyle: React.CSSProperties = {
   position: "fixed",
+  zIndex: 21,
   top: 0,
   left: 0,
   width: siderWidth,
   height: siderHeight,
-  padding: "0.5rem",
-  backgroundColor: "#20372f",
+  padding: "1rem 0.75rem",
+  backgroundColor: "#232f3e",
 };
 
 export const footerStyle: React.CSSProperties = {
   position: "fixed",
+  zIndex: 19,
   bottom: footerBottom,
   left: footerLeft,
   width: footerWidth,
   height: footerHeight,
-  backgroundColor: "#fffefa",
+  padding: "0 1.5rem",
+  backgroundColor: "#ffffff",
   display: "flex",
   justifyContent: "space-between",
   alignItems: "center",
+  borderTop: "1px solid #d5dbdb",
 };
 
 export const alignCenter: React.CSSProperties = {
-  display: 'flex',
-  alignItems: 'center',
-}
+  display: "flex",
+  alignItems: "center",
+};

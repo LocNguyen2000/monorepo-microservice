@@ -529,7 +529,7 @@ const InvoicePage: React.FunctionComponent = () => {
             </Flex>
           }
         >
-          <Typography style={{ marginBottom: "0.2rem", color: "#de4614" }}>
+          <Typography style={{ marginBottom: "0.2rem", color: "#ff9900" }}>
             Kiểm tra kỹ càng các chi phí phía dưới:
           </Typography>
           <BaseTable

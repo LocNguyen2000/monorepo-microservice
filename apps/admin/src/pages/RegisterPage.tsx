@@ -1,5 +1,5 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { Alert, Button, Card, Form, Input, Typography, Flex } from "antd";
+import { Alert, Button, Form, Input, Typography } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getGlobalContext } from "../lib/context";
@@ -44,132 +44,122 @@ const RegisterPage: FunctionComponent = () => {
   };
 
   return (
-    <Flex
-      style={{
-        width: "100vw",
-        minHeight: "100vh",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-      className="m-login-img"
-    >
-      <Card className="m-login" style={{ width: "min(92vw, 480px)" }}>
-        <Form
-          name="register"
-          className="m-login-form"
-          layout="vertical"
-          autoComplete="off"
-          onFinish={submitRegister}
-        >
-          <Typography.Title level={2} style={{ textAlign: "center" }}>
-            <HomeOutlined style={{ marginRight: "0.5rem" }} />
-            Đăng ký tài khoản
+    <div className="aws-login-shell">
+      <header className="aws-login-header">
+        <div className="aws-login-brand">
+          <span className="aws-login-brand-icon">
+            <HomeOutlined />
+          </span>
+          <span className="aws-login-brand-name">Rental</span>
+        </div>
+      </header>
+
+      <main className="aws-login-main">
+        <section className="aws-login-card" aria-labelledby="register-title">
+          <Typography.Title
+            id="register-title"
+            level={2}
+            className="aws-login-title"
+          >
+            Tạo tài khoản
           </Typography.Title>
-          <Typography.Paragraph type="secondary">
-            Tạo tài khoản để sử dụng hệ thống nhà trọ.
-          </Typography.Paragraph>
-          {error && (
-            <Alert
-              message={error}
-              type="error"
-              showIcon
-              style={{ marginBottom: 16 }}
-            />
-          )}
-          {success && (
-            <Alert
-              message="Đăng ký thành công. Đang chuyển đến trang đăng nhập..."
-              type="success"
-              showIcon
-              style={{ marginBottom: 16 }}
-            />
-          )}
-
-          <Form.Item
-            label="Họ và tên"
-            name="fullName"
-            rules={[{ required: true, message: "Vui lòng nhập họ và tên." }]}
+          <Form
+            name="register"
+            className="aws-login-form"
+            layout="vertical"
+            autoComplete="off"
+            onFinish={submitRegister}
           >
-            <Input
-              size="large"
-              autoComplete="name"
-              placeholder="Your full name"
-            />
-          </Form.Item>
+            {error && (
+              <Alert
+                message={error}
+                type="error"
+                showIcon
+                style={{ marginBottom: 16 }}
+              />
+            )}
+            {success && (
+              <Alert
+                message="Đăng ký thành công."
+                type="success"
+                showIcon
+                style={{ marginBottom: 16 }}
+              />
+            )}
 
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                required: true,
-                type: "email",
-                message: "Vui lòng nhập email hợp lệ.",
-              },
-            ]}
-          >
-            <Input
-              size="large"
-              autoComplete="email"
-              placeholder="you@example.com"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Mật khẩu"
-            name="password"
-            rules={[
-              { required: true, message: "Vui lòng tạo mật khẩu." },
-              { min: 8, message: "Mật khẩu phải có ít nhất 8 ký tự." },
-            ]}
-          >
-            <Input.Password
-              size="large"
-              autoComplete="new-password"
-              placeholder="At least 8 characters"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Xác nhận mật khẩu"
-            name="confirmPassword"
-            dependencies={["password"]}
-            rules={[
-              { required: true, message: "Vui lòng xác nhận mật khẩu." },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  return !value || getFieldValue("password") === value
-                    ? Promise.resolve()
-                    : Promise.reject(new Error("Mật khẩu không khớp."));
-                },
-              }),
-            ]}
-          >
-            <Input.Password
-              size="large"
-              autoComplete="new-password"
-              placeholder="Repeat your password"
-            />
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              size="large"
-              block
-              loading={loading}
+            <Form.Item
+              label="Họ và tên"
+              name="fullName"
+              rules={[{ required: true, message: "Vui lòng nhập họ và tên." }]}
             >
-              Đăng ký
-            </Button>
-          </Form.Item>
+              <Input size="large" autoComplete="name" />
+            </Form.Item>
 
-          <Button type="link" block onClick={() => navigate("/login")}>
-            Đã có tài khoản? Đăng nhập
-          </Button>
-        </Form>
-      </Card>
-    </Flex>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                  message: "Vui lòng nhập email hợp lệ.",
+                },
+              ]}
+            >
+              <Input size="large" autoComplete="email" />
+            </Form.Item>
+
+            <Form.Item
+              label="Mật khẩu"
+              name="password"
+              rules={[
+                { required: true, message: "Vui lòng tạo mật khẩu." },
+                { min: 8, message: "Mật khẩu phải có ít nhất 8 ký tự." },
+              ]}
+            >
+              <Input.Password size="large" autoComplete="new-password" />
+            </Form.Item>
+
+            <Form.Item
+              label="Xác nhận mật khẩu"
+              name="confirmPassword"
+              dependencies={["password"]}
+              rules={[
+                { required: true, message: "Vui lòng xác nhận mật khẩu." },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    return !value || getFieldValue("password") === value
+                      ? Promise.resolve()
+                      : Promise.reject(new Error("Mật khẩu không khớp."));
+                  },
+                }),
+              ]}
+            >
+              <Input.Password size="large" autoComplete="new-password" />
+            </Form.Item>
+
+            <Form.Item className="aws-login-submit-item">
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                block
+                loading={loading}
+                className="aws-login-submit"
+              >
+                Tạo tài khoản
+              </Button>
+            </Form.Item>
+
+            <div className="aws-login-register">
+              <Button type="link" onClick={() => navigate("/login")}>
+                Đăng nhập
+              </Button>
+            </div>
+          </Form>
+        </section>
+      </main>
+    </div>
   );
 };
 

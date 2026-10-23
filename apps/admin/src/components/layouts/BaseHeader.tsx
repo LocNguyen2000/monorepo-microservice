@@ -1,12 +1,5 @@
-import {
-  BellFilled,
-  HomeOutlined,
-  InfoCircleOutlined,
-  MenuOutlined,
-  QuestionCircleOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Typography, Avatar, Popover, Button, Divider, Badge } from "antd";
+import { UserOutlined } from "@ant-design/icons";
+import { Typography, Avatar, Popover, Button, Divider } from "antd";
 import { Header } from "antd/es/layout/layout";
 import { getGlobalContext, getPathContext } from "../../lib/context";
 import { headerStyle, navHeaderStyle } from "../../css/layout";
@@ -14,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import BaseBreadCrum from "../BaseBreadCrum";
 import { MENU_LIST } from "../../pages/Dashboard";
 import { DASHBOARD_ROUTES } from "../../lib/constants/routes";
-import Input from "antd/es/input/Input";
 import WebSocketComponent from "../../pages/Websocket";
 
 const PopoverMenuHeader = () => {
@@ -26,7 +18,8 @@ const PopoverMenuHeader = () => {
     <>
       <Divider />
       <Button
-        style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}
+        block
+        className="account-menu-action"
         onClick={() => {
           const [mePage] = MENU_LIST.filter(
             (i) => i.path && i.path == DASHBOARD_ROUTES.MY_PROFILE,
@@ -37,9 +30,9 @@ const PopoverMenuHeader = () => {
       >
         Trang cá nhân
       </Button>
-      <br />
       <Button
-        style={{ width: "100%", height: "2rem", marginBottom: "0.5rem" }}
+        block
+        className="account-menu-action"
         onClick={() => {
           serviceClient.post("auth/logout", {
             sessionId: localStorage.getItem("sessionId"),
@@ -49,31 +42,15 @@ const PopoverMenuHeader = () => {
           });
         }}
       >
-        Sign Out
+        Đăng xuất
       </Button>
-      <br />
     </>
   );
 };
 
 const PopoverMenuTitle = () => {
   const { authUser } = getGlobalContext();
-  return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        height: "4rem",
-      }}
-    >
-      <Typography style={{ marginBottom: "0.25rem" }}> {authUser.email}</Typography>
-      <span style={{ fontWeight: "lighter", color: "grey" }}>
-        Quản lý nhà trọ
-      </span>
-    </div>
-  );
+  return <Typography.Text ellipsis>{authUser.email}</Typography.Text>;
 };
 
 const BaseHeader = () => {
@@ -82,11 +59,10 @@ const BaseHeader = () => {
 
   return (
     <>
-      <Header style={headerStyle} color="primary">
-
-        <Typography style={{ color: "white", marginRight: "1rem" }}>
+      <Header className="admin-topbar" style={headerStyle}>
+        <Typography.Text className="admin-topbar-name">
           {authUser?.name}
-        </Typography>
+        </Typography.Text>
         <Popover
           content={<PopoverMenuHeader />}
           title={<PopoverMenuTitle />}
@@ -96,8 +72,8 @@ const BaseHeader = () => {
           trigger={"click"}
         >
           <Avatar
-            className="m-hoverable"
-            shape="square"
+            className="admin-account-avatar"
+            shape="circle"
             size={40}
             icon={<UserOutlined />}
             style={{ cursor: "pointer" }}
@@ -105,15 +81,10 @@ const BaseHeader = () => {
         </Popover>
       </Header>
 
-      <Header style={navHeaderStyle}>
+      <Header className="admin-subnav" style={navHeaderStyle}>
         <WebSocketComponent url={process.env.ADMIN_WEBSOCKET_SERVICE} />
 
         <BaseBreadCrum selectedMenu={menuItem} />
-
-        <Typography style={{ fontWeight: "bold" }}>
-          <InfoCircleOutlined style={{ marginRight: "5px" }} />
-          Last login: {new Date().toLocaleString()}
-        </Typography>
       </Header>
     </>
   );

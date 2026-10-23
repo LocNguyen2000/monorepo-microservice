@@ -1,6 +1,5 @@
 import {
   Button,
-  Carousel,
   Divider,
   Empty,
   Flex,
@@ -136,50 +135,32 @@ const LocationList = () => {
 
         <Divider />
 
-        <Flex className="location-card-list">
+        <div className="location-card-grid">
           {isLoading ? (
-            <>
-              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
+            Array.from({ length: pagination.size }, (_, index) => (
+              <Card
+                key={`location-skeleton-${index}`}
+                className="location-grid-card"
+                cover={<SkeletonImage className="location-card-cover" />}
+              >
                 <Skeleton active loading />
               </Card>
-              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
-                <Skeleton active loading />
-              </Card>
-              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
-                <Skeleton active loading />
-              </Card>
-              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
-                <Skeleton active loading />
-              </Card>
-              <Card style={{ width: 300 }} cover={<SkeletonImage />}>
-                <Skeleton active loading />
-              </Card>
-            </>
+            ))
           ) : locations.length > 0 ? (
             locations.map((l) => (
               <Card
                 key={l.locationCode}
                 hoverable
-                style={{ width: 400, marginRight: "0.5rem" }}
+                className="location-grid-card"
                 cover={
                   l.image ? (
                     <img
+                      className="location-card-cover"
                       alt={l.locationName}
                       src={l.image}
-                      style={{
-                        width: "100%",
-                        aspectRatio: "1 / 1",
-                        objectFit: "cover",
-                      }}
                     />
                   ) : (
-                    <div
-                      style={{
-                        aspectRatio: "1 / 1",
-                        display: "grid",
-                        placeItems: "center",
-                      }}
-                    >
+                    <div className="location-card-cover location-card-empty-cover">
                       <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                     </div>
                   )
@@ -247,13 +228,11 @@ const LocationList = () => {
               </Card>
             ))
           ) : (
-            <>
-              <Card style={{ width: "100%" }}>
-                <Empty />
-              </Card>
-            </>
+            <Card className="location-grid-empty">
+              <Empty />
+            </Card>
           )}
-        </Flex>
+        </div>
         <Pagination
           current={pagination.page}
           total={pagination.total}

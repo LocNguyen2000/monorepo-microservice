@@ -518,3 +518,39 @@ Avoid making separate location-detail and location-summary requests when the sum
 - `pnpm.cmd --dir apps/admin exec tsc --noEmit` passes.
 - `pnpm.cmd --dir apps/admin build` passes.
 - `git diff --check` passes.
+
+# AWS-Inspired Admin Theme
+
+## Goal
+
+Refresh the admin application with a minimal AWS-console-inspired visual system while preserving existing workflows and concise UI copy.
+
+## Implementation
+
+1. Apply a consistent navy, white, light-gray, and orange palette through Ant Design tokens and shared styles.
+2. Restyle desktop and mobile navigation, headers, content surfaces, forms, tables, and common controls without changing behavior.
+3. Apply the minimal auth layout to login and registration and keep necessary labels and accessibility.
+4. Update project knowledge and run the admin TypeScript check and production build.
+
+## Verification
+
+- `pnpm.cmd --dir apps/admin build` passes, including the TypeScript check.
+- `git diff --check` passes.
+
+# Location Card Grid
+
+## Goal
+
+Replace the horizontal location card carousel with a responsive grid.
+
+## Implementation
+
+1. Render location cards and loading placeholders in a responsive grid.
+2. Preserve location content, actions, and pagination.
+3. Update project knowledge and verify with the admin build.
+
+## Verification
+
+- `pnpm.cmd --dir apps/admin exec tsc --noEmit` passes.
+- `pnpm.cmd --dir apps/admin build` passes.
+- `git diff --check` passes.

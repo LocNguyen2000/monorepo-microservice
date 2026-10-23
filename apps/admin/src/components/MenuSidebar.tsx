@@ -1,7 +1,7 @@
 import { FunctionComponent, useContext } from "react";
 import { Divider, Menu, Typography } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
-import { headerHight, siderStyle } from "../css/layout";
+import { siderStyle } from "../css/layout";
 import { formatAntdMenuByList } from "../lib/utils";
 import { IAntdMenuItem } from "../lib/interface";
 import { MENU_LIST } from "../pages/Dashboard";
@@ -19,7 +19,7 @@ const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({
   const { menuItem, setPathFromKey } = useContext(PathContext);
 
   return (
-    <div style={siderStyle}>
+    <div className="admin-sidebar" style={siderStyle}>
       <div
         style={{
           display: "flex",
@@ -45,7 +45,7 @@ const MenuSidebar: FunctionComponent<MenuSidebarProps> = ({
       <Divider />
 
       <Menu
-        // theme="dark"
+        theme="dark"
         mode="inline"
         className="override-antd-menu-item"
         onClick={(info) => setPathFromKey(info.key)}

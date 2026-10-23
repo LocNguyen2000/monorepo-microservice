@@ -1,9 +1,8 @@
 import { FunctionComponent, useEffect, useState } from "react";
-import { Form, Input, Checkbox, Button, Typography, Flex, Alert } from "antd";
+import { Form, Input, Checkbox, Button, Typography, Alert } from "antd";
 import { HomeOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import { getGlobalContext } from "../lib/context";
-import Card from "antd/es/card/Card";
 import { UserRole } from "../lib/constants/roles";
 import { DASHBOARD_ROUTES } from "../lib/constants/routes";
 
@@ -65,91 +64,100 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
   };
 
   return (
-    <Flex
-      style={{
-        width: "100vw",
-        minHeight: "100vh",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-      className="m-login-img"
-    >
-      <Card className="m-login" style={{ width: "min(92vw, 480px)" }}>
-        <Form
-          name="login"
-          className="m-login-form"
-          initialValues={{ remember: true }}
-          autoComplete="off"
-          layout="vertical"
-          onFinish={submitLogin}
-        >
-          <Typography.Title level={2} style={{ textAlign: "center" }}>
-            <HomeOutlined style={{ marginRight: "0.5rem" }} />
-            Đăng nhập quản trị
+    <div className="aws-login-shell">
+      <header className="aws-login-header">
+        <div className="aws-login-brand">
+          <span className="aws-login-brand-icon">
+            <HomeOutlined />
+          </span>
+          <span className="aws-login-brand-name">Rental</span>
+        </div>
+      </header>
+
+      <main className="aws-login-main">
+        <section className="aws-login-card" aria-labelledby="login-title">
+          <Typography.Title
+            id="login-title"
+            level={2}
+            className="aws-login-title"
+          >
+            Đăng nhập
           </Typography.Title>
-          <Typography.Paragraph type="secondary">
-            Đăng nhập để quản lý hệ thống nhà trọ.
-          </Typography.Paragraph>
-          {error && (
-            <Alert
-              message={error}
-              type="error"
-              showIcon
-              style={{ marginBottom: 16 }}
-            />
-          )}
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                required: true,
-                type: "email",
-                message: "Vui lòng nhập email hợp lệ.",
-              },
-            ]}
+
+          <Form
+            name="login"
+            className="aws-login-form"
+            initialValues={{ remember: true }}
+            autoComplete="off"
+            layout="vertical"
+            onFinish={submitLogin}
           >
-            <Input
-              size="large"
-              autoComplete="email"
-              placeholder="you@example.com"
-            />
-          </Form.Item>
-
-          <Form.Item
-            label="Mật khẩu"
-            name="password"
-            rules={[{ required: true, message: "Vui lòng nhập mật khẩu." }]}
-          >
-            <Input.Password
-              size="large"
-              autoComplete="current-password"
-              placeholder="Your password"
-            />
-          </Form.Item>
-
-          <Form.Item name="remember" valuePropName="checked">
-            <Checkbox>Ghi nhớ đăng nhập</Checkbox>
-          </Form.Item>
-
-          <Form.Item>
-            <Button
-              type="primary"
-              htmlType="submit"
-              size="large"
-              block
-              loading={loading}
+            {error && (
+              <Alert
+                message={error}
+                type="error"
+                showIcon
+                style={{ marginBottom: 16 }}
+              />
+            )}
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  type: "email",
+                  message: "Vui lòng nhập email hợp lệ.",
+                },
+              ]}
             >
-              Đăng nhập
-            </Button>
-          </Form.Item>
+              <Input
+                size="large"
+                autoComplete="email"
+              />
+            </Form.Item>
 
-          <Button type="link" block onClick={() => navigate("/register")}>
-            Chưa có tài khoản? Đăng ký ngay
-          </Button>
-        </Form>
-      </Card>
-    </Flex>
+            <Form.Item
+              label="Mật khẩu"
+              name="password"
+              rules={[{ required: true, message: "Vui lòng nhập mật khẩu." }]}
+            >
+              <Input.Password
+                size="large"
+                autoComplete="current-password"
+              />
+            </Form.Item>
+
+            <Form.Item
+              name="remember"
+              valuePropName="checked"
+              className="aws-login-remember"
+            >
+              <Checkbox>Ghi nhớ đăng nhập</Checkbox>
+            </Form.Item>
+
+            <Form.Item className="aws-login-submit-item">
+              <Button
+                type="primary"
+                htmlType="submit"
+                size="large"
+                block
+                loading={loading}
+                className="aws-login-submit"
+              >
+                Đăng nhập
+              </Button>
+            </Form.Item>
+          </Form>
+
+          <div className="aws-login-register">
+            <Button type="link" onClick={() => navigate("/register")}>
+              Tạo tài khoản
+            </Button>
+          </div>
+        </section>
+      </main>
+    </div>
   );
 };
 

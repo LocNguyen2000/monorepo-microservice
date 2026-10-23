@@ -74,11 +74,7 @@ const MobileDashboard: FunctionComponent<MobileDashboardProps> = ({
           <Avatar
             aria-label="Account menu"
             icon={<UserOutlined />}
-            style={{
-              cursor: "pointer",
-              flex: "none",
-              backgroundColor: "#4CAF50",
-            }}
+            className="mobile-dashboard-avatar"
           />
         </Popover>
       </header>
@@ -97,6 +93,7 @@ const MobileDashboard: FunctionComponent<MobileDashboardProps> = ({
         styles={{ body: { padding: 0 } }}
       >
         <Menu
+          theme="dark"
           mode="inline"
           items={formatAntdMenuByList(menuItems)}
           selectedKeys={[menuItem.key]}
