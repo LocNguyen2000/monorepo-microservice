@@ -833,7 +833,8 @@ paths:
     post:
       tags: [Invoices]
       operationId: createInvoice
-      summary: Create a draft invoice for an account-owned location
+      summary: Create a draft invoice for a location accessible to the account
+      description: Shared accounts may create invoices for shared locations; the invoice is stored under the location owner's account.
       x-required-roles: [SuperAdministrator, Administrator, LocationOperator]
       requestBody:
         required: true

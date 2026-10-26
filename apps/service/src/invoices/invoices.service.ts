@@ -54,9 +54,14 @@ export class InvoicesService {
     if (!locationCode || expenses.length === 0) {
       throw new Error('Location and expenses are required');
     }
-    await this.locationSvc.findOwnedOne(locationCode, accountId);
+    const location = await this.locationSvc.findReadableOne(locationCode, accountId);
+    const locationOwnerAccountId = Number(location.accountId);
     const expenseCodes = expenses.map((expense: Record<string, unknown>) => Number(expense.expenseCode));
-    await this.locationSvc.validateExpensesForLocation(locationCode, expenseCodes, accountId);
+    await this.locationSvc.validateExpensesForLocation(
+      locationCode,
+      expenseCodes,
+      locationOwnerAccountId,
+    );
 
     const snapshots = expenses.map((expense: Record<string, unknown>) => {
       const initialUnit = Number(expense.initialUnit || 0);
@@ -79,7 +84,12 @@ export class InvoicesService {
 
     try {
       const invoice = await this.invoiceRepository.create(
-        { locationCode, totalAmount, status: InvoiceStatus.DRAFT, accountId },
+        {
+          locationCode,
+          totalAmount,
+          status: InvoiceStatus.DRAFT,
+          accountId: locationOwnerAccountId,
+        },
         { transaction },
       );
       await this.invoiceExpenseRepository.bulkCreate(

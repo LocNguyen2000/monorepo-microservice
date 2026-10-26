@@ -120,7 +120,7 @@ export class LocationsService {
   }
 
   async findOne(id: number, accountId: number) {
-    await this.findReadableLocationRecord(id, accountId);
+    await this.findReadableOne(id, accountId);
 
     try {
       const cachedLocation = await this.redisManager.getCacheLocationByAccount(
@@ -366,13 +366,9 @@ export class LocationsService {
     return this.findLocationRecord(id, accountId);
   }
 
-  private async findReadableLocationRecord(id: number, accountId: number) {
+  async findReadableOne(id: number, accountId: number) {
     const readableAccountIds = await this.accountSharesService.getReadableAccountIds(accountId);
-    const location = await this.locationModel.findOne({
-      where: { locationCode: id, accountId: { [Op.in]: readableAccountIds } },
-    });
-    if (!location) throw new NotFoundException('Location not found');
-    return location;
+    return this.findLocationRecord(id, readableAccountIds);
   }
 
   private async assertOwnerBelongsToAccount(owner: unknown, accountId: number) {
